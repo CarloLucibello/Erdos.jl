@@ -139,13 +139,4 @@ for (i,g) in enumerate(graphs)
     rm(path)
 end
 
-for (i,g) in enumerate(graphs)
-    eprop = Dict{Edge,Char}([(e, Char(i)) for e in edges(g)])
-    net = LightGraphs.Network{Graph, Int, Char}(g, 1:nv(g), eprop)
-    path = joinpath(testdir,"testdata", "test.$i.jld")
-    nsaved = write_readback(path, net)
-    @test LightGraphs.Network(nsaved) == net
-    #delete the file (it gets left on test failure so you could debug it)
-    rm(path)
-end
 println("*** Finished JLD IO tests")
