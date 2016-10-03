@@ -36,14 +36,12 @@ dst(e::Edge) = e.dst
 
 """A type representing an undirected graph."""
 type Graph
-    vertices::UnitRange{Int}
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
 end
 
 """A type representing a directed graph."""
 type DiGraph
-    vertices::UnitRange{Int}
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{Int}} # [dst]: (src, src, src)
@@ -52,15 +50,26 @@ end
 typealias SimpleGraph Union{Graph, DiGraph}
 
 
-"""Return the vertices of a graph."""
-vertices(g::SimpleGraph) = g.vertices
+"""
+    vertices(g)
 
-"""Return an iterator to the edges of a graph.
+Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
+"""
+vertices(g::SimpleGraph) = 1:nv(g)
+
+"""
+    edges(g)
+
+Returns an iterator to the edges of a graph.
 The returned iterator is valid for one pass over the edges, and is invalidated by changes to `g`.
 """
 edges(g::SimpleGraph) = EdgeIter(g)
 
-"""Returns the forward adjacency list of a graph.
+"""
+    fadj(g)
+    fadj(g, v)
+
+Returns the forward adjacency list of a graph.
 
 The Array, where each vertex the Array of destinations for each of the edges eminating from that vertex.
 This is equivalent to:
@@ -128,7 +137,8 @@ has_vertex(g::SimpleGraph, v::Int) = v in vertices(g)
 
 The number of vertices in `g`.
 """
-nv(g::SimpleGraph) = length(vertices(g))
+nv(g::SimpleGraph) = length(fadj(g))
+
 """
     ne(g)
 

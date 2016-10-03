@@ -14,7 +14,7 @@ function Graph(n::Int)
         # sizehint!(o_s, n/4)
         push!(fadjlist, Vector{Int}())
     end
-    return Graph(1:n, 0, fadjlist)
+    return Graph(0, fadjlist)
 end
 
 Graph() = Graph(0)
@@ -50,7 +50,7 @@ function Graph(g::DiGraph)
         end
     end
     iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
-    return Graph(vertices(g), edgect ÷ 2, newfadj)
+    return Graph(edgect ÷ 2, newfadj)
 end
 
 """Returns the backwards adjacency list of a graph.
@@ -71,7 +71,7 @@ adj(g::Graph) = fadj(g)
 adj(g::Graph, v::Int) = fadj(g, v)
 
 function copy(g::Graph)
-    return Graph(g.vertices, g.ne, deepcopy(g.fadjlist))
+    return Graph(g.ne, deepcopy(g.fadjlist))
 end
 
 ==(g::Graph, h::Graph) =
@@ -120,7 +120,11 @@ function rem_edge!(g::Graph, e::Edge)
 end
 
 
-"""Add a new vertex to the graph `g`."""
+"""
+    add_vertex!(g)
+
+Add a new vertex to the graph `g`.
+"""
 function add_vertex!(g::Graph)
     g.vertices = 1:nv(g)+1
     push!(g.fadjlist, Vector{Int}())
@@ -129,10 +133,17 @@ function add_vertex!(g::Graph)
 end
 
 
-"""Return the number of edges (both ingoing and outgoing) from the vertex `v`."""
+"""
+    degree(g, v)
+
+Return the number of edges (both ingoing and outgoing) from the vertex `v`.
+"""
 degree(g::Graph, v::Int) = indegree(g,v)
 
-doc"""Density is defined as the ratio of the number of actual edges to the
+"""
+    density(g)
+
+Density is defined as the ratio of the number of actual edges to the
 number of possible edges. This is $|v| |v-1|$ for directed graphs and
 $(|v| |v-1|) / 2$ for undirected graphs.
 """

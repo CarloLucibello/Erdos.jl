@@ -13,7 +13,7 @@ function DiGraph(n::Int)
         push!(badjlist, Vector{Int}())
         push!(fadjlist, Vector{Int}())
     end
-    return DiGraph(1:n, 0, badjlist, fadjlist)
+    return DiGraph(0, badjlist, fadjlist)
 end
 
 DiGraph() = DiGraph(0)
@@ -61,7 +61,7 @@ badj(g::DiGraph, v::Int) = badj(g)[v]
 
 
 function copy(g::DiGraph)
-    return DiGraph(g.vertices, g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
+    return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
 ==(g::DiGraph, h::DiGraph) =
@@ -95,7 +95,6 @@ end
 
 
 function add_vertex!(g::DiGraph)
-    g.vertices = 1:nv(g)+1
     push!(g.badjlist, Vector{Int}())
     push!(g.fadjlist, Vector{Int}())
 
