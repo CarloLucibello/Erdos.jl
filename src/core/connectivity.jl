@@ -290,3 +290,77 @@ function isgraphical(degs::Vector{Int})
     end
     return true
 end
+
+
+"""Return the number of edges which start at vertex `v`."""
+indegree(g::SimpleGraph, v::Int) = length(badj(g,v))
+"""Return the number of edges which end at vertex `v`."""
+outdegree(g::SimpleGraph, v::Int) = length(fadj(g,v))
+
+
+indegree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [indegree(g,x) for x in v]
+outdegree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [outdegree(g,x) for x in v]
+degree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) for x in v]
+
+"Return the maxium `outdegree` of vertices in `g`."
+Δout(g) = noallocextreme(outdegree,(>), typemin(Int), g)
+"Return the minimum `outdegree` of vertices in `g`."
+δout(g) = noallocextreme(outdegree,(<), typemax(Int), g)
+"Return the maximum `indegree` of vertices in `g`."
+δin(g)  = noallocextreme(indegree,(<), typemax(Int), g)
+"Return the minimum `indegree` of vertices in `g`."
+Δin(g)  = noallocextreme(indegree,(>), typemin(Int), g)
+"Return the minimum `degree` of vertices in `g`."
+δ(g)    = noallocextreme(degree,(<), typemax(Int), g)
+"Return the maximum `degree` of vertices in `g`."
+Δ(g)    = noallocextreme(degree,(>), typemin(Int), g)
+
+"computes the extreme value of `[f(g,i) for i=i:nv(g)]` without gathering them all"
+function noallocextreme(f, comparison, initial, g)
+    value = initial
+    for i in 1:nv(g)
+        funci = f(g, i)
+        if comparison(funci, value)
+            value = funci
+        end
+    end
+    return value
+end
+
+"""
+    degree_histogram(g)
+
+Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
+"""
+degree_histogram(g::SimpleGraph) = fit(Histogram, degree(g))
+
+"""Returns a list of all neighbors connected to vertex `v` by an incoming edge.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+in_neighbors(g::SimpleGraph, v::Int) = badj(g,v)
+"""Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+out_neighbors(g::SimpleGraph, v::Int) = fadj(g,v)
+
+"""Returns a list of all neighbors of vertex `v` in `g`.
+
+For DiGraphs, this is equivalent to `out_neighbors(g, v)`.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+neighbors(g::SimpleGraph, v::Int) = out_neighbors(g, v)
+
+"Returns the neighbors common to vertices `u` and `v` in `g`."
+common_neighbors(g::SimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
+
+@deprecate has_self_loop has_self_loops
+
+"Returns true if `g` has any self loops."
+
+has_self_loops(g::SimpleGraph) = any(v->has_edge(g, v, v), vertices(g))
+
+"Returns the number of self loops in `g`."
+num_self_loops(g::SimpleGraph) = sum(v->has_edge(g, v, v), vertices(g))

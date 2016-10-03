@@ -126,9 +126,7 @@ end
 Add a new vertex to the graph `g`.
 """
 function add_vertex!(g::Graph)
-    g.vertices = 1:nv(g)+1
     push!(g.fadjlist, Vector{Int}())
-
     return true
 end
 
@@ -144,7 +142,7 @@ degree(g::Graph, v::Int) = indegree(g,v)
     density(g)
 
 Density is defined as the ratio of the number of actual edges to the
-number of possible edges. This is $|v| |v-1|$ for directed graphs and
-$(|v| |v-1|) / 2$ for undirected graphs.
+number of possible edges. This is ``|v| |v-1|`` for directed graphs and
+``(|v| |v-1|) / 2`` for undirected graphs.
 """
 density(g::Graph) = (2*ne(g)) / (nv(g) * (nv(g)-1))

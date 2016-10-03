@@ -5,7 +5,7 @@ using GZip
 using Distributions: Binomial
 using Base.Collections
 using LightXML
-using ParserCombinator: Parsers.DOT, Parsers.GML
+import ParserCombinator: Parsers.DOT, Parsers.GML
 using StatsBase: fit, Histogram
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
@@ -127,17 +127,18 @@ more traditional and better-optimized mechanisms.
 """
 LightGraphs
 
-include("core/core.jl")
+include("core/edge.jl")
+    include("core/core.jl")
     include("core/digraph.jl")
     include("core/graph.jl")
     include("core/edgeiter.jl")
-    include("core/connectivity.jl")
     include("core/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")
     include("traversals/dfs.jl")
     include("traversals/maxadjvisit.jl")
     include("traversals/randomwalks.jl")
+    include("core/connectivity.jl")
 include("distances/distance.jl")
     include("distances/edit_distance.jl")
 include("shortestpaths/astar.jl")

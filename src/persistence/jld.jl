@@ -19,7 +19,7 @@ This format is fine for storage on disk because the data is not changing.
 JLD.readas(gs::GraphSerializer) creates the adjacency list representation directly instead of calling add_edge!
 repeatedly in an attempt to improve performance.
 
-This type has not been tested with mmaped files or compression in JLD. 
+This type has not been tested with mmaped files or compression in JLD.
 """
 type GraphSerializer
     vertices::UnitRange{Int}
@@ -47,7 +47,7 @@ function JLD.writeas(g::Graph)
             packed_adjlist[k+=1] = v
         end
     end
-    GraphSerializer(g.vertices, g.ne, packed_adjlist, n_adjlist)
+    GraphSerializer(vertices(g), g.ne, packed_adjlist, n_adjlist)
 end
 
 function JLD.readas(gs::GraphSerializer)
@@ -64,7 +64,7 @@ function JLD.readas(gs::GraphSerializer)
         adj[i] = gs.packed_adjlist[posbegin:posend]
     end
     @assert sum(map(length, adj)) == 2gs.ne
-    g = Graph(1:n, gs.ne, adj)
+    g = Graph(gs.ne, adj)
     return g
 end
 
