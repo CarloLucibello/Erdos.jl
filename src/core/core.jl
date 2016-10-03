@@ -3,19 +3,36 @@ abstract AbstractPathState
 # returns true if insert succeeded, false if it was a duplicate
 _insert_and_dedup!(v::Vector{Int}, x::Int) = isempty(splice!(v, searchsorted(v,x), x))
 
-"""A type representing a single edge between two vertices of a graph."""
-typealias Edge Pair{Int,Int}
+"""
+    immutable Edge
+        src::Int
+        dst::Int
+    end
 
-@deprecate rev(e::Edge) reverse(e)
+A type representing a single edge between two vertices of a graph.
+"""
+immutable Edge
+    src::Int
+    dst::Int
+end
 
-"""Return source of an edge."""
-src(e::Edge) = e.first
-"""Return destination of an edge."""
-dst(e::Edge) = e.second
+"""
+    src(e::Edge)
 
- is_ordered(e::Edge) = src(e) <= dst(e)
+Returns the source of an edge.
+"""
+src(e::Edge) = e.src
 
-==(e1::Edge, e2::Edge) = (e1.first == e2.first && e1.second == e2.second)
+"""
+    dst(e::Edge)
+
+Returns the destination of an edge.
+"""
+dst(e::Edge) = e.dst
+
+ isordered(e::Edge) = src(e) <= dst(e)
+
+==(e1::Edge, e2::Edge) = (src(e1) == src(e2) && dst(e1) == dst(e2))
 
 """A type representing an undirected graph."""
 type Graph
