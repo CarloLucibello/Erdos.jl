@@ -1,0 +1,1 @@
+- Edge is now its own type (not a Pair{Int,Int} anymore)
