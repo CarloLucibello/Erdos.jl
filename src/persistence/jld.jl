@@ -67,13 +67,3 @@ function JLD.readas(gs::GraphSerializer)
     g = Graph(gs.ne, adj)
     return g
 end
-
-type Network{G,V,E}
-    graph::G
-    vprop::Vector{V}
-    eprop::Dict{Edge,E}
-end
-
-import Base.==
-
-==(n::Network, m::Network) = (n.graph == m.graph) && (n.vprop == m.vprop) && (n.eprop == m.eprop)
