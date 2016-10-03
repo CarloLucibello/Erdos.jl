@@ -49,16 +49,15 @@ a1 = Graph(adjmx1)
 a2 = DiGraph(adjmx2)
 
 tests = [
-    "core",
-    "edgeiter",
-    "operators",
-    "graphdigraph",
-    "distance",
-    "edit_distance",
+    "core/core",
+    "core/edgeiter",
+    "core/operators",
+    "core/graphdigraph",
+    "core/connectivity",
+    "distances/distance",
+    "distances/edit_distance",
     "linalg/spectral",
     "linalg/graphmatrices",
-    "cliques",
-    "connectivity",
     "persistence/persistence",
     "generators/randgraphs",
     "generators/staticgraphs",
@@ -74,6 +73,7 @@ tests = [
     "traversals/graphvisit",
     "traversals/randomwalks",
     "community/core-periphery",
+    "community/cliques",
     "community/label_propagation",
     "community/modularity",
     "community/clustering",
@@ -88,8 +88,8 @@ tests = [
     "flow/push_relabel",
     "flow/maximum_flow",
     "flow/multiroute_flow",
-    "utils",
-    "spanningtrees/kruskal"
+    "spanningtrees/kruskal",
+    "utils"
 ]
 
 
