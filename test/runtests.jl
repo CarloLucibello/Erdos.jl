@@ -1,6 +1,5 @@
 include("../src/LightGraphs.jl")
 using LightGraphs
-using LightGraphs.LinAlg
 using Base.Test
 
 g1 = smallgraph(:petersen)
@@ -60,7 +59,6 @@ tests = [
     "distances/distance",
     "distances/edit_distance",
     "linalg/spectral",
-    "linalg/graphmatrices",
     "persistence/persistence",
     "generators/randgraphs",
     "generators/staticgraphs",
