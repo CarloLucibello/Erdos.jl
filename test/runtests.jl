@@ -36,9 +36,11 @@ pentagon = random_regular_graph(5,2)
 
 testdir = dirname(@__FILE__)
 
-pdict = load(joinpath(testdir,"testdata","tutte-pathdigraph.jgz"))
-p1 = pdict["Tutte"]
-p2 = pdict["pathdigraph"]
+pdict = load(joinpath(testdir,"testdata","tutte.gml"),:gml)
+p1 = pdict["graph"]
+
+pdict = load(joinpath(testdir,"testdata","pathdigraph.gml"),:gml)
+p2 = pdict["digraph"]
 
 
 adjmx1 = [0 1 0; 1 0 1; 0 1 0] # graph

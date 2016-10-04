@@ -9,7 +9,7 @@ function readcentrality(f::AbstractString)
 end
 
 
-g = load(joinpath(testdir,"testdata","graph-50-500.jgz"), "graph-50-500")
+g = load(joinpath(testdir,"testdata","graph-50-500.gml"),:gml)["digraph"]
 
 c = readcentrality(joinpath(testdir,"testdata","graph-50-500-bc.txt"))
 z = betweenness_centrality(g)

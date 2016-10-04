@@ -11,11 +11,11 @@ const filemap = Dict{Symbol, Tuple{Function, Function, Function, Function}}()
 # load a single graph by name
 
 """
-    loadgraph(file, t=:lg)
+    loadgraph(file, t=:gml)
 
 Reads a graph from  `file` in the format `t`.
 
-Supported formats are `:lg, :gml, :dot, :graphml, :gexf, :net, :jld`.
+Supported formats are `:gml, :dot, :graphml, :gexf, :net, :jld`.
 """
 function loadgraph(fn::String, x...)
     GZip.open(fn,"r") do io
@@ -23,7 +23,7 @@ function loadgraph(fn::String, x...)
     end
 end
 
-function loadgraph(io::IO, t::Symbol=:lg)
+function loadgraph(io::IO, t::Symbol=:gml)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     d = filemap[t][2](io)
     return first(d)[2]
@@ -31,7 +31,7 @@ end
 
 
 """
-    load(file, name, t=:lg)
+    load(file, name, t=:gml)
 
 Loads a graph with name `name` from `file` in format `t`.
 
@@ -43,7 +43,7 @@ function load(io::IO, gname::String, t::Symbol=:lg)
 end
 
 """
-    load(file, t=:lg)
+    load(file, t=:gml)
 
 Loads multiple graphs from  `file` in the format `t`. Returns a dictionary
 mapping graph name to graph.
@@ -51,7 +51,7 @@ mapping graph name to graph.
 For unnamed graphs the default names \"graph\" and \"digraph\" will be used.
 """
 
-function load(io::IO, t::Symbol=:lg)
+function load(io::IO, t::Symbol=:gml)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][2](io)
 end
@@ -70,9 +70,9 @@ Save a graph to file. See [`save`](@ref).
 savegraph(f, g::SimpleGraph, x...; kws...) = save(f, g::SimpleGraph, x...; kws...)
 
 """
-    save(file, g, t=:lg)
-    save(file, g, name, t=:lg)
-    save(file, dict, t=:lg)
+    save(file, g, t=:gml)
+    save(file, dict, t=:gml)
+    save(file, g, name, t=:gml)
 
 Saves a graph `g` with name `name` to `file` in the format `t`. If `name` is not given
 the default names \"graph\" and \"digraph\" will be used.
@@ -83,17 +83,17 @@ For some graph formats, multiple graphs in a  `dict` `"name"=>g` can be saved in
 
 Returns the number of graphs written.
 """
-function save(io::IO, g::SimpleGraph, gname::String, t::Symbol=:lg)
+function save(io::IO, g::SimpleGraph, gname::String, t::Symbol=:gml)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][3](io, g, gname)
 end
 
 # save a single graph without name
-save(io::IO, g::Graph, t::Symbol=:lg) = save(io, g, "graph", t)
-save(io::IO, g::DiGraph, t::Symbol=:lg) = save(io, g, "digraph", t)
+save(io::IO, g::Graph, t::Symbol=:gml) = save(io, g, "graph", t)
+save(io::IO, g::DiGraph, t::Symbol=:gml) = save(io, g, "digraph", t)
 
 # save a dictionary of graphs {"name" => graph}
-function save{T<:String}(io::IO, d::Dict{T, SimpleGraph}, t::Symbol=:lg)
+function save{T<:String}(io::IO, d::Dict{T, SimpleGraph}, t::Symbol=:gml)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][4](io, d)
 end
