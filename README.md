@@ -1,12 +1,8 @@
 # FatGraphs
 
-[![Build Status](https://travis-ci.org/JuliaGraphs/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphs/FatGraphs.jl)
-[![codecov.io](http://codecov.io/github/JuliaGraphs/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/FatGraphs.jl?branch=master)
+[![Build Status](https://travis-ci.org/CarloLucibello/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/FatGraphs.jl)
+[![codecov.io](http://codecov.io/github/CarloLucibello/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/FatGraphs.jl?branch=master)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/FatGraphs.jl/latest)
-[![Join the chat at https://gitter.im/JuliaGraphs/FatGraphs.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/JuliaGraphs/FatGraphs.jl)
-
-[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.3.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
-[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.4.svg)](http://pkg.julialang.org/?pkg=FatGraphs&ver=0.4)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 
@@ -134,7 +130,7 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/JuliaGraphs/FatGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for list
+- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for list
 
 - **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
 
@@ -156,14 +152,6 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **visualization:** integration with [GraphLayout](https://github.com/IainNZ/GraphLayout.jl), [TikzGraphs](https://github.com/sisl/TikzGraphs.jl), [GraphPlot](https://github.com/afternone/GraphPlot.jl), [NetworkViz](https://github.com/abhijithanilkumar/NetworkViz.jl/)
 
-
-## Supported Versions
-* FatGraphs master is designed to work with the latest stable version of Julia.
-* Julia 0.3: FatGraphs v0.3.7 is the last version guaranteed to work with Julia 0.3.
-* Julia 0.4: FatGraphs versions in the 0.6 series are designed to work with Julia 0.4.
-* Julia 0.5: FatGraphs versions in the 0.7 series are designed to work with Julia 0.5.
-* Julia 0.6: Some functionality might not work with prerelease / unstable / nightly versions of Julia. If you run into a problem on 0.6, please file an issue.
-
 # Contributing and Reporting Bugs
-We welcome contributions and bug reports! Please see [CONTRIBUTING.md](https://github.com/JuliaGraphs/FatGraphs.jl/blob/master/CONTRIBUTING.md)
+We welcome contributions and bug reports! Please see [CONTRIBUTING.md](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/CONTRIBUTING.md)
 for guidance on development and bug reporting.

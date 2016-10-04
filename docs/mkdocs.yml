@@ -1,9 +1,9 @@
 site_name: FatGraphs.jl
 site_author: Carlo Lucibello
-repo_url: https://github.com/JuliaGraphs/FatGraphs.jl/
+repo_url: https://github.com/CarloLucibello/FatGraphs.jl/
 docs_dir: 'build'
 
-theme: material
+theme: readthedocs
 
 extra:
   palette:
