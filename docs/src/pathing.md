@@ -49,7 +49,7 @@ is_weakly_connected
 connected_components
 strongly_connected_components
 weakly_connected_components
-has_self_loop
+has_self_loops
 attracting_components
 is_bipartite
 condensation
