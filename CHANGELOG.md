@@ -4,3 +4,4 @@
 - add Changelog
 - remove member `vertices` from graph types
 - remove graphmatrices (LinAlg submodule)
+- bring in Matching, Interdiction, MatrixDepot, Community from LughtGraphExtras

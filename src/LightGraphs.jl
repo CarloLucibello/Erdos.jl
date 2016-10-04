@@ -2,11 +2,19 @@ __precompile__(true)
 module LightGraphs
 
 using GZip
-using Distributions: Binomial
+using Distributions: Binomial # randgraphs
 using Base.Collections
-using LightXML
-import ParserCombinator: Parsers.DOT, Parsers.GML
+using LightXML # persistence
+import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 using StatsBase: fit, Histogram
+import BlossomV # matching
+using JuMP # matching/interdiction
+using MathProgBase # interdiction
+import Clustering: kmeans # community detection
+using MatrixDepot # matrixdepot
+
+
+# more imports in interdiction.jl
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
@@ -96,6 +104,7 @@ stochastic_block_model, barabasi_albert, barabasi_albert!, static_fitness_model,
 modularity, core_periphery_deg,
 local_clustering,local_clustering_coefficient, global_clustering_coefficient, triangles,
 label_propagation, maximal_cliques,
+community_detection_nback, community_detection_bethe,
 
 #generators
 CompleteGraph, StarGraph, PathGraph, WheelGraph, CycleGraph,
@@ -109,7 +118,17 @@ smallgraph,
 euclidean_graph,
 
 #minimum_spanning_trees
-kruskal_mst
+kruskal_mst,
+
+#matching
+MatchingResult, maximum_weight_maximal_matching, minimum_weight_perfect_matching,
+
+#interdiction
+# more imports/export in interdiction.jl
+
+# matrixdepot
+MDGraph, MDDiGraph
+
 """An optimized graphs package.
 
 Simple graphs (not multi- or hypergraphs) are represented in a memory- and
@@ -158,6 +177,7 @@ include("generators/staticgraphs.jl")
     include("generators/randgraphs.jl")
     include("generators/euclideangraphs.jl")
     include("generators/smallgraphs.jl")
+    include("generators/matrixdepot.jl")
 include("centrality/betweenness.jl")
     include("centrality/closeness.jl")
     include("centrality/degree.jl")
@@ -168,6 +188,7 @@ include("community/modularity.jl")
     include("community/core-periphery.jl")
     include("community/clustering.jl")
     include("community/cliques.jl")
+    include("community/detection.jl")
 include("flow/maximum_flow.jl")
     include("flow/edmonds_karp.jl")
     include("flow/dinic.jl")
@@ -176,6 +197,8 @@ include("flow/maximum_flow.jl")
     include("flow/multiroute_flow.jl")
     include("flow/kishimoto.jl")
     include("flow/ext_multiroute_flow.jl")
+include("interdiction/interdiction.jl")
+include("matching/matching.jl")
 include("spanningtrees/kruskal.jl")
 include("utils.jl")
 

@@ -64,6 +64,7 @@ tests = [
     "generators/staticgraphs",
     "generators/smallgraphs",
     "generators/euclideangraphs",
+    "generators/matrixdepot",
     "shortestpaths/astar",
     "shortestpaths/bellman-ford",
     "shortestpaths/dijkstra",
@@ -78,6 +79,7 @@ tests = [
     "community/label_propagation",
     "community/modularity",
     "community/clustering",
+    "community/detection",
     "centrality/betweenness",
     "centrality/closeness",
     "centrality/degree",
@@ -90,6 +92,8 @@ tests = [
     "flow/maximum_flow",
     "flow/multiroute_flow",
     "spanningtrees/kruskal",
+    "matching/matching",
+    "interdiction/interdiction",
     "utils"
 ]
 
