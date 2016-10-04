@@ -7,8 +7,8 @@ in graphs.
 Modules = [LightGraphs]
 Pages   = ["community/clustering.jl",
             "community/core-periphery.jl",
-            "community/label_propagation.jl",
             "community/modularity.jl",
-            "community/cliques.jl"]
+            "community/cliques.jl",
+            "community/detection.jl"]
 Private = false
 ```

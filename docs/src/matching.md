@@ -1,3 +1,10 @@
 # Matching
+Algorithms for the [optimal matching problem](<https://en.wikipedia.org/wiki/Matching_(graph_theory)>).
 
-Maximum weight matching  is supperted in the companion package *LightGraphsExtras.jl*
+```@autodocs
+Modules = [LightGraphs]
+Pages   = ["matching/common.jl",
+            "matching/lp.jl",
+            "matching/blossomv.jl"]
+Private = false
+```

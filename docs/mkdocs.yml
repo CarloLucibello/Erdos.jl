@@ -21,6 +21,7 @@ pages:
   - 'Matching': 'matching.md'
   - 'Community Structures': 'community.md'
   - 'Flow and Cut': 'flowcut.md'
+  - 'Interdiction': 'interdiction.md'
   - 'Graph Generators': 'generators.md'
   - 'Reading / Writing Graphs': 'persistence.md'
   - 'Integration with other packages': 'integration.md'

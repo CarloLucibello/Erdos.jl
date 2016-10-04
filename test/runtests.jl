@@ -76,7 +76,6 @@ tests = [
     "traversals/randomwalks",
     "community/core-periphery",
     "community/cliques",
-    "community/label_propagation",
     "community/modularity",
     "community/clustering",
     "community/detection",

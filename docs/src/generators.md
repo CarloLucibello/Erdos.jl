@@ -40,8 +40,12 @@ Pages   = [ "generators/euclideangraphs.jl"]
 Private = false
 ```
 
-## Datasets
+## MatrixDepot
 
-Other notorious graphs and integration with the `MatrixDepot.jl` package are available in the `Datasets` submodule of the companion package
-*LightGraphsExtras.jl*
+Other notorious graphs are available through integration with the `MatrixDepot.jl` package.
+
+```@autodocs
+Modules = [LightGraphs]
+Pages   = [ "generators/matrixdepot.jl"]
+Private = false
 ```
