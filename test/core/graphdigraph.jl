@@ -28,9 +28,9 @@ h = DiGraph(5)
 @test add_edge!(h, e4)
 @test add_edge!(h, e5)
 
-@test LightGraphs.fadj(g)[1] == LightGraphs.fadj(g,1) ==
-    LightGraphs.badj(g)[1] == LightGraphs.badj(g,1) ==
-    LightGraphs.adj(g)[1] == LightGraphs.adj(g,1) ==
+@test FatGraphs.fadj(g)[1] == FatGraphs.fadj(g,1) ==
+    FatGraphs.badj(g)[1] == FatGraphs.badj(g,1) ==
+    FatGraphs.adj(g)[1] == FatGraphs.adj(g,1) ==
     [2,3,4]
 
 @test sprint(show, h4) == "{7, 0} directed graph"

@@ -1,4 +1,4 @@
-using LightGraphs
+using FatGraphs
 using MatrixDepot
 using Base.Profile
 
@@ -37,15 +37,15 @@ for matname in names
     println("Working on $matname")
     g = loadmat(matname)
     println("Finding Components")
-    visitor = LightGraphs.TreeBFSVisitorVector(zeros(Int, nv(g)))
+    visitor = FatGraphs.TreeBFSVisitorVector(zeros(Int, nv(g)))
     label = zeros(Int, nv(g))
-    @time label = LightGraphs.connected_components!(label, g)
-    @time components = LightGraphs.connected_components!(visitor, g)
+    @time label = FatGraphs.connected_components!(label, g)
+    @time components = FatGraphs.connected_components!(visitor, g)
     fill!(visitor.tree, 0)
-    @time LightGraphs.bfs_tree!(visitor, g, 1)
+    @time FatGraphs.bfs_tree!(visitor, g, 1)
     @show length(components)
     #=
-    @time components_slow = LightGraphs.connected_components(g)
+    @time components_slow = FatGraphs.connected_components(g)
     @assert length(components) == length(components_slow)
     =#
 end

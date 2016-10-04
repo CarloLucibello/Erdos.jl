@@ -25,7 +25,7 @@ function euclidean_graph end
 
 function euclidean_graph(N::Int, d::Int;
             L=1., seed = -1, kws...)
-    rng = LightGraphs.getRNG(seed)
+    rng = FatGraphs.getRNG(seed)
     points = scale!(rand(rng, d, N), L)
     return (euclidean_graph(points; L=L, kws...)..., points)
 end

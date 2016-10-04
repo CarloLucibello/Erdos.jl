@@ -1,10 +1,10 @@
 # Community Structures
 
-*LightGraphs.jl* contains many algorithm to detect and analyze community structures
+*FatGraphs.jl* contains many algorithm to detect and analyze community structures
 in graphs.
 
 ```@autodocs
-Modules = [LightGraphs]
+Modules = [FatGraphs]
 Pages   = ["community/clustering.jl",
             "community/core-periphery.jl",
             "community/modularity.jl",

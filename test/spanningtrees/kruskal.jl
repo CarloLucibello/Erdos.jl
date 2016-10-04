@@ -1,4 +1,4 @@
-using LightGraphs
+using FatGraphs
 using Base.Test
 
 g = Graph(4)

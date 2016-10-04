@@ -13,9 +13,9 @@ z = eccentricity(a2, distmx2)
 @test radius(z) == radius(a2, distmx2) == 4.2
 @test center(z) == center(a2, distmx2) == [2]
 
-@test size(LightGraphs.DefaultDistance()) == (typemax(Int), typemax(Int))
-d = LightGraphs.DefaultDistance(3)
+@test size(FatGraphs.DefaultDistance()) == (typemax(Int), typemax(Int))
+d = FatGraphs.DefaultDistance(3)
 @test size(d) == (3, 3)
 @test d[1,1] == 1
-@test d[1:2, 1:2] == LightGraphs.DefaultDistance(2)
+@test d[1:2, 1:2] == FatGraphs.DefaultDistance(2)
 @test d == transpose(d) == ctranspose(d)

@@ -1,6 +1,6 @@
 # Test of Min-Cut and maximum adjacency visit
 
-using LightGraphs
+using FatGraphs
 using Base.Test
 
 g = Graph(8)

@@ -1,8 +1,8 @@
 # Distance
-*LightGraphs.jl* includes the following distance measurements:
+*FatGraphs.jl* includes the following distance measurements:
 
 ```@autodocs
-Modules = [LightGraphs]
+Modules = [FatGraphs]
 Pages   = [ "distance.jl"]
 Private = false
 ```

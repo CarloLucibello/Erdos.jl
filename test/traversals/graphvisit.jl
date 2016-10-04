@@ -9,7 +9,7 @@ f = IOBuffer()
 
 function trivialgraphvisit(
     g::SimpleGraph,
-    alg::LightGraphs.SimpleGraphVisitAlgorithm,
+    alg::FatGraphs.SimpleGraphVisitAlgorithm,
     sources
 )
     visitor = TrivialGraphVisitor()
@@ -23,6 +23,6 @@ end
 @test traverse_graph!(g, BreadthFirst(), 1, LogGraphVisitor(IOBuffer())) == nothing
 
 # dummy edge map test
-d = LightGraphs.DummyEdgeMap()
+d = FatGraphs.DummyEdgeMap()
 e = Edge(1,2)
 @test d[e] == 0

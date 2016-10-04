@@ -1,4 +1,4 @@
-using LightGraphs
+using FatGraphs
 function bench_maxflow(n)
     p = 8.0/n
     A = sprand(n,n,p)

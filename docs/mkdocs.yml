@@ -1,6 +1,6 @@
-site_name: LightGraphs.jl
-site_author: Seth Bromberger
-repo_url: https://github.com/JuliaGraphs/LightGraphs.jl/
+site_name: FatGraphs.jl
+site_author: Carlo Lucibello
+repo_url: https://github.com/JuliaGraphs/FatGraphs.jl/
 docs_dir: 'build'
 
 theme: material

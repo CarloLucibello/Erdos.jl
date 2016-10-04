@@ -4,7 +4,7 @@ Graphs may be written to I/O streams and files using the `save` function and
 read with the `load` function. Currently supported common graph formats are `gml, graphml, gexf, dot, net`.
 
 ```@autodocs
-Modules = [LightGraphs]
+Modules = [FatGraphs]
 Pages   = [ "persistence/common.jl"]
 Private = false
 ```

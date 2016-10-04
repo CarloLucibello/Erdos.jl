@@ -184,9 +184,9 @@ Replicate `len` times `h` and connect each vertex with its copies in a path
 crosspath(len::Integer, g::Graph) = cartesian_product(PathGraph(len), g)
 
 
-# The following operators allow one to use a LightGraphs.Graph as a matrix in eigensolvers for spectral ranking and partitioning.
+# The following operators allow one to use a FatGraphs.Graph as a matrix in eigensolvers for spectral ranking and partitioning.
 # """Provides multiplication of a graph `g` by a vector `v` such that spectral
-# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize LightGraphs natively.
+# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize FatGraphs natively.
 # """
 function *{T<:Real}(g::Graph, v::Vector{T})
     length(v) == nv(g) || error("Vector size must equal number of vertices")

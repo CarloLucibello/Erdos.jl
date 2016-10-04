@@ -1,21 +1,21 @@
 # Integration with other packages
 
-*LightGraphs.jl*'s integration with other Julia packages is designed to be straightforward. Here are a few examples.
+*FatGraphs.jl*'s integration with other Julia packages is designed to be straightforward. Here are a few examples.
 
 ## [Graphs.jl](http://github.com/JuliaLang/Graphs.jl)
 
 Creating a Graphs.jl `simple_graph` is easy:
 
 ```julia
-julia> s = simple_graph(nv(g), is_directed=LightGraphs.is_directed(g))
-julia> for e in LightGraphs.edges(g)
+julia> s = simple_graph(nv(g), is_directed=FatGraphs.is_directed(g))
+julia> for e in FatGraphs.edges(g)
            add_edge!(s,src(e), dst(e))
        end
 ```
 
 ## [GraphLayout.jl](https://github.com/IainNZ/GraphLayout.jl)
 
-This excellent graph visualization package can be used with *LightGraphs.jl*
+This excellent graph visualization package can be used with *FatGraphs.jl*
 as follows:
 
 ```julia
@@ -58,10 +58,10 @@ julia> draw(PNG("/tmp/wheel10.png", 16cm, 16cm), gplot(g))
 
 ## [Metis.jl](https://github.com/JuliaSparse/Metis.jl)
 
-The Metis graph partitioning package can interface with *LightGraphs.jl*:
+The Metis graph partitioning package can interface with *FatGraphs.jl*:
 
 ```julia
-julia> using LightGraphs
+julia> using FatGraphs
 
 julia> g = Graph(100,1000)
 {100, 1000} undirected graph
@@ -70,13 +70,13 @@ julia> partGraphKway(g, 6)  # 6 partitions
 ```
 
 ##[NetworkViz.jl](https://github.com/abhijithanilkumar/NetworkViz.jl)
-NetworkViz.jl is tightly coupled with *LightGraphs.jl*. Graphs can be visualized in 2D as well as 3D using [ThreeJS.jl](https://github.com/rohitvarkey/ThreeJS.jl) and [Escher.jl](https://github.com/shashi/Escher.jl).
+NetworkViz.jl is tightly coupled with *FatGraphs.jl*. Graphs can be visualized in 2D as well as 3D using [ThreeJS.jl](https://github.com/rohitvarkey/ThreeJS.jl) and [Escher.jl](https://github.com/shashi/Escher.jl).
 
 ```julia
 #Run this code in Escher
 
 using NetworkViz
-using LightGraphs
+using FatGraphs
 
 main(window) = begin
   push!(window.assets, "widgets")

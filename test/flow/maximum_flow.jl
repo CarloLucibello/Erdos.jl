@@ -36,12 +36,12 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
     end
 
     # Test DefaultCapacity
-    d = LightGraphs.DefaultCapacity(flow_graph)
+    d = FatGraphs.DefaultCapacity(flow_graph)
     @test typeof(d) <: AbstractArray{Int, 2}
     @test d[s,t] == 0
     @test size(d) == (nvertices,nvertices)
-    @test typeof(transpose(d)) == LightGraphs.DefaultCapacity
-    @test typeof(ctranspose(d)) == LightGraphs.DefaultCapacity
+    @test typeof(transpose(d)) == FatGraphs.DefaultCapacity
+    @test typeof(ctranspose(d)) == FatGraphs.DefaultCapacity
 
     # Test all algorithms
     for ALGO in [EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm]

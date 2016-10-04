@@ -1,5 +1,5 @@
 # Basic Functions
-*LightGraphs.jl* defines the following basic types and functionalities:
+*FatGraphs.jl* defines the following basic types and functionalities:
 
 ```@index
 Order = [:type, :function]
@@ -7,7 +7,7 @@ Pages   = ["basicmeasures.md"]
 ```
 
 ```@autodocs
-Modules = [LightGraphs]
+Modules = [FatGraphs]
 Order = [:type, :function]
 Pages   = ["core.jl", "graph.jl", "digraph.jl", "edgeiter.jl","connectivity.jl"]
 Private = false

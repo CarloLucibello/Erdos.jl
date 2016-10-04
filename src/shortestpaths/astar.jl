@@ -18,7 +18,7 @@ function a_star_impl!{T<:Number}(
             return path
         end
 
-        for v in LightGraphs.fadj(graph, u)
+        for v in FatGraphs.fadj(graph, u)
 
             if colormap[v] < 2
                 dist = distmx[u, v]
@@ -45,7 +45,7 @@ function a_star{T<:Number}(
 
     s::Int,                       # the start vertex
     t::Int,                       # the end vertex
-    distmx::AbstractArray{T, 2} = LightGraphs.DefaultDistance(),
+    distmx::AbstractArray{T, 2} = FatGraphs.DefaultDistance(),
     heuristic::Function = n -> 0
     )
             # heuristic (under)estimating distance to target

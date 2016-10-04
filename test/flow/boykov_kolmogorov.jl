@@ -7,7 +7,7 @@ add_edge!(G,2,3)
 source, target = 1, 3
 
 # default capacity
-capacity_matrix = LightGraphs.DefaultCapacity(G)
+capacity_matrix = FatGraphs.DefaultCapacity(G)
 
 # state variables
 flow_matrix = zeros(Int, 3, 3)
@@ -20,8 +20,8 @@ PARENT = zeros(Int, 3)
 
 A = [source,target]
 
-residual_graph = LightGraphs.residual(G)
+residual_graph = FatGraphs.residual(G)
 
-path = LightGraphs.find_path!(residual_graph, source, target, flow_matrix, capacity_matrix, PARENT, TREE, A)
+path = FatGraphs.find_path!(residual_graph, source, target, flow_matrix, capacity_matrix, PARENT, TREE, A)
 
 @test path == [1,2,3]

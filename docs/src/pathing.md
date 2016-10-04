@@ -1,6 +1,6 @@
 # Path and Traversal
 
-*LightGraphs.jl* provides several traversal and shortest-path algorithms, along with
+*FatGraphs.jl* provides several traversal and shortest-path algorithms, along with
 various utility functions. Where appropriate, edge distances may be passed in as a
 matrix of real number values.
 
@@ -31,7 +31,7 @@ maximum_adjacency_visit
 
 ## Random walks
 
-*LightGraphs* includes uniform random walks and self avoiding walks:
+*FatGraphs* includes uniform random walks and self avoiding walks:
 
 ```@docs
 randomwalk

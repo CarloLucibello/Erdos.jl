@@ -23,7 +23,7 @@ function connected_components!(label::Vector{Int}, g::SimpleGraph)
     # the return type is a vector of labels which can be used directly or
     # passed to components(a)
     nvg = nv(g)
-    visitor = LightGraphs.ComponentVisitorVector(label, 0)
+    visitor = FatGraphs.ComponentVisitorVector(label, 0)
     colormap = fill(0, nvg)
     queue = Vector{Int}()
     sizehint!(queue, nvg)

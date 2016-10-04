@@ -2,8 +2,8 @@ g5 = DiGraph(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 
 z = bfs_tree(g5, 1)
-visitor = LightGraphs.TreeBFSVisitorVector(zeros(Int,nv(g5)))
-LightGraphs.bfs_tree!(visitor, g5, 1)
+visitor = FatGraphs.TreeBFSVisitorVector(zeros(Int,nv(g5)))
+FatGraphs.bfs_tree!(visitor, g5, 1)
 t = visitor.tree
 @test t == [1,1,1,3]
 @test nv(z) == 4 && ne(z) == 3 && !has_edge(z, 2, 3)
@@ -21,7 +21,7 @@ add_edge!(g,3,4)
 @test is_bipartite(g, 2)
 
 
-import LightGraphs: TreeBFSVisitorVector, bfs_tree!, tree
+import FatGraphs: TreeBFSVisitorVector, bfs_tree!, tree
 
 function istree(parents::Vector{Int}, maxdepth)
     flag = true

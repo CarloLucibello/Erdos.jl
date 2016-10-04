@@ -1,5 +1,5 @@
 __precompile__(true)
-module LightGraphs
+module FatGraphs
 
 using GZip
 using Distributions: Binomial # randgraphs
@@ -144,7 +144,7 @@ explicit design decision that any data not required for graph manipulation
 outside of the graph structure itself. Such data lends itself to storage in
 more traditional and better-optimized mechanisms.
 """
-LightGraphs
+FatGraphs
 
 include("core/edge.jl")
     include("core/core.jl")

@@ -7,8 +7,8 @@ e3 = Edge(1,4)
 e4 = Edge(2,5)
 e5 = Edge(3,5)
 
-@test LightGraphs.is_ordered(e5)
-@test !LightGraphs.is_ordered(reverse(e5))
+@test FatGraphs.is_ordered(e5)
+@test !FatGraphs.is_ordered(reverse(e5))
 
 g = Graph(5)
 @test add_edge!(g, 1, 2)
@@ -46,8 +46,8 @@ end
 @test indegree(h,1) == 0
 @test outdegree(h) == [3, 1, 1, 0, 0]
 @test outdegree(h,1) == 3
-@test in_neighbors(h,5) == LightGraphs.badj(h)[5] == LightGraphs.badj(h,5) == [2, 3]
-@test out_neighbors(h,1) == LightGraphs.fadj(h)[1] == LightGraphs.fadj(h,1) == [2, 3, 4]
+@test in_neighbors(h,5) == FatGraphs.badj(h)[5] == FatGraphs.badj(h,5) == [2, 3]
+@test out_neighbors(h,1) == FatGraphs.fadj(h)[1] == FatGraphs.fadj(h,1) == [2, 3, 4]
 
 @test p1 == g2
 @test issubset(h2, h1)

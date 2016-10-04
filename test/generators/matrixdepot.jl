@@ -1,5 +1,5 @@
 println("*** Running MatrixDepot tests")
-randstr = "LightGraphs/$(rand(1:10000))"
+randstr = "FatGraphs/$(rand(1:10000))"
 g = MDGraph("hilb", 4)
 @test nv(g) == 4 && ne(g) == 10
 

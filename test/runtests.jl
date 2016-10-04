@@ -1,5 +1,5 @@
-include("../src/LightGraphs.jl")
-using LightGraphs
+include("../src/FatGraphs.jl")
+using FatGraphs
 using Base.Test
 
 g1 = smallgraph(:petersen)

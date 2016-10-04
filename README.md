@@ -1,14 +1,14 @@
-# LightGraphs
+# FatGraphs
 
-[![Build Status](https://travis-ci.org/JuliaGraphs/LightGraphs.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphs/LightGraphs.jl)
-[![codecov.io](http://codecov.io/github/JuliaGraphs/LightGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/LightGraphs.jl?branch=master)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/LightGraphs.jl/latest)
-[![Join the chat at https://gitter.im/JuliaGraphs/LightGraphs.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/JuliaGraphs/LightGraphs.jl)
+[![Build Status](https://travis-ci.org/JuliaGraphs/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphs/FatGraphs.jl)
+[![codecov.io](http://codecov.io/github/JuliaGraphs/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/FatGraphs.jl?branch=master)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/FatGraphs.jl/latest)
+[![Join the chat at https://gitter.im/JuliaGraphs/FatGraphs.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/JuliaGraphs/FatGraphs.jl)
 
-[![LightGraphs](http://pkg.julialang.org/badges/LightGraphs_0.3.svg)](http://pkg.julialang.org/?pkg=LightGraphs)
-[![LightGraphs](http://pkg.julialang.org/badges/LightGraphs_0.4.svg)](http://pkg.julialang.org/?pkg=LightGraphs&ver=0.4)
-[![LightGraphs](http://pkg.julialang.org/badges/LightGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=LightGraphs)
-[![LightGraphs](http://pkg.julialang.org/badges/LightGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=LightGraphs)
+[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.3.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
+[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.4.svg)](http://pkg.julialang.org/?pkg=FatGraphs&ver=0.4)
+[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
+[![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 
 An optimized graphs package.
 
@@ -26,10 +26,8 @@ other information, for example) is expected to be stored outside of the graph
 structure itself. Such data lends itself to storage in more traditional and
 better-optimized mechanisms.
 
-Additional functionalities can be found in the companion package [LightGraphsExtras.jl](https://github.com/JuliaGraphs/LightGraphsExtras.jl).
-
 ## Documentation
-Full documentation available at [GitHub Pages](https://juliagraphs.github.io/LightGraphs.jl/latest).
+Full documentation available at [GitHub Pages](https://juliagraphs.github.io/FatGraphs.jl/latest).
 Documentation for methods is also available via the Julia REPL help system.
 
 ## Core Concepts
@@ -39,7 +37,7 @@ A graph *G* is described by a set of vertices *V* and edges *E*:
 may also be accessed via an iterator that yields `Edge` types containing
 `(src::Int, dst::Int)` values.
 
-*LightGraphs.jl* provides two graph types: `Graph` is an undirected graph, and
+*FatGraphs.jl* provides two graph types: `Graph` is an undirected graph, and
 `DiGraph` is its directed counterpart.
 
 Graphs are created using `Graph()` or `DiGraph()`; there are several options
@@ -68,7 +66,7 @@ an array with all edges in the graph.
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.add("LightGraphs")
+julia> Pkg.add("FatGraphs")
 ```
 
 ## Usage Examples
@@ -136,7 +134,7 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for list
+- **small graph generators:** see [smallgraphs.jl](https://github.com/JuliaGraphs/FatGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for list
 
 - **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
 
@@ -146,7 +144,7 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **flow operations:** maximum flow
 
-- **matching:** Matching functions have been moved to [LightGraphsExtras.jl](https://github.com/JuliaGraphs/LightGraphsExtras.jl).
+- **matching:** minimum/maximum optimal matching on bipartite and arbitrary graphs
 
 - **clique enumeration:** maximal cliques
 
@@ -160,12 +158,12 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 
 ## Supported Versions
-* LightGraphs master is designed to work with the latest stable version of Julia.
-* Julia 0.3: LightGraphs v0.3.7 is the last version guaranteed to work with Julia 0.3.
-* Julia 0.4: LightGraphs versions in the 0.6 series are designed to work with Julia 0.4.
-* Julia 0.5: LightGraphs versions in the 0.7 series are designed to work with Julia 0.5.
+* FatGraphs master is designed to work with the latest stable version of Julia.
+* Julia 0.3: FatGraphs v0.3.7 is the last version guaranteed to work with Julia 0.3.
+* Julia 0.4: FatGraphs versions in the 0.6 series are designed to work with Julia 0.4.
+* Julia 0.5: FatGraphs versions in the 0.7 series are designed to work with Julia 0.5.
 * Julia 0.6: Some functionality might not work with prerelease / unstable / nightly versions of Julia. If you run into a problem on 0.6, please file an issue.
 
 # Contributing and Reporting Bugs
-We welcome contributions and bug reports! Please see [CONTRIBUTING.md](https://github.com/JuliaGraphs/LightGraphs.jl/blob/master/CONTRIBUTING.md)
+We welcome contributions and bug reports! Please see [CONTRIBUTING.md](https://github.com/JuliaGraphs/FatGraphs.jl/blob/master/CONTRIBUTING.md)
 for guidance on development and bug reporting.

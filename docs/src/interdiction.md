@@ -6,7 +6,7 @@ Network Interdiction is a family of problems where some elements of graph
 (vertices or links usually) are forbidden, destroyed or have failed. The goal is
 then to compute some objective function, as a maximum flow or a shortest path.
 
-Currently, `LightGraphsExtras.jl` implement methods for three kinds of Interdiction
+Currently, `FatGraphs.jl` implement methods for three kinds of Interdiction
 Flow's problems. The Interdiction flow problems can be seen as a game between two
 players, a defender (that maximizes the flow) and an attacker (that destroy some
 links). Called using respectively `NetworkInterdictionProblem()`,
@@ -28,10 +28,10 @@ variants, as described by
       going through this edge.
 
 
-This Interdiction Flow (including all the variants) for general graphs is an NP-hard problem and several exact and approximative algorithms have been designed in the academic litterature. Called using respectively `MultilinkAttackAlgorithm()` and `BilevelMixedIntegerLinearProgram()`, `LightGraphsExtras.jl` provides the following methods (any help to implement other algorithms is welcome):
+This Interdiction Flow (including all the variants) for general graphs is an NP-hard problem and several exact and approximative algorithms have been designed in the academic litterature. Called using respectively `MultilinkAttackAlgorithm()` and `BilevelMixedIntegerLinearProgram()`, `FatGraphs.jl` provides the following methods (any help to implement other algorithms is welcome):
 
 - A deterministic pollynomial algorithm called Multilink Attack relying on the
-  Extended Multiroute Flow algorithm (available in `LightGraphs.jl`) introduced by
+  Extended Multiroute Flow algorithm (available in `FatGraphs.jl`) introduced by
   [Baffier et al.](http://dx.doi.org/10.1016/j.disopt.2016.05.002). For a certain
   category of graph, it solves Network Interdiction Flow and Adaptive Flow (arc)
   exactly. When it fails, it provides upper and lower bounds. It provides a
@@ -41,7 +41,7 @@ This Interdiction Flow (including all the variants) for general graphs is an NP-
 - A Bilevel Mixed Integer Linear Program (BMILP) framework using `JuMP.jl` that is
   guaranteed to converge. (Only the adaptive flow (arc) vairant is covered yet, the
   others use dummy functions). The results of this framework through
-  `LightGraphsExtras.jl` will be appear in the following month in the litterature.
+  `FatGraphs.jl` will be appear in the following month in the litterature.
 
 The `interdiction_flow{T<:AbstractFloat}` function takes the following arguments:
 
@@ -69,7 +69,7 @@ use of the solver keyword, as it is similar to the `Model()` method there.
 
 All algorithms return a tuple with 1) a lower bound and 2) an upper bound.
 For the Multilink Attack algorithm, it also returns the restriction values (to use with
-the function maximum_flow in LightGraphs.jl) associated with 3-a) the lower bound and
+the function maximum_flow in FatGraphs.jl) associated with 3-a) the lower bound and
 4-a) the upper bound. When the BMILP is used, the third element returned is 3-b) the
 time used by the algorithm.
 

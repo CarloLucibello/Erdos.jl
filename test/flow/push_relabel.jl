@@ -16,17 +16,17 @@ for e in flow_edges
     capacity_matrix[u,v] = f
 end
 
-residual_graph = LightGraphs.residual(flow_graph)
+residual_graph = FatGraphs.residual(flow_graph)
 
 # Test enqueue_vertex
 Q = Array{Int,1}()
 excess = [0, 1, 0, 1]
 active = [false, false, true, true]
-@test LightGraphs.enqueue_vertex!(Q, 1, active, excess) == nothing
-@test LightGraphs.enqueue_vertex!(Q, 3, active, excess) == nothing
-@test LightGraphs.enqueue_vertex!(Q, 4, active, excess) == nothing
+@test FatGraphs.enqueue_vertex!(Q, 1, active, excess) == nothing
+@test FatGraphs.enqueue_vertex!(Q, 3, active, excess) == nothing
+@test FatGraphs.enqueue_vertex!(Q, 4, active, excess) == nothing
 @test length(Q) == 0
-@test LightGraphs.enqueue_vertex!(Q, 2, active, excess) == nothing
+@test FatGraphs.enqueue_vertex!(Q, 2, active, excess) == nothing
 @test length(Q) == 1
 
 # Test push_flow
@@ -35,10 +35,10 @@ excess = [15, 1, 1, 0, 0, 0, 0, 0]
 height = [8, 0, 0, 0, 0, 0, 0, 0]
 active = [true, false, false, false, false, false, false, true]
 flow_matrix = zeros(Int, 8, 8)
-@test LightGraphs.push_flow!(residual_graph, 1, 2, capacity_matrix, flow_matrix, excess, height, active, Q) == nothing
+@test FatGraphs.push_flow!(residual_graph, 1, 2, capacity_matrix, flow_matrix, excess, height, active, Q) == nothing
 @test length(Q) == 1
 @test flow_matrix[1,2] == 10
-@test LightGraphs.push_flow!(residual_graph, 2, 3, capacity_matrix, flow_matrix, excess, height, active, Q) == nothing
+@test FatGraphs.push_flow!(residual_graph, 2, 3, capacity_matrix, flow_matrix, excess, height, active, Q) == nothing
 @test length(Q) == 1
 @test flow_matrix[2,3] == 0
 
@@ -50,7 +50,7 @@ active = [true, false, false, false, false, false, false, true]
 count  = [0, 1, 2, 2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 flow_matrix = zeros(Int, 8, 8)
 
-@test LightGraphs.gap!(residual_graph, 1, excess, height, active, count, Q) == nothing
+@test FatGraphs.gap!(residual_graph, 1, excess, height, active, count, Q) == nothing
 @test length(Q) == 2
 
 # Test relabel
@@ -61,7 +61,7 @@ active = [true, false, false, false, false, false, false, true]
 count  = [1, 6, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 flow_matrix = zeros(Int, 8, 8)
 
-@test LightGraphs.relabel!(residual_graph, 2, capacity_matrix, flow_matrix, excess, height, active, count, Q) == nothing
+@test FatGraphs.relabel!(residual_graph, 2, capacity_matrix, flow_matrix, excess, height, active, count, Q) == nothing
 @test length(Q) == 1
 
 # Test discharge
@@ -72,14 +72,14 @@ active = [true, false, false, false, false, false, false, true]
 count  = [7, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 flow_matrix = zeros(Int, 8, 8)
 
-@test LightGraphs.discharge!(residual_graph, 1, capacity_matrix, flow_matrix, excess, height, active, count, Q) == nothing
+@test FatGraphs.discharge!(residual_graph, 1, capacity_matrix, flow_matrix, excess, height, active, count, Q) == nothing
 @test length(Q) == 3
 
 # Test with default distances
-@test LightGraphs.push_relabel(residual_graph, 1, 8, LightGraphs.DefaultCapacity(residual_graph))[1] == 3
+@test FatGraphs.push_relabel(residual_graph, 1, 8, FatGraphs.DefaultCapacity(residual_graph))[1] == 3
 
 # Test with capacity matrix
-@test LightGraphs.push_relabel(residual_graph, 1, 8, capacity_matrix)[1] == 28
+@test FatGraphs.push_relabel(residual_graph, 1, 8, capacity_matrix)[1] == 28
 
 # Non regression test added for #448
 M448 =[0 1 0 0 1 1      
