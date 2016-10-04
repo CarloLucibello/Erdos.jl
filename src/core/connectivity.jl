@@ -356,7 +356,6 @@ neighbors(g::SimpleGraph, v::Int) = out_neighbors(g, v)
 "Returns the neighbors common to vertices `u` and `v` in `g`."
 common_neighbors(g::SimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
 
-@deprecate has_self_loop has_self_loops
 
 "Returns true if `g` has any self loops."
 

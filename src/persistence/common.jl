@@ -1,7 +1,5 @@
 NI(x...) = error("This function is not implemented.")
 
-@deprecate readgraph load
-
 # filemap is filled in the format specific source files
 const filemap = Dict{Symbol, Tuple{Function, Function, Function, Function}}()
         # :gml        => (loadgml, loadgml_mult, savegml, savegml_mult)

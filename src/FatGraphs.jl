@@ -200,5 +200,6 @@ include("interdiction/interdiction.jl")
 include("matching/matching.jl")
 include("spanningtrees/kruskal.jl")
 include("utils.jl")
+include("deprecate.jl")
 
 end # module
