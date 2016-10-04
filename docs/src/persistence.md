@@ -1,7 +1,7 @@
 # Reading and writing Graphs
 
-Graphs may be written to I/O streams and files using the `save` function and
-read with the `load` function. Currently supported common graph formats are `gml, graphml, gexf, dot, net`.
+Graphs may be written to I/O streams and files using the `writegraph` function and
+read with the `readgraph` function. Currently supported common graph formats are `gml, graphml, gexf, dot` and `Pajek .NET`.
 
 ```@autodocs
 Modules = [FatGraphs]
@@ -12,12 +12,11 @@ Private = false
 ## Examples
 
 ```julia
-save(STDOUT, g)
-save("mygraph.gml", g, "mygraph", :gml)
+writegraph(STDOUT, g)
+writegraph("mygraph.gml", g, :gml)
+writegraph("mygraph.dot.gzip", g, :dot, compress=true)
 
-dg = load("multiplegraphs.graphml", :graphml)
-dg = load("mygraph.gml", "mygraph", :gml)
-
-g = laoadgraph("mygraph.gml",  :gml)
-
+g = readgraph("mygraph.dot.gzip", :dot)
+g = readgraph("mygraphs.graphml", :graphml)
+g = readgraph("mygraph.gml", :gml)
 ```

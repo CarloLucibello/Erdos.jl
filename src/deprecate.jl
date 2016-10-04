@@ -1,0 +1,2 @@
+# example
+# @deprecate oldfun newfun

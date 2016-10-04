@@ -10,7 +10,7 @@ to a file `f` in the
 
 Returns 1 (number of graphs written).
 """
-function savegexf(f::IO, g::SimpleGraph, gname::String)
+function writegexf(f::IO, g::SimpleGraph)
     xdoc = XMLDocument()
     xroot = create_root(xdoc, "gexf")
     set_attribute(xroot,"xmlns","http://www.gexf.net/1.2draft")
@@ -20,7 +20,6 @@ function savegexf(f::IO, g::SimpleGraph, gname::String)
 
     xmeta = new_child(xroot, "meta")
     xdesc = new_child(xmeta, "description")
-    add_text(xdesc, gname)
     xg = new_child(xroot, "graph")
     strdir = is_directed(g) ? "directed" : "undirected"
     set_attribute(xg,"defaultedgetype",strdir)
@@ -45,4 +44,4 @@ function savegexf(f::IO, g::SimpleGraph, gname::String)
     return 1
 end
 
-filemap[:gexf] = (NI, NI, savegexf, NI)
+filemap[:gexf] = (NI, writegexf)

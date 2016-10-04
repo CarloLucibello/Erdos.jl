@@ -7,3 +7,4 @@
 - bring in Matching, Interdiction, MatrixDepot, Community from LightGraphExtras
 - change name to FatGraphs
 - improved docs
+- [I/O] drop support for multiple graphs and renamse save/load to readgraph/writegraph

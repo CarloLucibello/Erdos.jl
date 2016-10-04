@@ -88,8 +88,7 @@ contract,
 a_star,
 
 # persistence
-# readgraph, readgraphml, readgml, writegraphml, writegexf, readdot,
-load, save, savegraph, loadgraph,
+readgraph, writegraph,
 
 # flow
 maximum_flow, EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm,
