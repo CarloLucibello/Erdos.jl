@@ -1,6 +1,6 @@
 using JLD
 """GraphSerializer is a type for custom serialization into JLD files.
-It has no use except on disk. This type supports JLD.writeas(g::Graph)
+It has no use except on disk. This type supports JLD.writeas(g::AGraph)
 and JLD.readas(gs::GraphSerializer). It is a form of Compressed Sparse Column format
 of the adjacency matrix of a graph g.
 
@@ -28,7 +28,7 @@ type GraphSerializer
     n_adjlist::Vector{Int} #stores the end offset into packed_adjlist
 end
 
-function JLD.writeas(g::Graph)
+function JLD.writeas(g::AGraph)
     n_adjlist = zeros(Int,nv(g))
     @assert sum(degree(g))/2 == ne(g)
     packed_adjlist = Array(Int, 2*ne(g))

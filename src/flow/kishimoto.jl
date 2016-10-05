@@ -1,7 +1,7 @@
 # Method when using Boykov-Kolmogorov as a subroutine
 # Kishimoto algorithm
 function kishimoto{T<:AbstractFloat}(
-  flow_graph::DiGraph,                       # the input graph
+  flow_graph::ADiGraph,                       # the input graph
   source::Int,                               # the source vertex
   target::Int,                               # the target vertex
   capacity_matrix::AbstractArray{T, 2},      # edge flow capacities
@@ -37,7 +37,7 @@ Returns the value of the multiroute flow as well as the final flow matrix,
 along with a multiroute cut if Boykov-Kolmogorov is used as a subroutine.
 Use a default capacity of 1 when the capacity matrix isn\'t specified.
 Requires arguments:
-- flow_graph::DiGraph                    # the input graph
+- flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
@@ -46,7 +46,7 @@ Requires arguments:
 """
 
 function kishimoto{T<:AbstractFloat}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractArray{T, 2},  # edge flow capacities

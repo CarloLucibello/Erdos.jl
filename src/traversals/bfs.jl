@@ -24,7 +24,7 @@ type BreadthFirst <: SimpleGraphVisitAlgorithm
 end
 
 function breadth_first_visit_impl!(
-    graph::AS,                 # the graph
+    graph::ASimpleGraph,                 # the graph
     queue::Vector{Int},                 # an (initialized) queue that stores the active vertices
     vertexcolormap::AbstractVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
     edgecolormap::AbstractEdgeMap,        # an (initialized) color-map to indicate status of edges
@@ -55,7 +55,7 @@ function breadth_first_visit_impl!(
 end
 
 function traverse_graph!(
-    graph::AS,
+    graph::ASimpleGraph,
     alg::BreadthFirst,
     source,
     visitor::SimpleGraphVisitor;
@@ -94,7 +94,7 @@ end
 Fills `dists` with the geodesic distances of vertices in  `g` from vertex/vertices `source`.
 `dists` can be either a vector or a dictionary.
 """
-function gdistances!(g::AS, source, dists)
+function gdistances!(g::ASimpleGraph, source, dists)
     visitor = GDistanceVisitor()
     traverse_graph!(g, BreadthFirst(), source, visitor, vertexcolormap=dists)
     for i in eachindex(dists)
@@ -110,7 +110,7 @@ end
 Returns a vector filled with the geodesic distances of vertices in  `g` from vertex/vertices `source`.
 For vertices in disconnected components the default distance is -1.
 """
-gdistances(g::AS, source) = gdistances!(g, source, fill(0,nv(g)))
+gdistances(g::ASimpleGraph, source) = gdistances!(g, source, fill(0,nv(g)))
 
 
 ###########################################
@@ -152,7 +152,7 @@ function examine_neighbor!(visitor::TreeBFSVisitorVector, u::Int, v::Int,
 end
 
 function bfs_tree!(visitor::TreeBFSVisitorVector,
-        g::AS,
+        g::ASimpleGraph,
         s::Int;
         vertexcolormap = Dict{Int,Int}(),
         queue = Vector{Int}())
@@ -174,7 +174,7 @@ and returns a directed acyclic graph of vertices in the order they were discover
 
 This function is a high level wrapper around bfs_tree!, use that function for more performance.
 """
-function bfs_tree(g::AS, s::Int)
+function bfs_tree(g::ASimpleGraph, s::Int)
     nvg = nv(g)
     visitor = TreeBFSVisitorVector(nvg)
     bfs_tree!(visitor, g, s)
@@ -227,7 +227,7 @@ end
 Will return `true` if graph `g` is [bipartite](https://en.wikipedia.org/wiki/Bipartite_graph).
 If a node `v` is specified, only the connected component to which it belongs is considered.
 """
-function is_bipartite(g::AS)
+function is_bipartite(g::ASimpleGraph)
     cc = filter(x->length(x)>2, connected_components(g))
     vmap = Dict{Int,Int}()
     for c in cc
@@ -236,11 +236,11 @@ function is_bipartite(g::AS)
     return true
 end
 
-is_bipartite(g::AS, v::Int) = _is_bipartite(g, v)
+is_bipartite(g::ASimpleGraph, v::Int) = _is_bipartite(g, v)
 
-_is_bipartite(g::AS, v::Int; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
+_is_bipartite(g::ASimpleGraph, v::Int; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
 
-function _bipartite_visitor(g::AS, s::Int; vmap=Dict{Int,Int}())
+function _bipartite_visitor(g::ASimpleGraph, s::Int; vmap=Dict{Int,Int}())
     nvg = nv(g)
     visitor = BipartiteVisitor(nvg)
     for v in keys(vmap) #have to reset vmap, otherway problems with digraphs
@@ -255,7 +255,7 @@ If the graph is bipartite returns a vector `c`  of size `nv(g)` containing
 the assignment of each vertex to one of the two sets (`c[i] == 1` or `c[i]==2`).
 If `g` is not bipartite returns an empty vector.
 """
-function bipartite_map(g::AS)
+function bipartite_map(g::ASimpleGraph)
     cc = connected_components(g)
     visitors = [_bipartite_visitor(g, x[1]) for x in cc]
     !all([v.is_bipartite for v in visitors]) && return zeros(Int, 0)

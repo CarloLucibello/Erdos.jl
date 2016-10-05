@@ -1,5 +1,5 @@
 """
-    community_detection_nback(g::Graph, k::Int)
+    community_detection_nback(g::AGraph, k::Int)
 
 Community detection using the spectral properties of
 the non-backtracking matrix of `g` (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
@@ -9,7 +9,7 @@ the non-backtracking matrix of `g` (see [Krzakala et al.](http://www.pnas.org/co
 
 return : array containing vertex assignments
 """
-function community_detection_nback(g::Graph, k::Int)
+function community_detection_nback(g::AGraph, k::Int)
     #TODO insert check on connected_components
     ϕ = real(nonbacktrack_embedding(g, k))
     if k==2
@@ -20,7 +20,7 @@ function community_detection_nback(g::Graph, k::Int)
     return c
 end
 
-function community_detection_threshold(g::AS, coords::AbstractArray)
+function community_detection_threshold(g::ASimpleGraph, coords::AbstractArray)
     # TODO use a more intelligent method to set the threshold
     # 0 based thresholds are highly sensitive to errors.
     c = ones(Int, nv(g))
@@ -44,7 +44,7 @@ Note does not explicitly construct the `non_backtracking_matrix`.
 See `Nonbacktracking` for details.
 
 """
-function nonbacktrack_embedding(g::Graph, k::Int)
+function nonbacktrack_embedding(g::AGraph, k::Int)
     B = Nonbacktracking(g)
     λ, eigv, conv = eigs(B, nev=k+1, v0=ones(Float64, B.m))
     ϕ = zeros(Complex64, nv(g), k-1)
@@ -62,7 +62,7 @@ end
 
 
 """
-    community_detection_bethe(g::Graph, k=-1; kmax=15)
+    community_detection_bethe(g::AGraph, k=-1; kmax=15)
 
 Community detection using the spectral properties of
 the Bethe Hessian matrix associated to `g` (see [Saade et al.](http://papers.nips.cc/paper/5520-spectral-clustering-of-graphs-with-the-bethe-hessian)).
@@ -71,7 +71,7 @@ optimal number of communities will be automatically selected.
 In this case the maximum number of detectable communities is given by `kmax`.
 Returns a vector containing the vertex assignments.
 """
-function community_detection_bethe(g::Graph, k::Int=-1; kmax::Int=15)
+function community_detection_bethe(g::AGraph, k::Int=-1; kmax::Int=15)
     A = adjacency_matrix(g)
     D = diagm(degree(g))
     r = (sum(degree(g)) / nv(g))^0.5
@@ -95,7 +95,7 @@ Community detection using the label propagation algorithm (see [Raghavan et al.]
 `maxiter`: maximum number of iterations
 return : vertex assignments and the convergence history
 """
-function label_propagation(g::AS; maxiter=1000)
+function label_propagation(g::ASimpleGraph; maxiter=1000)
     n = nv(g)
     label = collect(1:n)
     active_nodes = IntSet(vertices(g))
@@ -150,7 +150,7 @@ function range_shuffle!(r::UnitRange, a::AbstractVector)
 end
 
 """Return the most frequency label."""
-function vote!(g::AS, m::Vector{Int}, c::NeighComm, u::Int)
+function vote!(g::ASimpleGraph, m::Vector{Int}, c::NeighComm, u::Int)
     @inbounds for i=1:c.neigh_last-1
         c.neigh_cnt[c.neigh_pos[i]] = -1
     end

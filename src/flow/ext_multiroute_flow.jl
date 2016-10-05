@@ -9,7 +9,7 @@ Otherwise, it returns the vector of breaking points of the parametric
 multiroute flow function.
 Use a default capacity of 1 when the capacity matrix isn\'t specified.
 Requires arguments:
-- flow_graph::DiGraph                    # the input graph
+- flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
@@ -19,7 +19,7 @@ Requires arguments:
 
 # EMRF (Extended Multiroute Flow) algorithms
 function emrf{T<:AbstractFloat, R<:Real}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
@@ -39,14 +39,14 @@ end
 Output a set of (point,slope) that compose the restricted max-flow function.
 One point by possible slope is enough (hence O(λ×max_flow) complexity).
 Requires arguments:
-- flow_graph::DiGraph                    # the input graph
+- flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
 """
 
 function auxiliaryPoints{T<:AbstractFloat}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
@@ -104,14 +104,14 @@ end
 """
 Calculates the breaking of the restricted max-flow from a set of auxiliary points.
 Requires arguments:
-- flow_graph::DiGraph                    # the input graph
+- flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
 """
 
 function breakingPoints{T<:AbstractFloat}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
@@ -167,14 +167,14 @@ end
 Function to get the slope of the restricted flow. The slope is initialized at 0
 and is incremented for each non saturated edge in the restricted min-cut.
 Requires argument:
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
 """
 # Function to get the slope of the restricted flow
 function slope{T<:AbstractFloat}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction

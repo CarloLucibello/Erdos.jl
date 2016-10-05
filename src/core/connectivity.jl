@@ -3,7 +3,7 @@
 
 
 """
-    connected_components!(label::Vector{Int}, g::AS)
+    connected_components!(label::Vector{Int}, g::ASimpleGraph)
 
 Fills `label` with the `id` of the connected component to which it belongs.
 
@@ -14,7 +14,7 @@ Output:
     c = labels[i] => vertex i belongs to component c.
     c is the smallest vertex id in the component.
 """
-function connected_components!(label::Vector{Int}, g::AS)
+function connected_components!(label::Vector{Int}, g::ASimpleGraph)
     # this version of connected components uses Breadth First Traversal
     # with custom visitor type in order to improve performance.
     # one BFS is performed for each component.
@@ -88,7 +88,7 @@ Returns the [connected components](https://en.wikipedia.org/wiki/Connectivity_(g
 of `g` as a vector of components, each represented by a
 vector of vertices belonging to the component.
 """
-function connected_components(g::AS)
+function connected_components(g::ASimpleGraph)
     label = zeros(Int, nv(g))
     connected_components!(label, g)
     c, d = components(label)
@@ -101,14 +101,14 @@ end
 Returns `true` if `g` is connected.
 For DiGraphs, this is equivalent to a test of weak connectivity.
 """
-is_connected(g::Graph) = length(connected_components(g)) == 1
-is_connected(g::DiGraph) = is_weakly_connected(g)
+is_connected(g::AGraph) = length(connected_components(g)) == 1
+is_connected(g::ADiGraph) = is_weakly_connected(g)
 
 """Returns connected components of the undirected graph of `g`."""
-weakly_connected_components(g::DiGraph) = connected_components(Graph(g))
+weakly_connected_components(g::ADiGraph) = connected_components(Graph(g))
 
 """Returns `true` if the undirected graph of `g` is connected."""
-is_weakly_connected(g::DiGraph) = length(weakly_connected_components(g)) == 1
+is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
 
 # Adapated from Graphs.jl
 type TarjanVisitor <: SimpleGraphVisitor
@@ -155,7 +155,7 @@ function close_vertex!(vis::TarjanVisitor, v)
 end
 
 """Computes the (strongly) connected components of a directed graph."""
-function strongly_connected_components(g::DiGraph)
+function strongly_connected_components(g::ADiGraph)
     nvg = nv(g)
     cmap = zeros(Int, nvg)
     components = Vector{Vector{Int}}()
@@ -173,10 +173,10 @@ function strongly_connected_components(g::DiGraph)
 end
 
 """Returns `true` if `g` is (strongly) connected."""
-is_strongly_connected(g::DiGraph) = length(strongly_connected_components(g)) == 1
+is_strongly_connected(g::ADiGraph) = length(strongly_connected_components(g)) == 1
 
 """Computes the (common) period for all nodes in a strongly connected graph."""
-function period(g::DiGraph)
+function period(g::ADiGraph)
     !is_strongly_connected(g) && error("Graph must be strongly connected")
 
     # First check if there's a self loop
@@ -198,7 +198,7 @@ function period(g::DiGraph)
 end
 
 """Computes the condensation graph of the strongly connected components."""
-function condensation(g::DiGraph, scc::Vector{Vector{Int}})
+function condensation(g::ADiGraph, scc::Vector{Vector{Int}})
     h = DiGraph(length(scc))
 
     component = Vector{Int}(nv(g))
@@ -222,12 +222,12 @@ connected component in `g`, and the presence of an edge between between nodes
 in `h` indicates that there is at least one edge between the associated
 strongly connected components in `g`. The node numbering in `h` corresponds to
 the ordering of the components output from `strongly_connected_components`."""
-condensation(g::DiGraph) = condensation(g,strongly_connected_components(g))
+condensation(g::ADiGraph) = condensation(g,strongly_connected_components(g))
 
 """Returns a vector of vectors of integers representing lists of attracting
 components in `g`. The attracting components are a subset of the strongly
 connected components in which the components do not have any leaving edges."""
-function attracting_components(g::DiGraph)
+function attracting_components(g::ADiGraph)
     scc  = strongly_connected_components(g)
     cond = condensation(g,scc)
 
@@ -264,7 +264,7 @@ Returns a vector of the vertices in `g` at distance less or equal to `d`
 from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
 the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
 """
-function neighborhood(g::AS, v::Int, d::Int; dir=:out)
+function neighborhood(g::ASimpleGraph, v::Int, d::Int; dir=:out)
     @assert d >= 0 "Distance has to be greater then zero."
     visitor = NeighborhoodVisitor(d)
     push!(visitor.neigs, v)
@@ -323,19 +323,19 @@ end
 
 Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
 """
-degree_histogram(g::AS) = fit(Histogram, degree(g))
+degree_histogram(g::ASimpleGraph) = fit(Histogram, degree(g))
 
 "Returns the neighbors common to vertices `u` and `v` in `g`."
-common_neighbors(g::AS, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
+common_neighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
 "Returns the inneighbors common to vertices `u` and `v` in `g`."
-common_inneighbors(g::AS, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
+common_inneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
 "Returns the outneighbors common to vertices `u` and `v` in `g`."
-common_outneighbors(g::AS, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
+common_outneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
 
 
 "Returns true if `g` has any self loops."
 
-has_self_loops(g::AS) = any(v->has_edge(g, v, v), vertices(g))
+has_self_loops(g::ASimpleGraph) = any(v->has_edge(g, v, v), vertices(g))
 
 "Returns the number of self loops in `g`."
-num_self_loops(g::AS) = sum(v->has_edge(g, v, v), vertices(g))
+num_self_loops(g::ASimpleGraph) = sum(v->has_edge(g, v, v), vertices(g))

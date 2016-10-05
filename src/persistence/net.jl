@@ -4,7 +4,7 @@ Writes a graph `g` to a file `f` in the [Pajek
 NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
 Returns 1 (number of graphs written).
 """
-function writepajek(f::IO, g::AS)
+function writepajek(f::IO, g::ASimpleGraph)
     println(f, "*Vertices $(nv(g))")
     # write edges
     if is_directed(g)

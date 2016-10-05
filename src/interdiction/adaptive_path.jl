@@ -1,6 +1,6 @@
 # Method when the algorithm used is the Multilink Attack algorithm
 function adaptive_path{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities
@@ -20,7 +20,7 @@ end
 
 # Method when the algorithm used is a Bilevel Mixed Integer Linear Program
 function adaptive_path{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities

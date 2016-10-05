@@ -24,7 +24,7 @@ end
 Writes a graph `g` to a file `f` in the
 [GML](https://en.wikipedia.org/wiki/Graph_Modelling_Language) format.
 """
-function writegml(io::IO, g::AS)
+function writegml(io::IO, g::ASimpleGraph)
     println(io, "graph")
     println(io, "[")
     # length(gname) > 0 && println(io, "label \"$gname\"")

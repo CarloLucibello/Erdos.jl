@@ -12,8 +12,8 @@ end
 
 eltype(::Type{EdgeIter}) = Edge
 
-EdgeIter(g::AG) = EdgeIter(ne(g), fadj(g), false)
-EdgeIter(g::AD) = EdgeIter(ne(g), fadj(g), true)
+EdgeIter(g::AGraph) = EdgeIter(ne(g), fadj(g), false)
+EdgeIter(g::ADiGraph) = EdgeIter(ne(g), fadj(g), true)
 
 function _next(eit::EdgeIter, state::EdgeIterState = EdgeIterState(1,1,false), first::Bool = true)
     s = state.s

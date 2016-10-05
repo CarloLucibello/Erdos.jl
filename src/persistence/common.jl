@@ -34,13 +34,13 @@ Eventually the resulting file can be compressed in the gzip format.
 
 Currently supported formats are `:lg, :gml, :graphml, :gexf, :dot, :NET`.
 """
-function writegraph(io::IO, g::AS, t::Symbol)
+function writegraph(io::IO, g::ASimpleGraph, t::Symbol)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][2](io, g)
 end
 
 # save to a file
-function writegraph(fn::String, g::AS, t::Symbol; compress::Bool=false)
+function writegraph(fn::String, g::ASimpleGraph, t::Symbol; compress::Bool=false)
     if compress
         io = GZip.open(fn,"w")
     else

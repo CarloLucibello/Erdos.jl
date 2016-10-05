@@ -43,9 +43,9 @@ Union of `AbstractGraph` and `AbstractDiGraph`
 """
 typealias AbstractSimpleGraph Union{AbstractGraph, AbstractDiGraph}
 
-typealias AG AbstractGraph
-typealias AD AbstractDiGraph
-typealias AS AbstractSimpleGraph
+typealias AGraph AbstractGraph
+typealias ADiGraph AbstractDiGraph
+typealias ASimpleGraph AbstractSimpleGraph
 
 ####### Required interface for concrete types ########################
 """
@@ -55,7 +55,7 @@ The number of edges in `g`.
 
 Time Complexity: O(1)
 """
-ne(g::AS) = nothing
+ne(g::ASimpleGraph) = nothing
 
 """
     fadj(g)
@@ -79,7 +79,7 @@ NOTE: returns a reference, not a copy. Do not modify result.
 
 Time Complexity: O(1)
 """
-fadj(g::AS) = nothing
+fadj(g::ASimpleGraph) = nothing
 
 
 """
@@ -98,7 +98,7 @@ The second form is defined as
 
 NOTE: returns a reference, not a copy. Do not modify result.
 """
-badj(g::AD) = nothing
+badj(g::ADiGraph) = nothing
 
 """
     add_edge!(g, e::Edge)
@@ -108,7 +108,7 @@ Add to `g` the edge `e` (from `u` to `v`).
 Will return false if add fails (e.g., if vertices are not in the graph or the edge
 is already present) and true otherwise.
 """
-add_edge!(g::AS, e::Edge) = nothing
+add_edge!(g::ASimpleGraph, e::Edge) = nothing
 
 
 """
@@ -119,7 +119,7 @@ Remove the edge from `u` to `v`.
 
 Returns false if edge removal fails (e.g., if the edge does not exist) and true otherwise.
 """
-rem_edge!(g::AS, e::Edge) = nothing
+rem_edge!(g::ASimpleGraph, e::Edge) = nothing
 
 
 """
@@ -127,7 +127,7 @@ rem_edge!(g::AS, e::Edge) = nothing
 
 Add a new vertex to the graph `g`.
 """
-add_vertex!(g::AS) = nothing
+add_vertex!(g::ASimpleGraph) = nothing
 
 
 """
@@ -136,6 +136,6 @@ add_vertex!(g::AS) = nothing
 Remove the vertex `v` from graph `g`.
 It may change the index of other vertices (usually of the last one).
 """
-rem_vertex!(g::AS, i::Int) = nothing
+rem_vertex!(g::ASimpleGraph, i::Int) = nothing
 
-copy(g::AS) = nothing
+copy(g::ASimpleGraph) = nothing

@@ -18,7 +18,7 @@ type BellmanFordState{T<:Number}<:AbstractPathState
 end
 
 function bellman_ford_shortest_paths!{R<:Real}(
-    graph::AS,
+    graph::ASimpleGraph,
     sources::AbstractVector{Int},
     distmx::AbstractArray{R, 2},
     state::BellmanFordState
@@ -60,7 +60,7 @@ vertices `ss`. Returns a `BellmanFordState` with relevant traversal information
 (see below).
 """
 function bellman_ford_shortest_paths{T}(
-    graph::AS,
+    graph::ASimpleGraph,
 
     sources::AbstractVector{Int},
     distmx::AbstractArray{T, 2} = DefaultDistance()
@@ -71,12 +71,12 @@ function bellman_ford_shortest_paths{T}(
 end
 
 bellman_ford_shortest_paths{T}(
-    graph::AS,
+    graph::ASimpleGraph,
     v::Int,
     distmx::AbstractArray{T, 2} = DefaultDistance()
 ) = bellman_ford_shortest_paths(graph, [v], distmx)
 
-function has_negative_edge_cycle(graph::AS)
+function has_negative_edge_cycle(graph::ASimpleGraph)
     try
         bellman_ford_shortest_paths(graph, vertices(graph))
     catch e

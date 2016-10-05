@@ -290,7 +290,7 @@ end
 
 Merges graphs `g` and `h` by taking the set union of all vertices and edges.
 """
-function union{T<:AS}(g::T, h::T)
+function union{T<:SimpleGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 

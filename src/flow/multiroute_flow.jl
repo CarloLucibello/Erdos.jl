@@ -36,7 +36,7 @@ end
 
 # Method for Kishimoto algorithm
 function multiroute_flow{T<:Real}(
-  flow_graph::DiGraph,                   # the input graph
+  flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
@@ -50,7 +50,7 @@ end
 ## Methods for Extended Multiroute Flow Algorithm
 #1 When the breaking points are not already known
 function multiroute_flow{T<:Real, R<:Real}(
-  flow_graph::DiGraph,                            # the input graph
+  flow_graph::ADiGraph,                            # the input graph
   source::Int,                                    # the source vertex
   target::Int,                                    # the target vertex
   capacity_matrix::AbstractArray{T, 2},           # edge flow capacities
@@ -72,7 +72,7 @@ end
 function multiroute_flow{T1<:Real, T2<:Real, R<:Real}(
   breakingpoints::Vector{Tuple{T1, T1, Int}}, # vector of breaking points
   routes::R,                                # keyword argument for routes
-  flow_graph::DiGraph,                      # the input graph
+  flow_graph::ADiGraph,                      # the input graph
   source::Int,                              # the source vertex
   target::Int,                              # the target vertex
   capacity_matrix::AbstractArray{T2, 2} =    # edge flow capacities
@@ -104,7 +104,7 @@ returned as a third output.
 
 When the input is a network, it requires the following arguments:
 
-- flow_graph::DiGraph                   # the input graph
+- flow_graph::ADiGraph                   # the input graph
 - source::Int                           # the source vertex
 - target::Int                           # the target vertex
 - capacity_matrix::AbstractArray{T, 2}  # edge flow capacities with T<:Real
@@ -123,7 +123,7 @@ and the network descriptors, it requires the following arguments:
 
 - breakingpoints::Vector{Tuple{T1, T1, Int}} # vector of breaking points (T1<:Real)
 - routes::R<:Real                            # number of routes
-- flow_graph::DiGraph                        # the input graph
+- flow_graph::ADiGraph                        # the input graph
 - source::Int                                # the source vertex
 - target::Int                                # the target vertex
 - capacity_matrix::AbstractArray{T2, 2}      # optional edge flow capacities (T2<:Real)
@@ -180,7 +180,7 @@ f, F, labels = multiroute_flow(flow_graph, 1, 8, capacity_matrix,
 """
 
 function multiroute_flow{T<:Real, R<:Real}(
-  flow_graph::DiGraph,                    # the input graph
+  flow_graph::ADiGraph,                    # the input graph
   source::Int,                            # the source vertex
   target::Int,                            # the target vertex
   capacity_matrix::AbstractArray{T, 2} =  # edge flow capacities

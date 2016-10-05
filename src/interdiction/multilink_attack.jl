@@ -40,7 +40,7 @@ end
 
 
 function multilink_attack{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities

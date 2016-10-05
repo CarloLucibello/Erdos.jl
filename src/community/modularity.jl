@@ -4,7 +4,7 @@
 Computes Newman's modularity `Q`
 for graph `g` given the partitioning `c`.
 """
-function modularity(g::Graph, c)
+function modularity(g::AGraph, c)
     n = nv(g)
     m = 2*ne(g)
     m == 0 && return 0.

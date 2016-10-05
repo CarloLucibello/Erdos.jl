@@ -25,7 +25,7 @@ and computes minimum spanning tree. Returns a `Vector{KruskalHeapEntry}`,
 that contains the containing edges and its weights.
 """
 function kruskal_mst{T<:Real}(
-    g::AS,
+    g::ASimpleGraph,
     distmx::AbstractArray{T, 2} = DefaultDistance()
 )
 

@@ -19,7 +19,7 @@ julia> maximal_cliques(g)
  [2,1]
 ```
 """
-function maximal_cliques(g::Graph)
+function maximal_cliques(g::AGraph)
 
 
     # Cache nbrs and find first pivot (highest degree)

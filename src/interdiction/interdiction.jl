@@ -77,7 +77,7 @@ end
 
 # Method when the problem considered is Network Interdiction
 function interdiction_flow{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities
@@ -95,7 +95,7 @@ end
 
 # Method when the problem considered is Adaptive Flow (arc version)
 function interdiction_flow{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities
@@ -113,7 +113,7 @@ end
 
 # Method when the problem considered is Adaptive Flow (path version)
 function interdiction_flow{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities
@@ -177,7 +177,7 @@ This Interdiction Flow (including all the variants) for general graphs is an NP-
 
 The `interdiction_flow{T<:AbstractFloat}` function takes the following arguments:
 
-- flow_graph::DiGraph                           # the input graph
+- flow_graph::ADiGraph                           # the input graph
 - source::Int                                   # the source vertex
 - target::Int                                   # the target vertex
 - capacity_matrix::AbstractArray{T, 2}          # edge flow capacities
@@ -210,7 +210,7 @@ When the number of attacks is set to -1, an array with the results for any possi
 """
 
 function interdiction_flow{T<:AbstractFloat}(
-  flow_graph::DiGraph,                           # the input graph
+  flow_graph::ADiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities

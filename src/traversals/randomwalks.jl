@@ -1,7 +1,7 @@
 """Performs a random walk on graph `g` starting at vertex `s` and continuing for
 a maximum of `niter` steps. Returns a vector of vertices visited in order.
 """
-function randomwalk(g::AS, s::Integer, niter::Integer)
+function randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
   s in vertices(g) || throw(BoundsError())
   visited = Vector{Int}()
   sizehint!(visited, niter)
@@ -20,7 +20,7 @@ end
 """Performs a non-backtracking random walk on graph `g` starting at vertex `s` and continuing for
 a maximum of `niter` steps. Returns a vector of vertices visited in order.
 """
-function non_backtracking_randomwalk(g::Graph, s::Integer, niter::Integer)
+function non_backtracking_randomwalk(g::AGraph, s::Integer, niter::Integer)
     s in vertices(g) || throw(BoundsError())
     visited = Vector{Int}()
     sizehint!(visited, niter)
@@ -51,7 +51,7 @@ function non_backtracking_randomwalk(g::Graph, s::Integer, niter::Integer)
     return visited[1:i-1]
 end
 
-function non_backtracking_randomwalk(g::DiGraph, s::Integer, niter::Integer)
+function non_backtracking_randomwalk(g::ADiGraph, s::Integer, niter::Integer)
     s in vertices(g) || throw(BoundsError())
     visited = Vector{Int}()
     sizehint!(visited, niter)
@@ -83,7 +83,7 @@ end
 on graph `g` starting at vertex `s` and continuing for a maximum of `niter` steps.
 Returns a vector of vertices visited in order.
 """
-function saw(g::AS, s::Integer, niter::Integer)
+function saw(g::ASimpleGraph, s::Integer, niter::Integer)
   s in vertices(g) || throw(BoundsError())
   visited = Vector{Int}()
   svisited = Set{Int}()

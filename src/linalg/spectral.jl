@@ -14,7 +14,7 @@ matrix (defaults to `Int`).
 
 Note: This function is optimized for speed.
 """
-function adjacency_matrix(g::AS, dir::Symbol=:out, T::DataType=Int)
+function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
     n_v = nv(g)
     nz = ne(g) * (is_directed(g)? 1 : 2)
     colpt = ones(Int, n_v + 1)
@@ -59,20 +59,20 @@ function adjacency_matrix(g::AS, dir::Symbol=:out, T::DataType=Int)
     return spmx
 end
 
-adjacency_matrix(g::Graph, T::DataType=Int) = adjacency_matrix(g, :out, T)
+adjacency_matrix(g::AGraph, T::DataType=Int) = adjacency_matrix(g, :out, T)
 
 """Returns a sparse [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix)
 for a graph `g`, indexed by `[u, v]` vertices. For undirected graphs, `dir`
 defaults to `:out`; for directed graphs, `dir` defaults to `:both`. `T`
 defaults to `Int` for both graph types.
 """
-function laplacian_matrix(g::Graph, dir::Symbol=:out, T::DataType=Int)
+function laplacian_matrix(g::AGraph, dir::Symbol=:out, T::DataType=Int)
     A = adjacency_matrix(g, dir, T)
     D = spdiagm(sum(A,2)[:])
     return D - A
 end
 
-function laplacian_matrix(g::DiGraph, dir::Symbol=:both, T::DataType=Int)
+function laplacian_matrix(g::ADiGraph, dir::Symbol=:both, T::DataType=Int)
     A = adjacency_matrix(g, dir, T)
     D = spdiagm(sum(A,2)[:])
     return D - A
@@ -84,8 +84,8 @@ by vertex. Warning: Converts the matrix to dense with $nv^2$ memory usage. Use
 eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 `laplacian_matrix`.
 """
-laplacian_spectrum(g::Graph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
-laplacian_spectrum(g::DiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
+laplacian_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
+laplacian_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
 
 doc"""Returns the eigenvalues of the adjacency matrix for a graph `g`, indexed
 by vertex. Warning: Converts the matrix to dense with $nv^2$ memory usage. Use
@@ -93,8 +93,8 @@ by vertex. Warning: Converts the matrix to dense with $nv^2$ memory usage. Use
 eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 `adjacency_matrix`.
 """
-adjacency_spectrum(g::Graph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
-adjacency_spectrum(g::DiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
+adjacency_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
+adjacency_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
 
 
 """Returns a sparse node-arc incidence matrix for a graph, indexed by
@@ -103,7 +103,7 @@ directed graphs, a value of `-1` indicates that `src(e) == v`, while a
 value of `1` indicates that `dst(e) == v`. Otherwise, the value is
 `0`. For undirected graphs, both entries are `1`.
 """
-function incidence_matrix(g::AS, T::DataType=Int)
+function incidence_matrix(g::ASimpleGraph, T::DataType=Int)
     isdir = is_directed(g)
     n_v = nv(g)
     n_e = ne(g)
@@ -140,7 +140,7 @@ For further details, please refer to:
 JOVANOVIC, I.; STANIC, Z., 2014. Spectral Distances of
 Graphs Based on their Different Matrix Representations
 """
-function spectral_distance(G₁::Graph, G₂::Graph, k::Integer)
+function spectral_distance(G₁::AGraph, G₂::AGraph, k::Integer)
   A₁ = adjacency_matrix(G₁)
   A₂ = adjacency_matrix(G₂)
 
@@ -150,7 +150,7 @@ function spectral_distance(G₁::Graph, G₂::Graph, k::Integer)
   sumabs(λ₁ - λ₂)
 end
 
-function spectral_distance(G₁::Graph, G₂::Graph)
+function spectral_distance(G₁::AGraph, G₂::AGraph)
   @assert nv(G₁) == nv(G₂) "spectral distance not defined for |G₁| != |G₂|"
   spectral_distance(G₁, G₂, nv(G₁))
 end

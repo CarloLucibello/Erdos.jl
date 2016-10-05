@@ -20,7 +20,7 @@ The returned object is of type `MatchingResult`.
 """
 function maximum_weight_maximal_matching end
 
-function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, cutoff)
+function maximum_weight_maximal_matching{T<:Real}(g::AGraph, w::Dict{Edge,T}, cutoff)
     wnew = Dict{Edge,T}()
     for (e,x) in w
         if x >= cutoff
@@ -32,7 +32,7 @@ function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, cut
 end
 
 
-function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T})
+function maximum_weight_maximal_matching{T<:Real}(g::AGraph, w::Dict{Edge,T})
 # TODO support for graphs with zero degree nodes
 # TODO apply separately on each connected component
     bpmap = bipartite_map(g)
