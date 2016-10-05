@@ -6,7 +6,8 @@ export adjacency_matrix,
     coo_sparse,
     spectral_distance
 
-"""Returns a sparse boolean adjacency matrix for a graph, indexed by `[u, v]`
+"""
+Returns a sparse boolean adjacency matrix for a graph, indexed by `[u, v]`
 vertices. `true` values indicate an edge between `u` and `v`. Users may
 specify a direction (`:in`, `:out`, or `:both` are currently supported; `:out`
 is default for both directed and undirected graphs) and a data type for the
@@ -61,7 +62,8 @@ end
 
 adjacency_matrix(g::AGraph, T::DataType=Int) = adjacency_matrix(g, :out, T)
 
-"""Returns a sparse [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix)
+"""
+Returns a sparse [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix)
 for a graph `g`, indexed by `[u, v]` vertices. For undirected graphs, `dir`
 defaults to `:out`; for directed graphs, `dir` defaults to `:both`. `T`
 defaults to `Int` for both graph types.
@@ -78,8 +80,9 @@ function laplacian_matrix(g::ADiGraph, dir::Symbol=:both, T::DataType=Int)
     return D - A
 end
 
-doc"""Returns the eigenvalues of the Laplacian matrix for a graph `g`, indexed
-by vertex. Warning: Converts the matrix to dense with $nv^2$ memory usage. Use
+"""
+Returns the eigenvalues of the Laplacian matrix for a graph `g`, indexed
+by vertex. Warning: Converts the matrix to dense with ``nv^2`` memory usage. Use
 `eigs(laplacian_matrix(g);  kwargs...)` to compute some of the
 eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 `laplacian_matrix`.
@@ -87,8 +90,9 @@ eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 laplacian_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
 laplacian_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
 
-doc"""Returns the eigenvalues of the adjacency matrix for a graph `g`, indexed
-by vertex. Warning: Converts the matrix to dense with $nv^2$ memory usage. Use
+"""
+Returns the eigenvalues of the adjacency matrix for a graph `g`, indexed
+by vertex. Warning: Converts the matrix to dense with ``nv^2`` memory usage. Use
 `eigs(adjacency_matrix(g);kwargs...)` to compute some of the
 eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 `adjacency_matrix`.
@@ -97,7 +101,8 @@ adjacency_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(
 adjacency_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
 
 
-"""Returns a sparse node-arc incidence matrix for a graph, indexed by
+"""
+Returns a sparse node-arc incidence matrix for a graph, indexed by
 `[v, i]`, where `i` is in `1:ne(g)`, indexing an edge `e`. For
 directed graphs, a value of `-1` indicates that `src(e) == v`, while a
 value of `1` indicates that `dst(e) == v`. Otherwise, the value is
@@ -130,7 +135,9 @@ function incidence_matrix(g::ASimpleGraph, T::DataType=Int)
     return spmx
 end
 
-"""spectral_distance(G₁, G₂ [, k])
+"""
+    spectral_distance(G₁, G₂ [, k])
+
 Compute the spectral distance between undirected n-vertex
 graphs G₁ and G₂ using the top k ≤ n greatest eigenvalues.
 If k is ommitted, uses full spectrum.

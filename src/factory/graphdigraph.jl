@@ -13,6 +13,8 @@ end
 
 typealias SimpleGraph Union{Graph, DiGraph}
 
+
+#### GRAPH CONSTRUCTORS
 """
     Graph(n=0)
 
@@ -66,6 +68,9 @@ function Graph(g::DiGraph)
     return Graph(edgect ÷ 2, newfadj)
 end
 
+Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
+
+###################
 
 fadj(g::SimpleGraph) = g.fadjlist
 ne(g::SimpleGraph) = g.ne
@@ -160,7 +165,7 @@ function add_vertex!(g::Graph)
     return nv(g)
 end
 
-
+##### DIGRAPH CONSTRUCTORS  #############
 """
     DiGraph(n=0)
 
@@ -220,6 +225,9 @@ function DiGraph(g::Graph)
     h.badjlist = deepcopy(badj(g))
     return h
 end
+
+DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
+#########
 
 badj(g::DiGraph) = g.badjlist
 

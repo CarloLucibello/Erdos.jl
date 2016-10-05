@@ -157,7 +157,6 @@ FatGraphs
 include("core/edge.jl")
     include("core/interface.jl")
     include("core/core.jl")
-    include("core/graphdigraph.jl")
     include("core/edgeiter.jl")
     include("core/operators.jl")
 include("traversals/graphvisit.jl")
@@ -204,7 +203,7 @@ include("flow/maximum_flow.jl")
 include("interdiction/interdiction.jl")
 include("matching/matching.jl")
 include("spanningtrees/kruskal.jl")
+include("factory/graphdigraph.jl")
 include("utils.jl")
 include("deprecate.jl")
-
 end # module

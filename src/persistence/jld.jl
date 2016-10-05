@@ -47,7 +47,7 @@ function JLD.writeas(g::AGraph)
             packed_adjlist[k+=1] = v
         end
     end
-    GraphSerializer(vertices(g), g.ne, packed_adjlist, n_adjlist)
+    GraphSerializer(vertices(g), ne(g), packed_adjlist, n_adjlist)
 end
 
 function JLD.readas(gs::GraphSerializer)

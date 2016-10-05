@@ -18,7 +18,7 @@ function _make_simple_directed_graph{T<:Integer}(n::T, edgelist::Vector{Tuple{T,
     return g
 end
 
-doc"""
+"""
     smallgraph(s::Symbol)
     smallgraph(s::AbstractString)
 

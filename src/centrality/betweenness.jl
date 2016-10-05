@@ -2,7 +2,7 @@
 # TODO - weighted, separate unweighted, edge betweenness
 
 
-doc"""
+"""
     betweenness_centrality(g, k=0; normalize=true, endpoints=false)
 
 
@@ -13,8 +13,8 @@ default.
 
 Betweenness centrality is defined as:
 
-$bc(v) = \frac{1}{\mathcal{N}} \sum_{s \neq t \neq v}
-        \frac{\sigma_{st}(v)}{\sigma_{st}}$.
+``bc(v) = \frac{1}{\mathcal{N}} \sum_{s \neq t \neq v}
+        \frac{\sigma_{st}(v)}{\sigma_{st}}``.
 
  **Parameters**
 

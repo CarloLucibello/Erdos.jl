@@ -2,8 +2,8 @@
 - Edge is now its own type (not a Pair{Int,Int} anymore)
 - drop lg graph format
 - add Changelog
-- remove member vertices from graph types
-- remove graphmatrices (LinAlg submodule)
+- removed member vertices from graph types
+- removed graphmatrices (LinAlg submodule)
 - bring in Matching, Interdiction, MatrixDepot, Community from LightGraphExtras
 - change name to FatGraphs
 - improved docs
@@ -13,3 +13,4 @@
 - introduce AbstractGraph, AbstractDiGraph, AbstractSimpleGraph
 - make most methods accept abstract types
 - change the return type of add_vertex! to nv(g)
+- removed dynamic stochastic block model
