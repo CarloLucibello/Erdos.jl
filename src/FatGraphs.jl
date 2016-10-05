@@ -21,16 +21,24 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             sum, size, sparse, eltype, length, ndims, transpose,
             ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!
 
+#interface
+export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
 
+# edge
+Edge, is_ordered, reverse,
 # core
-export AS, Edge, Graph, DiGraph, vertices, edges, src, dst,
-fadj, badj, in_edges, out_edges, has_vertex, has_edge, is_directed,
+vertices, edges, src, dst,
+fadj, badj, adj,
+in_edges, out_edges, has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
 indegree, outdegree, degree, degree_histogram, density, Δ, δ,
 Δout, Δin, δout, δin, neighbors, in_neighbors, out_neighbors,
 common_neighbors, common_inneighbors, common_outneighbors,
  has_self_loops, num_self_loops,
 rem_vertex!,
+
+# Graph and DiGraph concrete types
+reverse!, Graph, DiGraph, SimpleGraph, #reverse
 
 # distance
 eccentricity, diameter, periphery, radius, center,
@@ -42,7 +50,7 @@ spectral_distance, edit_distance,
 MinkowskiCost, BoundedMinkowskiCost,
 
 # operators
-complement, reverse, reverse!, blkdiag, union, intersect,
+complement, blkdiag, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 induced_subgraph, egonet,

@@ -8,7 +8,7 @@ f = IOBuffer()
 
 
 function trivialgraphvisit(
-    g::AS,
+    g::AbstractSimpleGraph,
     alg::FatGraphs.SimpleGraphVisitAlgorithm,
     sources
 )

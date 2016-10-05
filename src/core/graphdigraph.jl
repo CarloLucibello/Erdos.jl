@@ -254,3 +254,56 @@ function add_vertex!(g::DiGraph)
     push!(g.fadjlist, Vector{Int}())
     return nv(g)
 end
+
+#TODO define for abstract types
+"""
+    reverse(g::DiGraph)
+
+Produces a graph where all edges are reversed from the
+original.
+"""
+function reverse(g::DiGraph)
+    gnv = nv(g)
+    gne = ne(g)
+    h = DiGraph(gnv)
+    h.fadjlist = deepcopy(g.badjlist)
+    h.badjlist = deepcopy(g.fadjlist)
+    h.ne = gne
+
+    return h
+end
+
+#TODO define for abstract types
+"""
+    reverse!(g::DiGraph)
+
+In-place reverse (modifies the original graph).
+"""
+function reverse!(g::DiGraph)
+    g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
+    return g
+end
+
+#TODO define for abstract types
+"""
+    union(g, h)
+
+Merges graphs `g` and `h` by taking the set union of all vertices and edges.
+"""
+function union{T<:AS}(g::T, h::T)
+    gnv = nv(g)
+    hnv = nv(h)
+
+    r = T(max(gnv, hnv))
+    r.ne = ne(g)
+    for i = 1:gnv
+        r.fadjlist[i] = deepcopy(g.fadjlist[i])
+        if is_directed(g)
+            r.badjlist[i] = deepcopy(g.badjlist[i])
+        end
+    end
+    for e in edges(h)
+        add_edge!(r, e)
+    end
+    return r
+end

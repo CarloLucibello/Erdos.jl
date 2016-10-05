@@ -30,37 +30,11 @@ function complement(g::DiGraph)
     return h
 end
 
-"""
-    reverse(g::DiGraph)
-
-Produces a graph where all edges are reversed from the
-original.
-"""
-function reverse(g::DiGraph)
-    gnv = nv(g)
-    gne = ne(g)
-    h = DiGraph(gnv)
-    h.fadjlist = deepcopy(g.badjlist)
-    h.badjlist = deepcopy(g.fadjlist)
-    h.ne = gne
-
-    return h
-end
 
 """
-    reverse!(g::DiGraph)
-
-In-place reverse (modifies the original graph).
-"""
-function reverse!(g::DiGraph)
-    g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
-    return g
-end
-
-doc"""
     blkdiag(g, h)
 
-Produces a graph with $|V(g)| + |V(h)|$ vertices and $|E(g)| + |E(h)|$
+Produces a graph with ``|V(g)| + |V(h)|`` vertices and ``|E(g)| + |E(h)|``
 edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
@@ -134,30 +108,6 @@ function symmetric_difference{T<:AS}(g::T, h::T)
     end
     return r
 end
-
-"""
-    union(g, h)
-
-Merges graphs `g` and `h` by taking the set union of all vertices and edges.
-"""
-function union{T<:AS}(g::T, h::T)
-    gnv = nv(g)
-    hnv = nv(h)
-
-    r = T(max(gnv, hnv))
-    r.ne = ne(g)
-    for i = 1:gnv
-        r.fadjlist[i] = deepcopy(g.fadjlist[i])
-        if is_directed(g)
-            r.badjlist[i] = deepcopy(g.badjlist[i])
-        end
-    end
-    for e in edges(h)
-        add_edge!(r, e)
-    end
-    return r
-end
-
 
 """
     join(g, h)

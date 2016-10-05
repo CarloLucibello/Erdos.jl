@@ -48,6 +48,8 @@ a1 = Graph(adjmx1)
 a2 = DiGraph(adjmx2)
 
 tests = [
+    "core/edge",
+    "core/interface",
     "core/core",
     "core/edgeiter",
     "core/operators",

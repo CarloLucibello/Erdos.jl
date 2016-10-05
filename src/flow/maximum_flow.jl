@@ -39,6 +39,8 @@ end
 
 getindex(d::DefaultCapacity, s::Int, t::Int) = if has_edge(d.flow_graph, s , t) 1 else 0 end
 size(d::DefaultCapacity) = (d.nv, d.nv)
+
+# TODO implement reverse for AbstractDiGraph?
 transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
 ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
 

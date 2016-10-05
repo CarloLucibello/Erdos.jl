@@ -6,11 +6,6 @@ c4 = complement(g4)
 @test nv(c4) == 5
 @test ne(c4) == 16
 
-g = reverse(g4)
-@test re1 in edges(g)
-reverse!(g)
-@test g == g4
-
 g = blkdiag(g3, g3)
 @test nv(g) == 10
 @test ne(g) == 8
