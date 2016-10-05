@@ -4,7 +4,7 @@
         dst::Int
     end
 
-A type representing a single edge between two vertices of a graph.
+A type representing an edge between two vertices of a graph.
 """
 immutable Edge
     src::Int
@@ -39,4 +39,18 @@ done(e::Edge, i) = i>2
 next(e::Edge, i) = (getfield(e,i), i+1)
 indexed_next(e::Edge, i::Int, state) = (getfield(e,i), i+1)
 
+"""
+    reverse(e::Edge)
+
+Swap `e.src` and `e.dst`.
+"""
 reverse(e::Edge) = Edge(dst(e), src(e))
+
+"""
+    sort(e::Edge)
+
+Swap `src` and `dst` if `src > dst`.
+"""
+sort(e::Edge) = src(e) > dst(e) ? reverse(e) : e
+
+show(io::IO, e::Edge) = print(io, "$(src(e))=>$(dst(e))")

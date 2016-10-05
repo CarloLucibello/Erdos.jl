@@ -2,9 +2,11 @@
 - Edge is now its own type (not a Pair{Int,Int} anymore)
 - drop lg graph format
 - add Changelog
-- remove member `vertices` from graph types
+- remove member vertices from graph types
 - remove graphmatrices (LinAlg submodule)
 - bring in Matching, Interdiction, MatrixDepot, Community from LightGraphExtras
 - change name to FatGraphs
 - improved docs
 - [I/O] rename save/load to readgraph/writegraph and drop support for multiple graphs in one file
+- in_edges and out_edges now return iterators and not vectors
+- introduce AbstractGraph, AbstractDiGraph, AbstractSimpleGraph

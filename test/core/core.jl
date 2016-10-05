@@ -53,8 +53,8 @@ end
 @test issubset(h2, h1)
 
 @test has_edge(g, 1, 2)
-@test in_edges(g, 2) == [e1, reverse(e4)]
-@test out_edges(g, 1) == [e1, e2, e3]
+@test collect(in_edges(g, 2)) == [e1, reverse(e4)]
+@test collect(out_edges(g, 1)) == [e1, e2, e3]
 
 @test add_vertex!(g) && nv(g) == 6
 @test add_vertices!(g,5) && nv(g) == 11

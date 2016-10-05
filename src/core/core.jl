@@ -84,10 +84,10 @@ has_edge(g::SimpleGraph, u::Int, v::Int) = has_edge(g, Edge(u, v))
 """
     in_edges(g, v)
 
-Returns an Array of the edges in `g` that arrive at vertex `v`.
-`v=dst(e)` for each returned edge `e`.
+Returns an iterable of the edges in `g` that arrive at vertex `v`.
+`v = dst(e)` for each returned edge `e`.
 """
-in_edges(g::SimpleGraph, v::Int) = [Edge(x,v) for x in badj(g, v)]
+in_edges(g::SimpleGraph, v::Int) = (Edge(x,v) for x in badj(g, v))
 
 """
     out_edges(g, v)
@@ -95,7 +95,7 @@ in_edges(g::SimpleGraph, v::Int) = [Edge(x,v) for x in badj(g, v)]
 Returns an Array of the edges in `g` that depart from vertex `v`.
 `v = src(e)` for each returned edge `e`.
 """
-out_edges(g::SimpleGraph, v::Int) = [Edge(v,x) for x in fadj(g,v)]
+out_edges(g::SimpleGraph, v::Int) = (Edge(v,x) for x in fadj(g,v))
 
 
 """Return true if `v` is a vertex of `g`."""
@@ -147,7 +147,7 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     v in vertices(g) || return false
     n = nv(g)
 
-    edgs = in_edges(g, v)
+    edgs = collect(in_edges(g, v))
     for e in edgs
         rem_edge!(g, e)
     end
@@ -162,7 +162,7 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     end
 
     if is_directed(g)
-        edgs = out_edges(g, v)
+        edgs = collect(out_edges(g, v))
         for e in edgs
             rem_edge!(g, e)
         end
