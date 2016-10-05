@@ -7,6 +7,9 @@
 - bring in Matching, Interdiction, MatrixDepot, Community from LightGraphExtras
 - change name to FatGraphs
 - improved docs
+- file and folders reorganization
 - [I/O] rename save/load to readgraph/writegraph and drop support for multiple graphs in one file
 - in_edges and out_edges now return iterators and not vectors
 - introduce AbstractGraph, AbstractDiGraph, AbstractSimpleGraph
+- make most methods accept abstract types
+- change the return type of add_vertex! to nv(g)
