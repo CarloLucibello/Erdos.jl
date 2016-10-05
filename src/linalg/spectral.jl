@@ -28,7 +28,7 @@ function adjacency_matrix(g::SimpleGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = out_neighbors
     elseif dir == :both
         if is_directed(g)
-            neighborfn = all_neighbors
+            neighborfn = neighbors
             nz *= 2
         else
             neighborfn = out_neighbors

@@ -56,8 +56,8 @@ end
 @test collect(in_edges(g, 2)) == [e1, reverse(e4)]
 @test collect(out_edges(g, 1)) == [e1, e2, e3]
 
-@test add_vertex!(g) && nv(g) == 6
-@test add_vertices!(g,5) && nv(g) == 11
+@test add_vertex!(g) == nv(g) == 6
+@test add_vertices!(g,5) == nv(g) == 11
 @test has_vertex(g, 11)
 @test ne(g) == 5
 @test !is_directed(g)
@@ -79,7 +79,9 @@ end
 
 @test neighbors(g, 1) == [2, 3, 4]
 @test common_neighbors(g, 2, 3) == [1, 5]
-@test common_neighbors(h, 2, 3) == [5]
+@test common_neighbors(h, 2, 3) == [1,5]
+@test common_inneighbors(h, 2, 3) == [1]
+@test common_outneighbors(h, 2, 3) == [5]
 
 @test add_edge!(g, 1, 1)
 @test has_self_loops(g)

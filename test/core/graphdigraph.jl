@@ -4,7 +4,7 @@
 @test Graph(DiGraph(g3)) == g3
 
 @test degree(g3, 1) == 1
-# @test all_neighbors(g3, 3) == [2, 4]
+# @test neighbors(g3, 3) == [2, 4]
 @test density(g3) == 0.4
 
 g = Graph(5)
@@ -41,7 +41,7 @@ h = DiGraph(5)
 @test !has_edge(h, e0)
 
 @test degree(g4, 1) == 1
-# @test all_neighbors(g4, 3) == [4]
+# @test neighbors(g4, 3) == [4]
 @test density(g4) == 0.2
 
 @test nv(a1) == 3
@@ -69,4 +69,4 @@ h = DiGraph(sparse(adjmx1))
 @test (nv(h), ne(h)) == (3, 4)
 @test Graph(h) == g
 
-@test sort(all_neighbors(WheelDiGraph(10),2)) == [1, 3, 10]
+@test sort(neighbors(WheelDiGraph(10),2)) == [1, 3, 10]

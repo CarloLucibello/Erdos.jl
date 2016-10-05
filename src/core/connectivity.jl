@@ -292,15 +292,6 @@ function isgraphical(degs::Vector{Int})
 end
 
 
-"""Return the number of edges which start at vertex `v`."""
-indegree(g::SimpleGraph, v::Int) = length(badj(g,v))
-"""Return the number of edges which end at vertex `v`."""
-outdegree(g::SimpleGraph, v::Int) = length(fadj(g,v))
-
-
-indegree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [indegree(g,x) for x in v]
-outdegree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [outdegree(g,x) for x in v]
-degree(g::SimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) for x in v]
 
 "Return the maxium `outdegree` of vertices in `g`."
 Δout(g) = noallocextreme(outdegree,(>), typemin(Int), g)
@@ -334,27 +325,12 @@ Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
 """
 degree_histogram(g::SimpleGraph) = fit(Histogram, degree(g))
 
-"""Returns a list of all neighbors connected to vertex `v` by an incoming edge.
-
-NOTE: returns a reference, not a copy. Do not modify result.
-"""
-in_neighbors(g::SimpleGraph, v::Int) = badj(g,v)
-"""Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
-
-NOTE: returns a reference, not a copy. Do not modify result.
-"""
-out_neighbors(g::SimpleGraph, v::Int) = fadj(g,v)
-
-"""Returns a list of all neighbors of vertex `v` in `g`.
-
-For DiGraphs, this is equivalent to `out_neighbors(g, v)`.
-
-NOTE: returns a reference, not a copy. Do not modify result.
-"""
-neighbors(g::SimpleGraph, v::Int) = out_neighbors(g, v)
-
 "Returns the neighbors common to vertices `u` and `v` in `g`."
 common_neighbors(g::SimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
+"Returns the inneighbors common to vertices `u` and `v` in `g`."
+common_inneighbors(g::SimpleGraph, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
+"Returns the outneighbors common to vertices `u` and `v` in `g`."
+common_outneighbors(g::SimpleGraph, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
 
 
 "Returns true if `g` has any self loops."

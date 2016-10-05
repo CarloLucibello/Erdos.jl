@@ -14,9 +14,9 @@ The returned iterator is valid for one pass over the edges, and is invalidated b
 edges(g::AS) = EdgeIter(g)
 
 fadj(g::AS, v::Int) = fadj(g)[v]
+badj(g::AS, v::Int) = badj(g)[v]
 
 badj(g::AG) = fadj(g)
-badj(g::AG, v::Int) = fadj(g, v)
 
 
 """
@@ -44,7 +44,7 @@ end
 Add `n` new vertices to the graph `g`. Returns the final number
 of vertices.
 """
-function add_vertices!(g::SimpleGraph, n::Integer)
+function add_vertices!(g::AS, n::Integer)
     added = true
     for i = 1:n
         add_vertex!(g)
@@ -104,6 +104,14 @@ end
     ne(g) == ne(h) &&
     fadj(g) == fadj(h)
 
+==(g::AD, h::AD) =
+    vertices(g) == vertices(h) &&
+    ne(g) == ne(h) &&
+    fadj(g) == fadj(h) &&
+    badj(g) == badj(h)
+
+
+
 """
     is_directed(g)
 
@@ -130,13 +138,54 @@ function has_edge(g::AG, e::Edge)
     return length(searchsorted(fadj(g,u), v)) > 0
 end
 
+function has_edge(g::AD, e::Edge)
+    u, v = e
+    u > nv(g) || v > nv(g) && return false
+    if degree(g,u) < degree(g,v)
+        return length(searchsorted(fadj(g,u), v)) > 0
+    else
+        return length(searchsorted(badj(g,v), u)) > 0
+    end
+end
+
+"""Return the number of edges which start at vertex `v`."""
+indegree(g::AS, v::Int) = length(badj(g,v))
+"""Return the number of edges which end at vertex `v`."""
+outdegree(g::AS, v::Int) = length(fadj(g,v))
 
 """
     degree(g, v)
 
 Return the number of edges (both ingoing and outgoing) from the vertex `v`.
 """
-degree(g::AG, v::Int) = indegree(g,v)
+degree(g::AG, v::Int) = indegree(g, v)
+degree(g::AD, v::Int) = indegree(g, v) + outdegree(g, v)
+
+indegree(g::AS, v::AbstractArray{Int,1} = vertices(g)) = [indegree(g,x) for x in v]
+outdegree(g::AS, v::AbstractArray{Int,1} = vertices(g)) = [outdegree(g,x) for x in v]
+degree(g::AS, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) for x in v]
+
+
+"""Returns a list of all neighbors connected to vertex `v` by an incoming edge.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+in_neighbors(g::AS, v::Int) = badj(g,v)
+"""Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+out_neighbors(g::AS, v::Int) = fadj(g,v)
+
+"""Returns a list of all neighbors of vertex `v` in `g`.
+
+For DiGraphs, this is equivalent to `[in_neighbors(g, v); out_neighbors(g, v)]`.
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+neighbors(g::AG, v::Int) = out_neighbors(g, v)
+neighbors(g::AD, v::Int) = [in_neighbors(g, v); out_neighbors(g, v)]
+
 
 """
     density(g)
@@ -146,3 +195,4 @@ number of possible edges. This is ``|v| |v-1|`` for directed graphs and
 ``(|v| |v-1|) / 2`` for undirected graphs.
 """
 density(g::AG) = (2*ne(g)) / (nv(g) * (nv(g)-1))
+density(g::AD) = ne(g) / (nv(g) * (nv(g)-1))

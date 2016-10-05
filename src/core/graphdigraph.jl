@@ -1,11 +1,11 @@
 """A type representing an undirected graph."""
-type Graph
+type Graph <: AbstractGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
 end
 
 """A type representing a directed graph."""
-type DiGraph
+type DiGraph <: AbstractDiGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{Int}} # [dst]: (src, src, src)
@@ -157,11 +157,16 @@ end
 
 function add_vertex!(g::Graph)
     push!(g.fadjlist, Vector{Int}())
-    return true
+    return nv(g)
 end
 
 
-function DiGraph(n::Int)
+"""
+    DiGraph(n=0)
+
+Construct an empty DiGraph with `n` vertices.
+"""
+function DiGraph(n::Int = 0)
     fadjlist = Vector{Vector{Int}}()
     badjlist = Vector{Vector{Int}}()
     for i = 1:n
@@ -171,7 +176,6 @@ function DiGraph(n::Int)
     return DiGraph(0, badjlist, fadjlist)
 end
 
-DiGraph() = DiGraph(0)
 
 function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
     dima, dimb = size(adjmx)
@@ -191,6 +195,12 @@ function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
     return g
 end
 
+
+"""
+    DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+
+Construct a `DiGraph` from the adjacency matrix `adjmx`.
+"""
 function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
@@ -212,20 +222,11 @@ function DiGraph(g::Graph)
 end
 
 badj(g::DiGraph) = g.badjlist
-badj(g::DiGraph, v::Int) = badj(g)[v]
 
 
 function copy(g::DiGraph)
     return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
-
-==(g::DiGraph, h::DiGraph) =
-    vertices(g) == vertices(h) &&
-    ne(g) == ne(h) &&
-    fadj(g) == fadj(h) &&
-    badj(g) == badj(h)
-
-is_directed(g::DiGraph) = true
 
 function add_edge!(g::DiGraph, e::Edge)
     s, d = e
@@ -248,26 +249,8 @@ function rem_edge!(g::DiGraph, e::Edge)
     return true
 end
 
-
 function add_vertex!(g::DiGraph)
     push!(g.badjlist, Vector{Int}())
     push!(g.fadjlist, Vector{Int}())
-
-    return true
+    return nv(g)
 end
-
-
-function has_edge(g::DiGraph, e::Edge)
-    u, v = e
-    u > nv(g) || v > nv(g) && return false
-    if degree(g,u) < degree(g,v)
-        return length(searchsorted(fadj(g,u), v)) > 0
-    else
-        return length(searchsorted(badj(g,v), u)) > 0
-    end
-end
-
-degree(g::DiGraph, v::Int) = indegree(g,v) + outdegree(g,v)
-"Returns all the vertices which share an edge with `v`."
-all_neighbors(g::DiGraph, v::Int) = union(in_neighbors(g,v), out_neighbors(g,v))
-density(g::DiGraph) = ne(g) / (nv(g) * (nv(g)-1))
