@@ -3,7 +3,7 @@
 
 
 """
-    connected_components!(label::Vector{Int}, g::SimpleGraph)
+    connected_components!(label::Vector{Int}, g::AS)
 
 Fills `label` with the `id` of the connected component to which it belongs.
 
@@ -14,7 +14,7 @@ Output:
     c = labels[i] => vertex i belongs to component c.
     c is the smallest vertex id in the component.
 """
-function connected_components!(label::Vector{Int}, g::SimpleGraph)
+function connected_components!(label::Vector{Int}, g::AS)
     # this version of connected components uses Breadth First Traversal
     # with custom visitor type in order to improve performance.
     # one BFS is performed for each component.
@@ -88,7 +88,7 @@ Returns the [connected components](https://en.wikipedia.org/wiki/Connectivity_(g
 of `g` as a vector of components, each represented by a
 vector of vertices belonging to the component.
 """
-function connected_components(g::SimpleGraph)
+function connected_components(g::AS)
     label = zeros(Int, nv(g))
     connected_components!(label, g)
     c, d = components(label)
@@ -264,7 +264,7 @@ Returns a vector of the vertices in `g` at distance less or equal to `d`
 from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
 the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
 """
-function neighborhood(g::SimpleGraph, v::Int, d::Int; dir=:out)
+function neighborhood(g::AS, v::Int, d::Int; dir=:out)
     @assert d >= 0 "Distance has to be greater then zero."
     visitor = NeighborhoodVisitor(d)
     push!(visitor.neigs, v)
@@ -323,19 +323,19 @@ end
 
 Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
 """
-degree_histogram(g::SimpleGraph) = fit(Histogram, degree(g))
+degree_histogram(g::AS) = fit(Histogram, degree(g))
 
 "Returns the neighbors common to vertices `u` and `v` in `g`."
-common_neighbors(g::SimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
+common_neighbors(g::AS, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
 "Returns the inneighbors common to vertices `u` and `v` in `g`."
-common_inneighbors(g::SimpleGraph, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
+common_inneighbors(g::AS, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
 "Returns the outneighbors common to vertices `u` and `v` in `g`."
-common_outneighbors(g::SimpleGraph, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
+common_outneighbors(g::AS, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
 
 
 "Returns true if `g` has any self loops."
 
-has_self_loops(g::SimpleGraph) = any(v->has_edge(g, v, v), vertices(g))
+has_self_loops(g::AS) = any(v->has_edge(g, v, v), vertices(g))
 
 "Returns the number of self loops in `g`."
-num_self_loops(g::SimpleGraph) = sum(v->has_edge(g, v, v), vertices(g))
+num_self_loops(g::AS) = sum(v->has_edge(g, v, v), vertices(g))

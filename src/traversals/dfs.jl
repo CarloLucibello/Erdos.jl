@@ -25,7 +25,7 @@ type DepthFirst <: SimpleGraphVisitAlgorithm
 end
 
 function depth_first_visit_impl!(
-    graph::SimpleGraph,      # the graph
+    graph::AS,      # the graph
     stack,                          # an (initialized) stack of vertex
     vertexcolormap::AbstractVertexMap,    # an (initialized) color-map to indicate status of vertices
     edgecolormap::AbstractEdgeMap,      # an (initialized) color-map to indicate status of edges
@@ -66,7 +66,7 @@ function depth_first_visit_impl!(
 end
 
 function traverse_graph!(
-    graph::SimpleGraph,
+    graph::AS,
     alg::DepthFirst,
     s::Int,
     visitor::SimpleGraphVisitor;
@@ -118,7 +118,7 @@ discover_vertex!(vis::DFSCyclicTestVisitor, v) = !vis.found_cycle
 Tests whether a graph contains a cycle through depth-first search. It
 returns `true` when it finds a cycle, otherwise `false`.
 """
-function is_cyclic(g::SimpleGraph)
+function is_cyclic(g::AS)
     cmap = zeros(Int, nv(g))
     visitor = DFSCyclicTestVisitor()
 
@@ -152,7 +152,7 @@ function close_vertex!(visitor::TopologicalSortVisitor, v::Int)
     push!(visitor.vertices, v)
 end
 
-function topological_sort_by_dfs(graph::SimpleGraph)
+function topological_sort_by_dfs(graph::AS)
     nvg = nv(graph)
     cmap = zeros(Int, nvg)
     visitor = TopologicalSortVisitor(nvg)
@@ -187,7 +187,7 @@ end
 Provides a depth-first traversal of the graph `g` starting with source vertex `s`,
 and returns a directed acyclic graph of vertices in the order they were discovered.
 """
-function dfs_tree(g::SimpleGraph, s::Int)
+function dfs_tree(g::AS, s::Int)
     nvg = nv(g)
     visitor = TreeDFSVisitor(nvg)
     traverse_graph!(g, DepthFirst(), s, visitor)

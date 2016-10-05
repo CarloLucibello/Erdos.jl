@@ -53,7 +53,7 @@ function readgraphml(io::IO)
 end
 
 
-function writegraphml(io::IO, g::SimpleGraph)
+function writegraphml(io::IO, g::AS)
     xdoc = XMLDocument()
     xroot = create_root(xdoc, "graphml")
     set_attribute(xroot,"xmlns","http://graphml.graphdrawing.org/xmlns")

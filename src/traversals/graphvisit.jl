@@ -63,7 +63,7 @@ function discover_vertex!(visitor::VertexListVisitor, v::Int)
 end
 
 function visited_vertices(
-    graph::SimpleGraph,
+    graph::AS,
     alg::SimpleGraphVisitAlgorithm,
     sources)
 
@@ -100,7 +100,7 @@ function examine_neighbor!(vis::LogGraphVisitor, u::Int, v::Int, ucolor::Int, vc
 end
 
 function traverse_graph_withlog(
-    g::SimpleGraph,
+    g::AS,
     alg::SimpleGraphVisitAlgorithm,
     sources,
     io::IO = STDOUT

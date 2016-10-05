@@ -14,7 +14,7 @@ matrix (defaults to `Int`).
 
 Note: This function is optimized for speed.
 """
-function adjacency_matrix(g::SimpleGraph, dir::Symbol=:out, T::DataType=Int)
+function adjacency_matrix(g::AS, dir::Symbol=:out, T::DataType=Int)
     n_v = nv(g)
     nz = ne(g) * (is_directed(g)? 1 : 2)
     colpt = ones(Int, n_v + 1)
@@ -103,7 +103,7 @@ directed graphs, a value of `-1` indicates that `src(e) == v`, while a
 value of `1` indicates that `dst(e) == v`. Otherwise, the value is
 `0`. For undirected graphs, both entries are `1`.
 """
-function incidence_matrix(g::SimpleGraph, T::DataType=Int)
+function incidence_matrix(g::AS, T::DataType=Int)
     isdir = is_directed(g)
     n_v = nv(g)
     n_e = ne(g)

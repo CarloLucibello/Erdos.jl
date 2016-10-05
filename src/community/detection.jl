@@ -20,7 +20,7 @@ function community_detection_nback(g::Graph, k::Int)
     return c
 end
 
-function community_detection_threshold(g::SimpleGraph, coords::AbstractArray)
+function community_detection_threshold(g::AS, coords::AbstractArray)
     # TODO use a more intelligent method to set the threshold
     # 0 based thresholds are highly sensitive to errors.
     c = ones(Int, nv(g))
@@ -95,7 +95,7 @@ Community detection using the label propagation algorithm (see [Raghavan et al.]
 `maxiter`: maximum number of iterations
 return : vertex assignments and the convergence history
 """
-function label_propagation(g::SimpleGraph; maxiter=1000)
+function label_propagation(g::AS; maxiter=1000)
     n = nv(g)
     label = collect(1:n)
     active_nodes = IntSet(vertices(g))
@@ -150,7 +150,7 @@ function range_shuffle!(r::UnitRange, a::AbstractVector)
 end
 
 """Return the most frequency label."""
-function vote!(g::SimpleGraph, m::Vector{Int}, c::NeighComm, u::Int)
+function vote!(g::AS, m::Vector{Int}, c::NeighComm, u::Int)
     @inbounds for i=1:c.neigh_last-1
         c.neigh_cnt[c.neigh_pos[i]] = -1
     end
