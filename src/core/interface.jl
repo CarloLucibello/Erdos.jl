@@ -7,6 +7,7 @@ Guarantees:
     sorted adjacency list member (Vector{Vector{Int}})
 
 Functions to implement:
+    basic constructors (e.g. MyGraph(n), MyGraph())
     ne(g)
     fadj(g)
     add_edge!(g, e)
@@ -14,6 +15,7 @@ Functions to implement:
     add_vertex!(g)
     rem_vertex!(g, v)
     copy(g)
+    digraph(g)
 """
 abstract AbstractGraph
 
@@ -26,7 +28,7 @@ Guarantees:
     sorted forward and backward adjacency list members (Vector{Vector{Int}})
 
 Functions to implement:
-    basic constructors
+    basic constructors (e.g. MyGraph(n), MyGraph())
     ne(g)
     fadj(g)
     badj(g)
@@ -35,8 +37,11 @@ Functions to implement:
     add_vertex!(g)
     rem_vertex!(g, v)
     copy(g)
+    graph(g)
 """
 abstract AbstractDiGraph
+
+#TODO eventually remove graph/digraph methods (used only in a few functions)
 
 """
 Union of `AbstractGraph` and `AbstractDiGraph`
@@ -137,5 +142,9 @@ Remove the vertex `v` from graph `g`.
 It may change the index of other vertices (usually of the last one).
 """
 rem_vertex!(g::ASimpleGraph, i::Int) = nothing
+
+
+graph(g::ADiGraph) = nothing
+digraph(g::AGraph) = nothing
 
 copy(g::ASimpleGraph) = nothing

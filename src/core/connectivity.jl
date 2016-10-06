@@ -105,7 +105,7 @@ is_connected(g::AGraph) = length(connected_components(g)) == 1
 is_connected(g::ADiGraph) = is_weakly_connected(g)
 
 """Returns connected components of the undirected graph of `g`."""
-weakly_connected_components(g::ADiGraph) = connected_components(Graph(g))
+weakly_connected_components(g::ADiGraph) = connected_components(graph(g))
 
 """Returns `true` if the undirected graph of `g` is connected."""
 is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
@@ -198,8 +198,8 @@ function period(g::ADiGraph)
 end
 
 """Computes the condensation graph of the strongly connected components."""
-function condensation(g::ADiGraph, scc::Vector{Vector{Int}})
-    h = DiGraph(length(scc))
+function condensation{T<:ADiGraph}(g::T, scc::Vector{Vector{Int}})
+    h = T(length(scc))
 
     component = Vector{Int}(nv(g))
 

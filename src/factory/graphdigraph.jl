@@ -47,27 +47,6 @@ function Graph{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-function Graph(g::DiGraph)
-    gnv = nv(g)
-
-    edgect = 0
-    newfadj = deepcopy(g.fadjlist)
-    for i in 1:gnv
-        for j in badj(g,i)
-            if (_insert_and_dedup!(newfadj[i], j))
-                edgect += 2     # this is a new edge only in badjlist
-            else
-                edgect += 1     # this is an existing edge - we already have it
-                if i == j
-                    edgect += 1 # need to count self loops
-                end
-            end
-        end
-    end
-    iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
-    return Graph(edgect ÷ 2, newfadj)
-end
-
 Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
 
 ###################
@@ -165,6 +144,28 @@ function add_vertex!(g::Graph)
     return nv(g)
 end
 
+
+function graph(g::DiGraph)
+    gnv = nv(g)
+
+    edgect = 0
+    newfadj = deepcopy(g.fadjlist)
+    for i in 1:gnv
+        for j in badj(g,i)
+            if (_insert_and_dedup!(newfadj[i], j))
+                edgect += 2     # this is a new edge only in badjlist
+            else
+                edgect += 1     # this is an existing edge - we already have it
+                if i == j
+                    edgect += 1 # need to count self loops
+                end
+            end
+        end
+    end
+    iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
+    return Graph(edgect ÷ 2, newfadj)
+end
+
 ##### DIGRAPH CONSTRUCTORS  #############
 """
     DiGraph(n=0)
@@ -218,16 +219,18 @@ function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-function DiGraph(g::Graph)
+
+DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
+#########
+
+
+function digraph(g::Graph)
     h = DiGraph(nv(g))
     h.ne = ne(g) * 2 - num_self_loops(g)
     h.fadjlist = deepcopy(fadj(g))
     h.badjlist = deepcopy(badj(g))
     return h
 end
-
-DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
-#########
 
 badj(g::DiGraph) = g.badjlist
 
@@ -280,6 +283,20 @@ function reverse(g::DiGraph)
 
     return h
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #TODO define for abstract types
 """

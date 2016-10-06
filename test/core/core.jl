@@ -167,7 +167,7 @@ g10 = CompleteGraph(5)
 @test sprint(show, h1) == "{5, 0} undirected graph"
 @test sprint(show, h3) == "empty undirected graph"
 
-@test Graph(DiGraph(g3)) == g3
+@test graph(digraph(g3)) == g3
 
 @test degree(g3, 1) == 1
 # @test neighbors(g3, 3) == [2, 4]
@@ -232,6 +232,6 @@ h = DiGraph(sparse(adjmx1))
 
 @test (nv(g), ne(g)) == (3, 2)
 @test (nv(h), ne(h)) == (3, 4)
-@test Graph(h) == g
+@test graph(h) == g
 
 @test sort(neighbors(WheelDiGraph(10),2)) == [1, 3, 10]

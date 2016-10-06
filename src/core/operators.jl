@@ -4,9 +4,9 @@
 Produces the [graph complement](https://en.wikipedia.org/wiki/Complement_graph)
 of a graph.
 """
-function complement(g::AGraph)
+function complement{T<:AGraph}(g::T)
     gnv = nv(g)
-    h = Graph(gnv)
+    h = T(gnv)
     for i=1:gnv
         for j=i+1:gnv
             if !has_edge(g, i, j)
@@ -17,9 +17,9 @@ function complement(g::AGraph)
     return h
 end
 
-function complement(g::ADiGraph)
+function complement{T<:ADiGraph}(g::T)
     gnv = nv(g)
-    h = DiGraph(gnv)
+    h = T(gnv)
     for i=1:gnv
         for j=1:gnv
             if i != j && !has_edge(g,i,j)

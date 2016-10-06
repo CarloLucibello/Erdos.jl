@@ -62,7 +62,7 @@ Requires arguments:
 - capacity_matrix::AbstractArray{T,2}     # input capacity matrix
 """
 
-residual(flow_graph::ADiGraph) = DiGraph(Graph(flow_graph))
+residual(flow_graph::ADiGraph) = digraph(graph(flow_graph))
 
 # Method for Edmonds–Karp algorithm
 

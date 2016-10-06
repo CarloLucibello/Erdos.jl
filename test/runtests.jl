@@ -19,7 +19,7 @@ h5 = DiGraph()
 # self loops
 s2 = DiGraph(3)
 add_edge!(s2,1,2); add_edge!(s2,2,3); add_edge!(s2,3,3)
-s1 = Graph(s2)
+s1 = graph(s2)
 
 r1 = Graph(10,20)
 r2 = DiGraph(5,10)

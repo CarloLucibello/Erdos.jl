@@ -28,6 +28,7 @@ export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
 Edge, is_ordered, reverse,
 # core
 vertices, edges, src, dst,
+graph, digraph,
 fadj, badj, adj,
 in_edges, out_edges, has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,

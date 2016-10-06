@@ -14,3 +14,5 @@
 - make most methods accept abstract types
 - change the return type of add_vertex! to nv(g)
 - removed dynamic stochastic block model
+- all_neighbors -> neighbors
+- Graph(dg) -> graph(dg)
