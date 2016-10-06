@@ -8,14 +8,21 @@ Guarantees:
 
 Functions to implement:
     basic constructors (e.g. MyGraph(n), MyGraph())
+    nv(g)
     ne(g)
-    fadj(g)
+    out_neighbors(g, v)
     add_edge!(g, e)
     rem_edge!(g, e)
     add_vertex!(g)
     rem_vertex!(g, v)
     copy(g)
+    graph(g)
     digraph(g)
+
+Reccomended Overrides:
+    out_adjlist(g)
+    has_edge(g, e)
+    ==(g, h)
 """
 abstract AbstractGraph
 
@@ -29,15 +36,23 @@ Guarantees:
 
 Functions to implement:
     basic constructors (e.g. MyGraph(n), MyGraph())
+    nv(g)
     ne(g)
-    fadj(g)
-    badj(g)
+    in_neighbors(g, v)
+    out_neighbors(g, v)
     add_edge!(g, e)
     rem_edge!(g, e)
     add_vertex!(g)
     rem_vertex!(g, v)
     copy(g)
     graph(g)
+    digraph(g)
+
+Reccomended Overrides:
+    in_adjlist(g)
+    out_adjlist(g)
+    has_edge(g, e)
+    ==(g, h)
 """
 abstract AbstractDiGraph
 
@@ -53,6 +68,14 @@ typealias ADiGraph AbstractDiGraph
 typealias ASimpleGraph AbstractSimpleGraph
 
 ####### Required interface for concrete types ########################
+
+"""
+    nv(g)
+
+The number of vertices in `g`.
+"""
+nv(g::ASimpleGraph) = nothing
+
 """
     ne(g)
 
@@ -61,39 +84,6 @@ The number of edges in `g`.
 Time Complexity: O(1)
 """
 ne(g::ASimpleGraph) = nothing
-
-"""
-    fadj(g)
-
-Returns the forward adjacency list of a graph, i.e. a vector of vectors
-containing for each vertex the neighbors though outgoing edges.
-The adjacency list is sorted:
-
-    fadj(g) == [sort(collect(out_neighbors(i))) for i=1:nv(g)]
-
-The adjacency list has to be pre-calculated for any user-defined graph.
-It is the same as [`adj`](@ref) and [`badj`](@ref) for
-undirected graphs.
-
-NOTE: returns a reference, not a copy. Do not modify result.
-
-Time Complexity: O(1)
-"""
-fadj(g::ASimpleGraph) = nothing
-
-
-"""
-    badj(g)
-
-Returns the backward adjacency list of a graph.
-For each vertex the vector of neighbors though incoming edges.
-It is the same as [`adj`](@ref) and [`fadj`](@ref) for
-undirected graphs.
-
-
-NOTE: returns a reference, not a copy. Do not modify result.
-"""
-badj(g::ADiGraph) = nothing
 
 """
     add_edge!(g, e::Edge)
@@ -134,7 +124,25 @@ It may change the index of other vertices (usually of the last one).
 rem_vertex!(g::ASimpleGraph, i::Int) = nothing
 
 
-graph(g::ADiGraph) = nothing
-digraph(g::AGraph) = nothing
+"""
+    in_neighbors(g, v::Int)
 
+Returns a list of all neighbors connected to vertex `v` by an incoming edge.
+
+NOTE: it may return a reference, not a copy. Do not modify result.
+"""
+in_neighbors(g::ADiGraph, v::Int) = nothing
+
+"""
+    out_neighbors(g::ASimpleGraph, v::Int)
+
+Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
+
+NOTE: it may return a reference, not a copy. Do not modify result.
+"""
+out_neighbors(g::ASimpleGraph, v::Int) = nothing
+
+
+graph(g::ASimpleGraph) = nothing
+digraph(g::ASimpleGraph) = nothing
 copy(g::ASimpleGraph) = nothing

@@ -14,19 +14,17 @@ The returned iterator is valid for one pass over the edges, and is invalidated b
 edges(g::ASimpleGraph) = EdgeIter(g)
 
 
-badj(g::AGraph) = fadj(g)
-
-
 """
     adjlist(g)
 
 Returns the adjacency list of a graph (a vector of vector of ints).
-For directed graphs it represents the out_neighborhood of each vertex.
+It is equivalent to  [`out_adjlist(g)`](@ref).
 
 NOTE: For most graph types it returns a reference, not a copy,
 therefore the returned object should not be modified.
 """
-adjlist(g::ASimpleGraph) = fadj(g)
+adjlist(g::ASimpleGraph) = out_adjlist(g)
+in_adjlist(g::AGraph) = out_adjlist(g)
 
 """
     issubset(g, h)
@@ -70,18 +68,14 @@ Returns an Array of the edges in `g` that depart from vertex `v`.
 out_edges(g::ASimpleGraph, v::Int) = (Edge(v,x) for x in out_neighbors(g,v))
 
 
-"""Return true if `v` is a vertex of `g`."""
+"""
+    has_vertex(g, v)
+
+Return true if `v` is a vertex of `g`.
+"""
 has_vertex(g::ASimpleGraph, v::Int) = v in vertices(g)
 
-"""
-    nv(g)
-
-The number of vertices in `g`.
-"""
-nv(g::ASimpleGraph) = length(fadj(g))
-
 add_edge!(g::ASimpleGraph, u::Int, v::Int) = add_edge!(g, Edge(u, v))
-
 rem_edge!(g::ASimpleGraph, u::Int, v::Int) = rem_edge!(g, Edge(u, v))
 
 function show(io::IO, g::AGraph)
@@ -99,15 +93,6 @@ function show(io::IO, g::ADiGraph)
     end
 end
 
-# generic fallback
-function =={G<:ASimpleGraph}(g::G, h::G)
-    nv(g) != nv(h) && return false
-    ne(g) != ne(h) && return false
-    for i=1:nv(g)
-        sort(out_neighbors(g, i)) != sort(out_neighbors(g, i)) && return false
-    end
-    return true
-end
 
 """
     is_directed(g)
@@ -145,45 +130,54 @@ function has_edge(g::ADiGraph, e::Edge)
     end
 end
 
-"""Returns the number of edges which start at vertex `v`."""
+"""
+    indegree(g, v)
+
+Returns the number of edges which start at vertex `v`.
+"""
 indegree(g::ASimpleGraph, v::Int) = length(in_neighbors(g,v))
-"""Returns the number of edges which end at vertex `v`."""
+
+"""
+    outdegree(g, v)
+
+Returns the number of edges which end at vertex `v`.
+"""
 outdegree(g::ASimpleGraph, v::Int) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
 
-Return the number of edges (both ingoing and outgoing) from the vertex `v`.
+Return the number of edges  from the vertex `v`.
 """
-degree(g::AGraph, v::Int) = indegree(g, v)
-degree(g::ADiGraph, v::Int) = indegree(g, v) + outdegree(g, v)
+degree(g::ASimpleGraph, v::Int) = outdegree(g, v)
 
 indegree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [indegree(g,x) for x in v]
 outdegree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [outdegree(g,x) for x in v]
 degree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) for x in v]
 
-
-"""Returns a list of all neighbors connected to vertex `v` by an incoming edge.
-
-NOTE: returns a reference, not a copy. Do not modify result.
 """
-in_neighbors(g::ASimpleGraph, v::Int) = badj(g)[v]
+    neighbors(g, v)
 
-"""Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
+Returns a list of all neighbors from vertex `v` in `g`.
 
-NOTE: returns a reference, not a copy. Do not modify result.
+For directed graph, this is equivalent to [`out_neighbors`](@ref)(g, v).
+
+NOTE: it may return a reference, not a copy. Do not modify result.
 """
-out_neighbors(g::ASimpleGraph, v::Int) = fadj(g)[v]
+neighbors(g::ASimpleGraph, v::Int) = out_neighbors(g, v)
+in_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
 
-"""Returns a list of all neighbors of vertex `v` in `g`.
+"""
+    all_neighbors(g, v)
+
+Returns a list of all neighbors of vertex `v` in `g`.
 
 For DiGraphs, this is equivalent to `[in_neighbors(g, v); out_neighbors(g, v)]`.
 
-NOTE: returns a reference, not a copy. Do not modify result.
+NOTE: it may return a reference, not a copy. Do not modify result.
 """
-neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
-neighbors(g::ADiGraph, v::Int) = [in_neighbors(g, v); out_neighbors(g, v)]
-
+all_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
+all_neighbors(g::ADiGraph, v::Int) = [out_neighbors(g, v); in_neighbors(g, v)]
 
 """
     density(g)
@@ -194,3 +188,48 @@ number of possible edges. This is ``|v| |v-1|`` for directed graphs and
 """
 density(g::AGraph) = (2*ne(g)) / (nv(g) * (nv(g)-1))
 density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
+
+
+# FALLBACKS
+function =={G<:ASimpleGraph}(g::G, h::G)
+    nv(g) != nv(h) && return false
+    ne(g) != ne(h) && return false
+    for i=1:nv(g)
+        sort(out_neighbors(g, i)) != sort(out_neighbors(g, i)) && return false
+    end
+    return true
+end
+
+
+"""
+    in_adjlist(g)
+
+Returns the backward adjacency list of a graph.
+For each vertex the vector of neighbors though incoming edges.
+
+    in_adjlist(g) == [collect(in_neighbors(i)) for i=1:nv(g)]
+
+It is the same as [`adjlist`](@ref) and [`out_adjlist`](@ref) for
+undirected graphs.
+
+
+NOTE: returns a reference, not a copy. Do not modify result.
+"""
+in_adjlist(g::ADiGraph) = Vector{Int}[collect(in_neighbors(g, i)) for i=1:nv(g)]
+
+"""
+    out_adjlist(g)
+
+Returns the forward adjacency list of a graph, i.e. a vector of vectors
+containing for each vertex the neighbors trhough outgoing edges.
+
+    out_adjlist(g) == [collect(out_neighbors(i)) for i=1:nv(g)]
+
+The adjacency list is be pre-calculated for most graph types.
+It is the same as [`adjlist`](@ref) and [`in_adjlist`](@ref) for
+undirected graphs and the same as [`adjlist`](@ref) for directed ones.
+
+NOTE: It may return a reference, not a copy. Do not modify result.
+
+"""
+out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:nv(g)]

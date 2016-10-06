@@ -7,13 +7,13 @@ export adjacency_matrix,
     spectral_distance
 
 """
+    adjacency_matrix(g, dir::Symbol=:out, T::DataType=Int)
+
 Returns a sparse boolean adjacency matrix for a graph, indexed by `[u, v]`
 vertices. `true` values indicate an edge between `u` and `v`. Users may
-specify a direction (`:in`, `:out`, or `:both` are currently supported; `:out`
+specify a direction (`:in`, `:out`, or `:all` are currently supported; `:out`
 is default for both directed and undirected graphs) and a data type for the
 matrix (defaults to `Int`).
-
-Note: This function is optimized for speed.
 """
 function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
     n_v = nv(g)
@@ -27,15 +27,15 @@ function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = in_neighbors
     elseif dir == :in
         neighborfn = out_neighbors
-    elseif dir == :both
+    elseif dir == :all
         if is_directed(g)
-            neighborfn = neighbors
+            neighborfn = all_neighbors
             nz *= 2
         else
             neighborfn = out_neighbors
         end
     else
-        error("Not implemented")
+        error("Wrong dir ($dir)")
     end
     rowval = sizehint!(Vector{Int}(), nz)
     selfloops = Vector{Int}()
@@ -63,32 +63,27 @@ end
 adjacency_matrix(g::AGraph, T::DataType=Int) = adjacency_matrix(g, :out, T)
 
 """
+    laplacian_matrix(g, dir::Symbol=:out, T::DataType=Int)
+
 Returns a sparse [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix)
-for a graph `g`, indexed by `[u, v]` vertices. For undirected graphs, `dir`
-defaults to `:out`; for directed graphs, `dir` defaults to `:both`. `T`
-defaults to `Int` for both graph types.
+for a graph `g`, indexed by `[u, v]` vertices. `dir` has to be `:in, :out` or `:all`.
 """
-function laplacian_matrix(g::AGraph, dir::Symbol=:out, T::DataType=Int)
-    A = adjacency_matrix(g, dir, T)
-    D = spdiagm(sum(A,2)[:])
-    return D - A
-end
-
-function laplacian_matrix(g::ADiGraph, dir::Symbol=:both, T::DataType=Int)
+function laplacian_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
     A = adjacency_matrix(g, dir, T)
     D = spdiagm(sum(A,2)[:])
     return D - A
 end
 
 """
+    laplacian_spectrum(g, dir::Symbol=:out, T::DataType=Int)
+
 Returns the eigenvalues of the Laplacian matrix for a graph `g`, indexed
 by vertex. Warning: Converts the matrix to dense with ``nv^2`` memory usage. Use
 `eigs(laplacian_matrix(g);  kwargs...)` to compute some of the
 eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
-`laplacian_matrix`.
+`laplacian_matrix`. `dir` has to be `:in, :out` or `:all`.
 """
-laplacian_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
-laplacian_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
+laplacian_spectrum(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
 
 """
 Returns the eigenvalues of the adjacency matrix for a graph `g`, indexed
@@ -98,7 +93,7 @@ eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
 `adjacency_matrix`.
 """
 adjacency_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
-adjacency_spectrum(g::ADiGraph, dir::Symbol=:both, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
+adjacency_spectrum(g::ADiGraph, dir::Symbol=:all, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
 
 
 """

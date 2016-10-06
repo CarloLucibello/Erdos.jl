@@ -25,17 +25,16 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
 export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
 
 # edge
-Edge, is_ordered, reverse,
+Edge, is_ordered, reverse, #sort
+
 # core
 vertices, edges, src, dst,
 graph, digraph,
-fadj, badj, adjlist,
+adjlist, in_adjlist, out_adjlist,
+neighbors, in_neighbors, out_neighbors, all_neighbors,
 in_edges, out_edges, has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
-indegree, outdegree, degree, degree_histogram, density, Δ, δ,
-Δout, Δin, δout, δin, neighbors, in_neighbors, out_neighbors,
-common_neighbors, common_inneighbors, common_outneighbors,
- has_self_loops, num_self_loops,
+indegree, outdegree, degree, has_self_loops, num_self_loops,
 rem_vertex!,
 
 # Graph and DiGraph concrete types
@@ -74,6 +73,8 @@ randomwalk, saw, non_backtracking_randomwalk,
 connected_components, strongly_connected_components, weakly_connected_components,
 is_connected, is_strongly_connected, is_weakly_connected, period,
 condensation, attracting_components, neighborhood, isgraphical,
+Δ, δ, Δout, Δin, δout, δin, degree_histogram, density,
+common_neighbors, common_inneighbors, common_outneighbors,
 
 
 # maximum_adjacency_visit

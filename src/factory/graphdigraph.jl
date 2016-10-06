@@ -50,10 +50,8 @@ end
 Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
 
 ###################
-
-fadj(g::SimpleGraph) = g.fadjlist
+nv(g::SimpleGraph) = length(g.fadjlist)
 ne(g::SimpleGraph) = g.ne
-
 
 #=
     rem_vertex!(g, v)
@@ -227,13 +225,10 @@ DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed
 function digraph(g::Graph)
     h = DiGraph(nv(g))
     h.ne = ne(g) * 2 - num_self_loops(g)
-    h.fadjlist = deepcopy(fadj(g))
-    h.badjlist = deepcopy(badj(g))
+    h.fadjlist = deepcopy(g.fadjlist)
+    h.badjlist = deepcopy(g.fadjlist)
     return h
 end
-
-badj(g::DiGraph) = g.badjlist
-
 
 function copy(g::DiGraph)
     return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
@@ -296,5 +291,13 @@ function reverse!(g::DiGraph)
     return g
 end
 
+
+out_neighbors(g::SimpleGraph,v::Int) = g.fadjlist[v]
+in_neighbors(g::DiGraph,v::Int) = g.badjlist[v]
+
+## fallbaks override
+out_adjlist(g::SimpleGraph) = g.fadjlist
+in_adjlist(g::DiGraph) = g.badjlist
+
 =={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
-                ne(g) == ne(h) && fadj(g) == fadj(h)
+                ne(g) == ne(h) && g.fadjlist == h.fadjlist

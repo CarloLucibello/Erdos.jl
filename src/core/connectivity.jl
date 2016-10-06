@@ -325,9 +325,14 @@ Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
 """
 degree_histogram(g::ASimpleGraph) = fit(Histogram, degree(g))
 
-"Returns the neighbors common to vertices `u` and `v` in `g`."
+"
+    common_neighbors(g, u, v)
+
+Returns the neighbors common to vertices `u` and `v` in `g`."
 common_neighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
-"Returns the inneighbors common to vertices `u` and `v` in `g`."
+
+"
+Returns the inneighbors common to vertices `u` and `v` in `g`."
 common_inneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
 "Returns the outneighbors common to vertices `u` and `v` in `g`."
 common_outneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))

@@ -7,9 +7,9 @@
 
 g5 = DiGraph(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
-@test laplacian_spectrum(g5)[3] == laplacian_spectrum(g5,:both)[3] == 3.0
+@test laplacian_spectrum(g5)[3] == laplacian_spectrum(g5,:out)[3] == 1.0
+@test laplacian_spectrum(g5,:all)[3] == 3.0
 @test laplacian_spectrum(g5,:in)[3] == 1.0
-@test laplacian_spectrum(g5,:out)[3] == 1.0
 
 # check adjacency matrices with self loops
 g = copy(g3)
@@ -44,14 +44,14 @@ zprime = contract(n10, v)
 @test adjacency_matrix(g3) ==
     adjacency_matrix(g3, :out) ==
     adjacency_matrix(g3, :in) ==
-    adjacency_matrix(g3, :both)
+    adjacency_matrix(g3, :all)
 
 @test_throws ErrorException adjacency_matrix(g3, :purple)
 
 #that call signature works
 inmat   = adjacency_matrix(g5, :in, Int)
 outmat  = adjacency_matrix(g5, :out, Int)
-bothmat = adjacency_matrix(g5, :both, Int)
+bothmat = adjacency_matrix(g5, :all, Int)
 
 #relations that should be true
 @test inmat' == outmat
@@ -59,7 +59,7 @@ bothmat = adjacency_matrix(g5, :both, Int)
 @test all((bothmat - inmat)  .>= 0)
 
 #check properties of the undirected laplacian carry over.
-for dir in [:in, :out, :both]
+for dir in [:in, :out, :all]
     amat = adjacency_matrix(g5, dir, Float64)
     lmat = laplacian_matrix(g5, dir, Float64)
     @test isa(amat, SparseMatrixCSC{Float64, Int64})

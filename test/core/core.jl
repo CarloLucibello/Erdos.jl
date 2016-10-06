@@ -28,20 +28,19 @@ end
 @test has_edge(g,3,5)
 # @test edges(g) == Set([e1, e2, e3, e4, e5])
 # @test Set{Edge}(edges(g)) == Set([e1, e2, e3, e4, e5])
-# fadj, badj, and adj tested in graphdigraph.jl
 
 @test degree(g) == [3, 2, 2, 1, 2]
 @test indegree(g) == [3, 2, 2, 1, 2]
 @test indegree(g,1) == 3
 @test outdegree(g) == [3, 2, 2, 1, 2]
 @test outdegree(g,1) == 3
-@test degree(h) == [3, 2, 2, 1, 2]
+@test degree(h) == [3, 1, 1, 0, 0]
 @test indegree(h) == [0, 1, 1, 1, 2]
 @test indegree(h,1) == 0
 @test outdegree(h) == [3, 1, 1, 0, 0]
 @test outdegree(h,1) == 3
-@test in_neighbors(h,5) == badj(h)[5]  == [2, 3]
-@test out_neighbors(h,1) == fadj(h)[1]  == [2, 3, 4]
+@test in_neighbors(h,5) == in_adjlist(h)[5]  == [2, 3]
+@test out_neighbors(h,1) == out_adjlist(h)[1]  == [2, 3, 4]
 
 @test p1 == g2
 @test issubset(h2, h1)
@@ -60,7 +59,7 @@ end
 @test δ(g) == δin(g) == δout(g) == 0
 @test Δ(g) == Δout(g) == 3
 @test Δin(h) == 2
-@test δ(h) == 1
+@test δ(h) == δout(h)
 @test δin(h) == 0
 @test δout(h) == 0
 @test CompleteGraph(4) == CompleteGraph(4)
@@ -73,7 +72,7 @@ end
 
 @test neighbors(g, 1) == [2, 3, 4]
 @test common_neighbors(g, 2, 3) == [1, 5]
-@test common_neighbors(h, 2, 3) == [1,5]
+@test common_neighbors(h, 2, 3) == common_outneighbors(h, 2, 3)
 @test common_inneighbors(h, 2, 3) == [1]
 @test common_outneighbors(h, 2, 3) == [5]
 
@@ -194,8 +193,8 @@ h = DiGraph(5)
 @test add_edge!(h, e4)
 @test add_edge!(h, e5)
 
-@test fadj(g)[1] == out_neighbors(g,1) ==
-    badj(g)[1] == in_neighbors(g,1) ==
+@test adjlist(g)[1] == out_neighbors(g,1) ==
+    in_adjlist(g)[1] == in_neighbors(g,1) ==
     adjlist(g)[1] == [2,3,4]
 
 @test sprint(show, h4) == "{7, 0} directed graph"
@@ -234,4 +233,7 @@ h = DiGraph(sparse(adjmx1))
 @test (nv(h), ne(h)) == (3, 4)
 @test graph(h) == g
 
-@test sort(neighbors(WheelDiGraph(10),2)) == [1, 3, 10]
+
+
+@test neighbors(WheelDiGraph(10),2) == out_neighbors(WheelDiGraph(10),2)
+@test out_neighbors(WheelDiGraph(10),2) == [3]
