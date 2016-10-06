@@ -30,6 +30,23 @@ function complement{T<:ADiGraph}(g::T)
     return h
 end
 
+"""
+    union(g, h)
+
+Merges graphs `g` and `h` by taking the set union of all vertices and edges.
+"""
+function union{T<:ASimpleGraph}(g::T, h::T)
+    gnv = nv(g)
+    hnv = nv(h)
+
+    r = copy(g)
+    add_vertices!(r, gnv - max(gnv, hnv))
+    for e in edges(h)
+        add_edge!(r, e)
+    end
+    return r
+end
+
 
 """
     blkdiag(g, h)
