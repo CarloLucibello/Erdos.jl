@@ -16,3 +16,4 @@
 - removed dynamic stochastic block model
 - all_neighbors -> neighbors
 - Graph(dg) -> graph(dg)
+- remove fadj(g, v) in favor of out_neighbors(g, v)

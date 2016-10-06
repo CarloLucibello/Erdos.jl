@@ -40,7 +40,7 @@ function union{T<:ASimpleGraph}(g::T, h::T)
     hnv = nv(h)
 
     r = copy(g)
-    add_vertices!(r, gnv - max(gnv, hnv))
+    add_vertices!(r, max(gnv, hnv) - gnv)
     for e in edges(h)
         add_edge!(r, e)
     end

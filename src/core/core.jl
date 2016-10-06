@@ -13,20 +13,20 @@ The returned iterator is valid for one pass over the edges, and is invalidated b
 """
 edges(g::ASimpleGraph) = EdgeIter(g)
 
-fadj(g::ASimpleGraph, v::Int) = fadj(g)[v]
-badj(g::ASimpleGraph, v::Int) = badj(g)[v]
 
 badj(g::AGraph) = fadj(g)
 
 
 """
-Returns the adjacency list of a graph.
-For each vertex the Array of `dst` for each edge eminating from that vertex.
+    adjlist(g)
 
-NOTE: returns a reference, not a copy. Do not modify result.
+Returns the adjacency list of a graph (a vector of vector of ints).
+For directed graphs it represents the out_neighborhood of each vertex.
+
+NOTE: For most graph types it returns a reference, not a copy,
+therefore the returned object should not be modified.
 """
-adj(g::AGraph) = fadj(g)
-adj(g::AGraph, v::Int) = fadj(g, v)
+adjlist(g::ASimpleGraph) = fadj(g)
 
 """
     issubset(g, h)
@@ -59,7 +59,7 @@ end
 Returns an iterable of the edges in `g` that arrive at vertex `v`.
 `v = dst(e)` for each returned edge `e`.
 """
-in_edges(g::ASimpleGraph, v::Int) = (Edge(x,v) for x in badj(g, v))
+in_edges(g::ASimpleGraph, v::Int) = (Edge(x,v) for x in in_neighbors(g, v))
 
 """
     out_edges(g, v)
@@ -67,7 +67,7 @@ in_edges(g::ASimpleGraph, v::Int) = (Edge(x,v) for x in badj(g, v))
 Returns an Array of the edges in `g` that depart from vertex `v`.
 `v = src(e)` for each returned edge `e`.
 """
-out_edges(g::ASimpleGraph, v::Int) = (Edge(v,x) for x in fadj(g,v))
+out_edges(g::ASimpleGraph, v::Int) = (Edge(v,x) for x in out_neighbors(g,v))
 
 
 """Return true if `v` is a vertex of `g`."""
@@ -135,23 +135,23 @@ function has_edge(g::AGraph, e::Edge)
     if degree(g,u) > degree(g,v)
         u, v = v, u
     end
-    return length(searchsorted(fadj(g,u), v)) > 0
+    return length(searchsorted(neighbors(g,u), v)) > 0
 end
 
 function has_edge(g::ADiGraph, e::Edge)
     u, v = e
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) < degree(g,v)
-        return length(searchsorted(fadj(g,u), v)) > 0
+        return length(searchsorted(out_neighbors(g,u), v)) > 0
     else
-        return length(searchsorted(badj(g,v), u)) > 0
+        return length(searchsorted(in_neighbors(g,v), u)) > 0
     end
 end
 
-"""Return the number of edges which start at vertex `v`."""
-indegree(g::ASimpleGraph, v::Int) = length(badj(g,v))
-"""Return the number of edges which end at vertex `v`."""
-outdegree(g::ASimpleGraph, v::Int) = length(fadj(g,v))
+"""Returns the number of edges which start at vertex `v`."""
+indegree(g::ASimpleGraph, v::Int) = length(in_neighbors(g,v))
+"""Returns the number of edges which end at vertex `v`."""
+outdegree(g::ASimpleGraph, v::Int) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
@@ -170,12 +170,13 @@ degree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) fo
 
 NOTE: returns a reference, not a copy. Do not modify result.
 """
-in_neighbors(g::ASimpleGraph, v::Int) = badj(g,v)
+in_neighbors(g::ASimpleGraph, v::Int) = badj(g)[v]
+
 """Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
 
 NOTE: returns a reference, not a copy. Do not modify result.
 """
-out_neighbors(g::ASimpleGraph, v::Int) = fadj(g,v)
+out_neighbors(g::ASimpleGraph, v::Int) = fadj(g)[v]
 
 """Returns a list of all neighbors of vertex `v` in `g`.
 

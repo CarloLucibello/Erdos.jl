@@ -64,7 +64,6 @@ ne(g::ASimpleGraph) = nothing
 
 """
     fadj(g)
-    fadj(g, v)
 
 Returns the forward adjacency list of a graph, i.e. a vector of vectors
 containing for each vertex the neighbors though outgoing edges.
@@ -76,10 +75,6 @@ The adjacency list has to be pre-calculated for any user-defined graph.
 It is the same as [`adj`](@ref) and [`badj`](@ref) for
 undirected graphs.
 
-The second form is defined as
-
-    fadj(g, v::Int) = fadj(g)[v]
-
 NOTE: returns a reference, not a copy. Do not modify result.
 
 Time Complexity: O(1)
@@ -89,16 +84,11 @@ fadj(g::ASimpleGraph) = nothing
 
 """
     badj(g)
-    badj(g, v)
 
 Returns the backward adjacency list of a graph.
 For each vertex the vector of neighbors though incoming edges.
 It is the same as [`adj`](@ref) and [`fadj`](@ref) for
 undirected graphs.
-
-The second form is defined as
-
-    badj(g, v::Int) = badj(g)[v]
 
 
 NOTE: returns a reference, not a copy. Do not modify result.

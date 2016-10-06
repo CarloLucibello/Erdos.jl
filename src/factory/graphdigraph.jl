@@ -151,7 +151,7 @@ function graph(g::DiGraph)
     edgect = 0
     newfadj = deepcopy(g.fadjlist)
     for i in 1:gnv
-        for j in badj(g,i)
+        for j in in_neighbors(g,i)
             if (_insert_and_dedup!(newfadj[i], j))
                 edgect += 2     # this is a new edge only in badjlist
             else

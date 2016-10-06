@@ -18,7 +18,7 @@ function a_star_impl!{T<:Number}(
             return path
         end
 
-        for v in FatGraphs.fadj(graph, u)
+        for v in out_neighbors(graph, u)
 
             if colormap[v] < 2
                 dist = distmx[u, v]
