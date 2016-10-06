@@ -17,3 +17,4 @@
 - all_neighbors -> neighbors
 - Graph(dg) -> graph(dg)
 - remove fadj(g, v) in favor of out_neighbors(g, v)
+- more efficient equality test for DiGraph

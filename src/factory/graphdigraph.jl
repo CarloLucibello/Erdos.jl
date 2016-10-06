@@ -295,3 +295,6 @@ function reverse!(g::DiGraph)
     g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
     return g
 end
+
+=={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
+                ne(g) == ne(h) && fadj(g) == fadj(h)

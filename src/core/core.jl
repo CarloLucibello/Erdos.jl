@@ -99,18 +99,15 @@ function show(io::IO, g::ADiGraph)
     end
 end
 
-==(g::AGraph, h::AGraph) =
-    vertices(g) == vertices(h) &&
-    ne(g) == ne(h) &&
-    fadj(g) == fadj(h)
-
-==(g::ADiGraph, h::ADiGraph) =
-    vertices(g) == vertices(h) &&
-    ne(g) == ne(h) &&
-    fadj(g) == fadj(h) &&
-    badj(g) == badj(h)
-
-
+# generic fallback
+function =={G<:ASimpleGraph}(g::G, h::G)
+    nv(g) != nv(h) && return false
+    ne(g) != ne(h) && return false
+    for i=1:nv(g)
+        sort(out_neighbors(g, i)) != sort(out_neighbors(g, i)) && return false
+    end
+    return true
+end
 
 """
     is_directed(g)
