@@ -301,3 +301,23 @@ in_adjlist(g::DiGraph) = g.badjlist
 
 =={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
+
+
+function has_edge(g::Graph, e::Edge)
+    u, v = e
+    u > nv(g) || v > nv(g) && return false
+    if degree(g,u) > degree(g,v)
+        u, v = v, u
+    end
+    return length(searchsorted(neighbors(g,u), v)) > 0
+end
+
+function has_edge(g::DiGraph, e::Edge)
+    u, v = e
+    u > nv(g) || v > nv(g) && return false
+    if degree(g,u) < degree(g,v)
+        return length(searchsorted(out_neighbors(g,u), v)) > 0
+    else
+        return length(searchsorted(in_neighbors(g,v), u)) > 0
+    end
+end

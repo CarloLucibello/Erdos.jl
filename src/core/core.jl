@@ -111,25 +111,6 @@ Returns true if the graph `g` has an edge `e` (from `u` to `v`).
 """
 has_edge(g::ASimpleGraph, u::Int, v::Int) = has_edge(g, Edge(u, v))
 
-function has_edge(g::AGraph, e::Edge)
-    u, v = e
-    u > nv(g) || v > nv(g) && return false
-    if degree(g,u) > degree(g,v)
-        u, v = v, u
-    end
-    return length(searchsorted(neighbors(g,u), v)) > 0
-end
-
-function has_edge(g::ADiGraph, e::Edge)
-    u, v = e
-    u > nv(g) || v > nv(g) && return false
-    if degree(g,u) < degree(g,v)
-        return length(searchsorted(out_neighbors(g,u), v)) > 0
-    else
-        return length(searchsorted(in_neighbors(g,v), u)) > 0
-    end
-end
-
 """
     indegree(g, v)
 
@@ -190,7 +171,7 @@ density(g::AGraph) = (2*ne(g)) / (nv(g) * (nv(g)-1))
 density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
 
 
-# FALLBACKS
+#### FALLBACKS #################
 function =={G<:ASimpleGraph}(g::G, h::G)
     nv(g) != nv(h) && return false
     ne(g) != ne(h) && return false
@@ -233,3 +214,22 @@ NOTE: It may return a reference, not a copy. Do not modify result.
 
 """
 out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:nv(g)]
+
+function has_edge(g::AGraph, e::Edge)
+    u, v = e
+    u > nv(g) || v > nv(g) && return false
+    if degree(g,u) > degree(g,v)
+        u, v = v, u
+    end
+    return findfirst(neighbors(g,u), v) > 0
+end
+
+function has_edge(g::ADiGraph, e::Edge)
+    u, v = e
+    u > nv(g) || v > nv(g) && return false
+    if degree(g,u) < degree(g,v)
+        return findfirst(out_neighbors(g,u), v) > 0
+    else
+        return findfirst(in_neighbors(g,v), u) > 0
+    end
+end
