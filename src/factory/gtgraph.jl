@@ -1,57 +1,34 @@
 """A type representing an undirected graph."""
-type Graph <: AbstractGraph
+type GTGraph <: AbstractGraph
     ne::Int
-    fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
+    edge_index_range::Int
+    epos::Vector{Int}
+    fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
 end
-
-"""A type representing a directed graph."""
-type DiGraph <: AbstractDiGraph
-    ne::Int
-    fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
-    badjlist::Vector{Vector{Int}} # [dst]: (src, src, src)
-end
-
-typealias SimpleGraph Union{Graph, DiGraph}
 
 
 #### GRAPH CONSTRUCTORS
 """
-    Graph(n=0)
+    GTGraph(n=0)
 
 Construct an empty graph with `n` vertices.
 """
-function Graph(n::Int = 0)
-    fadjlist = Vector{Vector{Int}}()
+function GTGraph(n::Int = 0)
+    fadjlist = Vector{Vector{Pair{Int,Int}}}()
     sizehint!(fadjlist,n)
     for i = 1:n
         push!(fadjlist, Vector{Int}())
     end
-    return Graph(0, fadjlist)
+    epos = Vector{Int}()
+    return GTGraph(0, 0, epos, fadjlist)
 end
 
-"""
-    Graph{T<:Real}(adjmx::AbstractMatrix{T})
 
-Construct a `Graph` from the adjacency matrix `adjmx`.
-"""
-function Graph{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-    issymmetric(adjmx) || error("Adjacency / distance matrices must be symmetric")
-
-    g = Graph(dima)
-    for i in find(triu(adjmx))
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
+GTGraph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
 
 ###################
-nv(g::SimpleGraph) = length(g.fadjlist)
-ne(g::SimpleGraph) = g.ne
+nv(g::SimpleGTGraph) = length(g.fadjlist)
+ne(g::SimpleGTGraph) = g.ne
 
 #=
     rem_vertex!(g, v)
@@ -64,7 +41,7 @@ After removal the vertices in the ` g` will be indexed by 1:n-1.
 This is an O(k^2) operation, where `k` is the max of the degrees of vertices `v` and `n`.
 Returns false if removal fails (e.g., if vertex is not in the graph); true otherwise.
 =#
-function rem_vertex!(g::SimpleGraph, v::Int)
+function rem_vertex!(g::SimpleGTGraph, v::Int)
     v in vertices(g) || return false
     n = nv(g)
 
@@ -105,11 +82,11 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     return true
 end
 
-function copy(g::Graph)
-    return Graph(g.ne, deepcopy(g.fadjlist))
+function copy(g::GTGraph)
+    return GTGraph(g.ne, deepcopy(g.fadjlist))
 end
 
-function add_edge!(g::Graph, e::Edge)
+function add_edge!(g::GTGraph, e::Edge)
 
     s, d = e
     (s in vertices(g) && d in vertices(g)) || return false
@@ -123,7 +100,7 @@ function add_edge!(g::Graph, e::Edge)
     return inserted
 end
 
-function rem_edge!(g::Graph, e::Edge)
+function rem_edge!(g::GTGraph, e::Edge)
     i = searchsorted(g.fadjlist[src(e)], dst(e))
     length(i) > 0 || return false   # edge not in graph
     i = i[1]
@@ -137,7 +114,7 @@ function rem_edge!(g::Graph, e::Edge)
 end
 
 
-function add_vertex!(g::Graph)
+function add_vertex!(g::GTGraph)
     push!(g.fadjlist, Vector{Int}())
     return nv(g)
 end
@@ -145,26 +122,26 @@ end
 
 ##### DIGRAPH CONSTRUCTORS  #############
 """
-    DiGraph(n=0)
+    GTDiGraph(n=0)
 
-Construct an empty DiGraph with `n` vertices.
+Construct an empty GTDiGraph with `n` vertices.
 """
-function DiGraph(n::Int = 0)
+function GTDiGraph(n::Int = 0)
     fadjlist = Vector{Vector{Int}}()
     badjlist = Vector{Vector{Int}}()
     for i = 1:n
         push!(badjlist, Vector{Int}())
         push!(fadjlist, Vector{Int}())
     end
-    return DiGraph(0, badjlist, fadjlist)
+    return GTDiGraph(0, badjlist, fadjlist)
 end
 
 
-function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
+function GTDiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
     dima, dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = DiGraph(dima)
+    g = GTDiGraph(dima)
     maxc = length(adjmx.colptr)
     for c = 1:(maxc-1)
         for rind = adjmx.colptr[c]:adjmx.colptr[c+1]-1
@@ -180,15 +157,15 @@ end
 
 
 """
-    DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+    GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
 
-Construct a `DiGraph` from the adjacency matrix `adjmx`.
+Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
 """
-function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = DiGraph(dima)
+    g = GTDiGraph(dima)
     for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
@@ -197,16 +174,16 @@ function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
 end
 
 
-DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
+GTDiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
 #########
 
 
 
-function copy(g::DiGraph)
-    return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
+function copy(g::GTDiGraph)
+    return GTDiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
-function add_edge!(g::DiGraph, e::Edge)
+function add_edge!(g::GTDiGraph, e::Edge)
     s, d = e
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
@@ -217,7 +194,7 @@ function add_edge!(g::DiGraph, e::Edge)
 end
 
 
-function rem_edge!(g::DiGraph, e::Edge)
+function rem_edge!(g::GTDiGraph, e::Edge)
     has_edge(g,e) || return false
     i = searchsorted(g.fadjlist[src(e)], dst(e))[1]
     deleteat!(g.fadjlist[src(e)], i)
@@ -227,7 +204,7 @@ function rem_edge!(g::DiGraph, e::Edge)
     return true
 end
 
-function add_vertex!(g::DiGraph)
+function add_vertex!(g::GTDiGraph)
     push!(g.badjlist, Vector{Int}())
     push!(g.fadjlist, Vector{Int}())
     return nv(g)
@@ -235,15 +212,15 @@ end
 
 #TODO define for abstract types
 """
-    reverse(g::DiGraph)
+    reverse(g::GTDiGraph)
 
 Produces a graph where all edges are reversed from the
 original.
 """
-function reverse(g::DiGraph)
+function reverse(g::GTDiGraph)
     gnv = nv(g)
     gne = ne(g)
-    h = DiGraph(gnv)
+    h = GTDiGraph(gnv)
     h.fadjlist = deepcopy(g.badjlist)
     h.badjlist = deepcopy(g.fadjlist)
     h.ne = gne
@@ -254,32 +231,34 @@ end
 
 #TODO define for abstract types
 """
-    reverse!(g::DiGraph)
+    reverse!(g::GTDiGraph)
 
 In-place reverse (modifies the original graph).
 """
-function reverse!(g::DiGraph)
+function reverse!(g::GTDiGraph)
     g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
     return g
 end
 
 
-out_neighbors(g::SimpleGraph,v::Int) = g.fadjlist[v]
-in_neighbors(g::DiGraph,v::Int) = g.badjlist[v]
+out_neighbors(g::SimpleGTGraph,v::Int) = g.fadjlist[v]
+in_neighbors(g::GTDiGraph,v::Int) = g.badjlist[v]
 
 
-function digraph(g::Graph)
-    h = DiGraph(nv(g))
+function digraph(g::GTGraph)
+    h = GTDiGraph(nv(g))
     h.ne = ne(g) * 2 - num_self_loops(g)
     h.fadjlist = deepcopy(g.fadjlist)
     h.badjlist = deepcopy(g.fadjlist)
     return h
 end
 
-graph(g::Graph) = g
-digraph(g::DiGraph) = g
+graph(g::GTGraph) = g
 
-function graph(g::DiGraph)
+
+digraph(g::GTDiGraph) = g
+
+function graph(g::GTDiGraph)
     gnv = nv(g)
 
     edgect = 0
@@ -297,18 +276,18 @@ function graph(g::DiGraph)
         end
     end
     iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
-    return Graph(edgect ÷ 2, newfadj)
+    return GTGraph(edgect ÷ 2, newfadj)
 end
 
 #### fallbaks override #######
-out_adjlist(g::SimpleGraph) = g.fadjlist
-in_adjlist(g::DiGraph) = g.badjlist
+out_adjlist(g::SimpleGTGraph) = g.fadjlist
+in_adjlist(g::GTDiGraph) = g.badjlist
 
-=={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
+=={G<:SimpleGTGraph}(g::G, h::G) = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 
-function has_edge(g::Graph, e::Edge)
+function has_edge(g::GTGraph, e::Edge)
     u, v = e
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) > degree(g,v)
@@ -317,7 +296,7 @@ function has_edge(g::Graph, e::Edge)
     return length(searchsorted(neighbors(g,u), v)) > 0
 end
 
-function has_edge(g::DiGraph, e::Edge)
+function has_edge(g::GTDiGraph, e::Edge)
     u, v = e
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) < degree(g,v)
