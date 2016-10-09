@@ -17,4 +17,3 @@ type MatchingResult{T<:Real}
 end
 
 include("blossomv.jl")
-include("lp.jl")

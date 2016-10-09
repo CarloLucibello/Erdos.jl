@@ -133,7 +133,7 @@ euclidean_graph,
 kruskal_mst,
 
 #matching
-MatchingResult, maximum_weight_maximal_matching, minimum_weight_perfect_matching,
+MatchingResult, minimum_weight_perfect_matching,
 
 #interdiction
 # more imports/export in interdiction.jl
