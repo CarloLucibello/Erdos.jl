@@ -6,6 +6,16 @@ type GTGraph <: AbstractGraph
     fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
 end
 
+"""A type representing an undirected graph."""
+type GTDiGraph <: AbstractDiGraph
+    ne::Int
+    edge_index_range::Int
+    epos::Vector{Pair{Int,Int}}
+    fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
+    badjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
+end
+
+typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
 
 #### GRAPH CONSTRUCTORS
 """
@@ -30,17 +40,6 @@ GTGraph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
 nv(g::SimpleGTGraph) = length(g.fadjlist)
 ne(g::SimpleGTGraph) = g.ne
 
-#=
-    rem_vertex!(g, v)
-
-Remove the vertex `v` from graph `g`.
-This operation has to be performed carefully if one keeps external data structures indexed by
-edges or vertices in the graph, since internally the removal is performed swapping the vertices `v`  and `n=nv(g)`,
-and removing the vertex `n` from the graph.
-After removal the vertices in the ` g` will be indexed by 1:n-1.
-This is an O(k^2) operation, where `k` is the max of the degrees of vertices `v` and `n`.
-Returns false if removal fails (e.g., if vertex is not in the graph); true otherwise.
-=#
 function rem_vertex!(g::SimpleGTGraph, v::Int)
     v in vertices(g) || return false
     n = nv(g)
@@ -49,7 +48,7 @@ function rem_vertex!(g::SimpleGTGraph, v::Int)
     for e in edgs
         rem_edge!(g, e)
     end
-    neigs = copy(in_neighbors(g, n))
+    neigs = collect(in_neighbors(g, n))
     for i in neigs
         rem_edge!(g, Edge(i, n))
     end
@@ -64,7 +63,7 @@ function rem_vertex!(g::SimpleGTGraph, v::Int)
         for e in edgs
             rem_edge!(g, e)
         end
-        neigs = copy(out_neighbors(g, n))
+        neigs = collect(out_neighbors(g, n))
         for i in neigs
             rem_edge!(g, Edge(n, i))
         end
@@ -83,11 +82,11 @@ function rem_vertex!(g::SimpleGTGraph, v::Int)
 end
 
 function copy(g::GTGraph)
-    return GTGraph(g.ne, deepcopy(g.fadjlist))
+    return GTGraph(g.ne, g.edge_index_range, deepcopy(epos), deepcopy(g.fadjlist))
 end
 
 function add_edge!(g::GTGraph, e::Edge)
-
+#from hwre
     s, d = e
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
@@ -296,8 +295,8 @@ function has_edge(g::GTGraph, e::Edge)
     return length(searchsorted(neighbors(g,u), v)) > 0
 end
 
-function has_edge(g::GTDiGraph, e::Edge)
-    u, v = e
+function has_edge(g::GTDiGraph, e::Edge) = has_edge(g, src(e), dst(e))
+function has_edge(g::GTDiGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) < degree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0

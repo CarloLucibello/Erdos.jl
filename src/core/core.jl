@@ -51,22 +51,6 @@ function add_vertices!(g::ASimpleGraph, n::Integer)
 end
 
 
-"""
-    in_edges(g, v)
-
-Returns an iterable of the edges in `g` that arrive at vertex `v`.
-`v = dst(e)` for each returned edge `e`.
-"""
-in_edges(g::ASimpleGraph, v::Int) = (Edge(x,v) for x in in_neighbors(g, v))
-
-"""
-    out_edges(g, v)
-
-Returns an Array of the edges in `g` that depart from vertex `v`.
-`v = src(e)` for each returned edge `e`.
-"""
-out_edges(g::ASimpleGraph, v::Int) = (Edge(v,x) for x in out_neighbors(g,v))
-
 
 """
     has_vertex(g, v)
@@ -74,9 +58,6 @@ out_edges(g::ASimpleGraph, v::Int) = (Edge(v,x) for x in out_neighbors(g,v))
 Return true if `v` is a vertex of `g`.
 """
 has_vertex(g::ASimpleGraph, v::Int) = v in vertices(g)
-
-add_edge!(g::ASimpleGraph, u::Int, v::Int) = add_edge!(g, Edge(u, v))
-rem_edge!(g::ASimpleGraph, u::Int, v::Int) = rem_edge!(g, Edge(u, v))
 
 function show(io::IO, g::AGraph)
     if nv(g) == 0
@@ -102,14 +83,6 @@ Check if `g` a graph with directed edges.
 is_directed(g::AGraph) = false
 is_directed(g::ADiGraph) = true
 
-
-"""
-    has_edge(g, e::Edge)
-    has_edge(g, u, v)
-
-Returns true if the graph `g` has an edge `e` (from `u` to `v`).
-"""
-has_edge(g::ASimpleGraph, u::Int, v::Int) = has_edge(g, Edge(u, v))
 
 """
     indegree(g, v)
@@ -215,21 +188,45 @@ NOTE: It may return a reference, not a copy. Do not modify result.
 """
 out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:nv(g)]
 
-function has_edge(g::AGraph, e::Edge)
-    u, v = e
+
+"""
+    has_edge(g, e::Edge)
+    has_edge(g, u, v)
+
+Returns true if the graph `g` has an edge `e` (from `u` to `v`).
+"""
+has_edge(g::ASimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
+
+function has_edge(g::AGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
-    if degree(g,u) > degree(g,v)
+    if degree(g, u) > degree(g, v)
         u, v = v, u
     end
-    return findfirst(neighbors(g,u), v) > 0
+    return findfirst(neighbors(g, u), v) > 0
 end
 
-function has_edge(g::ADiGraph, e::Edge)
-    u, v = e
+function has_edge(g::ADiGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
-    if degree(g,u) < degree(g,v)
-        return findfirst(out_neighbors(g,u), v) > 0
+    if degree(g, u) < degree(g, v)
+        return findfirst(out_neighbors(g, u), v) > 0
     else
-        return findfirst(in_neighbors(g,v), u) > 0
+        return findfirst(in_neighbors(g, v), u) > 0
     end
 end
+
+
+"""
+    in_edges(g, v)
+
+Returns an iterable of the edges in `g` that arrive at vertex `v`.
+`v = dst(e)` for each returned edge `e`.
+"""
+in_edges(g::ASimpleGraph, v::Int) = (edge(g, x, v) for x in in_neighbors(g, v))
+
+"""
+    out_edges(g, v)
+
+Returns an Array of the edges in `g` that depart from vertex `v`.
+`v = src(e)` for each returned edge `e`.
+"""
+out_edges(g::ASimpleGraph, v::Int) = (edge(g, v, x) for x in out_neighbors(g, v))

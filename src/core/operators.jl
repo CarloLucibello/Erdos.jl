@@ -295,8 +295,7 @@ function induced_subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
         for d in out_neighbors(g, s)
             # println("s = $s, d = $d")
             if d in vset && has_edge(g, s, d)
-                newe = Edge(newvid[s], newvid[d])
-                add_edge!(h, newe)
+                add_edge!(h, newvid[s], newvid[d])
             end
         end
     end
@@ -310,7 +309,7 @@ function induced_subgraph{T<:ASimpleGraph}(g::T, elist::AbstractVector{Edge})
     vmap = Vector{Int}()
 
     for e in elist
-        u, v = e
+        u, v = src(e), dst(e)
         for i in (u,v)
             if !haskey(newvid, i)
                 add_vertex!(h)

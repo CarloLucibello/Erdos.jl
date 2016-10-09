@@ -8,7 +8,7 @@ function CompleteGraph(n::Integer)
     g = Graph(n)
     for i = 1:n, j=1:n
         if i < j
-            add_edge!(g, Edge(i,j))
+            add_edge!(g, i, j)
         end
     end
     return g
@@ -21,7 +21,7 @@ connecting each pair of vertices in the two sets.
 function CompleteBipartiteGraph(n1::Integer, n2::Integer)
     g = Graph(n1+n2)
     for i = 1:n1, j=n1+1:n1+n2
-        add_edge!(g, Edge(i,j))
+        add_edge!(g, i, j)
     end
     return g
 end
@@ -33,7 +33,7 @@ function CompleteDiGraph(n::Integer)
     g = DiGraph(n)
     for i = 1:n, j=1:n
         if i != j
-            add_edge!(g, Edge(i,j))
+            add_edge!(g, i,j)
         end
     end
     return g
@@ -45,7 +45,7 @@ with edges to each other vertex.
 function StarGraph(n::Integer)
     g = Graph(n)
     for i = 2:n
-        add_edge!(g, Edge(1,i))
+        add_edge!(g, 1, i)
     end
     return g
 end
@@ -56,7 +56,7 @@ vertex with directed edges to every other vertex.
 function StarDiGraph(n::Integer)
     g = DiGraph(n)
     for i = 2:n
-        add_edge!(g, Edge(1,i))
+        add_edge!(g, 1,i)
     end
     return g
 end
@@ -66,7 +66,7 @@ successive vertex by a single edge."""
 function PathGraph(n::Integer)
     g = Graph(n)
     for i = 2:n
-        add_edge!(g, Edge(i-1, i))
+        add_edge!(g, i-1, i)
     end
     return g
 end
@@ -76,7 +76,7 @@ successive vertex by a single directed edge."""
 function PathDiGraph(n::Integer)
     g = DiGraph(n)
     for i = 2:n
-        add_edge!(g, Edge(i-1, i))
+        add_edge!(g, i-1, i)
     end
     return g
 end
@@ -86,9 +86,9 @@ end
 function CycleGraph(n::Integer)
     g = Graph(n)
     for i = 1:n-1
-        add_edge!(g, Edge(i, i+1))
+        add_edge!(g, i, i+1)
     end
-    add_edge!(g, Edge(n, 1))
+    add_edge!(g, n, 1)
     return g
 end
 
@@ -97,9 +97,9 @@ end
 function CycleDiGraph(n::Integer)
     g = DiGraph(n)
     for i = 1:n-1
-        add_edge!(g, Edge(i, i+1))
+        add_edge!(g, i, i+1)
     end
-    add_edge!(g, Edge(n, 1))
+    add_edge!(g, n, 1)
     return g
 end
 
@@ -110,10 +110,10 @@ the outer vertices connected via a closed path graph.
 function WheelGraph(n::Integer)
     g = StarGraph(n)
     for i = 3:n
-        add_edge!(g, Edge(i-1, i))
+        add_edge!(g, i-1, i)
     end
     if n != 2
-        add_edge!(g, Edge(n, 2))
+        add_edge!(g, n, 2)
     end
     return g
 end
@@ -124,10 +124,10 @@ with the outer vertices connected via a closed path graph.
 function WheelDiGraph(n::Integer)
     g = StarDiGraph(n)
     for i = 3:n
-        add_edge!(g, Edge(i-1, i))
+        add_edge!(g, i-1, i)
     end
     if n != 2
-        add_edge!(g, Edge(n, 2))
+        add_edge!(g, n, 2)
     end
     return g
 end

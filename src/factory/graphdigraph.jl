@@ -72,13 +72,13 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     for e in edgs
         rem_edge!(g, e)
     end
-    neigs = copy(in_neighbors(g, n))
+    neigs = collect(in_neighbors(g, n))
     for i in neigs
-        rem_edge!(g, Edge(i, n))
+        rem_edge!(g, i, n)
     end
     if v != n
         for i in neigs
-            add_edge!(g, Edge(i, v))
+            add_edge!(g, i, v)
         end
     end
 
@@ -87,13 +87,13 @@ function rem_vertex!(g::SimpleGraph, v::Int)
         for e in edgs
             rem_edge!(g, e)
         end
-        neigs = copy(out_neighbors(g, n))
+        neigs = collect(out_neighbors(g, n))
         for i in neigs
-            rem_edge!(g, Edge(n, i))
+            rem_edge!(g, n, i)
         end
         if v != n
             for i in neigs
-                add_edge!(g, Edge(v, i))
+                add_edge!(g, v, i)
             end
         end
     end
@@ -109,9 +109,7 @@ function copy(g::Graph)
     return Graph(g.ne, deepcopy(g.fadjlist))
 end
 
-function add_edge!(g::Graph, e::Edge)
-
-    s, d = e
+function add_edge!(g::Graph, s::Int, d::Int)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     if inserted
@@ -123,14 +121,13 @@ function add_edge!(g::Graph, e::Edge)
     return inserted
 end
 
-function rem_edge!(g::Graph, e::Edge)
-    i = searchsorted(g.fadjlist[src(e)], dst(e))
+function rem_edge!(g::Graph, u::Int, v::Int)
+    i = searchsorted(g.fadjlist[u], v)
     length(i) > 0 || return false   # edge not in graph
-    i = i[1]
-    deleteat!(g.fadjlist[src(e)], i)
-    if src(e) != dst(e)     # not a self loop
-        i = searchsorted(g.fadjlist[dst(e)], src(e))[1]
-        deleteat!(g.fadjlist[dst(e)], i)
+    deleteat!(g.fadjlist[u], i[1])
+    if u != v     # not a self loop
+        i2 = searchsorted(g.fadjlist[v], u)[1]
+        deleteat!(g.fadjlist[v], i2)
     end
     g.ne -= 1
     return true # edge successfully removed
@@ -206,8 +203,8 @@ function copy(g::DiGraph)
     return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
-function add_edge!(g::DiGraph, e::Edge)
-    s, d = e
+add_edge!(g::SimpleGraph, e::Edge) = add_edge!(g, src(e), dst(e))
+function add_edge!(g::DiGraph, s::Int, d::Int)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     if inserted
@@ -216,13 +213,13 @@ function add_edge!(g::DiGraph, e::Edge)
     return inserted && _insert_and_dedup!(g.badjlist[d], s)
 end
 
-
-function rem_edge!(g::DiGraph, e::Edge)
-    has_edge(g,e) || return false
-    i = searchsorted(g.fadjlist[src(e)], dst(e))[1]
-    deleteat!(g.fadjlist[src(e)], i)
-    i = searchsorted(g.badjlist[dst(e)], src(e))[1]
-    deleteat!(g.badjlist[dst(e)], i)
+rem_edge!(g::SimpleGraph, e::Edge) = rem_edge!(g, src(e), dst(e))
+function rem_edge!(g::DiGraph, u::Int, v::Int)
+    has_edge(g,u,v) || return false
+    i = searchsorted(g.fadjlist[u],v)[1]
+    deleteat!(g.fadjlist[u], i)
+    i = searchsorted(g.badjlist[v], u)[1]
+    deleteat!(g.badjlist[v], i)
     g.ne -= 1
     return true
 end
@@ -300,6 +297,10 @@ function graph(g::DiGraph)
     return Graph(edgect ÷ 2, newfadj)
 end
 
+edge(g::DiGraph, u::Int, v::Int) = Edge(u, v)
+edge(g::Graph, u::Int, v::Int) = Edge(u, v)
+# edge(g::Graph, u::Int, v::Int) = u <= v ? Edge(u, v) : Edge(v, u)
+
 #### fallbaks override #######
 out_adjlist(g::SimpleGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
@@ -308,8 +309,8 @@ in_adjlist(g::DiGraph) = g.badjlist
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 
-function has_edge(g::Graph, e::Edge)
-    u, v = e
+has_edge(g::SimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
+function has_edge(g::Graph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) > degree(g,v)
         u, v = v, u
@@ -317,8 +318,7 @@ function has_edge(g::Graph, e::Edge)
     return length(searchsorted(neighbors(g,u), v)) > 0
 end
 
-function has_edge(g::DiGraph, e::Edge)
-    u, v = e
+function has_edge(g::DiGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) < degree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0
