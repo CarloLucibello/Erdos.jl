@@ -144,22 +144,22 @@ h = g[5:26]
 @test_throws ErrorException g[[1,1]]
 
 r = 5:26
-h2, vm = induced_subgraph(g, r)
+h2, vm = subgraph(g, r)
 @test h2 == h
 @test vm == collect(r)
 @test h2 == g[r]
 
-sg, vm = induced_subgraph(CompleteGraph(10), 5:8)
+sg, vm = subgraph(CompleteGraph(10), 5:8)
 @test nv(sg) == 4
 @test ne(sg) == 6
 
-sg2, vm = induced_subgraph(CompleteGraph(10), [5,6,7,8])
+sg2, vm = subgraph(CompleteGraph(10), [5,6,7,8])
 @test sg2 == sg
 @test vm[4] == 8
 
 gg5 = CompleteGraph(10)
 elist = [Edge(1,2),Edge(2,3),Edge(3,4),Edge(4,5),Edge(5,1)]
-sg, vm = induced_subgraph(gg5, elist)
+sg, vm = subgraph(gg5, elist)
 @test sg == CycleGraph(5)
 @test sort(vm) == [1:5;]
 

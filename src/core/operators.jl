@@ -245,7 +245,7 @@ end
 ## subgraphs ###
 
 """
-    induced_subgraph(g, vlist)
+    subgraph(g, vlist)
 
 Returns the subgraph of `g` induced by the vertices in  `vlist`.
 
@@ -257,7 +257,7 @@ Returns  also a vector `vmap` mapping the new vertices to the
 old ones: the  vertex `i` in the subgraph corresponds to
 the vertex `vmap[i]` in `g`.
 
-    induced_subgraph(g, elist)
+    subgraph(g, elist)
 
 Returns the subgraph of `g` induced by the edges in `elist`, along with
 the associated vector `vmap` mapping new vertices to the old ones.
@@ -280,7 +280,7 @@ sg, vmap = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
-function induced_subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
+function subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = T(length(vlist))
     newvid = Dict{Int, Int}()
@@ -303,7 +303,7 @@ function induced_subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
 end
 
 
-function induced_subgraph{T<:ASimpleGraph}(g::T, elist)
+function subgraph{T<:ASimpleGraph}(g::T, elist)
     h = T()
     newvid = Dict{Int, Int}()
     vmap = Vector{Int}()
@@ -326,9 +326,9 @@ end
 """
     g[iter]
 
-Returns the subgraph induced by `iter`. Equivalent to [`induced_subgraph`](@ref)`(g, iter)[1]`.
+Returns the subgraph induced by `iter`. Equivalent to [`subgraph`](@ref)`(g, iter)[1]`.
 """
-getindex(g::ASimpleGraph, iter) = induced_subgraph(g, iter)[1]
+getindex(g::ASimpleGraph, iter) = subgraph(g, iter)[1]
 
 
 """
@@ -337,6 +337,6 @@ getindex(g::ASimpleGraph, iter) = induced_subgraph(g, iter)[1]
 Returns the subgraph of `g` induced by the neighbors of `v` up to distance
 `d`. If `g` is a `DiGraph` the `dir` optional argument specifies
 the edge direction the edge direction with respect to `v` (i.e. `:in` or `:out`)
-to be considered. This is equivalent to [`induced_subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
+to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
 """
 egonet(g::ASimpleGraph, v::Int, d::Int; dir=:out) = g[neighborhood(g, v, d, dir=dir)]
