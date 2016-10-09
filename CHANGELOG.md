@@ -14,10 +14,10 @@
 - make most methods accept abstract types
 - change the return type of add_vertex! to nv(g)
 - removed dynamic stochastic block model
-- all_neighbors -> neighbors
 - Graph(dg) -> graph(dg)
 - remove fadj(g, v) in favor of out_neighbors(g, v)
 - more efficient equality test for DiGraph
 - remove fadj(g) in favor of out_adjlist
 - add `graph` and `digraph`
 - add `edge`
+- simplified and generic edge iterator (now a Generator)

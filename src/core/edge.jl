@@ -1,3 +1,7 @@
+abstract AbstractEdge
+
+show(io::IO, e::AbstractEdge) = print(io, "$(src(e))=>$(dst(e))")
+
 """
     immutable Edge
         src::Int
@@ -6,7 +10,7 @@
 
 A type representing an edge between two vertices of a graph.
 """
-immutable Edge
+immutable Edge <: AbstractEdge
     src::Int
     dst::Int
 end
@@ -52,5 +56,3 @@ reverse(e::Edge) = Edge(dst(e), src(e))
 Swap `src` and `dst` if `src > dst`.
 """
 sort(e::Edge) = src(e) > dst(e) ? reverse(e) : e
-
-show(io::IO, e::Edge) = print(io, "$(src(e))=>$(dst(e))")

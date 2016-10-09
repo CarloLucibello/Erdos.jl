@@ -12,6 +12,8 @@ using JuMP # matching/interdiction
 using MathProgBase # interdiction
 import Clustering: kmeans # community detection
 using MatrixDepot # matrixdepot
+# using Iterators: chain # all_neighbors
+# using Iterators: nth # EdgeIter
 
 
 # more imports in interdiction.jl
