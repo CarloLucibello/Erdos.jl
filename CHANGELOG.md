@@ -21,3 +21,4 @@
 - add `graph` and `digraph`
 - add `edge`
 - simplified and generic edge iterator (now a Generator)
+- add `edges(g, v)` and `edges(g, vertices)`

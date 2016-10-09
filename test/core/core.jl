@@ -48,6 +48,7 @@ end
 @test has_edge(g, 1, 2)
 @test collect(in_edges(g, 2)) == [e1, reverse(e4)]
 @test collect(out_edges(g, 1)) == [e1, e2, e3]
+@test collect(out_edges(g, 1)) == collect(edges(g, 1))
 
 @test add_vertex!(g) == nv(g) == 6
 @test add_vertices!(g,5) == nv(g) == 11

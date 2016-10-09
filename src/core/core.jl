@@ -5,14 +5,6 @@ Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
 """
 vertices(g::ASimpleGraph) = 1:nv(g)
 
-"""
-    edges(g)
-
-Returns an iterator to the edges of a graph.
-The returned iterator is valid for one pass over the edges, and is invalidated by changes to `g`.
-"""
-edges(g::ASimpleGraph) = EdgeIter(g)
-
 
 """
     adjlist(g)
@@ -218,15 +210,15 @@ end
 """
     in_edges(g, v)
 
-Returns an iterable of the edges in `g` that arrive at vertex `v`.
-`v = dst(e)` for each returned edge `e`.
+Returns an iterator to the edges in `g` going to vertex `v`.
+`v == dst(e)` for each returned edge `e`.
 """
 in_edges(g::ASimpleGraph, v::Int) = (edge(g, x, v) for x in in_neighbors(g, v))
 
 """
     out_edges(g, v)
 
-Returns an Array of the edges in `g` that depart from vertex `v`.
-`v = src(e)` for each returned edge `e`.
+Returns an iterator to the edges in `g` coming from vertex `v`.
+`v == src(e)` for each returned edge `e`.
 """
 out_edges(g::ASimpleGraph, v::Int) = (edge(g, v, x) for x in out_neighbors(g, v))

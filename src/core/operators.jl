@@ -303,7 +303,7 @@ function induced_subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
 end
 
 
-function induced_subgraph{T<:ASimpleGraph}(g::T, elist::AbstractVector{Edge})
+function induced_subgraph{T<:ASimpleGraph}(g::T, elist)
     h = T()
     newvid = Dict{Int, Int}()
     vmap = Vector{Int}()

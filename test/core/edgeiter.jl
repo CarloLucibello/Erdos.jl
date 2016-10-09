@@ -48,3 +48,9 @@ eit = edges(ga)
 # @test es.di == 1
 
 @test [e for e in eit] == [Edge(3, 2), Edge(3, 10), Edge(5,10), Edge(10,3)]
+
+g = CompleteGraph(10)
+collect(edges(g,1:3)) |> println
+@test collect(edges(g,1:3)) == collect(edges(g,[1:3;]))
+@test length(collect(edges(g, 1:3))) == 3
+@test length(collect(edges(g, 1:0))) == 0
