@@ -153,6 +153,12 @@ sg, vm = subgraph(CompleteGraph(10), 5:8)
 @test nv(sg) == 4
 @test ne(sg) == 6
 
+gg = CompleteGraph(10)
+sg, vm = subgraph(gg, edges(gg, 5:8))
+@test nv(sg) == 4
+@test ne(sg) == 6
+
+
 sg2, vm = subgraph(CompleteGraph(10), [5,6,7,8])
 @test sg2 == sg
 @test vm[4] == 8
