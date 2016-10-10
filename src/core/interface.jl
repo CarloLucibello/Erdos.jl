@@ -1,18 +1,18 @@
 """
-Abstract Graph type
+Abstract Graph/DiGraph type
 
 Guarantees:
     vertices are integers in 1:nv(g)
-    edges are pair of vertices
-    sorted adjacency list member (Vector{Vector{Int}})
 
 Functions to implement:
     basic constructors (e.g. MyGraph(n), MyGraph())
     nv(g)
     ne(g)
     out_neighbors(g, v)
-    add_edge!(g, e)
-    rem_edge!(g, e)
+    in_neighbors(g, v) #digraph
+    edge(g, u, v)
+    add_edge!(g, u, v)
+    rem_edge!(g, u, v)
     add_vertex!(g)
     rem_vertex!(g, v)
     copy(g)
@@ -20,40 +20,17 @@ Functions to implement:
     digraph(g)
 
 Reccomended Overrides:
+    in_adjlist(g) #digraph
     out_adjlist(g)
-    has_edge(g, e)
+    has_edge(g, u, v)
     ==(g, h)
+    out_edges(g, u)
+    in_edges(g, u) # digraph
+    add_edge!(g, e)
+    rem_edge!(g, e)
 """
 abstract AbstractGraph
 
-"""
-Abstract Directed Graph type
-
-Guarantees:
-    vertices are integers in 1:nv(g)
-    edges are pair of vertices
-    sorted forward and backward adjacency list members (Vector{Vector{Int}})
-
-Functions to implement:
-    basic constructors (e.g. MyGraph(n), MyGraph())
-    nv(g)
-    ne(g)
-    in_neighbors(g, v)
-    out_neighbors(g, v)
-    add_edge!(g, e)
-    rem_edge!(g, e)
-    add_vertex!(g)
-    rem_vertex!(g, v)
-    copy(g)
-    graph(g)
-    digraph(g)
-
-Reccomended Overrides:
-    in_adjlist(g)
-    out_adjlist(g)
-    has_edge(g, e)
-    ==(g, h)
-"""
 abstract AbstractDiGraph
 
 #TODO eventually remove graph/digraph methods (used only in a few functions)
@@ -86,25 +63,32 @@ Time Complexity: O(1)
 ne(g::ASimpleGraph) = nothing
 
 """
-    add_edge!(g, e::Edge)
+    add_edge!(g, e)
+
+Add to `g` the edge `e`.
+
     add_edge!(g, u, v)
 
-Add to `g` the edge `e` (from `u` to `v`).
+Add to `g` an edge from `u` to `v`.
+
 Will return false if add fails (e.g., if vertices are not in the graph or the edge
 is already present) and true otherwise.
 """
-add_edge!(g::ASimpleGraph, e::Edge) = nothing
+add_edge!(g::ASimpleGraph, u::Int, v::Int) = nothing
 
 
 """
-    rem_edge!(g, e::Edge)
+    rem_edge!(g, e)
+
+Remove the edge `e`.
+
     rem_edge!(g, u, v)
 
 Remove the edge from `u` to `v`.
 
 Returns false if edge removal fails (e.g., if the edge does not exist) and true otherwise.
 """
-rem_edge!(g::ASimpleGraph, e::Edge) = nothing
+rem_edge!(g::ASimpleGraph, u::Int, v::Int) = nothing
 
 
 """
@@ -142,6 +126,13 @@ NOTE: it may return a reference, not a copy. Do not modify result.
 """
 out_neighbors(g::ASimpleGraph, v::Int) = nothing
 
+"""
+    edge(g, u, v)
+
+Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
+in `g`.
+"""
+edge(g::ASimpleGraph, u::Int, v::Int) = nothing
 
 graph(g::ASimpleGraph) = nothing
 digraph(g::ASimpleGraph) = nothing

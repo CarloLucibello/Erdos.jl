@@ -4,7 +4,6 @@ Algorithms for the [optimal matching problem](<https://en.wikipedia.org/wiki/Mat
 ```@autodocs
 Modules = [FatGraphs]
 Pages   = ["matching/common.jl",
-            "matching/lp.jl",
-            "matching/blossomv.jl"]
+           "matching/blossomv.jl"]
 Private = false
 ```

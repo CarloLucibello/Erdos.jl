@@ -31,6 +31,6 @@ edges(g::AGraph, vs::AbstractVector) = length(vs) == 0 ? #julia issue #18852
 
 Returns an iterator to the edges in `g` coming from vertex `v`.
 `v == src(e)` for each returned edge `e`.
-It is equivalent to [`out_edges'](@ref)(g, v)
+This is equivalent to [`out_edges`](@ref)(g, v).
 """
 edges(g::ASimpleGraph, v::Int) = out_edges(g, v)

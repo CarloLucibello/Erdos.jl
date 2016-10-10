@@ -3,6 +3,6 @@
 
 ```@autodocs
 Modules = [FatGraphs]
-Pages   = [ "distance.jl"]
+Pages   = [ "distances/distance.jl, distances/edit_distance.jl"]
 Private = false
 ```

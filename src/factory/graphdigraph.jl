@@ -1,10 +1,43 @@
-"""A type representing an undirected graph."""
+"""
+    type Graph <: AbstractGraph
+        ne::Int
+        fadjlist::Vector{Vector{Int}}
+    end
+
+A simple graph type based on an adjacency list.
+
+
+    Graph(n=0)
+
+Construct an empty Graph with `n` vertices.
+
+    Graph(adjmx::AbstractMatrix)
+
+Construct a `Graph` from the adjacency matrix `adjmx`.
+"""
 type Graph <: AbstractGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
 end
 
-"""A type representing a directed graph."""
+"""
+    type DiGraph <: AbstractDiGraph
+        ne::Int
+        fadjlist::Vector{Vector{Int}}
+        badjlist::Vector{Vector{Int}}
+    end
+
+A simple digraph type based on two adjacency lists (forward and backward).
+
+
+    DiGraph(n=0)
+
+Construct an empty DiGraph with `n` vertices.
+
+    DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+
+Construct a `DiGraph` from the adjacency matrix `adjmx`.
+"""
 type DiGraph <: AbstractDiGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
@@ -15,11 +48,6 @@ typealias SimpleGraph Union{Graph, DiGraph}
 
 
 #### GRAPH CONSTRUCTORS
-"""
-    Graph(n=0)
-
-Construct an empty graph with `n` vertices.
-"""
 function Graph(n::Int = 0)
     fadjlist = Vector{Vector{Int}}()
     sizehint!(fadjlist,n)
@@ -29,11 +57,6 @@ function Graph(n::Int = 0)
     return Graph(0, fadjlist)
 end
 
-"""
-    Graph{T<:Real}(adjmx::AbstractMatrix{T})
-
-Construct a `Graph` from the adjacency matrix `adjmx`.
-"""
 function Graph{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
@@ -141,11 +164,6 @@ end
 
 
 ##### DIGRAPH CONSTRUCTORS  #############
-"""
-    DiGraph(n=0)
-
-Construct an empty DiGraph with `n` vertices.
-"""
 function DiGraph(n::Int = 0)
     fadjlist = Vector{Vector{Int}}()
     badjlist = Vector{Vector{Int}}()
@@ -175,12 +193,6 @@ function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
     return g
 end
 
-
-"""
-    DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
-
-Construct a `DiGraph` from the adjacency matrix `adjmx`.
-"""
 function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
@@ -230,13 +242,6 @@ function add_vertex!(g::DiGraph)
     return nv(g)
 end
 
-#TODO define for abstract types
-"""
-    reverse(g::DiGraph)
-
-Produces a graph where all edges are reversed from the
-original.
-"""
 function reverse(g::DiGraph)
     gnv = nv(g)
     gne = ne(g)
@@ -248,13 +253,6 @@ function reverse(g::DiGraph)
     return h
 end
 
-
-#TODO define for abstract types
-"""
-    reverse!(g::DiGraph)
-
-In-place reverse (modifies the original graph).
-"""
 function reverse!(g::DiGraph)
     g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
     return g

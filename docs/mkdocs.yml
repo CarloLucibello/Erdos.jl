@@ -12,8 +12,10 @@ extra:
 
 pages:
   - 'Getting Started': 'index.md'
-  - 'Basic Functions': 'basicmeasures.md'
+  - 'Basic Interface': 'interface.md'
+  - 'Graph Types': 'graphtypes.md'
   - 'Operators': 'operators.md'
+  - 'Connectivity': 'connectivity.md'
   - 'Path and Traversal': 'pathing.md'
   - 'Distance': 'distance.md'
   - 'Centrality Measures': 'centrality.md'

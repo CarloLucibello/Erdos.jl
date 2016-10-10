@@ -222,3 +222,22 @@ Returns an iterator to the edges in `g` coming from vertex `v`.
 `v == src(e)` for each returned edge `e`.
 """
 out_edges(g::ASimpleGraph, v::Int) = (edge(g, v, x) for x in out_neighbors(g, v))
+
+
+#TODO define for abstract types
+"""
+    reverse(g::DiGraph)
+
+Produces a graph where all edges are reversed from the
+original.
+"""
+reverse(g::ADiGraph) = nothing
+
+
+#TODO define for abstract types
+"""
+    reverse!(g::DiGraph)
+
+In-place reverse (modifies the original graph).
+"""
+reverse!(g::ADiGraph) = nothing
