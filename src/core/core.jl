@@ -74,7 +74,8 @@ Check if `g` a graph with directed edges.
 """
 is_directed(g::AGraph) = false
 is_directed(g::ADiGraph) = true
-
+is_directed{G<:AGraph}(::Type{G}) = false
+is_directed{G<:ADiGraph}(::Type{G}) = true
 
 """
     indegree(g, v)

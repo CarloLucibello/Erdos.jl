@@ -70,7 +70,7 @@ function Graph{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
+Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi(n, m, Graph; seed=seed)
 
 ###################
 nv(g::SimpleGraph) = length(g.fadjlist)
@@ -206,7 +206,7 @@ function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
 end
 
 
-DiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
+DiGraph(nv::Int, ne::Int; seed::Int = -1) = erdos_renyi(nv, ne, DiGraph, seed=seed)
 #########
 
 

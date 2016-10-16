@@ -1,74 +1,62 @@
 """
-    erdos_renyi(n::Int, p::Real; is_directed=false, seed=-1)
-    erdos_renyi(n::Int, ne::Int; is_directed=false, seed=-1)
+    erdos_renyi(n::Int, p::Real, G=Graph; seed=-1)
+    erdos_renyi(n::Int, m::Int, G=Graph; seed=-1)
 
 Creates an [Erdős–Rényi](http://en.wikipedia.org/wiki/Erdős–Rényi_model)
-random graph with `n` vertices. Edges are added between pairs of vertices with
-probability `p`. Undirected graphs are created by default; use
-`is_directed=true` to override.
+random graph of type `G` with `n` vertices.
+Edges are added between pairs of vertices with probability `p` in the first method.
+In the second method `m` edges are randomly chosen insted.
+
+Undirected graphs are created by default. Directed graphs can be created
+passing a directed graph type as last argument (e.g. `DiGraph`)
 
 Note also that Erdős–Rényi graphs may be generated quickly using `erdos_renyi(n, ne)`
 or the  `Graph(nv, ne)` constructor, which randomly select `ne` edges among all the potential
 edges.
 """
-function erdos_renyi(n::Int, p::Real; is_directed=false, seed::Int=-1)
-    m = is_directed ? n*(n-1) : div(n*(n-1),2)
+function erdos_renyi{G<:ASimpleGraph}(n::Int, p::Real, ::Type{G} = Graph;
+        seed::Int=-1)
+    m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     if seed >= 0
         # init dsfmt generator without altering GLOBAL_RNG
         Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+1)
     end
     ne = rand(Binomial(m, p)) # sadly StatsBase doesn't support non-global RNG
-    return is_directed ? erdos_renyi_dir(n, ne, seed=seed) : erdos_renyi_undir(n, ne, seed=seed)
+    return erdos_renyi(n, m, G; seed=seed)
 end
 
-function erdos_renyi(n::Int, m::Int; is_directed=false, seed::Int=-1)
-    return is_directed ? erdos_renyi_dir(n, m, seed=seed) : erdos_renyi_undir(n, m, seed=seed)
-end
-
-function erdos_renyi_undir(n::Int, m::Int; seed::Int = -1)
-    maxe = div(n * (n-1), 2)
+function erdos_renyi{G<:ASimpleGraph}(n::Int, m::Int, ::Type{G} = Graph;
+        seed::Int = -1)
+    maxe = is_directed(G) ? n * (n-1) : div(n * (n-1), 2)
     @assert(m <= maxe, "Maximum number of edges for this /src/generators is $maxe")
-    m > 2/3 * maxe && return complement(erdos_renyi_undir(n, maxe-m))
+    m > 2/3 * maxe && return complement(erdos_renyi(n, maxe-m, G; seed=seed))
 
     rng = getRNG(seed)
-    g = Graph(n)
+    g = G(n)
     while ne(g) < m
         source = rand(rng, 1:n)
         dest = rand(rng, 1:n)
-        source != dest && add_edge!(g,source,dest)
-    end
-    return g
-end
-
-function erdos_renyi_dir(n::Int, m::Int; seed::Int = -1)
-    maxe = n * (n-1)
-    @assert(m <= maxe, "Maximum number of edges for this graph is $maxe")
-    m > 2/3 * maxe && return complement(erdos_renyi_dir(n, maxe-m))
-
-    rng = getRNG(seed)
-    g = DiGraph(n)
-    while ne(g) < m
-        source = rand(rng, 1:n)
-        dest = rand(rng, 1:n)
-        source != dest && add_edge!(g,source,dest)
+        source != dest && add_edge!(g, source, dest)
     end
     return g
 end
 
 
 
-"""Creates a [Watts-Strogatz](https://en.wikipedia.org/wiki/Watts_and_Strogatz_model)
-small model random graph with `n` vertices, each with degree `k`. Edges are
-randomized per the model based on probability `β`. Undirected graphs are
-created by default; use `is_directed=true` to override.
 """
-function watts_strogatz(n::Int, k::Int, β::Real; is_directed=false, seed::Int = -1)
+    watts_strogatz(n, k, β, G=Graph; seed=-1)
+
+Creates a [Watts-Strogatz](https://en.wikipedia.org/wiki/Watts_and_Strogatz_model)
+small model random graph with `n` vertices, each with degree `k`. Edges are
+randomized per the model based on probability `β`.
+
+Undirected graphs are created by default. Directed graphs can be created
+passing a directed graph type as last argument (e.g. `DiGraph`).
+"""
+function watts_strogatz{G<:ASimpleGraph}(n::Int, k::Int, β::Real, ::Type{G} = Graph;
+        seed::Int = -1)
     @assert k < n/2
-    if is_directed
-        g = DiGraph(n)
-    else
-        g = Graph(n)
-    end
+    g = G(n)
     rng = getRNG(seed)
     for s in 1:n
         for i in 1:(floor(Int, k/2))
@@ -148,52 +136,43 @@ function _try_creation(n::Int, k::Vector{Int}, rng::AbstractRNG)
 end
 
 """
-    barabasi_albert(n::Int, k::Int; is_directed::Bool = false, complete::Bool = false, seed::Int = -1)
+    barabasi_albert(n, k, G=Graph; seed=-1)
+    barabasi_albert(n, n0, k, G=Graph; seed=-1)
 
-Creates a [Barabási–Albert model](https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model)
-random graph with `n` vertices. It is grown by adding new vertices to an initial
-graph with `k` vertices. Each new vertex is attached with `k` edges to `k`
-different vertices already present in the system by preferential attachment.
-Initial graphs are undirected and consist of isolated vertices by default;
-use `is_directed=true` and `complete=true` for directed and complete initial graphs.
+Creates a random graph of type `G` with `n` vertices according to [Barabási–Albert model](https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model).
+It is grown by adding new vertices to an initial graph with `n0` vertices (`n0=k` if not specified).
+Each new vertex is attached with `k` edges to `k` different vertices already present in the system by preferential attachment.
+The initial graph is empty by default.
+
+Undirected graphs are created by default. Directed graphs can be created
+passing a directed graph type as last argument (e.g. `DiGraph`).
+
+See also [`barabasi_albert!`](@ref) for growing a given graph.
 """
-barabasi_albert(n::Int, k::Int; keyargs...) =
-    barabasi_albert(n, k, k; keyargs...)
+barabasi_albert{G<:ASimpleGraph}(n::Int, k::Int, ::Type{G}=Graph; keyargs...) =
+    barabasi_albert(n, k, k, G; keyargs...)
 
-"""
-    barabasi_albert(n::Int, n0::Int, k::Int; is_directed::Bool = false, complete::Bool = false, seed::Int = -1)
-
-Creates a [Barabási–Albert model](https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model)
-random graph with `n` vertices. It is grown by adding new vertices to an initial
-graph with `n0` vertices. Each new vertex is attached with `k` edges to `k`
-different vertices already present in the system by preferential attachment.
-Initial graphs are undirected and consist of isolated vertices by default;
-use `is_directed=true` and `complete=true` for directed and complete initial graphs.
-"""
-function barabasi_albert(n::Int, n0::Int, k::Int; is_directed::Bool = false, complete::Bool = false, seed::Int = -1)
-    if complete
-        g = is_directed ? CompleteDiGraph(n0) : CompleteGraph(n0)
-    else
-        g = is_directed ? DiGraph(n0) : Graph(n0)
-    end
-
+function barabasi_albert{G<:ASimpleGraph}(n::Int, n0::Int, k::Int, ::Type{G}=Graph;
+        seed::Int = -1)
+    g = G(n0)
     barabasi_albert!(g, n, k; seed = seed)
     return g
 end
 
 """
-    barabasi_albert!(g::ASimpleGraph, n::Int, k::Int; seed::Int = -1)
+    barabasi_albert!(g, n::Int, k::Int; seed::Int = -1)
 
-Creates a [Barabási–Albert model](https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model)
-random graph with `n` vertices. It is grown by adding new vertices to an initial
-graph `g`. Each new vertex is attached with `k` edges to `k` different vertices
-already present in the system by preferential attachment.
+Grows the graph `g` according to
+[Barabási–Albert](https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model)
+process into a graph with `n` vertices. At each step a new vertex is attached by
+preferential attachment to `k` different vertices already present in the graph.
+
+See also [`barabasi_albert`](@ref).
 """
 function barabasi_albert!(g::ASimpleGraph, n::Int, k::Int; seed::Int=-1)
     n0 = nv(g)
     1 <= k <= n0 <= n ||
-        throw(ArgumentError("Barabási-Albert model requires 1 <= k <= n0 <= n" *
-			    "where n0 is the number of nodes in graph g"))
+        throw(ArgumentError("Barabási-Albert model requires 1 <= k <= nv(g) <= n"))
     n0 == n && return g
 
     # seed random number generator
@@ -258,21 +237,25 @@ end
 
 
 """
-    static_fitness_model{T<:Real}(m::Int, fitness::Vector{T}; seed::Int=-1)
+    static_fitness_model(m, fitness, G=Graph; seed=-1)
+    static_fitness_model(m, fitness_out, fitness_in, G=DiGraph; seed=-1)
 
 Generates a random graph with `length(fitness)` nodes and `m` edges,
 in which the probability of the existence of edge `(i, j)` is proportional
 to `fitness[i]*fitness[j]`. Time complexity is O(|V| + |E| log |E|).
+
+In and out fitness have to be supplied for generating directed graphs.
 
 Reference:
 
 * Goh K-I, Kahng B, Kim D: Universal behaviour of load distribution
 in scale-free networks. Phys Rev Lett 87(27):278701, 2001.
 """
-function static_fitness_model{T<:Real}(m::Int, fitness::Vector{T}; seed::Int=-1)
+function static_fitness_model{T<:Real, G<:AGraph}(m::Int, fitness::Vector{T}, ::Type{G}=Graph;
+        seed::Int=-1)
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness)
-    m == 0 && return Graph(n)
+    m == 0 && return G(n)
     nodes = 0
     for f in fitness
         # sanity check for the fitness
@@ -284,12 +267,13 @@ function static_fitness_model{T<:Real}(m::Int, fitness::Vector{T}; seed::Int=-1)
     @assert(m <= max_no_of_edges, "too many edges requested")
     # calculate the cumulative fitness scores
     cum_fitness = cumsum(fitness)
-    g = Graph(n)
+    g = G(n)
     _create_static_fitness_graph!(g, m, cum_fitness, cum_fitness, seed)
     return g
 end
 
-function static_fitness_model{T<:Real,S<:Real}(m::Int, fitness_out::Vector{T}, fitness_in::Vector{S}; seed::Int=-1)
+function static_fitness_model{T<:Real,S<:Real, G<:ADiGraph}(m::Int, fitness_out::Vector{T},
+        fitness_in::Vector{S}, ::Type{G}=DiGraph; seed::Int=-1)
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness_out)
     @assert(length(fitness_in) == n, "fitness_in must have the same size as fitness_out")
@@ -308,7 +292,7 @@ function static_fitness_model{T<:Real,S<:Real}(m::Int, fitness_out::Vector{T}, f
     # calculate the cumulative fitness scores
     cum_fitness_out = cumsum(fitness_out)
     cum_fitness_in = cumsum(fitness_in)
-    g = DiGraph(n)
+    g = G(n)
     _create_static_fitness_graph!(g, m, cum_fitness_out, cum_fitness_in, seed)
     return g
 end

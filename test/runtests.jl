@@ -21,9 +21,6 @@ s2 = DiGraph(3)
 add_edge!(s2,1,2); add_edge!(s2,2,3); add_edge!(s2,3,3)
 s1 = graph(s2)
 
-r1 = Graph(10,20)
-r2 = DiGraph(5,10)
-
 e0 = Edge(2, 3)
 e1 = Edge(1, 2)
 re1 = Edge(2, 1)

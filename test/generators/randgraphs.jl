@@ -1,32 +1,37 @@
+r1 = Graph(10,20)
+r2 = DiGraph(5,10)
+@test typeof(r1) == Graph
+@test typeof(r2) == DiGraph
 @test nv(r1) == 10
 @test ne(r1) == 20
 @test nv(r2) == 5
 @test ne(r2) == 10
 
-@test Graph(10,20,seed=3) == Graph(10,20,seed=3)
-@test DiGraph(10,20,seed=3) == DiGraph(10,20,seed=3)
-@test Graph(10,20,seed=3) == erdos_renyi(10,20,seed=3)
+@test Graph(10,20,seed=3) == Graph(10, 20, seed=3)
+@test DiGraph(10,20,seed=3) == DiGraph(10, 20, seed=3)
+@test Graph(10,20,seed=3) == erdos_renyi(10, 20, Graph, seed=3)
 @test ne(Graph(10,40,seed=3)) == 40
 @test ne(DiGraph(10,80,seed=3)) == 80
 
-er = erdos_renyi(10, 0.5)
+er = erdos_renyi(10, 0.5, Graph)
 @test nv(er) == 10
 @test is_directed(er) == false
-er = erdos_renyi(10, 0.5, is_directed=true)
+
+er = erdos_renyi(10, 0.5, DiGraph)
 @test nv(er) == 10
 @test is_directed(er) == true
 
-er = erdos_renyi(10, 0.5, seed=17)
+er = erdos_renyi(10, 0.5, Graph, seed=17)
 @test nv(er) == 10
 @test is_directed(er) == false
 
 
-ws = watts_strogatz(10,4,0.2)
+ws = watts_strogatz(10, 4, 0.2,  Graph)
 @test nv(ws) == 10
 @test ne(ws) == 20
 @test is_directed(ws) == false
 
-ws = watts_strogatz(10, 4, 0.2, is_directed=true)
+ws = watts_strogatz(10, 4, 0.2, DiGraph)
 @test nv(ws) == 10
 @test ne(ws) == 20
 @test is_directed(ws) == true
@@ -46,47 +51,47 @@ ba = barabasi_albert(10, 4, 2)
 @test ne(ba) == 12
 @test is_directed(ba) == false
 
-ba = barabasi_albert(10, 2, complete=true)
+ba = barabasi_albert!(CompleteGraph(2), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 17
 @test is_directed(ba) == false
 
-ba = barabasi_albert(10, 2, 2, complete=true)
+ba = barabasi_albert!(CompleteGraph(2), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 17
 @test is_directed(ba) == false
 
-ba = barabasi_albert(10, 4, 2, complete=true)
+ba = barabasi_albert!(CompleteGraph(4), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 18
 @test is_directed(ba) == false
 
-ba = barabasi_albert(10, 2, is_directed=true)
+ba = barabasi_albert(10, 2, DiGraph)
 @test nv(ba) == 10
 @test ne(ba) == 16
 @test is_directed(ba) == true
 
-ba = barabasi_albert(10, 2, 2, is_directed=true)
+ba = barabasi_albert(10, 2, 2, DiGraph)
 @test nv(ba) == 10
 @test ne(ba) == 16
 @test is_directed(ba) == true
 
-ba = barabasi_albert(10, 4, 2, is_directed=true)
+ba = barabasi_albert(10, 4, 2, DiGraph)
 @test nv(ba) == 10
 @test ne(ba) == 12
 @test is_directed(ba) == true
 
-ba = barabasi_albert(10, 2, is_directed=true, complete=true)
+ba = barabasi_albert!(CompleteDiGraph(2), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 18
 @test is_directed(ba) == true
 
-ba = barabasi_albert(10, 2, 2, is_directed=true, complete=true)
+ba = barabasi_albert!(CompleteDiGraph(2), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 18
 @test is_directed(ba) == true
 
-ba = barabasi_albert(10, 4, 2, is_directed=true, complete=true)
+ba = barabasi_albert!(CompleteDiGraph(4), 10, 2)
 @test nv(ba) == 10
 @test ne(ba) == 24
 @test is_directed(ba) == true
