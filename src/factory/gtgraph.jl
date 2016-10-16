@@ -1,8 +1,15 @@
+type GTEdge <: AbstractEdge
+    src::Int
+    dst::Int
+    idx::Int
+end
+
+
 """A type representing an undirected graph."""
 type GTGraph <: AbstractGraph
     ne::Int
     edge_index_range::Int
-    epos::Vector{Int}
+    epos::Vector{Pair{Int,Int}}
     fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
 end
 
@@ -85,18 +92,19 @@ function copy(g::GTGraph)
     return GTGraph(g.ne, g.edge_index_range, deepcopy(epos), deepcopy(g.fadjlist))
 end
 
-function add_edge!(g::GTGraph, e::Edge)
-#from hwre
-    s, d = e
-    (s in vertices(g) && d in vertices(g)) || return false
+function add_edge!(g::GTGraph, u::Int, v::Int)
+    (u in vertices(g) && v in vertices(g)) || return false
+    has_edge(g, u, v) || return false
+    idx = (g.edge_index_range += 1)
+    resize!(g.epos)
+    g.ne += 1
+    GTEdge(u, v, idx)
+    push!(g.fadjlist[u], Pair(v, idx))
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
-    if inserted
-        g.ne += 1
-    end
     if s != d
         inserted = _insert_and_dedup!(g.fadjlist[d], s)
     end
-    return inserted
+    return true
 end
 
 function rem_edge!(g::GTGraph, e::Edge)

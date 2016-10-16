@@ -1,11 +1,14 @@
 # Parts of this code were taken / derived from NetworkX. See LICENSE for
 # licensing details.
 
-"""Creates a complete graph with `n` vertices. A complete graph has edges
+"""
+    CompleteGraph(n, G = Graph)
+
+Creates a complete graph of type `G` with `n` vertices. A complete graph has edges
 connecting each pair of vertices.
 """
-function CompleteGraph(n::Integer)
-    g = Graph(n)
+function CompleteGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+    g = G(n)
     for i = 1:n, j=1:n
         if i < j
             add_edge!(g, i, j)
@@ -18,8 +21,8 @@ end
 """Creates a complete bipartite graph with `n1+n2` vertices. It has edges
 connecting each pair of vertices in the two sets.
 """
-function CompleteBipartiteGraph(n1::Integer, n2::Integer)
-    g = Graph(n1+n2)
+function CompleteBipartiteGraph{G<:AGraph}(n1::Integer, n2::Integer, ::Type{G} = Graph)
+    g = G(n1+n2)
     for i = 1:n1, j=n1+1:n1+n2
         add_edge!(g, i, j)
     end
@@ -29,8 +32,8 @@ end
 """Creates a complete digraph with `n` vertices. A complete digraph has edges
 connecting each pair of vertices (both an ingoing and outgoing edge).
 """
-function CompleteDiGraph(n::Integer)
-    g = DiGraph(n)
+function CompleteDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+    g = G(n)
     for i = 1:n, j=1:n
         if i != j
             add_edge!(g, i,j)
@@ -42,8 +45,8 @@ end
 """Creates a star graph with `n` vertices. A star graph has a central vertex
 with edges to each other vertex.
 """
-function StarGraph(n::Integer)
-    g = Graph(n)
+function StarGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+    g = G(n)
     for i = 2:n
         add_edge!(g, 1, i)
     end
@@ -53,8 +56,8 @@ end
 """Creates a star digraph with `n` vertices. A star digraph has a central
 vertex with directed edges to every other vertex.
 """
-function StarDiGraph(n::Integer)
-    g = DiGraph(n)
+function StarDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+    g = G(n)
     for i = 2:n
         add_edge!(g, 1,i)
     end
@@ -63,8 +66,8 @@ end
 
 """Creates a path graph with `n` vertices. A path graph connects each
 successive vertex by a single edge."""
-function PathGraph(n::Integer)
-    g = Graph(n)
+function PathGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+    g = G(n)
     for i = 2:n
         add_edge!(g, i-1, i)
     end
@@ -73,8 +76,8 @@ end
 
 """Creates a path digraph with `n` vertices. A path graph connects each
 successive vertex by a single directed edge."""
-function PathDiGraph(n::Integer)
-    g = DiGraph(n)
+function PathDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+    g = G(n)
     for i = 2:n
         add_edge!(g, i-1, i)
     end
@@ -83,8 +86,8 @@ end
 
 """Creates a cycle graph with `n` vertices. A cycle graph is a closed path graph.
 """
-function CycleGraph(n::Integer)
-    g = Graph(n)
+function CycleGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+    g = G(n)
     for i = 1:n-1
         add_edge!(g, i, i+1)
     end
@@ -94,8 +97,8 @@ end
 
 """Creates a cycle digraph with `n` vertices. A cycle digraph is a closed path digraph.
 """
-function CycleDiGraph(n::Integer)
-    g = DiGraph(n)
+function CycleDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+    g = G(n)
     for i = 1:n-1
         add_edge!(g, i, i+1)
     end
@@ -107,8 +110,8 @@ end
 """Creates a wheel graph with `n` vertices. A wheel graph is a star graph with
 the outer vertices connected via a closed path graph.
 """
-function WheelGraph(n::Integer)
-    g = StarGraph(n)
+function WheelGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+    g = StarGraph(n, G)
     for i = 3:n
         add_edge!(g, i-1, i)
     end
@@ -121,8 +124,8 @@ end
 """Creates a wheel digraph with `n` vertices. A wheel graph is a star digraph
 with the outer vertices connected via a closed path graph.
 """
-function WheelDiGraph(n::Integer)
-    g = StarDiGraph(n)
+function WheelDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+    g = StarDiGraph(n, G)
     for i = 3:n
         add_edge!(g, i-1, i)
     end
@@ -138,18 +141,19 @@ end
 Creates a `d`-dimensional cubic lattice, with `d=length(dims)` and length  `dims[i]` in dimension `i`.
 If `periodic=true` the resulting lattice will have periodic boundary condition in each dimension.
 """
-function Grid{T<:Integer}(dims::AbstractVector{T}; periodic=false)
+function Grid{T<:Integer,G<:AGraph}(dims::AbstractVector{T}, ::Type{G} = Graph;
+        periodic=false)
     func = periodic ? CycleGraph : PathGraph
     g = func(dims[1])
     for d in dims[2:end]
-        g = cartesian_product(func(d), g)
+        g = cartesian_product(func(d, G), g)
     end
     return g
 end
 
 """create a binary tree with k-levels vertices are numbered 1:2^levels-1"""
-function BinaryTree(levels::Int)
-    g = Graph(2^levels-1)
+function BinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
+    g = G(2^levels-1)
     for i in 0:levels-2
         for j in 2^i:2^(i+1)-1
             add_edge!(g, j, 2j)
@@ -161,9 +165,9 @@ end
 
 """create a double complete binary tree with k-levels
 used as an example for spectral clustering by Guattery and Miller 1998."""
-function DoubleBinaryTree(levels::Int)
-    gl = BinaryTree(levels)
-    gr = BinaryTree(levels)
+function DoubleBinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
+    gl = BinaryTree(levels, G)
+    gr = BinaryTree(levels, G)
     g = blkdiag(gl, gr)
     add_edge!(g,1, nv(gl)+1)
     return g
@@ -171,9 +175,9 @@ end
 
 
 """The Roach Graph from Guattery and Miller 1998"""
-function RoachGraph(k::Int)
-    dipole = CompleteGraph(2)
-    nopole = Graph(2)
+function RoachGraph{G<:AGraph}(k::Int, ::Type{G} = Graph)
+    dipole = CompleteGraph(2, G)
+    nopole = G(2)
     antannae = crosspath(k, nopole)
     body = crosspath(k,dipole)
     roach = blkdiag(antannae, body)
@@ -184,8 +188,8 @@ end
 
 
 """This function generates `n` connected k-cliques """
-function CliqueGraph(k::Integer, n::Integer)
-    g = Graph(k*n)
+function CliqueGraph{G<:AGraph}(k::Integer, n::Integer, ::Type{G} = Graph)
+    g = G(k*n)
     for c=1:n
         for i=(c-1)*k+1:c*k-1, j=i+1:c*k
             add_edge!(g, i, j)

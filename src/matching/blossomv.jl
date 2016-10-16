@@ -36,7 +36,7 @@ function minimum_weight_perfect_matching{T<:AbstractFloat, E}(g::AGraph, w::Dict
     for i=1:nv(g)
         j = match.mate[i]
         if j > i
-            weight += w[E(g, i, j)]
+            weight += w[edge(g, i, j)]
         end
     end
     return MatchingResult(weight, match.mate)
