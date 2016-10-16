@@ -23,3 +23,4 @@
 - simplified and generic edge iterator (now a Generator)
 - add `edges(g, v)` and `edges(g, vertices)`
 - induced_subgraph -> subgraph
+- graph generators for arbitrary graph types

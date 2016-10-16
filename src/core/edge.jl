@@ -15,6 +15,8 @@ immutable Edge <: AbstractEdge
     dst::Int
 end
 
+Edge(g::ASimpleGraph, u::Int, v::Int) = Edge(u, v)
+
 """
     src(e::Edge)
 

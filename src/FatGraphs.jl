@@ -158,8 +158,8 @@ more traditional and better-optimized mechanisms.
 """
 FatGraphs
 
-include("core/edge.jl")
-    include("core/interface.jl")
+include("core/interface.jl")
+    include("core/edge.jl")
     include("core/core.jl")
     include("core/edgeiter.jl")
     include("core/operators.jl")
