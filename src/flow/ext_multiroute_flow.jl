@@ -181,8 +181,8 @@ function slope{T<:AbstractFloat}(
   )
   slope = 0
   for e in edges(flow_graph)
-    if cut[dst(e)] - cut[src(e)] > 0 &&
-      capacity_matrix[src(e), dst(e)] > restriction
+      if cut[dst(e)] == 2 > cut[src(e)] &&
+            capacity_matrix[src(e), dst(e)] > restriction
         slope += 1
     end
   end
