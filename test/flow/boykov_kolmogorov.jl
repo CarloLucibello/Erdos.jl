@@ -1,13 +1,13 @@
 # construct graph
-G = DiGraph(3)
-add_edge!(G,1,2)
-add_edge!(G,2,3)
+g = DiGraph(3)
+add_edge!(g,1,2)
+add_edge!(g,2,3)
 
 # source and sink terminals
 source, target = 1, 3
 
 # default capacity
-capacity_matrix = FatGraphs.DefaultCapacity(G)
+capacity_matrix = FatGraphs.DefaultCapacity(g)
 
 # state variables
 flow_matrix = zeros(Int, 3, 3)
@@ -20,7 +20,7 @@ PARENT = zeros(Int, 3)
 
 A = [source,target]
 
-residual_graph = FatGraphs.residual(G)
+residual_graph = FatGraphs.residual(g)
 
 path = FatGraphs.find_path!(residual_graph, source, target, flow_matrix, capacity_matrix, PARENT, TREE, A)
 

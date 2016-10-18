@@ -11,7 +11,7 @@ import BlossomV # matching
 using JuMP # matching/interdiction
 using MathProgBase # interdiction
 import Clustering: kmeans # community detection
-using MatrixDepot # matrixdepot
+import MatrixDepot: matrixdepot
 # using Iterators: chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
@@ -139,7 +139,8 @@ MatchingResult, minimum_weight_perfect_matching,
 # more imports/export in interdiction.jl
 
 # matrixdepot
-MDGraph, MDDiGraph
+matrixdepot
+
 
 """An optimized graphs package.
 

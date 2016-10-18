@@ -92,7 +92,8 @@ tests = [
     "utils"
 ]
 
-
+G = Graph
+DG = DiGraph
 for t in tests
     tp = joinpath(testdir,"$(t).jl")
     println("running $(tp) ...")

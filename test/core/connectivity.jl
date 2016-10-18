@@ -56,10 +56,10 @@ wcc = weakly_connected_components(h)
 @test length(scc) == 3 && sort(scc[3]) == [1,2,5]
 @test length(wcc) == 1 && length(wcc[1]) == nv(h)
 
-function scc_ok(graph)
+function scc_ok(g)
   """Check that all SCC really are strongly connected"""
-  scc = strongly_connected_components(graph)
-  scc_as_subgraphs = map(i -> graph[i], scc)
+  scc = strongly_connected_components(g)
+  scc_as_subgraphs = map(i -> g[i], scc)
   return all(is_strongly_connected, scc_as_subgraphs)
 end
 

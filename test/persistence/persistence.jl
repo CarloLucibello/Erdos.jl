@@ -67,7 +67,6 @@ function testjldio(path::String, g::Graph)
     @test gloaded == g
 end
 
-println("*** Running JLD IO tests")
 graphs = [PathGraph(10), CompleteGraph(5), WheelGraph(7)]
 for (i,g) in enumerate(graphs)
     path = joinpath(testdir,"testdata", "test.$i.jld")
@@ -75,5 +74,3 @@ for (i,g) in enumerate(graphs)
     #delete the file (it gets left on test failure so you could debug it)
     rm(path)
 end
-
-println("*** Finished JLD IO tests")

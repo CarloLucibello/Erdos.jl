@@ -100,8 +100,8 @@ h = tensor_product(g22, g22)
 @test ne(h) == 1
 
 nx = 20; ny = 21
-G = PathGraph(ny); H = PathGraph(nx)
-c = cartesian_product(G, H)
+gg = PathGraph(ny); hh = PathGraph(nx)
+c = cartesian_product(gg, hh)
 g = crosspath(ny, PathGraph(nx));
 @test g == c
 

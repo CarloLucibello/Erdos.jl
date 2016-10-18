@@ -1,5 +1,5 @@
 """
-    euclidean_graph(points::Matrix, L=1., p=2., cutoff=-1., bc=:open)
+    euclidean_graph(points::Matrix G=Graph; L=1., p=2., cutoff=-1., bc=:open)
 
 Given the `d×N` matrix `points` builds an Euclidean graph of `N` vertices
 according to the following procedure.
@@ -13,7 +13,7 @@ Set `bc=:periodic` to impose periodic boundary conditions in the box ``[0,L]^d``
 Returns a graph and Dict containing the distance on each edge.
 
 
-    euclidean_graph(N, d; seed = -1, L=1., p=2., cutoff=-1., bc=:open)
+    euclidean_graph(N, d, G=Graph; seed = -1, L=1., p=2., cutoff=-1., bc=:open)
 
 Generates `N` uniformly distributed points in the box ``[0,L]^d``
 and builds and Euclidean graph.
@@ -23,17 +23,17 @@ the points' positions.
 """
 function euclidean_graph end
 
-function euclidean_graph(N::Int, d::Int;
+function euclidean_graph{G<:AGraph}(N::Int, d::Int, ::Type{G} = Graph;
             L=1., seed = -1, kws...)
     rng = FatGraphs.getRNG(seed)
     points = scale!(rand(rng, d, N), L)
     return (euclidean_graph(points; L=L, kws...)..., points)
 end
 
-function euclidean_graph(points::Matrix;
+function euclidean_graph{G<:AGraph}(points::Matrix, ::Type{G} = Graph;
             L=1., p=2., cutoff=-1., bc=:open)
     d, N = size(points)
-    g = Graph(N)
+    g = G(N)
     weights = Dict{Edge,Float64}()
     cutoff < 0. && (cutoff=typemax(Float64))
     if bc == :periodic

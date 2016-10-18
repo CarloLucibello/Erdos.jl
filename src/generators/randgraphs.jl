@@ -251,8 +251,8 @@ Reference:
 * Goh K-I, Kahng B, Kim D: Universal behaviour of load distribution
 in scale-free networks. Phys Rev Lett 87(27):278701, 2001.
 """
-function static_fitness_model{T<:Real, G<:AGraph}(m::Int, fitness::Vector{T}, ::Type{G}=Graph;
-        seed::Int=-1)
+function static_fitness_model{T<:Real, G<:AGraph}(m::Int, fitness::Vector{T},
+        ::Type{G}=Graph; seed::Int=-1)
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness)
     m == 0 && return G(n)
@@ -314,13 +314,19 @@ function _create_static_fitness_graph!{T<:Real,S<:Real}(g::ASimpleGraph, m::Int,
 end
 
 """
-    function static_scale_free(n::Int, m::Int, α::Float64; seed::Int=-1, finite_size_correction::Bool=true)
+    function static_scale_free(n, m, α, G=Graph;
+            seed=-1, finite_size_correction=true)
 
 Generates a random graph with `n` vertices, `m` edges and expected power-law
 degree distribution with exponent `α`. `finite_size_correction` determines
 whether to use the finite size correction proposed by Cho et al.
 This generator calls internally the `static_fitness_model function`.
 Time complexity is O(|V| + |E| log |E|).
+
+    function static_scale_free(n, m, α_out, α_in, G=DiGraph;
+            seed=-1, finite_size_correction=true)
+
+Generates a random digraph
 
 References:
 
@@ -330,14 +336,16 @@ References:
 
 * Cho YS, Kim JS, Park J, Kahng B, Kim D: Percolation transitions in scale-free networks under the Achlioptas process. Phys Rev Lett 103:135702, 2009.
 """
-function static_scale_free(n::Int, m::Int, α::Float64; seed::Int=-1, finite_size_correction::Bool=true)
+function static_scale_free{G<:AGraph}(n::Int, m::Int, α::Float64, ::Type{G} = Graph;
+        seed::Int=-1, finite_size_correction::Bool=true)
     @assert(n >= 0, "Invalid number of nodes")
     @assert(α >= 2, "out-degree exponent must be >= 2")
     fitness = _construct_fitness(n, α, finite_size_correction)
-    static_fitness_model(m, fitness, seed=seed)
+    static_fitness_model(m, fitness, G, seed=seed)
 end
 
-function static_scale_free(n::Int, m::Int, α_out::Float64, α_in::Float64; seed::Int=-1, finite_size_correction::Bool=true)
+function static_scale_free{G<:ADiGraph}(n::Int, m::Int, α_out::Float64, α_in::Float64, ::Type{G} = DiGraph;
+        seed::Int=-1, finite_size_correction::Bool=true)
     @assert(n >= 0, "Invalid number of nodes")
     @assert(α_out >= 2, "out-degree exponent must be >= 2")
     @assert(α_in >= 2, "in-degree exponent must be >= 2")
@@ -346,7 +354,7 @@ function static_scale_free(n::Int, m::Int, α_out::Float64, α_in::Float64; seed
     fitness_in = _construct_fitness(n, α_in, finite_size_correction)
     # eliminate correlation
     shuffle!(fitness_in)
-    static_fitness_model(m, fitness_out, fitness_in, seed=seed)
+    static_fitness_model(m, fitness_out, fitness_in, G, seed=seed)
 end
 
 function _construct_fitness(n::Int, α::Float64, finite_size_correction::Bool)
@@ -376,14 +384,15 @@ For undirected graphs, allocates an array of `nk` `Int`s, and takes
 approximately ``nk^2`` time. For ``k > n/2``, generates a graph of degree
 `n-k-1` and returns its complement.
 """
-function random_regular_graph(n::Int, k::Int; seed::Int=-1)
+function random_regular_graph{G<:AGraph}(n::Int, k::Int, ::Type{G}=Graph;
+        seed::Int=-1)
     @assert(iseven(n*k), "n * k must be even")
     @assert(0 <= k < n, "the 0 <= k < n inequality must be satisfied")
     if k == 0
-        return Graph(n)
+        return G(n)
     end
     if (k > n/2) && iseven(n * (n-k-1))
-        return complement(random_regular_graph(n, n-k-1, seed=seed))
+        return complement(random_regular_graph(n, n-k-1, G, seed=seed))
     end
 
     rng = getRNG(seed)
@@ -393,7 +402,7 @@ function random_regular_graph(n::Int, k::Int; seed::Int=-1)
         edges = _try_creation(n, k, rng)
     end
 
-    g = Graph(n)
+    g = G(n)
     for edge in edges
         add_edge!(g, edge)
     end
@@ -415,7 +424,8 @@ approximately ``nc^2`` time.
 
 If `check_graphical=true` makes sure that `k` is a graphical sequence (see `isgraphical`).
 """
-function random_configuration_model(n::Int, k::Array{Int}; seed::Int=-1, check_graphical::Bool=false)
+function random_configuration_model{G<:AGraph}(n::Int, k::Array{Int}, ::Type{G}=Graph;
+        seed::Int=-1, check_graphical::Bool=false)
     @assert(n == length(k), "a degree sequence of length n has to be provided")
     m = sum(k)
     @assert(iseven(m), "sum(k) must be even")
@@ -430,7 +440,7 @@ function random_configuration_model(n::Int, k::Array{Int}; seed::Int=-1, check_g
         edges = _try_creation(n, k, rng)
     end
 
-    g = Graph(n)
+    g = G(n)
     for edge in edges
         add_edge!(g, edge)
     end
@@ -449,16 +459,17 @@ specified using `dir=:in` or `dir=:out`. The default is `dir=:out`.
 For directed graphs, allocates an ``n \times n`` sparse matrix of boolean as an
 adjacency matrix and uses that to generate the directed graph.
 """
-function random_regular_digraph(n::Int, k::Int; dir::Symbol=:out, seed::Int=-1)
+function random_regular_digraph{G<:ADiGraph}(n::Int, k::Int, ::Type{G}=DiGraph;
+        dir::Symbol=:out, seed::Int=-1)
     #TODO remove the function sample from StatsBase for one allowing the use
     # of a local rng
     @assert(0 <= k < n, "the 0 <= k < n inequality must be satisfied")
 
     if k == 0
-        return DiGraph(n)
+        return G(n)
     end
     if (k > n/2) && iseven(n * (n-k-1))
-        return complement(random_regular_digraph(n, n-k-1, dir=dir, seed=seed))
+        return complement(random_regular_digraph(n, n-k-1, G, dir=dir, seed=seed))
     end
     rng = getRNG(seed)
     cs = collect(2:n)
@@ -473,9 +484,9 @@ function random_regular_digraph(n::Int, k::Int; dir::Symbol=:out, seed::Int=-1)
     end
 
     if dir == :out
-        return DiGraph(sparse(I, J, V, n, n))
+        return G(sparse(I, J, V, n, n))
     else
-        return DiGraph(sparse(I, J, V, n, n)')
+        return G(sparse(I, J, V, n, n)')
     end
 end
 
@@ -495,7 +506,8 @@ The second form samples from a SBM with `c[a,a]=cin`, and `c[a,b]=coff`.
 For a dynamic version of the SBM see the `StochasticBlockModel` type and
 related functions.
 """
-function stochastic_block_model{T<:Real}(c::Matrix{T}, n::Vector{Int}; seed::Int = -1)
+function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int},
+        ::Type{G}=Graph; seed::Int = -1)
     @assert size(c,1) == length(n)
     @assert size(c,2) == length(n)
     # init dsfmt generator without altering GLOBAL_RNG
@@ -505,7 +517,7 @@ function stochastic_block_model{T<:Real}(c::Matrix{T}, n::Vector{Int}; seed::Int
     N = sum(n)
     K = length(n)
     nedg = zeros(Int,K, K)
-    g = Graph(N)
+    g = G(N)
     cum = [sum(n[1:a]) for a=0:K]
     for a=1:K
         ra = cum[a]+1:cum[a+1]
@@ -531,8 +543,9 @@ function stochastic_block_model{T<:Real}(c::Matrix{T}, n::Vector{Int}; seed::Int
     return g
 end
 
-function stochastic_block_model{T<:Real}(cint::T, cext::T, n::Vector{Int}; seed::Int=-1)
+function stochastic_block_model{T<:Real, G<:AGraph}(cint::T, cext::T, n::Vector{Int},
+        ::Type{G}=Graph; seed::Int=-1)
     K = length(n)
     c = [ifelse(a==b, cint, cext) for a=1:K,b=1:K]
-    stochastic_block_model(c, n, seed=seed)
+    stochastic_block_model(c, n, G, seed=seed)
 end
