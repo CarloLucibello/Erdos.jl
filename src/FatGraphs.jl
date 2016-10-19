@@ -12,7 +12,7 @@ using JuMP # matching/interdiction
 using MathProgBase # interdiction
 import Clustering: kmeans # community detection
 import MatrixDepot: matrixdepot
-# using Iterators: chain # all_neighbors
+using Iterators: distinct, chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
 

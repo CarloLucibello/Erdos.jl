@@ -7,7 +7,7 @@ export adjacency_matrix,
     spectral_distance
 
 """
-    adjacency_matrix(g, dir::Symbol=:out, T::DataType=Int)
+    adjacency_matrix(g, dir=:out, T::DataType=Int)
 
 Returns a sparse boolean adjacency matrix for a graph, indexed by `[u, v]`
 vertices. `true` values indicate an edge between `u` and `v`. Users may
@@ -29,7 +29,7 @@ function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = out_neighbors
     elseif dir == :all
         if is_directed(g)
-            neighborfn = all_neighbors
+            neighborfn = (h,j)->[in_neighbors(h, j); out_neighbors(h, j)]
             nz *= 2
         else
             neighborfn = out_neighbors
@@ -43,7 +43,7 @@ function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
         if has_edge(g,j,j)
             push!(selfloops, j)
         end
-        dsts = neighborfn(g, j)
+        dsts = collect(neighborfn(g, j))
         colpt[j+1] = colpt[j] + length(dsts)
         append!(rowval, sort!(dsts))
     end

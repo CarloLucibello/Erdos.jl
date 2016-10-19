@@ -1,4 +1,4 @@
-## v0.1 (changes from LigtGraphs 0.7.1)
+## v0.8 (changes from LigtGraphs 0.7.1)
 - Edge is now its own type (not a Pair{Int,Int} anymore)
 - drop lg graph format
 - add Changelog
@@ -25,3 +25,4 @@
 - induced_subgraph -> subgraph
 - graph generators for arbitrary graph types
 - smallgraph -> graph
+- all_neighbors in digraph iterates over distinct neighbors

@@ -187,12 +187,24 @@ e5 = Edge(3,5)
 @test add_edge!(g, e4)
 @test add_edge!(g, e5)
 
+h = DG(10, 20)
+for i=1:10
+    u = sort(union(in_neighbors(h,i), out_neighbors(h,i)))
+    @test sort(collect(all_neighbors(h, i))) == u
+end
+
 h = DiGraph(5)
 @test add_edge!(h, 1, 2)
 @test add_edge!(h, e2)
 @test add_edge!(h, e3)
 @test add_edge!(h, e4)
 @test add_edge!(h, e5)
+
+for i=1:5
+    u = sort(union(in_neighbors(h,i), out_neighbors(h,i)))
+    @test sort(collect(all_neighbors(h, i))) == u
+end
+
 
 @test adjlist(g)[1] == out_neighbors(g,1) ==
     in_adjlist(g)[1] == in_neighbors(g,1) ==

@@ -117,14 +117,12 @@ in_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
 """
     all_neighbors(g, v)
 
-Returns a list of all neighbors of vertex `v` in `g`.
-
-For DiGraphs, this is equivalent to `[in_neighbors(g, v); out_neighbors(g, v)]`.
-
-NOTE: it may return a reference, not a copy. Do not modify result.
+Iterates over all distinct in/out neighbors of vertex `v` in `g`.
 """
 all_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
-all_neighbors(g::ADiGraph, v::Int) = [out_neighbors(g, v); in_neighbors(g, v)]
+
+all_neighbors(g::ADiGraph, v::Int) =
+    distinct(chain(out_neighbors(g, v), in_neighbors(g, v)))
 
 """
     density(g)
