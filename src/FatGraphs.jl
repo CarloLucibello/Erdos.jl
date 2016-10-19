@@ -124,7 +124,7 @@ CompleteBipartiteGraph, CompleteDiGraph, StarDiGraph, PathDiGraph, Grid,
 WheelDiGraph, CycleDiGraph, BinaryTree, DoubleBinaryTree, RoachGraph, CliqueGraph,
 
 #smallgraphs
-smallgraph,
+# graph, digraph
 
 # Euclidean graphs
 euclidean_graph,

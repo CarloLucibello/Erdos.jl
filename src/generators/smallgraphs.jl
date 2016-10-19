@@ -2,33 +2,35 @@
 # STATIC SMALL GRAPHS
 #####################
 
-function _make_simple_undirected_graph{T<:Integer}(n::T, edgelist::Vector{Tuple{T,T}})
-    g = Graph(n)
+function graph{G<:AGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
+        ::Type{G} = Graph)
+    g = G(n)
     for (s,d) in edgelist
-        add_edge!(g, Edge(s,d))
+        add_edge!(g, s, d)
     end
     return g
 end
 
-function _make_simple_directed_graph{T<:Integer}(n::T, edgelist::Vector{Tuple{T,T}})
-    g = DiGraph(n)
+
+function digraph{G<:ADiGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
+        ::Type{G} = DiGraph)
+    g = G(n)
     for (s,d) in edgelist
-        add_edge!(g, Edge(s,d))
+        add_edge!(g, s, d)
     end
     return g
 end
 
 """
-    smallgraph(s::Symbol)
-    smallgraph(s::AbstractString)
+    graph(s::Symbol, G = Graph)
 
-Creates a small graph of type `s`. Admissible values for `s` are:
+Creates a small graph `s` of type `G`. Admissible values for `s` are:
 
 | `s`                       | graph type                       |
-|:------------------------|:---------------------------------|
-| :bull                       | A [bull graph](https://en.wikipedia.org/wiki/Bull_graph).  |
-| :chvatal                    | A [Chvátal graph](https://en.wikipedia.org/wiki/Chvátal_graph). |
-| :cubical                    | A [Platonic cubical graph](https://en.wikipedia.org/wiki/Platonic_graph). |
+|:--------------------------|:---------------------------------|
+| :bull                     |   A [bull graph](https://en.wikipedia.org/wiki/Bull_graph).  |
+| :chvatal                  |   A [Chvátal graph](https://en.wikipedia.org/wiki/Chvátal_graph). |
+| :cubical                  |   A [Platonic cubical graph](https://en.wikipedia.org/wiki/Platonic_graph). |
 | :desargues                |   A [Desarguesgraph](https://en.wikipedia.org/wiki/Desargues_graph).|
 | :diamond                  |   A [diamond graph](http://en.wikipedia.org/wiki/Diamond_graph). |
 | :dodecahedral             |   A [Platonic dodecahedral  graph](https://en.wikipedia.org/wiki/Platonic_graph). |
@@ -50,57 +52,68 @@ Creates a small graph of type `s`. Admissible values for `s` are:
 | :tutte                    |   A [Tutte graph](https://en.wikipedia.org/wiki/Tutte_graph). |
 
 """
-function smallgraph(s::Symbol)
+function graph{G<:AGraph}(s::Symbol, ::Type{G} = Graph)
     graphmap = Dict(
-    :bull            => BullGraph,
-    :chvatal         => ChvatalGraph,
-    :cubical         => CubicalGraph,
-    :desargues       => DesarguesGraph,
-    :diamond         => DiamondGraph,
-    :dodecahedral    => DodecahedralGraph,
-    :frucht          => FruchtGraph,
-    :heawood         => HeawoodGraph,
-    :house           => HouseGraph,
-    :housex          => HouseXGraph,
-    :icosahedral     => IcosahedralGraph,
-    :krackhardtkite  => KrackhardtKiteGraph,
-    :moebiuskantor   => MoebiusKantorGraph,
-    :octahedral      => OctahedralGraph,
-    :pappus          => PappusGraph,
-    :petersen        => PetersenGraph,
-    :sedgewickmaze   => SedgewickMazeGraph,
-    :tetrahedral     => TetrahedralGraph,
-    :truncatedcube   => TruncatedCubeGraph,
-    :truncatedtetrahedron        => TruncatedTetrahedronGraph,
-    :truncatedtetrahedron_dir    => TruncatedTetrahedronDiGraph,
-    :tutte           => TutteGraph
+        :bull            => BullGraph,
+        :chvatal         => ChvatalGraph,
+        :cubical         => CubicalGraph,
+        :desargues       => DesarguesGraph,
+        :diamond         => DiamondGraph,
+        :dodecahedral    => DodecahedralGraph,
+        :frucht          => FruchtGraph,
+        :heawood         => HeawoodGraph,
+        :house           => HouseGraph,
+        :housex          => HouseXGraph,
+        :icosahedral     => IcosahedralGraph,
+        :krackhardtkite  => KrackhardtKiteGraph,
+        :moebiuskantor   => MoebiusKantorGraph,
+        :octahedral      => OctahedralGraph,
+        :pappus          => PappusGraph,
+        :petersen        => PetersenGraph,
+        :sedgewickmaze   => SedgewickMazeGraph,
+        :tetrahedral     => TetrahedralGraph,
+        :truncatedcube   => TruncatedCubeGraph,
+        :truncatedtetrahedron  => TruncatedTetrahedronGraph,
+        :tutte           => TutteGraph
     )
 
     if (s in keys(graphmap))
-        return graphmap[s]()
+        return graphmap[s](G)
     end
     error("Please choose a valid graph")
 end
 
-function smallgraph(s::AbstractString)
-    ls = lowercase(s)
-    if endswith(ls, "graph")
-        ls = replace(ls, "graph", "")
-    end
 
-    return smallgraph(Symbol(ls))
+"""
+    digraph(s::Symbol, G = DiGraph)
+
+Creates a small digraph `s` of type `G`. Admissible values for `s` are:
+
+| `s`                     | graph type                       |
+|:------------------------|:---------------------------------|
+| :truncatedtetrahedron   |   A skeleton of the [truncated tetrahedron digraph](https://en.wikipedia.org/wiki/Truncated_tetrahedron). |
+
+"""
+function digraph{G<:ADiGraph}(s::Symbol, ::Type{G} = DiGraph)
+    graphmap = Dict(
+    :truncatedtetrahedron    => TruncatedTetrahedronDiGraph,
+    )
+
+    if (s in keys(graphmap))
+        return graphmap[s](G)
+    end
+    error("Please choose a valid graph")
 end
 
-
-DiamondGraph() =
-    _make_simple_undirected_graph(4, [(1,2), (1,3), (2,3), (2,4), (3,4)])
-
-
-BullGraph() =
-    _make_simple_undirected_graph(5, [(1,2), (1,3), (2,3), (2,4), (3,5)])
+DiamondGraph{G<:AGraph}(::Type{G}) =
+    graph(4, [(1,2), (1,3), (2,3), (2,4), (3,4)])
 
 
-function ChvatalGraph()
+BullGraph{G<:AGraph}(::Type{G}) =
+    graph(5, [(1,2), (1,3), (2,3), (2,4), (3,5)])
+
+
+function ChvatalGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 5), (1, 7), (1, 10),
         (2, 3), (2, 6), (2, 8),
@@ -113,11 +126,11 @@ function ChvatalGraph()
         (9, 11),
         (10, 11), (10, 12)
     ]
-    return _make_simple_undirected_graph(12,e)
+    return graph(12, e, G)
 end
 
 
-function CubicalGraph()
+function CubicalGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 4), (1, 5),
         (2, 3), (2, 8),
@@ -126,11 +139,11 @@ function CubicalGraph()
         (6, 7),
         (7, 8)
     ]
-    return _make_simple_undirected_graph(8,e)
+    return graph(8, e, G)
 end
 
 
-function DesarguesGraph()
+function DesarguesGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 6), (1, 20),
         (2, 3), (2, 17),
@@ -152,11 +165,11 @@ function DesarguesGraph()
         (18, 19),
         (19, 20)
     ]
-    return _make_simple_undirected_graph(20,e)
+    return graph(20, e, G)
 end
 
 
-function DodecahedralGraph()
+function DodecahedralGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 11), (1, 20),
         (2, 3), (2, 9),
@@ -178,11 +191,11 @@ function DodecahedralGraph()
         (18, 19),
         (19, 20)
     ]
-    return _make_simple_undirected_graph(20,e)
+    return graph(20, e, G)
 end
 
 
-function FruchtGraph()
+function FruchtGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 7), (1, 8),
         (2, 3), (2, 8),
@@ -195,11 +208,11 @@ function FruchtGraph()
         (9, 10), (9, 12),
         (11, 12)
     ]
-    return _make_simple_undirected_graph(20,e)
+    return graph(20, e, G)
 end
 
 
-function HeawoodGraph()
+function HeawoodGraph{G<:AGraph}(::Type{G})
     e = [
     (1, 2), (1, 6), (1, 14),
     (2, 3), (2, 11),
@@ -215,25 +228,25 @@ function HeawoodGraph()
     (12, 13),
     (13, 14)
     ]
-    return _make_simple_undirected_graph(14,e)
+    return graph(14, e, G)
 end
 
 
-function HouseGraph()
+function HouseGraph{G<:AGraph}(::Type{G})
     e = [ (1, 2), (1, 3), (2, 4), (3, 4), (3, 5), (4, 5) ]
-    return _make_simple_undirected_graph(5,e)
+    return graph(5, e, G)
 end
 
 
-function HouseXGraph()
-    g = HouseGraph()
-    add_edge!(g, Edge(1, 4))
-    add_edge!(g, Edge(2, 3))
+function HouseXGraph{G<:AGraph}(::Type{G})
+    g = HouseGraph(G)
+    add_edge!(g, 1, 4)
+    add_edge!(g, 2, 3)
     return g
 end
 
 
-function IcosahedralGraph()
+function IcosahedralGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 6), (1, 8), (1, 9), (1, 12),
         (2, 3), (2, 6), (2, 7), (2, 9),
@@ -245,11 +258,11 @@ function IcosahedralGraph()
         (9, 10),
         (10, 11), (11, 12)
     ]
-    return _make_simple_undirected_graph(12, e)
+    return graph(12, e, G)
 end
 
 
-function KrackhardtKiteGraph()
+function KrackhardtKiteGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 3), (1, 4), (1, 6),
         (2, 4), (2, 5), (2, 7),
@@ -261,11 +274,11 @@ function KrackhardtKiteGraph()
         (8, 9),
         (9, 10)
     ]
-    return _make_simple_undirected_graph(10,e)
+    return graph(10, e, G)
 end
 
 
-function MoebiusKantorGraph()
+function MoebiusKantorGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 6), (1, 16),
         (2, 3), (2, 13),
@@ -283,11 +296,11 @@ function MoebiusKantorGraph()
         (14, 15),
         (15, 16)
     ]
-    return _make_simple_undirected_graph(16,e)
+    return graph(16, e, G)
 end
 
 
-function OctahedralGraph()
+function OctahedralGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 3), (1, 4), (1, 5),
         (2, 3), (2, 4), (2, 6),
@@ -295,11 +308,11 @@ function OctahedralGraph()
         (4, 5), (4, 6),
         (5, 6)
     ]
-    return _make_simple_undirected_graph(6,e)
+    return graph(6, e, G)
 end
 
 
-function PappusGraph()
+function PappusGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 6), (1, 18),
         (2, 3), (2, 9),
@@ -319,11 +332,11 @@ function PappusGraph()
         (16, 17),
         (17, 18)
     ]
-    return _make_simple_undirected_graph(18,e)
+    return graph(18, e, G)
 end
 
 
-function PetersenGraph()
+function PetersenGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 5), (1, 6),
         (2, 3), (2, 7),
@@ -334,10 +347,10 @@ function PetersenGraph()
         (7, 9), (7, 10),
         (8, 10)
     ]
-    return _make_simple_undirected_graph(10,e)
+    return graph(10, e, G)
 end
 
-function SedgewickMazeGraph()
+function SedgewickMazeGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 3),
         (1, 6), (1, 8),
@@ -346,15 +359,15 @@ function SedgewickMazeGraph()
         (4, 5), (4, 6),
         (5, 6), (5, 7), (5, 8)
     ]
-    return _make_simple_undirected_graph(8,e)
+    return graph(8, e, G)
 end
 
 
-TetrahedralGraph() =
-    _make_simple_undirected_graph(4, [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)])
+TetrahedralGraph{G<:AGraph}(::Type{G}) =
+    graph(4, [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)])
 
 
-function TruncatedCubeGraph()
+function TruncatedCubeGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2), (1, 3), (1, 5),
         (2, 12), (2, 15),
@@ -379,11 +392,11 @@ function TruncatedCubeGraph()
         (22, 23),
         (23, 24)
     ]
-    return _make_simple_undirected_graph(24,e)
+    return graph(24, e, G)
 end
 
 
-function TruncatedTetrahedronGraph()
+function TruncatedTetrahedronGraph{G<:AGraph}(::Type{G})
     e = [
         (1, 2),(1, 3),(1, 10),
         (2, 3),(2, 7),
@@ -397,11 +410,11 @@ function TruncatedTetrahedronGraph()
         (10, 11),
         (11, 12)
     ]
-    return _make_simple_undirected_graph(12,e)
+    return graph(12, e, G)
 end
 
 
-function TruncatedTetrahedronDiGraph()
+function TruncatedTetrahedronDiGraph{G<:ADiGraph}(::Type{G})
     e = [
         (1, 2),(1, 3),(1, 10),
         (2, 3),(2, 7),
@@ -415,11 +428,11 @@ function TruncatedTetrahedronDiGraph()
         (10, 11),
         (11, 12)
     ]
-    return _make_simple_directed_graph(12,e)
+    return digraph(12, e, G)
 end
 
 
-function TutteGraph()
+function TutteGraph{G<:AGraph}(::Type{G})
     e = [
     (1, 2),(1, 3),(1, 4),
     (2, 5),(2, 27),
@@ -462,5 +475,5 @@ function TutteGraph()
     (43, 44),(43, 46),
     (44, 45)
     ]
-    return _make_simple_undirected_graph(46,e)
+    return graph(46, e, G)
 end

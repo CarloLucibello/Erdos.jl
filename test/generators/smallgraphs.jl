@@ -1,73 +1,70 @@
-g = smallgraph("diamondgraph")
+g = graph(:diamond, G)
 @test nv(g) == 4 && ne(g) == 5
+@test typeof(g) == G
 
-g = smallgraph("diamond")
-@test nv(g) == 4 && ne(g) == 5
-
-g = smallgraph(:diamond)
-@test nv(g) == 4 && ne(g) == 5
-
-g = smallgraph(:bull)
+g = graph(:bull, G)
 @test nv(g) == 5 && ne(g) == 5
 
-g = smallgraph(:chvatal)
+g = graph(:chvatal, G)
 @test nv(g) == 12 && ne(g) == 24
 
-g = smallgraph(:cubical)
+g = graph(:cubical, G)
 @test nv(g) == 8 && ne(g) == 12
 
-g = smallgraph(:desargues)
+g = graph(:desargues, G)
 @test nv(g) == 20 && ne(g) == 30
 
-g = smallgraph(:dodecahedral)
+g = graph(:dodecahedral, G)
 @test nv(g) == 20 && ne(g) == 30
 
-g = smallgraph(:frucht)
+g = graph(:frucht, G)
 @test nv(g) == 20 && ne(g) == 18
 
-g = smallgraph(:heawood)
+g = graph(:heawood, G)
 @test nv(g) == 14 && ne(g) == 21
 
-g = smallgraph(:house)
+g = graph(:house, G)
 @test nv(g) == 5 && ne(g) == 6
 
-g = smallgraph(:housex)
+g = graph(:housex, G)
 @test nv(g) == 5 && ne(g) == 8
 
-g = smallgraph(:icosahedral)
+g = graph(:icosahedral, G)
 @test nv(g) == 12 && ne(g) == 30
 
-g = smallgraph(:krackhardtkite)
+g = graph(:krackhardtkite, G)
 @test nv(g) == 10 && ne(g) == 18
 
-g = smallgraph(:moebiuskantor)
+g = graph(:moebiuskantor, G)
 @test nv(g) == 16 && ne(g) == 24
 
-g = smallgraph(:octahedral)
+g = graph(:octahedral, G)
 @test nv(g) == 6 && ne(g) == 12
 
-g = smallgraph(:pappus)
+g = graph(:pappus, G)
 @test nv(g) == 18 && ne(g) == 27
 
-g = smallgraph(:petersen)
+g = graph(:petersen, G)
 @test nv(g) == 10 && ne(g) == 15
 
-g = smallgraph(:sedgewickmaze)
+g = graph(:sedgewickmaze, G)
 @test nv(g) == 8 && ne(g) == 10
 
-g = smallgraph(:tetrahedral)
+g = graph(:tetrahedral, G)
 @test nv(g) == 4 && ne(g) == 6
 
-g = smallgraph(:truncatedcube)
+g = graph(:truncatedcube, G)
 @test nv(g) == 24 && ne(g) == 36
 
-g = smallgraph(:truncatedtetrahedron)
+g = graph(:truncatedtetrahedron, G)
 @test nv(g) == 12 && ne(g) == 18 && !is_directed(g)
 
-g = smallgraph(:truncatedtetrahedron_dir)
+g = digraph(:truncatedtetrahedron, DG)
 @test nv(g) == 12 && ne(g) == 18 && is_directed(g)
+@test typeof(g) == DG
 
-g = smallgraph(:tutte)
+
+g = graph(:tutte, G)
 @test nv(g) == 46 && ne(g) == 69
 
-@test_throws ErrorException g = smallgraph(:nonexistent)
+@test_throws ErrorException g = graph(:nonexistent, G)

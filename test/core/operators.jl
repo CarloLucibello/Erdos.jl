@@ -122,7 +122,7 @@ end
 
 ## test subgraphs ##
 
-g = smallgraph(:bull)
+g = graph(:bull, G)
 n = 3
 h = g[1:n]
 @test nv(h) == n
