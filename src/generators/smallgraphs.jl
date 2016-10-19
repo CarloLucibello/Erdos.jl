@@ -1,17 +1,28 @@
 #####################
 # STATIC SMALL GRAPHS
 #####################
+"""
+    graph{G<:AGraph}(n, edgelist::Vector{Tuple{Int,Int}},
+        G = Graph)
 
+Build a graph with `n` vertices, type `G`, and given `edgelist`.
+"""
 function graph{G<:AGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
         ::Type{G} = Graph)
     g = G(n)
     for (s,d) in edgelist
+        #TODO asssert s,d <= n
         add_edge!(g, s, d)
     end
     return g
 end
 
+"""
+    digraph{G<:AGraph}(n, edgelist::Vector{Tuple{Int,Int}},
+        G = Graph)
 
+Build a digraph with `n` vertices, type `G`, and given `edgelist`.
+"""
 function digraph{G<:ADiGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
         ::Type{G} = DiGraph)
     g = G(n)
@@ -24,7 +35,7 @@ end
 """
     graph(s::Symbol, G = Graph)
 
-Creates a small graph `s` of type `G`. Admissible values for `s` are:
+Creates a notorious graph `s` of type `G`. Admissible values for `s` are:
 
 | `s`                       | graph type                       |
 |:--------------------------|:---------------------------------|
@@ -87,7 +98,7 @@ end
 """
     digraph(s::Symbol, G = DiGraph)
 
-Creates a small digraph `s` of type `G`. Admissible values for `s` are:
+Creates a notorious digraph `s` of type `G`. Admissible values for `s` are:
 
 | `s`                     | graph type                       |
 |:------------------------|:---------------------------------|
