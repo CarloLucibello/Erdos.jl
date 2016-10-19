@@ -33,7 +33,7 @@ distmx[4,2] = 10
 distmx[4,3] = 3
 
 # Testing Kruskal's algorithm
-mst = kruskal_mst(g, distmx)
+mst = minimum_spanning_tree(g, distmx)
 vec_mst = Vector{Edge}()
 push!(vec_mst, Edge(1, 2))
 push!(vec_mst, Edge(3, 4))
@@ -94,7 +94,7 @@ distmx_sec[5,1] = 0.38
 distmx_sec[5,8] = 0.37
 distmx_sec[8,5] = 0.37
 
-mst2 = kruskal_mst(g, distmx_sec)
+mst2 = minimum_spanning_tree(g, distmx_sec)
 vec2 = Vector{Edge}()
 push!(vec2, Edge(1, 8))
 push!(vec2, Edge(3, 4))

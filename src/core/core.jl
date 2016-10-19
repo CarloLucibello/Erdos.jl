@@ -181,13 +181,11 @@ out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:
 
 
 """
-    has_edge(g, e::Edge)
+    has_edge(g, e)
     has_edge(g, u, v)
 
 Returns true if the graph `g` has an edge `e` (from `u` to `v`).
 """
-has_edge(g::ASimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
-
 function has_edge(g::AGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
     if degree(g, u) > degree(g, v)
@@ -240,3 +238,9 @@ reverse(g::ADiGraph) = nothing
 In-place reverse (modifies the original graph).
 """
 reverse!(g::ADiGraph) = nothing
+
+
+### EDGE #################
+has_edge(g::ASimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
+add_edge!(g::ASimpleGraph, e::Edge) = add_edge!(g, src(e), dst(e))
+rem_edge!(g::ASimpleGraph, e::Edge) = rem_edge!(g, src(e), dst(e))

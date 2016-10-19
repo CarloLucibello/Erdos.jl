@@ -130,7 +130,7 @@ WheelDiGraph, CycleDiGraph, BinaryTree, DoubleBinaryTree, RoachGraph, CliqueGrap
 euclidean_graph,
 
 #minimum_spanning_trees
-kruskal_mst,
+minimum_spanning_tree,
 
 #matching
 MatchingResult, minimum_weight_perfect_matching,

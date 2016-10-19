@@ -19,13 +19,18 @@ function quick_find!(nodes, p, q)
     end
 end
 
-"""Performs [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
-on a connected, non-directional graph `g`, having adjacency matrix `distmx`,
+"""
+    minimum_spanning_tree{T<:Real}(
+        g, distmx::AbstractArray{T, 2} = DefaultDistance()
+    )
+
+Performs [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
+on a connected, undirected graph `g`, having adjacency matrix `distmx`,
 and computes minimum spanning tree. Returns a `Vector{KruskalHeapEntry}`,
 that contains the containing edges and its weights.
 """
-function kruskal_mst{T<:Real}(
-    g::ASimpleGraph,
+function minimum_spanning_tree{T<:Real}(
+    g::AGraph,
     distmx::AbstractArray{T, 2} = DefaultDistance()
 )
 

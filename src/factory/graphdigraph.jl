@@ -215,7 +215,6 @@ function copy(g::DiGraph)
     return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
-add_edge!(g::SimpleGraph, e::Edge) = add_edge!(g, src(e), dst(e))
 function add_edge!(g::DiGraph, s::Int, d::Int)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
@@ -225,7 +224,6 @@ function add_edge!(g::DiGraph, s::Int, d::Int)
     return inserted && _insert_and_dedup!(g.badjlist[d], s)
 end
 
-rem_edge!(g::SimpleGraph, e::Edge) = rem_edge!(g, src(e), dst(e))
 function rem_edge!(g::DiGraph, u::Int, v::Int)
     has_edge(g,u,v) || return false
     i = searchsorted(g.fadjlist[u],v)[1]
@@ -307,7 +305,6 @@ in_adjlist(g::DiGraph) = g.badjlist
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 
-has_edge(g::SimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
 function has_edge(g::Graph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
     if degree(g,u) > degree(g,v)
