@@ -50,13 +50,18 @@ tests = [
     "utils"
 ]
 
-G = Graph
-DG = DiGraph
 
 testdir = dirname(@__FILE__)
+(G, DG) = (Graph, DiGraph)
 
-for t in tests
-    tp = joinpath(testdir,"$(t).jl")
-    println("running $(tp) ...")
-    include(tp)
+@testset "FatGraphs Testing" begin
+    for t in tests
+        tp = joinpath(testdir,"$(t).jl")
+        # (G, DG) = (Graph, DiGraph)
+        print("running $t.jl ...")
+        @testset "$t" begin
+            include(tp)
+        end
+        println(" done")
+    end
 end
