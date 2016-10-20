@@ -54,14 +54,15 @@ tests = [
 testdir = dirname(@__FILE__)
 (G, DG) = (Graph, DiGraph)
 
-@testset "FatGraphs Testing" begin
+# @testset "FatGraphs Testing" begin
     for t in tests
         tp = joinpath(testdir,"$(t).jl")
         # (G, DG) = (Graph, DiGraph)
         print("running $t.jl ...")
-        @testset "$t" begin
+        #TODO stop when failing a testset
+        # @testset "$t" begin
             include(tp)
-        end
+        # end
         println(" done")
     end
-end
+# end

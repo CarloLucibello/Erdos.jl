@@ -5,9 +5,7 @@ add_edge!(g,6,7)
 add_edge!(g,8,9)
 add_edge!(g,10,9)
 
-
 @test !is_connected(g)
-
 
 g6 = graph(:house, G)
 @test is_connected(g6)
@@ -51,10 +49,12 @@ add_edge!(h,4,3); add_edge!(h,4,8); add_edge!(h,5,1);
 add_edge!(h,5,6); add_edge!(h,6,7); add_edge!(h,7,6);
 add_edge!(h,8,4); add_edge!(h,8,7)
 
-@test is_connected(h)
+@test is_weakly_connected(h)
+@test_throws MethodError is_connected(h)
 
 scc = strongly_connected_components(h)
 wcc = weakly_connected_components(h)
+@test_throws MethodError connected_components(h)
 
 @test length(scc) == 3 && sort(scc[3]) == [1,2,5]
 @test length(wcc) == 1 && length(wcc[1]) == nv(h)

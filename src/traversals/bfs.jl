@@ -227,7 +227,7 @@ end
 Will return `true` if graph `g` is [bipartite](https://en.wikipedia.org/wiki/Bipartite_graph).
 If a node `v` is specified, only the connected component to which it belongs is considered.
 """
-function is_bipartite(g::ASimpleGraph)
+function is_bipartite(g::AGraph)
     cc = filter(x->length(x)>2, connected_components(g))
     vmap = Dict{Int,Int}()
     for c in cc
@@ -236,11 +236,11 @@ function is_bipartite(g::ASimpleGraph)
     return true
 end
 
-is_bipartite(g::ASimpleGraph, v::Int) = _is_bipartite(g, v)
+is_bipartite(g::AGraph, v::Int) = _is_bipartite(g, v)
 
-_is_bipartite(g::ASimpleGraph, v::Int; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
+_is_bipartite(g::AGraph, v::Int; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
 
-function _bipartite_visitor(g::ASimpleGraph, s::Int; vmap=Dict{Int,Int}())
+function _bipartite_visitor(g::AGraph, s::Int; vmap=Dict{Int,Int}())
     nvg = nv(g)
     visitor = BipartiteVisitor(nvg)
     for v in keys(vmap) #have to reset vmap, otherway problems with digraphs
@@ -251,11 +251,13 @@ function _bipartite_visitor(g::ASimpleGraph, s::Int; vmap=Dict{Int,Int}())
 end
 
 """
+    bipartite_map(g)
+
 If the graph is bipartite returns a vector `c`  of size `nv(g)` containing
 the assignment of each vertex to one of the two sets (`c[i] == 1` or `c[i]==2`).
 If `g` is not bipartite returns an empty vector.
 """
-function bipartite_map(g::ASimpleGraph)
+function bipartite_map(g::AGraph)
     cc = connected_components(g)
     visitors = [_bipartite_visitor(g, x[1]) for x in cc]
     !all([v.is_bipartite for v in visitors]) && return zeros(Int, 0)
@@ -265,3 +267,7 @@ function bipartite_map(g::ASimpleGraph)
     end
     m
 end
+
+is_bipartite(g::ADiGraph) = is_bipartite(graph(g))
+is_bipartite(g::ADiGraph, v::Int) = is_bipartite(graph(g), v)
+bipartite_map(g::ADiGraph) = bipartite_map(graph(g), v)

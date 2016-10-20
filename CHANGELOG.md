@@ -27,4 +27,5 @@
 - smallgraph -> graph
 - all_neighbors in digraph iterates over distinct neighbors
 - kruskal_mst -> minimum_spanning_tree and more tests
-- tests polishing and use testsets
+- tests polishing and `@testset`
+- remove is_connected and connected_components methods for digraphs

@@ -3,7 +3,7 @@
 
 
 """
-    connected_components!(label::Vector{Int}, g::ASimpleGraph)
+    connected_components!(label::Vector{Int}, g::AGraph)
 
 Fills `label` with the `id` of the connected component to which it belongs.
 
@@ -14,7 +14,7 @@ Output:
     c = labels[i] => vertex i belongs to component c.
     c is the smallest vertex id in the component.
 """
-function connected_components!(label::Vector{Int}, g::ASimpleGraph)
+function connected_components!(label::Vector{Int}, g::AGraph)
     # this version of connected components uses Breadth First Traversal
     # with custom visitor type in order to improve performance.
     # one BFS is performed for each component.
@@ -82,13 +82,16 @@ function components(labels::Vector{Int})
 end
 
 """
-    connected_components(g)
+    connected_components(g::AGraph)
 
 Returns the [connected components](https://en.wikipedia.org/wiki/Connectivity_(graph_theory))
 of `g` as a vector of components, each represented by a
 vector of vertices belonging to the component.
+
+See also [weakly_connected_components](@ref) and [strongly_connected_components](@ref)
+for directed graphs.
 """
-function connected_components(g::ASimpleGraph)
+function connected_components(g::AGraph)
     label = zeros(Int, nv(g))
     connected_components!(label, g)
     c, d = components(label)
@@ -102,12 +105,23 @@ Returns `true` if `g` is connected.
 For DiGraphs, this is equivalent to a test of weak connectivity.
 """
 is_connected(g::AGraph) = length(connected_components(g)) == 1
-is_connected(g::ADiGraph) = is_weakly_connected(g)
 
-"""Returns connected components of the undirected graph of `g`."""
+"""
+    weakly_connected_components(g::ADiGraph)
+
+Returns the weakly connected components of undirected graph `g`.
+It is equivalent to the connected components of the corresponding
+undirected graph, i.e. `connected_components(graph(g))`.
+"""
 weakly_connected_components(g::ADiGraph) = connected_components(graph(g))
 
-"""Returns `true` if the undirected graph of `g` is connected."""
+"""
+    is_weakly_connected(g::ADiGraph)
+
+Returns `true` if the undirected graph `g` is weakly connected.
+
+See also [`weakly_connected_components`](@ref).
+"""
 is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
 
 # Adapated from Graphs.jl
@@ -154,7 +168,11 @@ function close_vertex!(vis::TarjanVisitor, v)
     return true
 end
 
-"""Computes the (strongly) connected components of a directed graph."""
+"""
+    strongly_connected_components(g::ADiGraph)
+
+Computes the strongly connected components of a directed graph.
+"""
 function strongly_connected_components(g::ADiGraph)
     nvg = nv(g)
     cmap = zeros(Int, nvg)
@@ -172,10 +190,20 @@ function strongly_connected_components(g::ADiGraph)
     return components
 end
 
-"""Returns `true` if `g` is (strongly) connected."""
+"""
+    is_strongly_connected(g::ADiGraph)
+
+Returns `true` if `g` is strongly connected.
+
+See also [`strongly_connected_components`](@ref)
+"""
 is_strongly_connected(g::ADiGraph) = length(strongly_connected_components(g)) == 1
 
-"""Computes the (common) period for all nodes in a strongly connected graph."""
+"""
+    period(g::ADiGraph)
+
+Computes the common period for all nodes in a strongly connected graph.
+"""
 function period(g::ADiGraph)
     !is_strongly_connected(g) && error("Graph must be strongly connected")
 
@@ -198,7 +226,7 @@ function period(g::ADiGraph)
 end
 
 """Computes the condensation graph of the strongly connected components."""
-function condensation{T<:ADiGraph}(g::T, scc::Vector{Vector{Int}})
+function _condensation{T<:ADiGraph}(g::T, scc::Vector{Vector{Int}})
     h = T(length(scc))
 
     component = Vector{Int}(nv(g))
@@ -216,20 +244,28 @@ function condensation{T<:ADiGraph}(g::T, scc::Vector{Vector{Int}})
     return h
 end
 
-"""Returns the condensation graph associated with `g`. The condensation `h` of
+"""
+    condensation(g::ADiGraph)
+
+Returns the condensation graph associated with `g`. The condensation `h` of
 a graph `g` is the directed graph where every node in `h` represents a strongly
 connected component in `g`, and the presence of an edge between between nodes
 in `h` indicates that there is at least one edge between the associated
 strongly connected components in `g`. The node numbering in `h` corresponds to
-the ordering of the components output from `strongly_connected_components`."""
-condensation(g::ADiGraph) = condensation(g,strongly_connected_components(g))
+the ordering of the components output from [`strongly_connected_components`](@ref).
+"""
+condensation(g::ADiGraph) = _condensation(g, strongly_connected_components(g))
 
-"""Returns a vector of vectors of integers representing lists of attracting
+"""
+    attracting_components(g::ADiGraph)
+
+Returns a vector of vectors of integers representing lists of attracting
 components in `g`. The attracting components are a subset of the strongly
-connected components in which the components do not have any leaving edges."""
+connected components in which the components do not have any leaving edges.
+"""
 function attracting_components(g::ADiGraph)
     scc  = strongly_connected_components(g)
-    cond = condensation(g,scc)
+    cond = _condensation(g, scc)
 
     attracting = Vector{Int}()
 
