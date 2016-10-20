@@ -22,6 +22,11 @@ y = betweenness_centrality(g, endpoints=true, normalize=false)
 x = betweenness_centrality(g,3)
 @test length(x) == 50
 
+# self loops
+s2 = DG(3)
+add_edge!(s2,1,2); add_edge!(s2,2,3); add_edge!(s2,3,3)
+s1 = graph(s2)
+
 @test betweenness_centrality(s1) == [0, 1, 0]
 @test betweenness_centrality(s2) == [0, 0.5, 0]
 
@@ -30,5 +35,7 @@ add_edge!(g,1,2)
 z = betweenness_centrality(g; normalize=true)
 @test z[1] == z[2] == 0.0
 
+
+g3 = PathGraph(5, G)
 z = betweenness_centrality(g3; normalize=false)
 @test z[1] == z[5] == 0.0

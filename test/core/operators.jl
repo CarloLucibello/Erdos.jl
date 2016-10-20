@@ -1,3 +1,14 @@
+g3 = PathGraph(5, G)
+g4 = PathDiGraph(5, DG)
+g5 = DG(4)
+add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
+
+h1 = G(5)
+h2 = G(3)
+h3 = G()
+h4 = DG(7)
+h5 = DG()
+
 c3 = complement(g3)
 c4 = complement(g4)
 

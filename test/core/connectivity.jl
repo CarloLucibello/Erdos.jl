@@ -7,6 +7,9 @@ add_edge!(g,10,9)
 
 
 @test !is_connected(g)
+
+
+g6 = graph(:house, G)
 @test is_connected(g6)
 
 cc = connected_components(g)

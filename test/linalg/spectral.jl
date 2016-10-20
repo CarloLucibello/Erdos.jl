@@ -1,3 +1,7 @@
+
+g3 = PathGraph(5, G)
+g4 = PathDiGraph(5, DG)
+
 @test adjacency_matrix(g3)[3,2] == 1
 @test adjacency_matrix(g3)[2,4] == 0
 @test laplacian_matrix(g3)[3,2] == -1

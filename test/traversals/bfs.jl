@@ -8,6 +8,8 @@ t = visitor.tree
 @test t == [1,1,1,3]
 @test nv(z) == 4 && ne(z) == 3 && !has_edge(z, 2, 3)
 
+
+g6 = graph(:house, G)
 @test gdistances(g6, 2) == [1, 0, 2, 1, 2]
 @test gdistances(g6, [1,2]) == [0, 0, 1, 1, 2]
 @test !is_bipartite(g6)

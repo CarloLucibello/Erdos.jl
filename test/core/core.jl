@@ -1,3 +1,15 @@
+g3 = PathGraph(5, G)
+g4 = PathDiGraph(5, DG)
+g5 = DG(4)
+add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
+
+h1 = G(5)
+h2 = G(3)
+h3 = G()
+h4 = DG(7)
+h5 = DG()
+
+
 e1 = Edge(1,2)
 e2 = Edge(1,3)
 e3 = Edge(1,4)
@@ -42,7 +54,6 @@ end
 @test in_neighbors(h,5) == in_adjlist(h)[5]  == [2, 3]
 @test out_neighbors(h,1) == out_adjlist(h)[1]  == [2, 3, 4]
 
-@test p1 == g2
 @test issubset(h2, h1)
 
 @test has_edge(g, 1, 2)
@@ -210,6 +221,7 @@ end
     in_adjlist(g)[1] == in_neighbors(g,1) ==
     adjlist(g)[1] == [2,3,4]
 
+e0 = Edge(2, 3)
 @test sprint(show, h4) == "{7, 0} directed graph"
 @test sprint(show, h5) == "empty directed graph"
 @test has_edge(g, e1)
@@ -221,17 +233,23 @@ end
 # @test neighbors(g4, 3) == [4]
 @test density(g4) == 0.2
 
+
+adjmx1 = [0 1 0; 1 0 1; 0 1 0] # graph
+adjmx2 = [0 1 0; 1 0 1; 1 1 0] # digraph
+a1 = G(adjmx1)
+a2 = DG(adjmx2)
+
 @test nv(a1) == 3
 @test ne(a1) == 2
 @test nv(a2) == 3
 @test ne(a2) == 5
 
 badadjmx = [ 0 1 0; 1 0 1]
-@test_throws ErrorException Graph(badadjmx)
-@test_throws ErrorException Graph(sparse(badadjmx))
-@test_throws ErrorException DiGraph(badadjmx)
-@test_throws ErrorException DiGraph(sparse(badadjmx))
-@test_throws ErrorException Graph([1 0; 1 1])
+@test_throws ErrorException G(badadjmx)
+@test_throws ErrorException G(sparse(badadjmx))
+@test_throws ErrorException DG(badadjmx)
+@test_throws ErrorException DG(sparse(badadjmx))
+@test_throws ErrorException G([1 0; 1 1])
 
 
 @test !add_edge!(g, 100, 100)

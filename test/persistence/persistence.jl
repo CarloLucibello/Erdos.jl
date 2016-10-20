@@ -1,12 +1,19 @@
 (f,fio) = mktemp()
 
+p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"),:gml)
+
 # test :graphml
 @test writegraph(f, p1, :graphml) == 1
 graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), :graphml)
 @test nv(graphml_g) == 13
 @test ne(graphml_g) == 15
 
+
 # test :gml
+p = readgraph(joinpath(testdir,"testdata","tutte.gml"),:gml)
+g = graph(:tutte, G)
+@test p == g
+
 gml1 = readgraph(joinpath(testdir,"testdata", "twographs-10-28.gml"), :gml)
 @test nv(gml1) == 10
 @test ne(gml1) == 28
