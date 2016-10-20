@@ -26,4 +26,4 @@
 - graph generators for arbitrary graph types
 - smallgraph -> graph
 - all_neighbors in digraph iterates over distinct neighbors
-- kruskal_mst -> minimum_spanning_tree
+- kruskal_mst -> minimum_spanning_tree and more tests

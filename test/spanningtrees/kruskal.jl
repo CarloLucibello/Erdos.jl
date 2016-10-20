@@ -105,3 +105,18 @@ push!(vec2, Edge(5, 6))
 push!(vec2, Edge(3, 7))
 
 @test mst2 == vec2
+
+
+n = 10; m = 20
+g = G(n, m)
+g = blkdiag(g, g)
+d = blkdiag(sparse(rand(n, n)), sparse(rand(n, n)))
+d = d + d'
+mst = minimum_spanning_tree(g, d)
+@test length(mst) == 2n - 2
+for e in mst
+    @test has_edge(g, e)
+    u , v  = src(e), dst(e)
+    u , v = u < v ? (u,v) : (v,u)
+    @test  1 <= u < v <= 10 || 11 <= u < v <= 20
+end
