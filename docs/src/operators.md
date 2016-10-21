@@ -10,6 +10,6 @@ Pages   = ["operators.md"]
 
 ```@autodocs
 Modules = [FatGraphs]
-Pages   = ["core/operators.jl"]
+Pages   = ["operators/operators.jl"]
 Private = false
 ```

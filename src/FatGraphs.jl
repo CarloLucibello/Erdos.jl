@@ -69,7 +69,7 @@ BreadthFirst, gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
 DepthFirst, is_cyclic, topological_sort_by_dfs, dfs_tree,
 
 # random
-randomwalk, saw, non_backtracking_randomwalk,
+randomwalk, self_avoiding_randomwalk, non_backtracking_randomwalk,
 
 # connectivity
 connected_components, strongly_connected_components, weakly_connected_components,
@@ -163,13 +163,14 @@ include("core/interface.jl")
     include("core/edge.jl")
     include("core/core.jl")
     include("core/edgeiter.jl")
-    include("core/operators.jl")
+    include("core/misc.jl")
+include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")
     include("traversals/dfs.jl")
     include("traversals/maxadjvisit.jl")
     include("traversals/randomwalks.jl")
-    include("core/connectivity.jl")
+    include("traversals/connectivity.jl")
 include("distances/distance.jl")
     include("distances/edit_distance.jl")
 include("shortestpaths/shortestpaths.jl")

@@ -125,8 +125,7 @@ savegraph("mygraph.gml", g, :gml)
 
 - **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood
 
-- **operators:** complement, reverse, reverse!, union, join, intersect, difference,
-symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
+- **operators:** complement, reverse, reverse!, union, join, intersect, difference, symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
@@ -152,6 +151,6 @@ symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 
 - **visualization:** integration with [GraphLayout](https://github.com/IainNZ/GraphLayout.jl), [TikzGraphs](https://github.com/sisl/TikzGraphs.jl), [GraphPlot](https://github.com/afternone/GraphPlot.jl), [NetworkViz](https://github.com/abhijithanilkumar/NetworkViz.jl/)
 
-# Contributing and Reporting Bugs
+## Contributing and Reporting Bugs
 We welcome contributions and bug reports! Please see [CONTRIBUTING.md](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/CONTRIBUTING.md)
 for guidance on development and bug reporting.

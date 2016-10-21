@@ -2,6 +2,13 @@ using Documenter
 include("../src/FatGraphs.jl")
 using FatGraphs
 
+#TODO use joinpath
+root, dir, files = first(walkdir("../src/"))
+nsrc = length(dir)
+root, dir, files = first(walkdir("src/"))
+ndocs = length(files)
+ndocs != nsrc && warn("Documenting $ndocs folders out of $nsrc")
+
 # index is equal to the README for the time being
 cp(normpath(@__FILE__, "../../README.md"), normpath(@__FILE__, "../src/index.md"); remove_destination=true)
 

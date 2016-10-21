@@ -1,4 +1,7 @@
-"""Performs a random walk on graph `g` starting at vertex `s` and continuing for
+"""
+    randomwalk(g, s, niter)
+
+Performs a random walk on graph `g` starting at vertex `s` and continuing for
 a maximum of `niter` steps. Returns a vector of vertices visited in order.
 """
 function randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
@@ -17,7 +20,10 @@ function randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
   return visited[1:i-1]
 end
 
-"""Performs a non-backtracking random walk on graph `g` starting at vertex `s` and continuing for
+"""
+    non_backtracking_randomwalk(g, s, niter)
+
+Performs a non-backtracking random walk on graph `g` starting at vertex `s` and continuing for
 a maximum of `niter` steps. Returns a vector of vertices visited in order.
 """
 function non_backtracking_randomwalk(g::AGraph, s::Integer, niter::Integer)
@@ -79,11 +85,14 @@ function non_backtracking_randomwalk(g::ADiGraph, s::Integer, niter::Integer)
     return visited[1:i-1]
 end
 
-"""Performs a [self-avoiding walk](https://en.wikipedia.org/wiki/Self-avoiding_walk)
+"""
+    self_avoiding_randomwalk(g, s, niter)
+
+Performs a [self-avoiding walk](https://en.wikipedia.org/wiki/Self-avoiding_walk)
 on graph `g` starting at vertex `s` and continuing for a maximum of `niter` steps.
 Returns a vector of vertices visited in order.
 """
-function saw(g::ASimpleGraph, s::Integer, niter::Integer)
+function self_avoiding_randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
   s in vertices(g) || throw(BoundsError())
   visited = Vector{Int}()
   svisited = Set{Int}()
