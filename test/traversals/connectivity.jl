@@ -1,3 +1,24 @@
+g = Graph()
+cc = connected_components(g)
+@test cc == Vector{Int}[Int[]]
+
+g = Graph(1)
+cc = connected_components(g)
+@test cc == [[1]]
+
+g = Graph(2)
+cc = connected_components(g)
+@test cc == [[1],[2]]
+
+g = DiGraph()
+cc = strongly_connected_components(g)
+@test cc == Vector{Int}[Int[]]
+
+g = DiGraph(1)
+cc = strongly_connected_components(g)
+@test cc == Vector{Int}[Int[1]]
+
+
 g = PathGraph(4)
 add_vertices!(g,10)
 add_edge!(g,5,6)

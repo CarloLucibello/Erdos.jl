@@ -92,6 +92,7 @@ See also [weakly_connected_components](@ref) and [strongly_connected_components]
 for directed graphs.
 """
 function connected_components(g::AGraph)
+    nv(g) == 0 && return Vector{Int}[Int[]]
     label = zeros(Int, nv(g))
     connected_components!(label, g)
     c, d = components(label)
@@ -176,6 +177,7 @@ Computes the strongly connected components of a directed graph.
 function strongly_connected_components(g::ADiGraph)
     nvg = nv(g)
     cmap = zeros(Int, nvg)
+    nv(g) == 0 && return Vector{Int}[Int[]]
     components = Vector{Vector{Int}}()
 
     for v in vertices(g)

@@ -129,8 +129,8 @@ WheelDiGraph, CycleDiGraph, BinaryTree, DoubleBinaryTree, RoachGraph, CliqueGrap
 # Euclidean graphs
 euclidean_graph,
 
-#minimum_spanning_trees
-minimum_spanning_tree,
+# Spanning Trees
+minimum_spanning_tree, count_spanning_trees,
 
 #matching
 MatchingResult, minimum_weight_perfect_matching,
@@ -208,7 +208,7 @@ include("flow/maximum_flow.jl")
     include("flow/ext_multiroute_flow.jl")
 include("interdiction/interdiction.jl")
 include("matching/matching.jl")
-include("spanningtrees/kruskal.jl")
+include("spanningtrees/spanningtrees.jl")
 include("factory/graphdigraph.jl")
 include("utils.jl")
 include("deprecate.jl")
