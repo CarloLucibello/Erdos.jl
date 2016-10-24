@@ -18,7 +18,10 @@ function CompleteGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
 end
 
 
-"""Creates a complete bipartite graph with `n1+n2` vertices. It has edges
+"""
+    CompleteBipartiteGraph(n1, n2, G = Graph)
+
+Creates a complete bipartite graph with `n1+n2` vertices. It has edges
 connecting each pair of vertices in the two sets.
 """
 function CompleteBipartiteGraph{G<:AGraph}(n1::Integer, n2::Integer, ::Type{G} = Graph)
@@ -29,7 +32,10 @@ function CompleteBipartiteGraph{G<:AGraph}(n1::Integer, n2::Integer, ::Type{G} =
     return g
 end
 
-"""Creates a complete digraph with `n` vertices. A complete digraph has edges
+"""
+    CompleteDiGraph(n, G = DiGraph)
+
+Creates a complete digraph with `n` vertices. A complete digraph has edges
 connecting each pair of vertices (both an ingoing and outgoing edge).
 """
 function CompleteDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
@@ -42,7 +48,10 @@ function CompleteDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
     return g
 end
 
-"""Creates a star graph with `n` vertices. A star graph has a central vertex
+"""
+    StarGraph(n, G = Graph)
+
+Creates a star graph with `n` vertices. A star graph has a central vertex
 with edges to each other vertex.
 """
 function StarGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
@@ -64,8 +73,12 @@ function StarDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
     return g
 end
 
-"""Creates a path graph with `n` vertices. A path graph connects each
-successive vertex by a single edge."""
+"""
+    PathGraph(n, G = Graph)
+
+Creates a path graph with `n` vertices. A path graph connects each
+successive vertex by a single edge.
+"""
 function PathGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
     g = G(n)
     for i = 2:n
@@ -74,8 +87,12 @@ function PathGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
     return g
 end
 
-"""Creates a path digraph with `n` vertices. A path graph connects each
-successive vertex by a single directed edge."""
+"""
+    PathDiGraph(n, G = DiGraph)
+
+Creates a path digraph with `n` vertices. A path graph connects each
+successive vertex by a single directed edge.
+"""
 function PathDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
     g = G(n)
     for i = 2:n
@@ -84,7 +101,10 @@ function PathDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
     return g
 end
 
-"""Creates a cycle graph with `n` vertices. A cycle graph is a closed path graph.
+"""
+    CycleGraph(n, G=Graph)
+
+Creates a cycle graph with `n` vertices. A cycle graph is a closed path graph.
 """
 function CycleGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
     g = G(n)
@@ -107,7 +127,10 @@ function CycleDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
 end
 
 
-"""Creates a wheel graph with `n` vertices. A wheel graph is a star graph with
+"""
+    WheelGraph(n, G=Graph)
+
+Creates a wheel graph with `n` vertices. A wheel graph is a star graph with
 the outer vertices connected via a closed path graph.
 """
 function WheelGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
@@ -151,7 +174,11 @@ function Grid{T<:Integer,G<:AGraph}(dims::AbstractVector{T}, ::Type{G} = Graph;
     return g
 end
 
-"""create a binary tree with k-levels vertices are numbered 1:2^levels-1"""
+"""
+    BinaryTree(levels, G=Graph)
+
+Creates a binary tree with k-levels vertices are numbered 1:2^levels-1
+"""
 function BinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
     g = G(2^levels-1)
     for i in 0:levels-2
@@ -163,8 +190,12 @@ function BinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
     return g
 end
 
-"""create a double complete binary tree with k-levels
-used as an example for spectral clustering by Guattery and Miller 1998."""
+"""
+    DoubleBinaryTree(levels, G=Graph)
+
+Create a double complete binary tree with k-levels
+used as an example for spectral clustering by Guattery and Miller 1998.
+"""
 function DoubleBinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
     gl = BinaryTree(levels, G)
     gr = BinaryTree(levels, G)
@@ -187,7 +218,11 @@ function RoachGraph{G<:AGraph}(k::Int, ::Type{G} = Graph)
 end
 
 
-"""This function generates `n` connected k-cliques """
+"""
+    CliqueGraph(k, n, G=Graph)
+
+This function generates a graph with `n` `k`-cliques connected circularly by `n` edges.
+"""
 function CliqueGraph{G<:AGraph}(k::Integer, n::Integer, ::Type{G} = Graph)
     g = G(k*n)
     for c=1:n

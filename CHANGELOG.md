@@ -29,3 +29,4 @@
 - kruskal_mst -> minimum_spanning_tree and more tests
 - tests polishing and `@testset`
 - remove is_connected and connected_components methods for digraphs
+- add oriented option for incidence_matrix

@@ -79,11 +79,19 @@ end
 @test incidence_matrix(g4)[1,1] == -1
 @test incidence_matrix(g4)[2,1] == 1
 @test incidence_matrix(g4)[3,1] == 0
+
+
+g3 = PathGraph(5, G)
+g4 = PathDiGraph(5, DG)
 # now undirected graph
 @test size(incidence_matrix(g3)) == (5,4)
 @test incidence_matrix(g3)[1,1] == 1
 @test incidence_matrix(g3)[2,1] == 1
 @test incidence_matrix(g3)[3,1] == 0
+
+i3o = incidence_matrix(g3; oriented=true)
+@test i3o == incidence_matrix(g4)
+@test laplacian_matrix(g3) == i3o * i3o'
 
 # TESTS FOR Nonbacktracking operator.
 
