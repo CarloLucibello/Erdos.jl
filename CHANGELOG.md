@@ -30,4 +30,4 @@
 - tests polishing and `@testset`
 - remove is_connected and connected_components methods for digraphs
 - add oriented option for incidence_matrix
--  fix num connected components for empty graphs (1)
+- fix num connected components for empty graphs (now is one)

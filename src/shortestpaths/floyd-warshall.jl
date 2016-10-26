@@ -8,7 +8,7 @@ type FloydWarshallState{T}<:AbstractPathState
 end
 
 """
-    floyd_warshall_shortest_paths{T}( g, distmx::AbstractMatrix{T} = DefaultDistance())
+    floyd_warshall_shortest_paths(g, distmx=DefaultDistance())
 
 Uses the [Floyd-Warshall algorithm](http://en.wikipedia.org/wiki/Floyd–Warshall_algorithm)
 to compute shortest paths between all pairs of vertices in graph `g`. Returns a

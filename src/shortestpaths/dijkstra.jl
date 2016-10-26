@@ -1,4 +1,4 @@
-abstract AbstractDijkstraState<:AbstractPathState
+abstract AbstractDijkstraState <: AbstractPathState
 
 immutable DijkstraHeapEntry{T}
     vertex::Int
@@ -14,18 +14,22 @@ type DijkstraState{T}<: AbstractDijkstraState
     pathcounts::Vector{Int}
 end
 
-"""Performs [Dijkstra's algorithm](http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
-on a graph, computing shortest distances between a source vertex `s` and all
-other nodes. Returns a `DijkstraState` that contains various traversal
-information (see below).
+"""
+    dijkstra_shortest_paths(g, s, distmx=DefaultDistance(); allpaths=false)
+    dijkstra_shortest_paths(g, sources, distmx=DefaultDistance(); allpaths=false)
+
+Performs [Dijkstra's algorithm](http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+on a graph, computing shortest distances between a source vertex `s` (or a vector
+`sources`)  and all other veritces.
+Returns a `DijkstraState` that contains various traversal information.
 
 With `allpaths=true`, returns a `DijkstraState` that keeps track of all
-predecessors of a given vertex (see below).
+predecessors of a given vertex.
 """
 function dijkstra_shortest_paths{T}(
     g::ASimpleGraph,
     srcs::Vector{Int},
-    distmx::AbstractArray{T, 2}=DefaultDistance();
+    distmx::AbstractMatrix{T}=DefaultDistance();
     allpaths=false
 )
     nvg = nv(g)
@@ -87,5 +91,5 @@ function dijkstra_shortest_paths{T}(
     return DijkstraState{T}(parents, dists, preds, pathcounts)
 end
 
-dijkstra_shortest_paths{T}(g::ASimpleGraph, src::Int, distmx::AbstractArray{T,2}=DefaultDistance(); allpaths=false) =
+dijkstra_shortest_paths{T<:Real}(g::ASimpleGraph, src::Int, distmx::AbstractMatrix{T}=DefaultDistance(); allpaths=false) =
   dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)

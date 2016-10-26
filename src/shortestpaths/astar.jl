@@ -36,16 +36,18 @@ function a_star_impl!{T<:Number}(
     nothing
 end
 
-"""Computes the shortest path between vertices `s` and `t` using the
+"""
+    a_star(g, s, t, distmx=DefaultDistance(), heuristic = n->0)
+    
+Computes the shortest path between vertices `s` and `t` using the
 [A\* search algorithm](http://en.wikipedia.org/wiki/A%2A_search_algorithm). An
 optional heuristic function and edge distance matrix may be supplied.
 """
-function a_star{T<:Number}(
+function a_star{T<:Real}(
     graph::ASimpleGraph,  # the graph
-
     s::Int,                       # the start vertex
     t::Int,                       # the end vertex
-    distmx::AbstractArray{T, 2} = FatGraphs.DefaultDistance(),
+    distmx::AbstractMatrix{T}=DefaultDistance(),
     heuristic::Function = n -> 0
     )
             # heuristic (under)estimating distance to target

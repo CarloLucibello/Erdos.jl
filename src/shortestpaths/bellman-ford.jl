@@ -12,15 +12,15 @@
 type NegativeCycleError <: Exception end
 
 # AbstractPathState is defined in core
-type BellmanFordState{T<:Number}<:AbstractPathState
+type BellmanFordState{T<:Real} <: AbstractPathState
     parents::Vector{Int}
     dists::Vector{T}
 end
 
-function bellman_ford_shortest_paths!{R<:Real}(
+function bellman_ford_shortest_paths!{T<:Real}(
     graph::ASimpleGraph,
     sources::AbstractVector{Int},
-    distmx::AbstractArray{R, 2},
+    distmx::AbstractMatrix{T},
     state::BellmanFordState
 )
 
@@ -54,26 +54,29 @@ function bellman_ford_shortest_paths!{R<:Real}(
     return state
 end
 
-"""Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
-to compute shortest paths between a source vertex `s` or a set of source
-vertices `ss`. Returns a `BellmanFordState` with relevant traversal information
+"""
+    bellman_ford_shortest_paths(g, s, distmx=DefaultDistance())
+    bellman_ford_shortest_paths(g, sources, distmx=DefaultDistance())
+
+Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
+to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
+vertices `sources`). Returns a `BellmanFordState` with relevant traversal information
 (see below).
 """
-function bellman_ford_shortest_paths{T}(
-    graph::ASimpleGraph,
+function bellman_ford_shortest_paths{T<:Real}(
+        graph::ASimpleGraph,
+        sources::AbstractVector{Int},
+        distmx::AbstractMatrix{T} = DefaultDistance())
 
-    sources::AbstractVector{Int},
-    distmx::AbstractArray{T, 2} = DefaultDistance()
-    )
     nvg = nv(graph)
     state = BellmanFordState(zeros(Int,nvg), fill(typemax(T), nvg))
     bellman_ford_shortest_paths!(graph, sources, distmx, state)
 end
 
-bellman_ford_shortest_paths{T}(
+bellman_ford_shortest_paths{T<:Real}(
     graph::ASimpleGraph,
     v::Int,
-    distmx::AbstractArray{T, 2} = DefaultDistance()
+    distmx::AbstractMatrix{T} = DefaultDistance()
 ) = bellman_ford_shortest_paths(graph, [v], distmx)
 
 function has_negative_edge_cycle(graph::ASimpleGraph)
@@ -105,10 +108,12 @@ function enumerate_paths(state::AbstractPathState, dest::Vector{Int})
     all_paths
 end
 
-enumerate_paths(state::AbstractPathState, dest) = enumerate_paths(state, [dest])[1]
-enumerate_paths(state::AbstractPathState) = enumerate_paths(state, [1:length(state.parents);])
 
-"""Given a path state `state` of type `AbstractPathState` (see below), returns a
+"""
+    enumerate_paths(state::AbstractPathState)
+    enumerate_paths(state::AbstractPathState, dest)
+
+Given a path state `state` of type `AbstractPathState` (see below), returns a
 vector (indexed by vertex) of the paths between the source vertex used to
 compute the path state and a destination vertex `v`, a set of destination
 vertices `vs`, or the entire graph. For multiple destination vertices, each
@@ -125,4 +130,5 @@ will return a vector (indexed by destination vertex) of paths from source `v`
 to all other vertices. In addition, `enumerate_paths(state, v, d)` will return
 a vector representing the path from vertex `v` to vertex `d`.
 """
-enumerate_paths
+enumerate_paths(state::AbstractPathState, dest) = enumerate_paths(state, [dest])[1]
+enumerate_paths(state::AbstractPathState) = enumerate_paths(state, [1:length(state.parents);])
