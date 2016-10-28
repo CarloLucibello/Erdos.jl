@@ -170,105 +170,28 @@ function in_neighbors(g::GTDiGraph, i::Int)
     return (j for (j, idx) in ies)
 end
 
-# O(k + k_last)
 function rem_vertex!(g::GTDiGraph, v::Int)
-    back = length(g.out_edges)
+    v in vertices(g) || return false
+    n = nv(g)
 
-    if v <= back
-        clear_vertex!(g, v)
-        g.out_edges[back], g.out_edges[v] = (g.out_edges[v], g.out_edges[back])
-        g.in_edges[back], g.in_edges[v] = (g.in_edges[v], g.in_edges[back])
-        pop!(g.out_edges)
-        pop!(g.in_edges)
+    clean_vertex!(g, v)
 
-        auto rename_v = [&] (auto& out_edges, auto& in_edges,
-                             const auto& get_pos)
-            {
-                for (auto& eu : out_edges[v])
-                {
-                    Vertex u = eu.first;
-                    if (u == back)
-                    {
-                        eu.first = v;
-                    }
-                    else
-                    {
-                        if (!g._keep_epos)
-                        {
-                            for (auto& e : in_edges[u])
-                            {
-                                if (e.first == back)
-                                    e.first = v;
-                            }
-                        }
-                        else
-                        {
-                            size_t idx = eu.second;
-                            auto pos = get_pos(idx);
-                            in_edges[u][pos].first = v;
-                        }
-                    }
-                }
-            };
-
-        rename_v(g._out_edges, g._in_edges,
-                 [&](size_t idx) -> auto {return g._epos[idx].second;});
-        rename_v(g._in_edges, g._out_edges,
-                 [&](size_t idx) -> auto {return g._epos[idx].first;});
-
-    else
-        clear_vertex!(g, v)
-        pop!(g.out_edges)
-        pop!(g.in_edges)
-    end
-end
-
-
-function clear_vertex(g::GTDiGraph, v::Int)
-    if !g.keep_epos
-        function remove_es(out_edges, in_edges)
-            oes = out_edges[v]
-            for oe in oes
-                t = oe.first
-                ies = in_edges[t]
-                filter!(ei-> begin
-                               if ei.first == v
-                                   push!(g.free_indexes, ei.second)
-                                   return false
-                               else
-                                   return true
-                               end
-                            end
-                        , ies)
-            end
-            g.ne -= length(oes)
+    if v != n
+        neigs = collect(out_neighbors(g, n))
+        for u in neigs
+            rem_edge!(g, n, u)
+            add_edge!(g, v, u)
         end
-        remove_es(g.out_edges, g.in_edges)
-        remove_es(g.in_edges, g.out_edges)
-    else
-        auto remove_es = [&] (auto& out_edges, auto& in_edges,
-                              const auto& get_pos)
-        {
-            auto& oes = out_edges[v];
-            for (const auto& ei : oes)
-            {
-                Vertex t = ei.first;
-                size_t idx = ei.second;
-                auto& ies = in_edges[t];
-                auto& back = ies.back();
-                auto& pos = get_pos(idx);
-                auto& bpos = get_pos(back.second);
-                bpos = pos;
-                ies[pos] = back;
-                ies.pop_back();
-                g._free_indexes.push_back(idx);
-            }
-            g._n_edges -= oes.size();
-            oes.clear();
-        };
-        remove_es(g._out_edges, g._in_edges,
-                  [&](size_t idx) -> auto& {return g._epos[idx].second;});
-        remove_es(g._in_edges, g._out_edges,
-                  [&](size_t idx) -> auto& {return g._epos[idx].first;});
+        if is_directed(g)
+            neigs = collect(in_neighbors(g, n))
+            for u in neigs
+                rem_edge!(g, u, n)
+                add_edge!(g, u, v)
+            end
+        end
     end
+
+    pop!(g.out_edges)
+    pop!(g.in_edges)
+    return true
 end
