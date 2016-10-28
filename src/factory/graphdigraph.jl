@@ -91,32 +91,19 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     v in vertices(g) || return false
     n = nv(g)
 
-    edgs = collect(in_edges(g, v))
-    for e in edgs
-        rem_edge!(g, e)
-    end
-    neigs = collect(in_neighbors(g, n))
-    for i in neigs
-        rem_edge!(g, i, n)
-    end
-    if v != n
-        for i in neigs
-            add_edge!(g, i, v)
-        end
-    end
+    clean_vertex!(g, v)
 
-    if is_directed(g)
-        edgs = collect(out_edges(g, v))
-        for e in edgs
-            rem_edge!(g, e)
-        end
+    if v != n
         neigs = collect(out_neighbors(g, n))
-        for i in neigs
-            rem_edge!(g, n, i)
+        for u in neigs
+            rem_edge!(g, n, u)
+            add_edge!(g, v, u)
         end
-        if v != n
-            for i in neigs
-                add_edge!(g, v, i)
+        if is_directed(g)
+            neigs = collect(in_neighbors(g, n))
+            for u in neigs
+                rem_edge!(g, u, n)
+                add_edge!(g, u, v)
             end
         end
     end

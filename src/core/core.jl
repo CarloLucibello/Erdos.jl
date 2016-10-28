@@ -134,6 +134,12 @@ number of possible edges. This is ``|v| |v-1|`` for directed graphs and
 density(g::AGraph) = (2*ne(g)) / (nv(g) * (nv(g)-1))
 density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
 
+function clean_vertex!(g::ASimpleGraph, v::Int)
+    edgs = collect(all_edges(g, v))
+    for e in edgs
+        rem_edge!(g, e)
+    end
+end
 
 #### FALLBACKS #################
 function =={G<:ASimpleGraph}(g::G, h::G)

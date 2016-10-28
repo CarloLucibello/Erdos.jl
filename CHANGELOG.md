@@ -31,3 +31,4 @@
 - remove is_connected and connected_components methods for digraphs
 - add oriented option for incidence_matrix
 - fix num connected components for empty graphs (now is one)
+- add all_edges
