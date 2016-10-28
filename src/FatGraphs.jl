@@ -40,8 +40,9 @@ nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
 indegree, outdegree, degree, has_self_loops, num_self_loops,
 rem_vertex!,
 
-# Graph and DiGraph concrete types
-reverse!, Graph, DiGraph, SimpleGraph, #reverse
+# graph types (factory)
+reverse!, Graph, DiGraph, SimpleGraph,
+GTDiGraph,
 
 # distance
 eccentricity, diameter, periphery, radius, center,
@@ -211,6 +212,7 @@ include("interdiction/interdiction.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("factory/graphdigraph.jl")
+include("factory/gtgraph.jl")
 include("utils.jl")
 include("deprecate.jl")
 end # module

@@ -6,7 +6,7 @@ end
 
 
 """A type representing an undirected graph."""
-type GTDiGraph <: AbstractGraph
+type GTDiGraph <: AbstractDiGraph
     ne::Int
     edge_index_range::Int
 
@@ -39,7 +39,8 @@ function GTDiGraph(n::Int = 0)
     end
     keep_epos = false
     epos = Vector{Pair{Int,Int}}()
-    return GTDiGraph(0, 0, in_edges, out_edges, keep_epos, epos)
+    free_indexes = Vector{Int}()
+    return GTDiGraph(0, 0, out_edges, in_edges, keep_epos, epos, free_indexes)
 end
 
 
@@ -54,7 +55,7 @@ function add_vertex!(g::GTDiGraph)
     return nv(g)
 end
 
-function add_edge!(g::GTDiGraph, i::Int, j::Int)
+function add_edge!(g::GTDiGraph, u::Int, v::Int)
     (u in vertices(g) && v in vertices(g)) || return false
     has_edge(g, u, v) || return false # could be removed for multigraphs
     if isempty(g.free_indexes)
@@ -63,10 +64,10 @@ function add_edge!(g::GTDiGraph, i::Int, j::Int)
     else
         idx = pop!(g.free_indexes)
     end
-    oes = g.out_edges[i]
-    ies = g.in_edges[j]
-    push!(oes, Pair(j, idx))
-    push!(ies, Pair(i, idx))
+    oes = g.out_edges[u]
+    ies = g.in_edges[v]
+    push!(oes, Pair(v, idx))
+    push!(ies, Pair(u, idx))
     g.ne += 1
 
     if g.keep_epos
@@ -85,7 +86,7 @@ function rem_edge!(g::GTDiGraph, s::Int, t::Int)
         po = findfirst(e->e.first==t, oes)
 
         po == 0 && return false
-        push!(g.free_indexes, oes[po]->second)
+        push!(g.free_indexes, oes[po].second)
         deleteat!(oes, po)
         g.ne -= 1
 
@@ -144,7 +145,7 @@ function edge(g::GTDiGraph, i::Int, j::Int)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
     if pos != 0
-        return GTEdge(i, j, oes[pos]->second)
+        return GTEdge(i, j, oes[pos].second)
     else
         return GTEdge(i, j, -1)
     end
