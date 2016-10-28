@@ -1,4 +1,4 @@
-type GTEdge <: AbstractEdge
+immutable GTEdge <: AbstractEdge
     src::Int
     dst::Int
     idx::Int
@@ -6,309 +6,269 @@ end
 
 
 """A type representing an undirected graph."""
-type GTGraph <: AbstractGraph
+type GTDiGraph <: AbstractGraph
     ne::Int
     edge_index_range::Int
-    epos::Vector{Pair{Int,Int}}
-    fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
-end
 
-"""A type representing an undirected graph."""
-type GTDiGraph <: AbstractDiGraph
-    ne::Int
-    edge_index_range::Int
-    epos::Vector{Pair{Int,Int}}
-    fadjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
-    badjlist::Vector{Vector{Pair{Int,Int}}} # [src]: (dst, dst, dst)
-end
+    out_edges::Vector{Vector{Pair{Int,Int}}}
+    in_edges::Vector{Vector{Pair{Int,Int}}}
 
-typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
+    keep_epos::Bool
+    epos::Vector{Pair{Int,Int}}    #position of the edge in out_edges and in_edges
+
+    free_indexes::Vector{Int}       # indexes of deleted edges to be used up
+                                    # for new edges to avoid very large
+                                    # indexes, and unnecessary property map
+                                    # memory use
+end
 
 #### GRAPH CONSTRUCTORS
 """
-    GTGraph(n=0)
+    GTDiGraph(n=0)
 
 Construct an empty graph with `n` vertices.
 """
-function GTGraph(n::Int = 0)
-    fadjlist = Vector{Vector{Pair{Int,Int}}}()
-    sizehint!(fadjlist,n)
-    for i = 1:n
-        push!(fadjlist, Vector{Int}())
-    end
-    epos = Vector{Int}()
-    return GTGraph(0, 0, epos, fadjlist)
-end
-
-
-GTGraph(n::Int, m::Int; seed::Int = -1) = erdos_renyi_undir(n, m; seed=seed)
-
-###################
-nv(g::SimpleGTGraph) = length(g.fadjlist)
-ne(g::SimpleGTGraph) = g.ne
-
-function rem_vertex!(g::SimpleGTGraph, v::Int)
-    v in vertices(g) || return false
-    n = nv(g)
-
-    edgs = collect(in_edges(g, v))
-    for e in edgs
-        rem_edge!(g, e)
-    end
-    neigs = collect(in_neighbors(g, n))
-    for i in neigs
-        rem_edge!(g, Edge(i, n))
-    end
-    if v != n
-        for i in neigs
-            add_edge!(g, Edge(i, v))
-        end
-    end
-
-    if is_directed(g)
-        edgs = collect(out_edges(g, v))
-        for e in edgs
-            rem_edge!(g, e)
-        end
-        neigs = collect(out_neighbors(g, n))
-        for i in neigs
-            rem_edge!(g, Edge(n, i))
-        end
-        if v != n
-            for i in neigs
-                add_edge!(g, Edge(v, i))
-            end
-        end
-    end
-
-    pop!(g.fadjlist)
-    if is_directed(g)
-        pop!(g.badjlist)
-    end
-    return true
-end
-
-function copy(g::GTGraph)
-    return GTGraph(g.ne, g.edge_index_range, deepcopy(epos), deepcopy(g.fadjlist))
-end
-
-function add_edge!(g::GTGraph, u::Int, v::Int)
-    (u in vertices(g) && v in vertices(g)) || return false
-    has_edge(g, u, v) || return false
-    idx = (g.edge_index_range += 1)
-    resize!(g.epos)
-    g.ne += 1
-    GTEdge(u, v, idx)
-    push!(g.fadjlist[u], Pair(v, idx))
-    inserted = _insert_and_dedup!(g.fadjlist[s], d)
-    if s != d
-        inserted = _insert_and_dedup!(g.fadjlist[d], s)
-    end
-    return true
-end
-
-function rem_edge!(g::GTGraph, e::Edge)
-    i = searchsorted(g.fadjlist[src(e)], dst(e))
-    length(i) > 0 || return false   # edge not in graph
-    i = i[1]
-    deleteat!(g.fadjlist[src(e)], i)
-    if src(e) != dst(e)     # not a self loop
-        i = searchsorted(g.fadjlist[dst(e)], src(e))[1]
-        deleteat!(g.fadjlist[dst(e)], i)
-    end
-    g.ne -= 1
-    return true # edge successfully removed
-end
-
-
-function add_vertex!(g::GTGraph)
-    push!(g.fadjlist, Vector{Int}())
-    return nv(g)
-end
-
-
-##### DIGRAPH CONSTRUCTORS  #############
-"""
-    GTDiGraph(n=0)
-
-Construct an empty GTDiGraph with `n` vertices.
-"""
 function GTDiGraph(n::Int = 0)
-    fadjlist = Vector{Vector{Int}}()
-    badjlist = Vector{Vector{Int}}()
-    for i = 1:n
-        push!(badjlist, Vector{Int}())
-        push!(fadjlist, Vector{Int}())
+    out_edges = Vector{Vector{Pair{Int,Int}}}()
+    in_edges = Vector{Vector{Pair{Int,Int}}}()
+    sizehint!(out_edges,n)
+    sizehint!(in_edges,n)
+    for i=1:n
+        push!(out_edges, Vector{Pair{Int,Int}}())
+        push!(in_edges, Vector{Pair{Int,Int}}())
     end
-    return GTDiGraph(0, badjlist, fadjlist)
+    keep_epos = false
+    epos = Vector{Pair{Int,Int}}()
+    return GTDiGraph(0, 0, in_edges, out_edges, keep_epos, epos)
 end
 
 
-function GTDiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
-    dima, dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
+GTDiGraph(n::Int, m::Int; seed::Int=-1) = erdos_renyi(n, m, GTDiGraph; seed=seed)
 
-    g = GTDiGraph(dima)
-    maxc = length(adjmx.colptr)
-    for c = 1:(maxc-1)
-        for rind = adjmx.colptr[c]:adjmx.colptr[c+1]-1
-            isnz = (adjmx.nzval[rind] != zero(T))
-            if isnz
-                r = adjmx.rowval[rind]
-                add_edge!(g,r,c)
-            end
-        end
-    end
-    return g
-end
-
-
-"""
-    GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
-
-Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
-"""
-function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = GTDiGraph(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-
-GTDiGraph(nv::Integer, ne::Integer; seed::Int = -1) = erdos_renyi_dir(nv, ne, seed=seed)
-#########
-
-
-
-function copy(g::GTDiGraph)
-    return GTDiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
-end
-
-function add_edge!(g::GTDiGraph, e::Edge)
-    s, d = e
-    (s in vertices(g) && d in vertices(g)) || return false
-    inserted = _insert_and_dedup!(g.fadjlist[s], d)
-    if inserted
-        g.ne += 1
-    end
-    return inserted && _insert_and_dedup!(g.badjlist[d], s)
-end
-
-
-function rem_edge!(g::GTDiGraph, e::Edge)
-    has_edge(g,e) || return false
-    i = searchsorted(g.fadjlist[src(e)], dst(e))[1]
-    deleteat!(g.fadjlist[src(e)], i)
-    i = searchsorted(g.badjlist[dst(e)], src(e))[1]
-    deleteat!(g.badjlist[dst(e)], i)
-    g.ne -= 1
-    return true
-end
+nv(g::GTDiGraph) = length(g.out_edges)
+ne(g::GTDiGraph) = g.ne
 
 function add_vertex!(g::GTDiGraph)
-    push!(g.badjlist, Vector{Int}())
-    push!(g.fadjlist, Vector{Int}())
+    push!(g.in_edges, Vector{Pair{Int,Int}}())
+    push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-#TODO define for abstract types
-"""
-    reverse(g::GTDiGraph)
+function add_edge!(g::GTDiGraph, i::Int, j::Int)
+    (u in vertices(g) && v in vertices(g)) || return false
+    has_edge(g, u, v) || return false # could be removed for multigraphs
+    if isempty(g.free_indexes)
+        g.edge_index_range += 1
+        idx = g.edge_index_range
+    else
+        idx = pop!(g.free_indexes)
+    end
+    oes = g.out_edges[i]
+    ies = g.in_edges[j]
+    push!(oes, Pair(j, idx))
+    push!(ies, Pair(i, idx))
+    g.ne += 1
 
-Produces a graph where all edges are reversed from the
-original.
-"""
-function reverse(g::GTDiGraph)
-    gnv = nv(g)
-    gne = ne(g)
-    h = GTDiGraph(gnv)
-    h.fadjlist = deepcopy(g.badjlist)
-    h.badjlist = deepcopy(g.fadjlist)
-    h.ne = gne
+    if g.keep_epos
+        lenght(epos) < idx && resize!(epos, idx)
+        ei = epos[idx]
+        ei.first = length(oes)
+        ei.second = length(ies)
+    end
 
-    return h
+    return true
 end
 
+function rem_edge!(g::GTDiGraph, s::Int, t::Int)
+    if !g.keep_epos
+        oes = g.out_edges[s]
+        po = findfirst(e->e.first==t, oes)
 
-#TODO define for abstract types
-"""
-    reverse!(g::GTDiGraph)
+        po == 0 && return false
+        push!(g.free_indexes, oes[po]->second)
+        deleteat!(oes, po)
+        g.ne -= 1
 
-In-place reverse (modifies the original graph).
-"""
-function reverse!(g::GTDiGraph)
-    g.fadjlist, g.badjlist = g.badjlist, g.fadjlist
-    return g
+        ies = g.in_edges[t];
+        pi = findfirst(e->e.first==s, ies)
+        pi == 0 && error("rem_edge")
+        deleteat!(ies, pi)
+    else
+        return rem_edge(g, edge(s, t, g));
+    end
+    return true
 end
 
+function rem_edge!(g::GTDiGraph, e::GTEdge)
+    s = e.src
+    t = e.dst
+    idx = e.idx
+    oes = g.out_edges[s]
+    ies = g.in_edges[t]
+    if !g._keep_epos # O(k_s + k_t)
 
-out_neighbors(g::SimpleGTGraph,v::Int) = g.fadjlist[v]
-in_neighbors(g::GTDiGraph,v::Int) = g.badjlist[v]
+        po = findfirst(e->e.first==s && e.second==idx, oes)
+        po == 0 && return false
+        deleteat!(oes, po)
 
+        ies = g.in_edges[t]
+        pi = findfirst(e->e.first==s && e.second==idx, ies)
+        pi == 0 && error("rem_edge")
+        deleteat!(ies, pi)
 
-function digraph(g::GTGraph)
-    h = GTDiGraph(nv(g))
-    h.ne = ne(g) * 2 - num_self_loops(g)
-    h.fadjlist = deepcopy(g.fadjlist)
-    h.badjlist = deepcopy(g.fadjlist)
-    return h
-end
+    else # O(1)
+        if idx <= length(g.epos)
 
-graph(g::GTGraph) = g
+                back = last(oes)
+                pindex = g.epos[idx].first
+                g.epos[back.idx].first = pindex
+                oes[pindex] = back
+                pop!(oes)
 
-
-digraph(g::GTDiGraph) = g
-
-function graph(g::GTDiGraph)
-    gnv = nv(g)
-
-    edgect = 0
-    newfadj = deepcopy(g.fadjlist)
-    for i in 1:gnv
-        for j in in_neighbors(g,i)
-            if (_insert_and_dedup!(newfadj[i], j))
-                edgect += 2     # this is a new edge only in badjlist
-            else
-                edgect += 1     # this is an existing edge - we already have it
-                if i == j
-                    edgect += 1 # need to count self loops
-                end
-            end
+                back = last(ies)
+                pindex = g.epos[idx].second
+                g.epos[back.idx].second = pindex
+                ies[pindex] = back
+                pop!(ies)
+        else
+            return false
         end
     end
-    iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
-    return GTGraph(edgect ÷ 2, newfadj)
+
+    g.ne -= 1
+    push!(g.free_indexes, idx)
+    return true
 end
 
-#### fallbaks override #######
-out_adjlist(g::SimpleGTGraph) = g.fadjlist
-in_adjlist(g::GTDiGraph) = g.badjlist
-
-=={G<:SimpleGTGraph}(g::G, h::G) = nv(g) == nv(h) &&
-                ne(g) == ne(h) && g.fadjlist == h.fadjlist
-
-
-function has_edge(g::GTGraph, e::Edge)
-    u, v = e
-    u > nv(g) || v > nv(g) && return false
-    if degree(g,u) > degree(g,v)
-        u, v = v, u
-    end
-    return length(searchsorted(neighbors(g,u), v)) > 0
-end
-
-function has_edge(g::GTDiGraph, e::Edge) = has_edge(g, src(e), dst(e))
-function has_edge(g::GTDiGraph, u::Int, v::Int)
-    u > nv(g) || v > nv(g) && return false
-    if degree(g,u) < degree(g,v)
-        return length(searchsorted(out_neighbors(g,u), v)) > 0
+function edge(g::GTDiGraph, i::Int, j::Int)
+    oes = g.out_edges[i]
+    pos = findfirst(e->e.first==j, oes)
+    if pos != 0
+        return GTEdge(i, j, oes[pos]->second)
     else
-        return length(searchsorted(in_neighbors(g,v), u)) > 0
+        return GTEdge(i, j, -1)
+    end
+end
+
+function out_edges(g::GTDiGraph, i::Int)
+    oes = g.out_edges[i]
+    return (GTEdge(i, j, idx) for (j, idx) in oes)
+end
+
+function out_neighbors(g::GTDiGraph, i::Int)
+    oes = g.out_edges[i]
+    return (j for (j, idx) in oes)
+end
+
+function in_edges(g::GTDiGraph, i::Int)
+    ies = g.in_edges[i]
+    return (GTEdge(j, i, idx) for (j, idx) in ies)
+end
+
+function in_neighbors(g::GTDiGraph, i::Int)
+    ies = g.in_edges[i]
+    return (j for (j, idx) in ies)
+end
+
+# O(k + k_last)
+function rem_vertex!(g::GTDiGraph, v::Int)
+    back = length(g.out_edges)
+
+    if v <= back
+        clear_vertex!(g, v)
+        g.out_edges[back], g.out_edges[v] = (g.out_edges[v], g.out_edges[back])
+        g.in_edges[back], g.in_edges[v] = (g.in_edges[v], g.in_edges[back])
+        pop!(g.out_edges)
+        pop!(g.in_edges)
+
+        auto rename_v = [&] (auto& out_edges, auto& in_edges,
+                             const auto& get_pos)
+            {
+                for (auto& eu : out_edges[v])
+                {
+                    Vertex u = eu.first;
+                    if (u == back)
+                    {
+                        eu.first = v;
+                    }
+                    else
+                    {
+                        if (!g._keep_epos)
+                        {
+                            for (auto& e : in_edges[u])
+                            {
+                                if (e.first == back)
+                                    e.first = v;
+                            }
+                        }
+                        else
+                        {
+                            size_t idx = eu.second;
+                            auto pos = get_pos(idx);
+                            in_edges[u][pos].first = v;
+                        }
+                    }
+                }
+            };
+
+        rename_v(g._out_edges, g._in_edges,
+                 [&](size_t idx) -> auto {return g._epos[idx].second;});
+        rename_v(g._in_edges, g._out_edges,
+                 [&](size_t idx) -> auto {return g._epos[idx].first;});
+
+    else
+        clear_vertex!(g, v)
+        pop!(g.out_edges)
+        pop!(g.in_edges)
+    end
+end
+
+
+function clear_vertex(g::GTDiGraph, v::Int)
+    if !g.keep_epos
+        function remove_es(out_edges, in_edges)
+            oes = out_edges[v]
+            for oe in oes
+                t = oe.first
+                ies = in_edges[t]
+                filter!(ei-> begin
+                               if ei.first == v
+                                   push!(g.free_indexes, ei.second)
+                                   return false
+                               else
+                                   return true
+                               end
+                            end
+                        , ies)
+            end
+            g.ne -= length(oes)
+        end
+        remove_es(g.out_edges, g.in_edges)
+        remove_es(g.in_edges, g.out_edges)
+    else
+        auto remove_es = [&] (auto& out_edges, auto& in_edges,
+                              const auto& get_pos)
+        {
+            auto& oes = out_edges[v];
+            for (const auto& ei : oes)
+            {
+                Vertex t = ei.first;
+                size_t idx = ei.second;
+                auto& ies = in_edges[t];
+                auto& back = ies.back();
+                auto& pos = get_pos(idx);
+                auto& bpos = get_pos(back.second);
+                bpos = pos;
+                ies[pos] = back;
+                ies.pop_back();
+                g._free_indexes.push_back(idx);
+            }
+            g._n_edges -= oes.size();
+            oes.clear();
+        };
+        remove_es(g._out_edges, g._in_edges,
+                  [&](size_t idx) -> auto& {return g._epos[idx].second;});
+        remove_es(g._in_edges, g._out_edges,
+                  [&](size_t idx) -> auto& {return g._epos[idx].first;});
     end
 end
