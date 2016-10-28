@@ -220,6 +220,26 @@ Returns an iterator to the edges in `g` coming from vertex `v`.
 """
 out_edges(g::ASimpleGraph, v::Int) = (edge(g, v, x) for x in out_neighbors(g, v))
 
+"""
+    edges(g, v)
+
+Returns an iterator to the edges in `g` coming from vertex `v`.
+`v == src(e)` for each returned edge `e`.
+
+It is equivalent to [`out_edges`](@ref).
+
+For digraphs, use [`all_edges`](@ref) to iterate over
+both in and out edges.
+"""
+edges(g::ASimpleGraph, v::Int) = out_edges(g, v)
+
+"""
+    all_edges(g, v)
+
+Iterates over all in and out edges of vertex `v` in `g`.
+"""
+all_edges(g::AGraph, v::Int) = out_edges(g, v)
+all_edges(g::ADiGraph, v::Int) = chain(out_edges(g, v), in_edges(g, v))
 
 #TODO define for abstract types
 """

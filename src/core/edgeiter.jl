@@ -11,26 +11,17 @@ over the edges between vertex in `vertices`.
 function edges end
 
 edges(g::ADiGraph) = nv(g) == 0 ? #julia issue #18852
-                        (edge(g, u, v) for u=1:1 for v=1:0) :
-                        (edge(g, u, v) for u=1:nv(g) for v in out_neighbors(g, u))
+                (edge(g, u, v) for u=1:1 for v=1:0) :
+                (e for u=1:nv(g) for e in out_edges(g, u))
 
 edges(g::AGraph) = nv(g) == 0 ? #julia issue #18852
-                        (edge(g, u, v) for u=1:1 for v=1:0) :
-                        (edge(g, u, v) for u=1:nv(g) for v in out_neighbors(g, u) if u <= v)
+                (edge(g, u, v) for u=1:1 for v=1:0) :
+                (e for u=1:nv(g) for e in out_edges(g, u) if src(e) <= dst(e))
 
 edges(g::ADiGraph, vs::AbstractVector) = length(vs) == 0 ? #julia issue #18852
-                        (edge(g, u, v) for u=1:1 for v=1:0) :
-                        (edge(g, u, v) for u in vs for v in out_neighbors(g, u) if v ∈ vs)
+                (edge(g, u, v) for u=1:1 for v=1:0) :
+                (e for u in vs for e in out_edges(g, u) if dst(e) ∈ vs)
 
 edges(g::AGraph, vs::AbstractVector) = length(vs) == 0 ? #julia issue #18852
-                        (edge(g, u, v) for u=1:1 for v=1:0) :
-                        (edge(g, u, v) for u in vs for v in out_neighbors(g, u) if u <= v && v ∈ vs)
-
-"""
-    edges(g, v)
-
-Returns an iterator to the edges in `g` coming from vertex `v`.
-`v == src(e)` for each returned edge `e`.
-This is equivalent to [`out_edges`](@ref)(g, v).
-"""
-edges(g::ASimpleGraph, v::Int) = out_edges(g, v)
+                (edge(g, u, v) for u=1:1 for v=1:0) :
+                (e for u in vs for e in out_edges(g, u) if src(e) <= dst(e) && dst(e) ∈ vs)
