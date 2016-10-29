@@ -148,6 +148,28 @@ end
 
 copy(g::ASimpleGraph) = deepcopy(g)
 
+graph(g::AGraph) = g
+digraph(g::ADiGraph) = g
+
+function digraph(g::AGraph)
+    G = digraphtype(g)
+    h = G(nv(g))
+    for e in edges(g)
+        add_edge!(h, src(e), dst(e))
+        add_edge!(h, dst(e), src(e))
+    end
+    return h
+end
+
+function graph(g::ADiGraph)
+    G = graphtype(g)
+    h = G(nv(g))
+    for e in edges(g)
+        add_edge!(h, src(e), dst(e))
+    end
+    return h
+end
+
 #### FALLBACKS #################
 function =={G<:ASimpleGraph}(g::G, h::G)
     nv(g) != nv(h) && return false
@@ -218,29 +240,6 @@ function has_edge(g::ADiGraph, u::Int, v::Int)
     end
 end
 
-
-graph(g::AGraph) = g
-digraph(g::ADiGraph) = g
-
-function digraph(g::AGraph)
-    G = digraphtype(g)
-    h = G(nv(g))
-    for e in edges(g)
-        add_edge!(h, src(e), dst(e))
-        add_edge!(h, dst(e), src(e))
-    end
-    return h
-end
-
-function graph(g::ADiGraph)
-    G = graphtype(g)
-    h = G(nv(g))
-    for e in edges(g)
-        add_edge!(h, src(e), dst(e))
-    end
-    return h
-end
-
 """
     in_edges(g, v)
 
@@ -297,8 +296,6 @@ In-place reverse (modifies the original graph).
 """
 reverse!(g::ADiGraph) = nothing
 
-
-### EDGE #################
-has_edge(g::ASimpleGraph, e::Edge) = has_edge(g, src(e), dst(e))
-add_edge!(g::ASimpleGraph, e::Edge) = add_edge!(g, src(e), dst(e))
-rem_edge!(g::ASimpleGraph, e::Edge) = rem_edge!(g, src(e), dst(e))
+add_edge!(g::ASimpleGraph, e::AEdge) = add_edge!(g, src(e), dst(e))
+rem_edge!(g::ASimpleGraph, e::AEdge) = rem_edge!(g, src(e), dst(e))
+has_edge(g::ASimpleGraph, e::AEdge) = has_edge(g, src(e), dst(e))

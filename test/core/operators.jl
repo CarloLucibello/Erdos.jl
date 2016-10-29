@@ -21,10 +21,10 @@ g = blkdiag(g3, g3)
 @test nv(g) == 10
 @test ne(g) == 8
 
-h = PathGraph(2)
+h = PathGraph(2, G)
 @test intersect(g3, h) == h
 
-h = PathGraph(4)
+h = PathGraph(4, G)
 z = difference(g3, h)
 @test nv(z) == 5
 @test ne(z) == 1
@@ -37,22 +37,22 @@ z = symmetric_difference(h,g3)
 @test nv(z) == 5
 @test ne(z) == 1
 
-h = Graph(6)
+h = G(6)
 add_edge!(h, 5, 6)
 e = Edge(5, 6)
 z = union(g3, h)
 @test has_edge(z, e)
-@test z == PathGraph(6)
+@test z == PathGraph(6, G)
 
-h = DiGraph(6)
+h = DG(6)
 add_edge!(h, 5, 6)
 e = Edge(5, 6)
 z = union(g4, h)
 @test has_edge(z, e)
-@test z == PathDiGraph(6)
+@test z == PathDiGraph(6, DG)
 
-g10 = CompleteGraph(2)
-h10 = CompleteGraph(2)
+g10 = CompleteGraph(2, G)
+h10 = CompleteGraph(2, G)
 z = blkdiag(g10, h10)
 @test nv(z) == nv(g10) + nv(h10)
 @test ne(z) == ne(g10) + ne(h10)
@@ -63,8 +63,8 @@ z = blkdiag(g10, h10)
 @test !has_edge(z, 2, 3)
 @test !has_edge(z, 2, 4)
 
-g10 = Graph(2)
-h10 = Graph(2)
+g10 = G(2)
+h10 = G(2)
 z = join(g10, h10)
 @test nv(z) == nv(g10) + nv(h10)
 @test ne(z) == 4
@@ -75,7 +75,7 @@ z = join(g10, h10)
 @test has_edge(z, 2, 3)
 @test has_edge(z, 2, 4)
 
-p = PathGraph(10)
+p = PathGraph(10, G)
 x = p*ones(10)
 @test  x[1]==1.0 && all(x[2:end-1].==2.0) && x[end]==1.0
 
@@ -84,7 +84,7 @@ x = p*ones(10)
 @test size(p, 3) == 1
 
 
-g5 = DiGraph(4)
+g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 @test g5 * ones(nv(g5)) == [2.0, 1.0, 1.0, 0.0]
 @test sum(g5, 1) ==  [0, 1, 2, 1]
@@ -100,20 +100,20 @@ add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 @test issymmetric(p)
 @test !issymmetric(g5)
 
-g22 = CompleteGraph(2)
+g22 = CompleteGraph(2, G)
 h = cartesian_product(g22, g22)
 @test nv(h) == 4
 @test ne(h)== 4
 
-g22 = CompleteGraph(2)
+g22 = CompleteGraph(2, G)
 h = tensor_product(g22, g22)
 @test nv(h) == 4
 @test ne(h) == 1
 
 nx = 20; ny = 21
-gg = PathGraph(ny); hh = PathGraph(nx)
+gg = PathGraph(ny, G); hh = PathGraph(nx, G)
 c = cartesian_product(gg, hh)
-g = crosspath(ny, PathGraph(nx));
+g = crosspath(ny, PathGraph(nx, G));
 @test g == c
 
 function crosspath_slow(len, h)
@@ -148,7 +148,7 @@ h = g[[1,5]]
 @test ne(h) == 0
 @test typeof(h) == typeof(g)
 
-g = DiGraph(100,200)
+g = DG(100,200)
 h = g[5:26]
 @test nv(h) == 22
 @test typeof(h) == typeof(g)
@@ -182,5 +182,5 @@ sg, vm = subgraph(gg5, elist)
 
 
 g10 = StarGraph(10)
-@test egonet(g10, 1, 0) == Graph(1,0)
+@test egonet(g10, 1, 0) == G(1,0)
 @test egonet(g10, 1, 1) == g10

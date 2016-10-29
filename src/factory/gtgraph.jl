@@ -1,4 +1,4 @@
-immutable GTEdge <: AbstractEdge
+immutable GTEdge <: AEdge
     src::Int
     dst::Int
     idx::Int
