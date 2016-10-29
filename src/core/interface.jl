@@ -15,9 +15,8 @@ Functions to implement:
     rem_edge!(g, u, v)
     add_vertex!(g)
     rem_vertex!(g, v)
-    copy(g)
-    graph(g)
-    digraph(g)
+    graphtype(g)
+    digraphtype(g)
 
 Reccomended Overrides:
     in_adjlist(g) #digraph
@@ -26,7 +25,6 @@ Reccomended Overrides:
     ==(g, h)
     out_edges(g, u)
     in_edges(g, u) # digraph
-    add_edge!(g, e)
     rem_edge!(g, e)
 """
 abstract AbstractGraph
@@ -134,6 +132,5 @@ in `g`.
 """
 edge(g::ASimpleGraph, u::Int, v::Int) = nothing
 
-graph(g::ASimpleGraph) = nothing
-digraph(g::ASimpleGraph) = nothing
-copy(g::ASimpleGraph) = nothing
+graphtype(g::ADiGraph) = nothing
+digraphtype(g::AGraph) = nothing

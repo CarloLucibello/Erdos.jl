@@ -21,7 +21,8 @@ using Iterators: distinct, chain # all_neighbors
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims, transpose,
-            ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!
+            ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!,
+            sort
 
 #interface
 export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
@@ -38,7 +39,7 @@ in_edges, out_edges, all_edges,
 has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
 indegree, outdegree, degree, has_self_loops, num_self_loops,
-rem_vertex!,
+rem_vertex!, edge, clean_vertex!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,

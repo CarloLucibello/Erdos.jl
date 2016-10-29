@@ -293,7 +293,6 @@ function subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
     vset = Set(vlist)
     for s in vlist
         for d in out_neighbors(g, s)
-            # println("s = $s, d = $d")
             if d in vset && has_edge(g, s, d)
                 add_edge!(h, newvid[s], newvid[d])
             end

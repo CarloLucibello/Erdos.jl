@@ -115,10 +115,6 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     return true
 end
 
-function copy(g::Graph)
-    return Graph(g.ne, deepcopy(g.fadjlist))
-end
-
 function add_edge!(g::Graph, s::Int, d::Int)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
@@ -247,38 +243,8 @@ end
 out_neighbors(g::SimpleGraph,v::Int) = g.fadjlist[v]
 in_neighbors(g::DiGraph,v::Int) = g.badjlist[v]
 
-
-function digraph(g::Graph)
-    h = DiGraph(nv(g))
-    h.ne = ne(g) * 2 - num_self_loops(g)
-    h.fadjlist = deepcopy(g.fadjlist)
-    h.badjlist = deepcopy(g.fadjlist)
-    return h
-end
-
-graph(g::Graph) = g
-digraph(g::DiGraph) = g
-
-function graph(g::DiGraph)
-    gnv = nv(g)
-
-    edgect = 0
-    newfadj = deepcopy(g.fadjlist)
-    for i in 1:gnv
-        for j in in_neighbors(g,i)
-            if (_insert_and_dedup!(newfadj[i], j))
-                edgect += 2     # this is a new edge only in badjlist
-            else
-                edgect += 1     # this is an existing edge - we already have it
-                if i == j
-                    edgect += 1 # need to count self loops
-                end
-            end
-        end
-    end
-    iseven(edgect) || throw(AssertionError("invalid edgect in graph creation - please file bug report"))
-    return Graph(edgect ÷ 2, newfadj)
-end
+graphtype(g::DiGraph) = Graph
+digraphtype(g::Graph) = DiGraph
 
 edge(g::DiGraph, u::Int, v::Int) = Edge(u, v)
 edge(g::Graph, u::Int, v::Int) = Edge(u, v)
@@ -302,7 +268,7 @@ end
 
 function has_edge(g::DiGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
-    if degree(g,u) < degree(g,v)
+    if outdegree(g,u) < indegree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0
     else
         return length(searchsorted(in_neighbors(g,v), u)) > 0

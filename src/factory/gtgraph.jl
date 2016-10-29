@@ -4,6 +4,10 @@ immutable GTEdge <: AbstractEdge
     idx::Int
 end
 
+src(e::GTEdge) = e.src
+dst(e::GTEdge) = e.dst
+id(e::GTEdge) = e.idx
+show(io::IO, e::GTEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
 
 """A type representing an undirected graph."""
 type GTDiGraph <: AbstractDiGraph
@@ -43,8 +47,22 @@ function GTDiGraph(n::Int = 0)
     return GTDiGraph(0, 0, out_edges, in_edges, keep_epos, epos, free_indexes)
 end
 
+function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+    dima,dimb = size(adjmx)
+    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
+
+    g = GTDiGraph(dima)
+    for i in find(adjmx)
+        ind = ind2sub((dima,dimb),i)
+        add_edge!(g,ind...)
+    end
+    return g
+end
+
 
 GTDiGraph(n::Int, m::Int; seed::Int=-1) = erdos_renyi(n, m, GTDiGraph; seed=seed)
+
+graphtype(g::GTDiGraph) = Graph
 
 nv(g::GTDiGraph) = length(g.out_edges)
 ne(g::GTDiGraph) = g.ne
@@ -57,7 +75,7 @@ end
 
 function add_edge!(g::GTDiGraph, u::Int, v::Int)
     (u in vertices(g) && v in vertices(g)) || return false
-    has_edge(g, u, v) || return false # could be removed for multigraphs
+    has_edge(g, u, v) && return false # could be removed for multigraphs
     if isempty(g.free_indexes)
         g.edge_index_range += 1
         idx = g.edge_index_range
@@ -106,9 +124,8 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
     idx = e.idx
     oes = g.out_edges[s]
     ies = g.in_edges[t]
-    if !g._keep_epos # O(k_s + k_t)
-
-        po = findfirst(e->e.first==s && e.second==idx, oes)
+    if !g.keep_epos # O(k_s + k_t)
+        po = findfirst(e->e.first==t && e.second==idx, oes)
         po == 0 && return false
         deleteat!(oes, po)
 
@@ -142,6 +159,7 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
 end
 
 function edge(g::GTDiGraph, i::Int, j::Int)
+    (i > nv(g) || j > nv(g)) && return GTEdge(i, j, -1)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
     if pos != 0

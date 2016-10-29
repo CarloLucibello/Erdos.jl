@@ -146,12 +146,16 @@ function clean_vertex!(g::ASimpleGraph, v::Int)
     end
 end
 
+copy(g::ASimpleGraph) = deepcopy(g)
+
 #### FALLBACKS #################
 function =={G<:ASimpleGraph}(g::G, h::G)
     nv(g) != nv(h) && return false
     ne(g) != ne(h) && return false
     for i=1:nv(g)
-        sort(out_neighbors(g, i)) != sort(out_neighbors(g, i)) && return false
+        if sort(collect(out_neighbors(g, i))) != sort(collect(out_neighbors(h, i)))
+            return false
+        end
     end
     return true
 end
@@ -202,18 +206,40 @@ function has_edge(g::AGraph, u::Int, v::Int)
     if degree(g, u) > degree(g, v)
         u, v = v, u
     end
-    return findfirst(neighbors(g, u), v) > 0
+    return v ∈ neighbors(g, u)
 end
 
 function has_edge(g::ADiGraph, u::Int, v::Int)
-    u > nv(g) || v > nv(g) && return false
-    if degree(g, u) < degree(g, v)
-        return findfirst(out_neighbors(g, u), v) > 0
+    (u > nv(g) || v > nv(g)) && return false
+    if outdegree(g, u) < indegree(g, v)
+        return v ∈ out_neighbors(g, u)
     else
-        return findfirst(in_neighbors(g, v), u) > 0
+        return u ∈ in_neighbors(g, v)
     end
 end
 
+
+graph(g::AGraph) = g
+digraph(g::ADiGraph) = g
+
+function digraph(g::AGraph)
+    G = digraphtype(g)
+    h = G(nv(g))
+    for e in edges(g)
+        add_edge!(h, src(e), dst(e))
+        add_edge!(h, dst(e), src(e))
+    end
+    return h
+end
+
+function graph(g::ADiGraph)
+    G = graphtype(g)
+    h = G(nv(g))
+    for e in edges(g)
+        add_edge!(h, src(e), dst(e))
+    end
+    return h
+end
 
 """
     in_edges(g, v)
@@ -251,6 +277,7 @@ Iterates over all in and out edges of vertex `v` in `g`.
 """
 all_edges(g::AGraph, v::Int) = out_edges(g, v)
 all_edges(g::ADiGraph, v::Int) = chain(out_edges(g, v), in_edges(g, v))
+#TODO fix chain eltype, since collect gives Any[...]
 
 #TODO define for abstract types
 """

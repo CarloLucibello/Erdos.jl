@@ -16,7 +16,7 @@ e3 = Edge(1,4)
 e4 = Edge(2,5)
 e5 = Edge(3,5)
 
-g = Graph(5)
+g = G(5)
 @test add_edge!(g, 1, 2)
 @test add_edge!(g, e2)
 @test add_edge!(g, e3)
@@ -24,7 +24,7 @@ g = Graph(5)
 @test add_edge!(g, e5)
 
 
-h = DiGraph(5)
+h = DG(5)
 @test add_edge!(h, 1, 2)
 @test add_edge!(h, e2)
 @test add_edge!(h, e3)
@@ -40,7 +40,7 @@ end
 @test has_edge(g,3,5)
 # @test edges(g) == Set([e1, e2, e3, e4, e5])
 # @test Set{Edge}(edges(g)) == Set([e1, e2, e3, e4, e5])
-
+#
 @test degree(g) == [3, 2, 2, 1, 2]
 @test indegree(g) == [3, 2, 2, 1, 2]
 @test indegree(g,1) == 3
@@ -51,8 +51,8 @@ end
 @test indegree(h,1) == 0
 @test outdegree(h) == [3, 1, 1, 0, 0]
 @test outdegree(h,1) == 3
-@test in_neighbors(h,5) == in_adjlist(h)[5]  == [2, 3]
-@test out_neighbors(h,1) == out_adjlist(h)[1]  == [2, 3, 4]
+@test collect(in_neighbors(h,5)) == in_adjlist(h)[5]  == [2, 3]
+@test collect(out_neighbors(h,1)) == out_adjlist(h)[1]  == [2, 3, 4]
 
 @test issubset(h2, h1)
 
@@ -74,15 +74,15 @@ end
 @test δ(h) == δout(h)
 @test δin(h) == 0
 @test δout(h) == 0
-@test CompleteGraph(4) == CompleteGraph(4)
-@test CompleteGraph(4) != PathGraph(4)
-@test CompleteDiGraph(4) != PathDiGraph(4)
-@test CompleteDiGraph(4) == CompleteDiGraph(4)
+@test CompleteGraph(4, G) == CompleteGraph(4, G)
+@test CompleteGraph(4, G) != PathGraph(4, G)
+@test CompleteDiGraph(4, DG) != PathDiGraph(4, DG)
+@test CompleteDiGraph(4, DG) == CompleteDiGraph(4, DG)
 
-@test degree_histogram(CompleteDiGraph(10)).weights == [10]
-@test degree_histogram(CompleteGraph(10)).weights == [10]
+@test degree_histogram(CompleteDiGraph(10, DG)).weights == [10]
+@test degree_histogram(CompleteGraph(10, G)).weights == [10]
 
-@test neighbors(g, 1) == [2, 3, 4]
+@test collect(neighbors(g, 1)) == [2, 3, 4]
 @test common_neighbors(g, 2, 3) == [1, 5]
 @test common_neighbors(h, 2, 3) == common_outneighbors(h, 2, 3)
 @test common_inneighbors(h, 2, 3) == [1]
@@ -125,55 +125,86 @@ end
 
 @test g == copy(g)
 @test !(g === copy(g))
-g10 = CompleteGraph(5)
+g10 = CompleteGraph(5, G)
 @test rem_vertex!(g10, 1)
-@test g10 == CompleteGraph(4)
+@test g10 == CompleteGraph(4, G)
 @test rem_vertex!(g10, 4)
-@test g10 == CompleteGraph(3)
+@test g10 == CompleteGraph(3, G)
 @test !rem_vertex!(g10, 9)
 
-g10 = CompleteDiGraph(5)
+
+g = G(10)
+add_edge!(g, 1, 2)
+add_edge!(g, 1, 3)
+ga = G(10)
+add_edge!(ga, 1, 2)
+add_edge!(ga, 1, 4)
+@test !(ga == g)
+@test ga != g
+
+g10 = CompleteDiGraph(5, DG)
+for i=2:5
+    @test rem_edge!(g10, 1, i)
+    @test ne(g10) == 21-i
+end
+@test indegree(g10, 1) == 4
+@test outdegree(g10, 1) == 0
+
+g = CompleteDiGraph(5, DG)
+@test ne(g) == 20
+@test nv(g) == 5
+clean_vertex!(g, 1)
+@test ne(g) == 12
+@test nv(g) == 5
+@test indegree(g, 1) == 0
+@test outdegree(g, 1) == 0
+for i=2:5
+    @test indegree(g, i) == 3
+    @test outdegree(g, i) == 3
+end
+
+g10 = CompleteDiGraph(5, DG)
 @test rem_vertex!(g10, 1)
-@test g10 == CompleteDiGraph(4)
+@test g10 == CompleteDiGraph(4, DG)
 rem_vertex!(g10, 4)
-@test g10 == CompleteDiGraph(3)
+@test g10 == CompleteDiGraph(3, DG)
 @test !rem_vertex!(g10, 9)
-g10 = PathGraph(5)
+g10 = PathGraph(5, G)
 @test rem_vertex!(g10, 5)
-@test g10 == PathGraph(4)
+@test g10 == PathGraph(4, G)
 @test rem_vertex!(g10, 4)
-@test g10 == PathGraph(3)
+@test g10 == PathGraph(3, G)
 
-g10 = PathDiGraph(5)
+g10 = PathDiGraph(5, DG)
 @test rem_vertex!(g10, 5)
-@test g10 == PathDiGraph(4)
+@test g10 == PathDiGraph(4, DG)
 @test rem_vertex!(g10, 4)
-@test g10 == PathDiGraph(3)
+@test g10 == PathDiGraph(3, DG)
 
-g10 = PathDiGraph(5)
+g10 = PathDiGraph(5, DG)
 @test rem_vertex!(g10, 1)
-h10 = PathDiGraph(6)
+h10 = PathDiGraph(6, DG)
 @test rem_vertex!(h10, 1)
 @test rem_vertex!(h10, 1)
 @test g10 == h10
 
-g10 = CycleGraph(5)
+g10 = CycleGraph(5, G)
 @test rem_vertex!(g10, 5)
-@test g10 == PathGraph(4)
+@test g10 == PathGraph(4, G)
 
 g10 = PathGraph(3)
 @test rem_vertex!(g10, 2)
-@test g10 == Graph(2)
+@test g10 == G(2)
 
-g10 = PathGraph(4)
+g10 = PathGraph(4, G)
 @test rem_vertex!(g10, 3)
-h10 =Graph(3)
+h10 =G(3)
 @test add_edge!(h10,1,2)
 @test g10 == h10
 
-g10 = CompleteGraph(5)
+g10 = CompleteGraph(5, G)
 @test rem_vertex!(g10, 3)
-@test g10 == CompleteGraph(4)
+@test g10 == CompleteGraph(4, G)
 
 @test sprint(show, h1) == "{5, 0} undirected graph"
 @test sprint(show, h3) == "empty undirected graph"
@@ -184,7 +215,7 @@ g10 = CompleteGraph(5)
 # @test neighbors(g3, 3) == [2, 4]
 @test density(g3) == 0.4
 
-g = Graph(5)
+g = G(5)
 @test add_edge!(g, 1, 2)
 
 e2 = Edge(1,3)
@@ -259,16 +290,15 @@ badadjmx = [ 0 1 0; 1 0 1]
 @test !add_edge!(g, 100, 100)
 @test !add_edge!(h, 100, 100)
 
-@test_throws ErrorException Graph(sparse(adjmx2))
+@test_throws ErrorException G(sparse(adjmx2))
 
-g = Graph(sparse(adjmx1))
-h = DiGraph(sparse(adjmx1))
+g = G(sparse(adjmx1))
+h = DG(sparse(adjmx1))
 
 @test (nv(g), ne(g)) == (3, 2)
 @test (nv(h), ne(h)) == (3, 4)
 @test graph(h) == g
 
-
-
-@test neighbors(WheelDiGraph(10),2) == out_neighbors(WheelDiGraph(10),2)
-@test out_neighbors(WheelDiGraph(10),2) == [3]
+@test collect(neighbors(WheelDiGraph(10, DG),2)) ==
+    collect(out_neighbors(WheelDiGraph(10, DG),2))
+@test collect(out_neighbors(WheelDiGraph(10, DG),2)) == [3]
