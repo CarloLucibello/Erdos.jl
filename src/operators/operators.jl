@@ -150,58 +150,6 @@ Replicate `len` times `h` and connect each vertex with its copies in a path
 """
 crosspath(len::Integer, g::AGraph) = cartesian_product(PathGraph(len), g)
 
-
-# The following operators allow one to use a FatGraphs.Graph as a matrix in eigensolvers for spectral ranking and partitioning.
-# """Provides multiplication of a graph `g` by a vector `v` such that spectral
-# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize FatGraphs natively.
-# """
-function *{T<:Real}(g::AGraph, v::Vector{T})
-    length(v) == nv(g) || error("Vector size must equal number of vertices")
-    y = zeros(T, nv(g))
-    for e in edges(g)
-        i = src(e)
-        j = dst(e)
-        y[i] += v[j]
-        y[j] += v[i]
-    end
-    return y
-end
-
-function *{T<:Real}(g::ADiGraph, v::Vector{T})
-    length(v) == nv(g) || error("Vector size must equal number of vertices")
-    y = zeros(T, nv(g))
-    for e in edges(g)
-        i = src(e)
-        j = dst(e)
-        y[i] += v[j]
-    end
-    return y
-end
-
-"""sum(g,i) provides 1:indegree or 2:outdegree vectors"""
-function sum(g::ASimpleGraph, dim::Int)
-    dim == 1 && return indegree(g, vertices(g))
-    dim == 2 && return outdegree(g, vertices(g))
-    error("Graphs are only two dimensional")
-end
-
-
-size(g::ASimpleGraph) = (nv(g), nv(g))
-"""size(g,i) provides 1:nv or 2:nv else 1 """
-size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
-
-"""sum(g) provides the number of edges in the graph"""
-sum(g::ASimpleGraph) = ne(g)
-
-"""sparse(g) is the adjacency_matrix of g"""
-sparse(g::ASimpleGraph) = adjacency_matrix(g)
-
-#arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
-eltype(g::ASimpleGraph) = Float64
-length(g::ASimpleGraph) = nv(g)*nv(g)
-ndims(g::ASimpleGraph) = 2
-issymmetric(g::ASimpleGraph) = !is_directed(g)
-
 """
     cartesian_product(g, h)
 
@@ -339,3 +287,56 @@ the edge direction the edge direction with respect to `v` (i.e. `:in` or `:out`)
 to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
 """
 egonet(g::ASimpleGraph, v::Int, d::Int; dir=:out) = g[neighborhood(g, v, d, dir=dir)]
+
+
+# The following operators allow one to use a FatGraphs.Graph as a matrix in
+# eigensolvers for spectral ranking and partitioning.
+# """Provides multiplication of a graph `g` by a vector `v` such that spectral
+# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize FatGraphs natively.
+# """
+function *{T<:Number}(g::AGraph, v::Vector{T})
+    length(v) == nv(g) || error("Vector size must equal number of vertices")
+    y = zeros(T, nv(g))
+    for e in edges(g)
+        i = src(e)
+        j = dst(e)
+        y[i] += v[j]
+        y[j] += v[i]
+    end
+    return y
+end
+
+function *{T<:Number}(g::ADiGraph, v::Vector{T})
+    length(v) == nv(g) || error("Vector size must equal number of vertices")
+    y = zeros(T, nv(g))
+    for e in edges(g)
+        i = src(e)
+        j = dst(e)
+        y[i] += v[j]
+    end
+    return y
+end
+
+"""sum(g,i) provides 1:indegree or 2:outdegree vectors"""
+function sum(g::ASimpleGraph, dim::Int)
+    dim == 1 && return indegree(g, vertices(g))
+    dim == 2 && return outdegree(g, vertices(g))
+    error("Graphs are only two dimensional")
+end
+
+
+size(g::ASimpleGraph) = (nv(g), nv(g))
+"""size(g,i) provides 1:nv or 2:nv else 1 """
+size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
+
+"""sum(g) provides the number of edges in the graph"""
+sum(g::ASimpleGraph) = ne(g)
+
+"""sparse(g) is the adjacency_matrix of g"""
+sparse(g::ASimpleGraph) = adjacency_matrix(g)
+
+#arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
+eltype(g::ASimpleGraph) = Float64
+length(g::ASimpleGraph) = nv(g)*nv(g)
+ndims(g::ASimpleGraph) = 2
+issymmetric(g::ASimpleGraph) = !is_directed(g)
