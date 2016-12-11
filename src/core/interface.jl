@@ -1,5 +1,5 @@
 """
-Abstract Graph/DiGraph type
+Abstract (undirected) graph type
 
 Guarantees:
     vertices are integers in 1:nv(g)
@@ -27,20 +27,17 @@ Reccomended Overrides:
     in_edges(g, u) # digraph
     rem_edge!(g, e)
 """
-abstract AbstractGraph
-
-abstract AbstractDiGraph
-
-#TODO eventually remove graph/digraph methods (used only in a few functions)
+abstract AGraph
 
 """
-Union of `AbstractGraph` and `AbstractDiGraph`
+Abstract directed graph type
 """
-typealias AbstractSimpleGraph Union{AbstractGraph, AbstractDiGraph}
+abstract ADiGraph
 
-typealias AGraph AbstractGraph
-typealias ADiGraph AbstractDiGraph
-typealias ASimpleGraph AbstractSimpleGraph
+"""
+Union of `AGraph` and `ADiGraph`
+"""
+typealias ASimpleGraph Union{AGraph, ADiGraph}
 
 ####### Required interface for concrete types ########################
 
@@ -105,20 +102,21 @@ It may change the index of other vertices (usually of the last one).
 """
 rem_vertex!(g::ASimpleGraph, i::Int) = nothing
 
-
+# length() has to be appliable to the result
 """
     in_neighbors(g, v::Int)
 
-Returns a list of all neighbors connected to vertex `v` by an incoming edge.
+Returns an iterable to all neighbors connected to vertex `v` by an incoming edge.
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
 in_neighbors(g::ADiGraph, v::Int) = nothing
 
+# length() has to be appliable to the result
 """
     out_neighbors(g::ASimpleGraph, v::Int)
 
-Returns a list of all neighbors connected to vertex `v` by an outgoing edge.
+Returns an iterable to all neighbors connected to vertex `v` by an outgoing edge.
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """

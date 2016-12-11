@@ -5,7 +5,6 @@ Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
 """
 vertices(g::ASimpleGraph) = 1:nv(g)
 
-
 """
     adjlist(g)
 
@@ -17,16 +16,6 @@ therefore the returned object should not be modified.
 """
 adjlist(g::ASimpleGraph) = out_adjlist(g)
 in_adjlist(g::AGraph) = out_adjlist(g)
-
-"""
-    issubset(g, h)
-
-Returns true if all of the vertices and edges of `g` are contained in `h`.
-"""
-function issubset{T<:ASimpleGraph}(g::T, h::T)
-    return nv(g) < nv(h) && issubset(edges(g), edges(h))
-end
-
 
 """
     add_vertices!(g, n)
@@ -147,6 +136,9 @@ function clean_vertex!(g::ASimpleGraph, v::Int)
 end
 
 copy(g::ASimpleGraph) = deepcopy(g)
+
+graphtype{G<:AGraph}(g::G) = G
+digraphtype{G<:ADiGraph}(g::G) = G
 
 graph(g::AGraph) = g
 digraph(g::ADiGraph) = g

@@ -26,7 +26,8 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             sort, push!, pop!
 
 #interface
-export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
+export AGraph, ADiGraph, ASimpleGraph,
+    graphtype, digraphtype,
 
 # edge
 Edge, is_ordered, reverse, #sort

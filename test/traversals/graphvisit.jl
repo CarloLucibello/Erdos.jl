@@ -9,7 +9,7 @@ g6 = graph(:house, G)
 
 
 function trivialgraphvisit(
-    g::AbstractSimpleGraph,
+    g::ASimpleGraph,
     alg::FatGraphs.SimpleGraphVisitAlgorithm,
     sources
 )

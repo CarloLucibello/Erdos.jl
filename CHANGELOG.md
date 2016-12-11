@@ -10,7 +10,7 @@
 - file and folders reorganization
 - [I/O] rename save/load to readgraph/writegraph and drop support for multiple graphs in one file
 - in_edges and out_edges now return iterators and not vectors
-- introduce AbstractGraph, AbstractDiGraph, AbstractSimpleGraph
+- introduce abstract types AGraph, ADiGraph, ASimpleGraph
 - make most methods accept abstract types
 - change the return type of add_vertex! to nv(g)
 - removed dynamic stochastic block model

@@ -1,4 +1,13 @@
 """
+    issubset(g, h)
+
+Returns true if all of the vertices and edges of `g` are contained in `h`.
+"""
+function issubset{T<:ASimpleGraph}(g::T, h::T)
+    return nv(g) < nv(h) && issubset(edges(g), edges(h))
+end
+
+"""
     complement(g)
 
 Produces the [graph complement](https://en.wikipedia.org/wiki/Complement_graph)

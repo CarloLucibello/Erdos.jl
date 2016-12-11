@@ -1,5 +1,5 @@
 """
-    type Graph <: AbstractGraph
+    type Graph <: AGraph
         ne::Int
         fadjlist::Vector{Vector{Int}}
     end
@@ -15,13 +15,13 @@ Construct an empty Graph with `n` vertices.
 
 Construct a `Graph` from the adjacency matrix `adjmx`.
 """
-type Graph <: AbstractGraph
+type Graph <: AGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
 end
 
 """
-    type DiGraph <: AbstractDiGraph
+    type DiGraph <: ADiGraph
         ne::Int
         fadjlist::Vector{Vector{Int}}
         badjlist::Vector{Vector{Int}}
@@ -38,7 +38,7 @@ Construct an empty DiGraph with `n` vertices.
 
 Construct a `DiGraph` from the adjacency matrix `adjmx`.
 """
-type DiGraph <: AbstractDiGraph
+type DiGraph <: ADiGraph
     ne::Int
     fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{Int}} # [dst]: (src, src, src)

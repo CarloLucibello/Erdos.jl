@@ -10,7 +10,7 @@ id(e::GTEdge) = e.idx
 show(io::IO, e::GTEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
 
 """A type representing an undirected graph."""
-type GTDiGraph <: AbstractDiGraph
+type GTDiGraph <: ADiGraph
     ne::Int
     edge_index_range::Int
 
