@@ -67,29 +67,29 @@ is_directed{G<:AGraph}(::Type{G}) = false
 is_directed{G<:ADiGraph}(::Type{G}) = true
 
 """
-    indegree(g, v)
+    in_degree(g, v)
 
 Returns the number of edges which start at vertex `v`.
 """
-indegree(g::ASimpleGraph, v::Int) = length(in_neighbors(g,v))
+in_degree(g::ASimpleGraph, v::Int) = length(in_neighbors(g,v))
 
 """
-    outdegree(g, v)
+    out_degree(g, v)
 
 Returns the number of edges which end at vertex `v`.
 """
-outdegree(g::ASimpleGraph, v::Int) = length(out_neighbors(g,v))
+out_degree(g::ASimpleGraph, v::Int) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
 
 Return the number of edges  from the vertex `v`.
 """
-degree(g::ASimpleGraph, v::Int) = outdegree(g, v)
+degree(g::ASimpleGraph, v::Int) = out_degree(g, v)
 
-indegree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [indegree(g,x) for x in v]
-outdegree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [outdegree(g,x) for x in v]
-degree(g::ASimpleGraph, v::AbstractArray{Int,1} = vertices(g)) = [degree(g,x) for x in v]
+in_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [in_degree(g,x) for x in v]
+out_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [out_degree(g,x) for x in v]
+degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [degree(g,x) for x in v]
 
 """
     neighbors(g, v)
@@ -225,7 +225,7 @@ end
 
 function has_edge(g::ADiGraph, u::Int, v::Int)
     (u > nv(g) || v > nv(g)) && return false
-    if outdegree(g, u) < indegree(g, v)
+    if out_degree(g, u) < in_degree(g, v)
         return v ∈ out_neighbors(g, u)
     else
         return u ∈ in_neighbors(g, v)

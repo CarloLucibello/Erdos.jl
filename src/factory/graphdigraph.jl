@@ -268,7 +268,7 @@ end
 
 function has_edge(g::DiGraph, u::Int, v::Int)
     u > nv(g) || v > nv(g) && return false
-    if outdegree(g,u) < indegree(g,v)
+    if out_degree(g,u) < in_degree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0
     else
         return length(searchsorted(in_neighbors(g,v), u)) > 0

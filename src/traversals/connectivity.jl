@@ -272,7 +272,7 @@ function attracting_components(g::ADiGraph)
     attracting = Vector{Int}()
 
     for v in vertices(cond)
-        if outdegree(cond,v) == 0
+        if out_degree(cond,v) == 0
             push!(attracting,v)
         end
     end

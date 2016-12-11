@@ -42,15 +42,15 @@ end
 # @test Set{Edge}(edges(g)) == Set([e1, e2, e3, e4, e5])
 #
 @test degree(g) == [3, 2, 2, 1, 2]
-@test indegree(g) == [3, 2, 2, 1, 2]
-@test indegree(g,1) == 3
-@test outdegree(g) == [3, 2, 2, 1, 2]
-@test outdegree(g,1) == 3
+@test in_degree(g) == [3, 2, 2, 1, 2]
+@test in_degree(g,1) == 3
+@test out_degree(g) == [3, 2, 2, 1, 2]
+@test out_degree(g,1) == 3
 @test degree(h) == [3, 1, 1, 0, 0]
-@test indegree(h) == [0, 1, 1, 1, 2]
-@test indegree(h,1) == 0
-@test outdegree(h) == [3, 1, 1, 0, 0]
-@test outdegree(h,1) == 3
+@test in_degree(h) == [0, 1, 1, 1, 2]
+@test in_degree(h,1) == 0
+@test out_degree(h) == [3, 1, 1, 0, 0]
+@test out_degree(h,1) == 3
 @test collect(in_neighbors(h,5)) == in_adjlist(h)[5]  == [2, 3]
 @test collect(out_neighbors(h,1)) == out_adjlist(h)[1]  == [2, 3, 4]
 
@@ -147,8 +147,8 @@ for i=2:5
     @test rem_edge!(g10, 1, i)
     @test ne(g10) == 21-i
 end
-@test indegree(g10, 1) == 4
-@test outdegree(g10, 1) == 0
+@test in_degree(g10, 1) == 4
+@test out_degree(g10, 1) == 0
 
 g = CompleteDiGraph(5, DG)
 @test ne(g) == 20
@@ -156,11 +156,11 @@ g = CompleteDiGraph(5, DG)
 clean_vertex!(g, 1)
 @test ne(g) == 12
 @test nv(g) == 5
-@test indegree(g, 1) == 0
-@test outdegree(g, 1) == 0
+@test in_degree(g, 1) == 0
+@test out_degree(g, 1) == 0
 for i=2:5
-    @test indegree(g, i) == 3
-    @test outdegree(g, i) == 3
+    @test in_degree(g, i) == 3
+    @test out_degree(g, i) == 3
 end
 
 g10 = CompleteDiGraph(5, DG)

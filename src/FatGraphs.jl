@@ -40,7 +40,7 @@ neighbors, in_neighbors, out_neighbors, all_neighbors,
 in_edges, out_edges, all_edges,
 has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
-indegree, outdegree, degree, has_self_loops, num_self_loops,
+in_degree, out_degree, degree, has_self_loops, num_self_loops,
 rem_vertex!, edge, clean_vertex!,
 
 # graph types (factory)
@@ -94,7 +94,7 @@ floyd_warshall_shortest_paths,
 
 # centrality
 betweenness_centrality, closeness_centrality, degree_centrality,
-indegree_centrality, outdegree_centrality, katz_centrality, pagerank,
+in_degree_centrality, out_degree_centrality, katz_centrality, pagerank,
 
 # spectral
 adjacency_matrix,laplacian_matrix, adjacency_spectrum, laplacian_spectrum,

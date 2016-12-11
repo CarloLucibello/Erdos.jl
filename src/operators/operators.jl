@@ -326,10 +326,10 @@ function *{T<:Number}(g::ADiGraph, v::Vector{T})
     return y
 end
 
-"""sum(g,i) provides 1:indegree or 2:outdegree vectors"""
+"""sum(g,i) provides 1:in_degree or 2:out_degree vectors"""
 function sum(g::ASimpleGraph, dim::Int)
-    dim == 1 && return indegree(g, vertices(g))
-    dim == 2 && return outdegree(g, vertices(g))
+    dim == 1 && return in_degree(g, vertices(g))
+    dim == 2 && return out_degree(g, vertices(g))
     error("Graphs are only two dimensional")
 end
 

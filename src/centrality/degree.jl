@@ -3,11 +3,11 @@ function _degree_centrality(g::ASimpleGraph, gtype::Integer; normalize=true)
    c = zeros(n_v)
    for v in 1:n_v
        if gtype == 0    # count both in and out degree if appropriate
-           deg = outdegree(g, v) + (is_directed(g) ? indegree(g, v) : 0.0)
+           deg = out_degree(g, v) + (is_directed(g) ? in_degree(g, v) : 0.0)
        elseif gtype == 1    # count only in degree
-           deg = indegree(g, v)
+           deg = in_degree(g, v)
        else                 # count only out degree
-           deg = outdegree(g, v)
+           deg = out_degree(g, v)
        end
        s = normalize? (1.0 / (n_v - 1.0)) : 1.0
        c[v] = deg*s
@@ -21,7 +21,7 @@ of the graph `g`, with optional (default) normalization."""
 degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 0; all...)
 """Calculates the [degree centrality](https://en.wikipedia.org/wiki/Centrality#Degree_centrality)
 of the graph `g`, with optional (default) normalization."""
-indegree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 1; all...)
+in_degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 1; all...)
 """Calculates the [degree centrality](https://en.wikipedia.org/wiki/Centrality#Degree_centrality)
 of the graph `g`, with optional (default) normalization."""
-outdegree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 2; all...)
+out_degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 2; all...)

@@ -16,14 +16,14 @@ function isgraphical(degs::Vector{Int})
     return true
 end
 
-"Return the maximum `outdegree` of vertices in `g`."
-Δout(g) = noallocextreme(outdegree,(>), typemin(Int), g)
-"Return the minimum `outdegree` of vertices in `g`."
-δout(g) = noallocextreme(outdegree,(<), typemax(Int), g)
-"Return the maximum `indegree` of vertices in `g`."
-δin(g)  = noallocextreme(indegree,(<), typemax(Int), g)
-"Return the minimum `indegree` of vertices in `g`."
-Δin(g)  = noallocextreme(indegree,(>), typemin(Int), g)
+"Return the maximum `out_degree` of vertices in `g`."
+Δout(g) = noallocextreme(out_degree,(>), typemin(Int), g)
+"Return the minimum `out_degree` of vertices in `g`."
+δout(g) = noallocextreme(out_degree,(<), typemax(Int), g)
+"Return the maximum `in_degree` of vertices in `g`."
+δin(g)  = noallocextreme(in_degree,(<), typemax(Int), g)
+"Return the minimum `in_degree` of vertices in `g`."
+Δin(g)  = noallocextreme(in_degree,(>), typemin(Int), g)
 "Return the minimum `degree` of vertices in `g`."
 δ(g)    = noallocextreme(degree,(<), typemax(Int), g)
 "Return the maximum `degree` of vertices in `g`."
