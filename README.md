@@ -6,58 +6,11 @@
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 
-An optimized graphs package.
-
-Simple graphs (not multi- or hypergraphs) are represented in a memory- and
-time-efficient manner with adjacency lists and edge iterators. Both directed and
-undirected graphs are supported via separate types, and conversion is available
-from directed to undirected.
-
-The project goal is to mirror the functionality of robust network and graph
-analysis libraries such as [NetworkX](http://networkx.github.io) while being
-simpler to use and more efficient than existing Julian graph libraries such as
-[Graphs.jl](https://github.com/JuliaLang/Graphs.jl). It is an explicit design
-decision that any data not required for graph manipulation (attributes and
-other information, for example) is expected to be stored outside of the graph
-structure itself. Such data lends itself to storage in more traditional and
-better-optimized mechanisms.
+A graph library entirely written in Julia.
 
 ## Documentation
 Full documentation available at [GitHub Pages](https://juliagraphs.github.io/FatGraphs.jl/latest).
 Documentation for methods is also available via the Julia REPL help system.
-
-## Core Concepts
-A graph *G* is described by a set of vertices *V* and edges *E*:
-*G = {V, E}*. *V* is an integer range `1:n`; *E* is represented as forward
-(and, for directed graphs, backward) adjacency lists indexed by vertices. Edges
-may also be accessed via an iterator that yields `Edge` types containing
-`(src::Int, dst::Int)` values.
-
-*FatGraphs.jl* provides two graph types: `Graph` is an undirected graph, and
-`DiGraph` is its directed counterpart.
-
-Graphs are created using `Graph()` or `DiGraph()`; there are several options
-(see below for examples).
-
-Edges are added to a graph using `add_edge!(g, e)`. Instead of an edge type
-integers may be passed denoting the source and destination vertices (e.g.,
-`add_edge!(g, 1, 2)`).
-
-Multiple edges between two given vertices are not allowed: an attempt to
-add an edge that already exists in a graph will result in a silent failure.
-
-Edges may be removed using `rem_edge!(g, e)`. Alternately, integers may be passed
-denoting the source and destination vertices (e.g., `rem_edge!(g, 1, 2)`). Note
-that, particularly for very large graphs, edge removal is a (relatively)
-expensive operation. An attempt to remove an edge that does not exist in the graph will result in an
-error.
-
-Use `nv(g)` and `ne(g)` to compute the number of vertices and edges respectively.
-
-`rem_vertex!(g, v)` alters the vertex identifiers. In particular, calling `n=nv(g)`, it swaps `v` and `n` and then removes `n`.
-
-`edges(g)` returns an iterator to the edge set. Use `collect(edge(set))` to fill
-an array with all edges in the graph.
 
 ## Installation
 Installation is straightforward:
@@ -69,30 +22,20 @@ julia> Pkg.add("FatGraphs")
 (all examples apply equally to `DiGraph` unless otherwise noted):
 
 ```julia
-# create an empty undirected graph
-g = Graph()
+g = Graph() # empty undirected graph
 
-# create a 10-node undirected graph with no edges
-g = Graph(10)
+g = Graph(10) # a graph with 10 veritces and no edges
 @assert nv(g) == 10
 
-# create a 10-node undirected graph with 30 randomly-selected edges
-g = Graph(10,30)
+g = Graph(10, 30) # a graph with 10 vertices and 30 randomly placed edges
+@assert ne(g) == 30
 
-# add an edge between vertices 4 and 5
 add_edge!(g, 4, 5)
 
-# remove an edge between vertices 9 and 10
-rem_edge!(g, 9, 10)
-
-# create vertex 11
 add_vertex!(g)
 
-# remove vertex 2
-# attention: this changes the id of vertex nv(g) to 2
 rem_vertex!(g, 2)
 
-# get the neighbors of vertex 4
 neighbors(g, 4)
 
 # iterate over the edges
