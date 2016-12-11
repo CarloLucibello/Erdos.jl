@@ -63,10 +63,9 @@ function residual{T}(flow_graph::ADiGraph, capacity_matrix::AbstractMatrix{T})
     g = complete(flow_graph)
     c = Vector{Vector{T}}()
     for i=1:nv(g)
-        neigs = fadj(g, i)
+        neigs = neighbors(g, i)
         push!(c, zeros(T, length(neigs)))
-        for k=1:length(neigs)
-            j = neigs[k]
+        for (k, j) in enumerate(neigs)
             if has_edge(flow_graph, i, j)
                 c[i][k] = capacity_matrix[i, j]
             end #else 0
@@ -81,14 +80,13 @@ in the adjlist of its neighbour `j=fadj[i][k]`,
 i.e. `i == adj[j][pl[i][k]]`.
 """
 function poslist(g::ASimpleGraph)
-    a = fadj(g)
-    pl = deepcopy(a)
+    pl = Vector{Vector{Int}}()
     for i=1:nv(g)
-        for k=1:length(a[i])
-            j = a[i][k]
-            p = searchsorted(a[j], i)
-            @assert length(p) == 1
-            pl[i][k] = p[1]
+        push!(pl, zeros(Int, degree(g, i)))
+        for (k,j) in enumerate(neighbors(g, i))
+            p = findfirst(neighbors(g,j), i)
+            @assert p > 0
+            pl[i][k] = p
         end
     end
     return pl

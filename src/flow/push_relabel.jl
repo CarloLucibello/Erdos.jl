@@ -82,8 +82,8 @@ function push_relabel{T<:Number}(
 
     Q = PushRelabelHeap{T}(n)
 
-    for k=1:length(fadj(g, source))
-        push_flow!(g, source, k, capacity_matrix, flow_matrix, excess, height, active, Q, pos, fadj(g))
+    for (k, u) in enumerate(neighbors(g, source))
+        push_flow!(g, source, u, k, capacity_matrix, flow_matrix, excess, height, active, Q, pos)
     end
 
     while length(Q) > 0
@@ -93,8 +93,7 @@ function push_relabel{T<:Number}(
     end
 
     flow = zero(T)
-    for k=1:length(fadj(g, target))
-        j = fadj(g, target)[k]
+    for (k, j) in enumerate(neighbors(g, target))
         k2 = pos[target][k]
         flow += flow_matrix[j][k2]
     end
@@ -145,18 +144,17 @@ Requires arguements:
 function push_flow!{T<:Number}(
         g::ADiGraph,             # the input graph
         u::Int,                              # input from-vertex
-        k::Int,                              # input to-vetex
+        v::Int,                                 # input to-vetex
+        k::Int,                                 #index of v as neig of u
         capacity_matrix,
         flow_matrix,
         excess::Vector{T},
         height::Vector{Int},
         active::AbstractVector{Bool},
         Q::PushRelabelHeap,
-        pos,
-        adj
+        pos
     )
 
-    v = adj[u][k]
     height[u] <= height[v] && return
     flow = min(excess[u], capacity_matrix[u][k] - flow_matrix[u][k])
     flow == 0 && return
@@ -241,8 +239,7 @@ function relabel!{T<:Number}(
     n = nv(g)
     count[height[v]+1] -= 1
     height[v] = 2*n
-    @inbounds for k=1:length(fadj(g, v))
-        to = fadj(g, v)[k]
+    @inbounds for (k,to) in enumerate(neighbors(g, v))
         if capacity_matrix[v][k] > flow_matrix[v][k]
             height[v] = min(height[v], height[to]+1)
         end
@@ -281,9 +278,9 @@ function discharge!{T<:Number}(
         pos
     )
 
-    for k=1:length(fadj(g, v))
+    for (k, u) in enumerate(neighbors(g, v))
         excess[v] == 0 && break
-        push_flow!(g, v, k, capacity_matrix, flow_matrix, excess, height, active, Q, pos, fadj(g))
+        push_flow!(g, v, u, k, capacity_matrix, flow_matrix, excess, height, active, Q, pos)
     end
 
     if excess[v] > 0

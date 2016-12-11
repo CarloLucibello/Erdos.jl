@@ -20,7 +20,7 @@ PARENT = zeros(Int, 3)
 
 A = [source,target]
 
-residual_graph = FatGraphs.residual(g)
+residual_graph = complete(g)
 
 path = FatGraphs.find_path!(residual_graph, source, target, flow_matrix, capacity_matrix, PARENT, TREE, A)
 

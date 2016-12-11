@@ -16,7 +16,7 @@ for e in flow_edges
     capacity_matrix[u,v] = f
 end
 
-residual_graph = FatGraphs.residual(flow_graph)
+residual_graph = complete(flow_graph)
 
 # Test with default distances
 @test FatGraphs.edmonds_karp_impl(residual_graph, 1, 8, FatGraphs.DefaultCapacity(residual_graph))[1] == 3

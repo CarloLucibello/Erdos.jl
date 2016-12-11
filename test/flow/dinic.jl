@@ -17,7 +17,7 @@ for e in flow_edges
 end
 
 # Construct the residual graph
-residual_graph = FatGraphs.residual(flow_graph)
+residual_graph = complete(flow_graph)
 
 # Test with default distances
 @test FatGraphs.dinic_impl(residual_graph, 1, 8, FatGraphs.DefaultCapacity(residual_graph))[1] == 3
