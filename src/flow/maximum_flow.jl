@@ -60,7 +60,7 @@ Requires arguments:
 - capacity_matrix::AbstractArray{T,2}     # input capacity matrix
 """
 function residual{T}(flow_graph::ADiGraph, capacity_matrix::AbstractMatrix{T})
-    g = digraph(graph(flow_graph))
+    g = complete(flow_graph)
     c = Vector{Vector{T}}()
     for i=1:nv(g)
         neigs = fadj(g, i)
@@ -94,44 +94,42 @@ function poslist(g::ASimpleGraph)
     return pl
 end
 
-residual(flow_graph::ADiGraph) = digraph(graph(flow_graph))
-
 # Method for Edmonds–Karp algorithm
 
 function maximum_flow{T<:Number}(
-    flow_graph::ADiGraph,                   # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
-    algorithm::EdmondsKarpAlgorithm        # keyword argument for algorithm
+        flow_graph::ADiGraph,                   # the input graph
+        source::Int,                           # the source vertex
+        target::Int,                           # the target vertex
+        capacity_matrix::AbstractMatrix{T},   # edge flow capacities
+        algorithm::EdmondsKarpAlgorithm        # keyword argument for algorithm
     )
-    residual_graph = residual(flow_graph)
+    residual_graph = complete(flow_graph)
     return edmonds_karp_impl(residual_graph, source, target, capacity_matrix)
 end
 
 # Method for Dinic's algorithm
 
 function maximum_flow{T<:Number}(
-    flow_graph::ADiGraph,                   # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
-    algorithm::DinicAlgorithm              # keyword argument for algorithm
+        flow_graph::ADiGraph,                   # the input graph
+        source::Int,                           # the source vertex
+        target::Int,                           # the target vertex
+        capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+        algorithm::DinicAlgorithm              # keyword argument for algorithm
     )
-    residual_graph = residual(flow_graph)
+    residual_graph = complete(flow_graph)
     return dinic_impl(residual_graph, source, target, capacity_matrix)
 end
 
 # Method for Boykov-Kolmogorov algorithm
 
 function maximum_flow{T<:Number}(
-    flow_graph::ADiGraph,                   # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
-    algorithm::BoykovKolmogorovAlgorithm   # keyword argument for algorithm
+        flow_graph::ADiGraph,                   # the input graph
+        source::Int,                           # the source vertex
+        target::Int,                           # the target vertex
+        capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+        algorithm::BoykovKolmogorovAlgorithm   # keyword argument for algorithm
     )
-    residual_graph = residual(flow_graph)
+    residual_graph = complete(flow_graph)
     return boykov_kolmogorov_impl(residual_graph, source, target, capacity_matrix)
 end
 

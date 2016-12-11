@@ -1,4 +1,32 @@
 """
+    complete(g::ADiGraph)
+
+Returns a digraph containing both the edges `(u,v)`
+of `g` and their reverse `(v,u)`.
+"""
+function complete(g::ADiGraph)
+    h = copy(g)
+    complete!(h)
+    return h
+end
+
+"""
+    complete(g::ADiGraph)
+
+Returns a digraph containing both the edges `(u,v)`
+of `g` and their reverse `(v,u)`.
+"""
+function complete!(g::ADiGraph)
+    edgs  = collect(edges(g))
+    for e in edgs
+        if !has_edge(g, dst(e), src(e))
+            add_edge!(g, dst(e), src(e))
+        end
+    end
+    return g
+end
+
+"""
     issubset(g, h)
 
 Returns true if all of the vertices and edges of `g` are contained in `h`.

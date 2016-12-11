@@ -7,7 +7,7 @@ tests = [
     "core/interface",
     "core/core",
     "core/edgeiter",
-    "core/operators",
+    "operators/operators",
     "factory/graphdigraph",
     "distances/distance",
     "distances/edit_distance",

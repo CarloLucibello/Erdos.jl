@@ -54,8 +54,6 @@ end
 @test collect(in_neighbors(h,5)) == in_adjlist(h)[5]  == [2, 3]
 @test collect(out_neighbors(h,1)) == out_adjlist(h)[1]  == [2, 3, 4]
 
-@test issubset(h2, h1)
-
 @test has_edge(g, 1, 2)
 @test collect(in_edges(g, 2)) == [e1, reverse(e4)]
 @test collect(out_edges(g, 1)) == [e1, e2, e3]
