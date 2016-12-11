@@ -40,8 +40,8 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
     @test typeof(d) <: AbstractArray{Int, 2}
     @test d[s,t] == 0
     @test size(d) == (nvertices,nvertices)
-    @test typeof(transpose(d)) == FatGraphs.DefaultCapacity
-    @test typeof(ctranspose(d)) == FatGraphs.DefaultCapacity
+    @test typeof(transpose(d)) == FatGraphs.DefaultCapacity{DG}
+    @test typeof(ctranspose(d)) == FatGraphs.DefaultCapacity{DG}
 
     # Test all algorithms
     for ALGO in [EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm]

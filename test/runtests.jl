@@ -53,9 +53,8 @@ tests = [
 
 
 testdir = dirname(@__FILE__)
-# (G, DG) = (Graph, DiGraph)
-(G, DG) = (Graph, GTDiGraph)
-
+(G, DG) = (Graph, DiGraph)
+# (G, DG) = (Graph, GTDiGraph)
 
 # @testset "FatGraphs Testing" begin
     for t in tests

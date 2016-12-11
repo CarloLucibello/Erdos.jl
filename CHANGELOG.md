@@ -32,3 +32,4 @@
 - add oriented option for incidence_matrix
 - fix num connected components for empty graphs (now is one)
 - add all_edges
+- vastly improve maximum_flow performance

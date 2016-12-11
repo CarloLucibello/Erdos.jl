@@ -31,16 +31,14 @@ end
 Type that returns 1 if a forward edge exists, and 0 otherwise
 """
 
-type DefaultCapacity <: AbstractArray{Int, 2}
-    flow_graph::ADiGraph
+type DefaultCapacity{G<:ADiGraph} <: AbstractMatrix{Int}
+    flow_graph::G
     nv::Int
-    DefaultCapacity(flow_graph::ADiGraph) = new(flow_graph, nv(flow_graph))
 end
+DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, nv(g))
 
-getindex(d::DefaultCapacity, s::Int, t::Int) = if has_edge(d.flow_graph, s , t) 1 else 0 end
+getindex(d::DefaultCapacity, s::Int, t::Int) = has_edge(d.flow_graph, s , t) ? 1 : 0
 size(d::DefaultCapacity) = (d.nv, d.nv)
-
-# TODO implement reverse for AbstractDiGraph?
 transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
 ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
 
@@ -58,9 +56,43 @@ residual graph and the modified capacity_matrix (when DefaultDistance is used.)
 
 Requires arguments:
 
-- flow_graph::ADiGraph,                    # the input graph
+- flow_graph::DiGraph,                    # the input graph
 - capacity_matrix::AbstractArray{T,2}     # input capacity matrix
 """
+function residual{T}(flow_graph::ADiGraph, capacity_matrix::AbstractMatrix{T})
+    g = digraph(graph(flow_graph))
+    c = Vector{Vector{T}}()
+    for i=1:nv(g)
+        neigs = fadj(g, i)
+        push!(c, zeros(T, length(neigs)))
+        for k=1:length(neigs)
+            j = neigs[k]
+            if has_edge(flow_graph, i, j)
+                c[i][k] = capacity_matrix[i, j]
+            end #else 0
+        end
+    end
+    return g, c
+end
+
+"""
+`pl[i][k]` is the position of vertex `i`
+in the adjlist of its neighbour `j=fadj[i][k]`,
+i.e. `i == adj[j][pl[i][k]]`.
+"""
+function poslist(g::ASimpleGraph)
+    a = fadj(g)
+    pl = deepcopy(a)
+    for i=1:nv(g)
+        for k=1:length(a[i])
+            j = a[i][k]
+            p = searchsorted(a[j], i)
+            @assert length(p) == 1
+            pl[i][k] = p[1]
+        end
+    end
+    return pl
+end
 
 residual(flow_graph::ADiGraph) = digraph(graph(flow_graph))
 
@@ -70,7 +102,7 @@ function maximum_flow{T<:Number}(
     flow_graph::ADiGraph,                   # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     algorithm::EdmondsKarpAlgorithm        # keyword argument for algorithm
     )
     residual_graph = residual(flow_graph)
@@ -106,26 +138,31 @@ end
 # Method for Push-relabel algorithm
 
 function maximum_flow{T<:Number}(
-    flow_graph::ADiGraph,                   # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
-    algorithm::PushRelabelAlgorithm        # keyword argument for algorithm
+        flow_graph::ADiGraph,                   # the input graph
+        source::Int,                           # the source vertex
+        target::Int,                           # the target vertex
+        capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+        algorithm::PushRelabelAlgorithm        # keyword argument for algorithm
     )
-    residual_graph = residual(flow_graph)
-    return push_relabel(residual_graph, source, target, capacity_matrix)
+
+    residual_graph, c = residual(flow_graph, capacity_matrix)
+    pos = poslist(residual_graph)
+    return push_relabel(residual_graph, source, target, c, pos)
 end
 
 """
-Generic maximum_flow function. Requires arguments:
+    maximum_flow{T<:Number}(
+                    flow_graph::ADiGraph,
+                    source::Int,
+                    target::Int,
+                    capacity_matrix::AbstractMatrix{T} =
+                        DefaultCapacity(flow_graph);
+                    algorithm::AbstractFlowAlgorithm  =
+                        PushRelabelAlgorithm(),
+                    restriction::T = zero(T)
+                    )
 
-- flow_graph::ADiGraph                   # the input graph
-- source::Int                           # the source vertex
-- target::Int                           # the target vertex
-- capacity_matrix::AbstractArray{T,2}   # edge flow capacities
-- algorithm::AbstractFlowAlgorithm      # keyword argument for algorithm
-- restriction::T                        # keyword argument for a restriction
-
+Generic maximum_flow function.
 The function defaults to the Push-relabel algorithm. Alternatively, the algorithm
 to be used can also be specified through a keyword argument. A default capacity of 1
 is assumed for each link if no capacity matrix is provided.
@@ -134,8 +171,8 @@ If the restriction is bigger than 0, it is applied to capacity_matrix.
 All algorithms return a tuple with 1) the maximum flow and 2) the flow matrix.
 For the Boykov-Kolmogorov algorithm, the associated mincut is returned as a third output.
 
-### Usage Example:
 
+### Usage Example:
 ```julia
 
 # Create a flow-graph and a capacity matrix
@@ -169,16 +206,15 @@ f, F, labels = maximum_flow(flow_graph,1,8,capacity_matrix,algorithm=BoykovKolmo
 
 ```
 """
-
-function maximum_flow{T<:Number}(
-    flow_graph::ADiGraph,                   # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2} =  # edge flow capacities
-        DefaultCapacity(flow_graph);
-    algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
-        PushRelabelAlgorithm(),
-    restriction::T = zero(T)               # keyword argument for restriction max-flow
+function maximum_flow{G<:ADiGraph, T<:Number}(
+        flow_graph::G,                   # the input graph
+        source::Int,                           # the source vertex
+        target::Int,                           # the target vertex
+        capacity_matrix::AbstractArray{T,2} =  # edge flow capacities
+            DefaultCapacity(flow_graph);
+        algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
+            PushRelabelAlgorithm(),
+        restriction::T = zero(T)               # keyword argument for restriction max-flow
     )
     if restriction > zero(T)
       return maximum_flow(flow_graph, source, target, min(restriction, capacity_matrix), algorithm)

@@ -15,6 +15,7 @@ import MatrixDepot: matrixdepot
 using Iterators: distinct, chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
+import DataStructures: MutableBinaryHeap, update!, compare  # push_relabel
 
 # more imports in interdiction.jl
 
@@ -22,7 +23,7 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims, transpose,
             ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort
+            sort, push!, pop!
 
 #interface
 export AbstractGraph, AbstractDiGraph, AbstractSimpleGraph,
