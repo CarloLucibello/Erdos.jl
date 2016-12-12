@@ -39,7 +39,7 @@ function breadth_first_visit_impl!(
 
         for v in fneig(graph, u)
             v_color = get(vertexcolormap, v, 0)
-            v_edge = Edge(u,v)
+            v_edge = edge(graph, u, v)
             e_color = get(edgecolormap, v_edge, 0)
             examine_neighbor!(visitor, u, v, u_color, v_color, e_color) || return
             edgecolormap[v_edge] = 1

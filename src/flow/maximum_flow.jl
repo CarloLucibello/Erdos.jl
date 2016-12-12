@@ -32,21 +32,19 @@ Type that returns 1 if a forward edge exists, and 0 otherwise
 """
 
 type DefaultCapacity{G<:ADiGraph} <: AbstractMatrix{Int}
-    flow_graph::G
+    g::G
     nv::Int
 end
 DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, nv(g))
 
-getindex(d::DefaultCapacity, s::Int, t::Int) = has_edge(d.flow_graph, s , t) ? 1 : 0
+getindex(d::DefaultCapacity, s::Int, t::Int) = has_edge(d.g, s , t) ? 1 : 0
 size(d::DefaultCapacity) = (d.nv, d.nv)
-transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
-ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.flow_graph))
+transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
+ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
 
 """
-Constructs a residual graph for the input flow graph. Creates a new graph instead
-of modifying the input flow graph.
-
-The residual graph comprises of the same Vertex list, but ensures that for each
+Completes `g` and the associated  `capacity_matrix`.
+The completed graph comprises has same vertex list, but ensures that for each
 edge (u,v), (v,u) also exists in the graph. (to allow flow in the reverse direction).
 
 If only the forward edge exists, a reverse edge is created with capacity 0. If both
@@ -56,17 +54,17 @@ residual graph and the modified capacity_matrix (when DefaultDistance is used.)
 
 Requires arguments:
 
-- flow_graph::DiGraph,                    # the input graph
-- capacity_matrix::AbstractArray{T,2}     # input capacity matrix
+- g::DiGraph,                    # the input graph
+- capacity_matrix::AbstractMatrix{T}     # input capacity matrix
 """
-function residual{T}(flow_graph::ADiGraph, capacity_matrix::AbstractMatrix{T})
-    g = complete(flow_graph)
+function _complete{T}(g::ADiGraph, capacity_matrix::AbstractMatrix{T})
+    g = complete(g)
     c = Vector{Vector{T}}()
     for i=1:nv(g)
         neigs = neighbors(g, i)
         push!(c, zeros(T, length(neigs)))
         for (k, j) in enumerate(neigs)
-            if has_edge(flow_graph, i, j)
+            if has_edge(g, i, j)
                 c[i][k] = capacity_matrix[i, j]
             end #else 0
         end
@@ -95,64 +93,71 @@ end
 # Method for Edmonds–Karp algorithm
 
 function maximum_flow{T<:Number}(
-        flow_graph::ADiGraph,                   # the input graph
+        g::ADiGraph,                   # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
         capacity_matrix::AbstractMatrix{T},   # edge flow capacities
         algorithm::EdmondsKarpAlgorithm        # keyword argument for algorithm
     )
-    residual_graph = complete(flow_graph)
-    return edmonds_karp_impl(residual_graph, source, target, capacity_matrix)
+    flow_graph = complete(g)
+    return edmonds_karp_impl(flow_graph, source, target, capacity_matrix)
 end
 
 # Method for Dinic's algorithm
 
 function maximum_flow{T<:Number}(
-        flow_graph::ADiGraph,                   # the input graph
+        g::ADiGraph,                   # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
         capacity_matrix::AbstractArray{T,2},   # edge flow capacities
         algorithm::DinicAlgorithm              # keyword argument for algorithm
     )
-    residual_graph = complete(flow_graph)
-    return dinic_impl(residual_graph, source, target, capacity_matrix)
+    flow_graph = complete(g)
+    return dinic_impl(flow_graph, source, target, capacity_matrix)
 end
 
 # Method for Boykov-Kolmogorov algorithm
 
 function maximum_flow{T<:Number}(
-        flow_graph::ADiGraph,                   # the input graph
+        g::ADiGraph,                   # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
         capacity_matrix::AbstractArray{T,2},   # edge flow capacities
         algorithm::BoykovKolmogorovAlgorithm   # keyword argument for algorithm
     )
-    residual_graph = complete(flow_graph)
-    return boykov_kolmogorov_impl(residual_graph, source, target, capacity_matrix)
+    flow_graph = complete(g)
+    return boykov_kolmogorov_impl(flow_graph, source, target, capacity_matrix)
 end
 
 # Method for Push-relabel algorithm
 
 function maximum_flow{T<:Number}(
-        flow_graph::ADiGraph,                   # the input graph
+        g::ADiGraph,                   # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
-        capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+        capacity_matrix::AbstractMatrix{T},   # edge flow capacities
         algorithm::PushRelabelAlgorithm        # keyword argument for algorithm
     )
 
-    residual_graph, c = residual(flow_graph, capacity_matrix)
-    pos = poslist(residual_graph)
-    return push_relabel(residual_graph, source, target, c, pos)
+    flow_graph, c = _complete(g, capacity_matrix)
+    pos = poslist(flow_graph)
+    f, Fvec = push_relabel(flow_graph, source, target, c, pos)
+    F = spzeros(T, nv(g), nv(g))
+    for i=1:nv(g)
+        for (k,j) in enumerate(neighbors(flow_graph, i))
+            F[i,j] = Fvec[i][k]
+        end
+    end
+    return f, F
 end
 
 """
     maximum_flow{T<:Number}(
-                    flow_graph::ADiGraph,
+                    g::ADiGraph,
                     source::Int,
                     target::Int,
                     capacity_matrix::AbstractMatrix{T} =
-                        DefaultCapacity(flow_graph);
+                        DefaultCapacity(g);
                     algorithm::AbstractFlowAlgorithm  =
                         PushRelabelAlgorithm(),
                     restriction::T = zero(T)
@@ -172,7 +177,7 @@ For the Boykov-Kolmogorov algorithm, the associated mincut is returned as a thir
 ```julia
 
 # Create a flow-graph and a capacity matrix
-flow_graph = DiGraph(8)
+g = DiGraph(8)
 flow_edges = [
     (1,2,10),(1,3,5),(1,4,15),(2,3,4),(2,5,9),
     (2,6,15),(3,4,4),(3,6,8),(4,7,16),(5,6,15),
@@ -181,39 +186,39 @@ flow_edges = [
 capacity_matrix = zeros(Int, 8, 8)
 for e in flow_edges
     u, v, f = e
-    add_edge!(flow_graph, u, v)
+    add_edge!(g, u, v)
     capacity_matrix[u,v] = f
 end
 
 # Run default maximum_flow without the capacity_matrix
-f, F = maximum_flow(flow_graph, 1, 8)
+f, F = maximum_flow(g, 1, 8)
 
 # Run default maximum_flow with the capacity_matrix
-f, F = maximum_flow(flow_graph, 1, 8)
+f, F = maximum_flow(g, 1, 8)
 
 # Run Endmonds-Karp algorithm
-f, F = maximum_flow(flow_graph,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm())
+f, F = maximum_flow(g,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm())
 
 # Run Dinic's algorithm
-f, F = maximum_flow(flow_graph,1,8,capacity_matrix,algorithm=DinicAlgorithm())
+f, F = maximum_flow(g,1,8,capacity_matrix,algorithm=DinicAlgorithm())
 
 # Run Boykov-Kolmogorov algorithm
-f, F, labels = maximum_flow(flow_graph,1,8,capacity_matrix,algorithm=BoykovKolmogorovAlgorithm())
+f, F, labels = maximum_flow(g,1,8,capacity_matrix,algorithm=BoykovKolmogorovAlgorithm())
 
 ```
 """
 function maximum_flow{G<:ADiGraph, T<:Number}(
-        flow_graph::G,                   # the input graph
+        g::G,                   # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
-        capacity_matrix::AbstractArray{T,2} =  # edge flow capacities
-            DefaultCapacity(flow_graph);
+        capacity_matrix::AbstractMatrix{T} =  # edge flow capacities
+            DefaultCapacity(g);
         algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
             PushRelabelAlgorithm(),
         restriction::T = zero(T)               # keyword argument for restriction max-flow
     )
     if restriction > zero(T)
-      return maximum_flow(flow_graph, source, target, min(restriction, capacity_matrix), algorithm)
+      return maximum_flow(g, source, target, min(restriction, capacity_matrix), algorithm)
     end
-    return maximum_flow(flow_graph, source, target, capacity_matrix, algorithm)
+    return maximum_flow(g, source, target, capacity_matrix, algorithm)
 end
