@@ -51,7 +51,7 @@ Requires arguments:
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractArray{T,2}    # edge flow capacities
 """
-function push_relabel{T<:Number}(
+function push_relabel_impl{T<:Number}(
         g::ADiGraph,               # the input graph
         source::Int,                           # the source vertex
         target::Int,                           # the target vertex
@@ -140,7 +140,6 @@ Requires arguements:
 - active::AbstractArray{Bool,1}
 - Q::PushRelabelHeap
 """
-
 function push_flow!{T<:Number}(
         g::ADiGraph,             # the input graph
         u::Int,                              # input from-vertex
@@ -186,7 +185,6 @@ Requires arguments:
 - count::AbstractArray{Int,1}
 - Q::PushRelabelHeap
 """
-
 function gap!{T<:Number}(
         g::ADiGraph,               # the input graph
         h::Int,                                # cutoff height
@@ -199,10 +197,12 @@ function gap!{T<:Number}(
 
     n = nv(g)
     @inbounds for v in vertices(g)
-        height[v] < h && continue
-        count[height[v]+1] -= 1
-        height[v] = max(height[v], n + 1)
-        count[height[v]+1] += 1
+        hv = height[v]
+        hv < h && continue
+        count[hv+1] -= 1
+        hv = max(hv, n + 1)
+        count[hv+1] += 1
+        height[v] = hv
         enqueue_vertex!(Q, v, active, excess)
     end
 end

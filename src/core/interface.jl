@@ -26,6 +26,8 @@ Reccomended Overrides:
     out_edges(g, u)
     in_edges(g, u) # digraph
     rem_edge!(g, e)
+    graph(dg)
+    digraph(g)
 """
 abstract AGraph
 

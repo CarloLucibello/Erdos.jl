@@ -143,6 +143,9 @@ digraphtype{G<:ADiGraph}(g::G) = G
 graph(g::AGraph) = g
 digraph(g::ADiGraph) = g
 
+#### FALLBACKS #################
+
+
 function digraph(g::AGraph)
     G = digraphtype(g)
     h = G(nv(g))
@@ -162,7 +165,6 @@ function graph(g::ADiGraph)
     return h
 end
 
-#### FALLBACKS #################
 function =={G<:ASimpleGraph}(g::G, h::G)
     nv(g) != nv(h) && return false
     ne(g) != ne(h) && return false

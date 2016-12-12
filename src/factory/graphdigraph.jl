@@ -251,6 +251,9 @@ edge(g::Graph, u::Int, v::Int) = Edge(u, v)
 # edge(g::Graph, u::Int, v::Int) = u <= v ? Edge(u, v) : Edge(v, u)
 
 #### fallbaks override #######
+
+digraph(g::Graph) = DiGraph(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
+
 out_adjlist(g::SimpleGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
 

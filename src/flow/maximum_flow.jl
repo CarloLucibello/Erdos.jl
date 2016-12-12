@@ -83,8 +83,7 @@ See wikipedia.
 function residual_graph{G<:ADiGraph,T<:Number}(g::G,
         capacity::Vector{Vector{T}}, flow::Vector{Vector{T}}
     )
-    n = nv(g)
-    h = G(n)
+    h = G(nv(g))
     for i=1:nv(g)
         c = capacity[i]
         f = flow[i]
@@ -98,10 +97,9 @@ function residual_graph{G<:ADiGraph,T<:Number}(g::G,
 end
 
 function residual_graph{G<:ADiGraph}(g::G, capacity::AbstractMatrix, flow::AbstractMatrix)
-    n = nv(g)
-    h = G(n)
+    h = G(nv(g))
     for e in edges(g)
-        i, j = e
+        i, j = src(e), dst(e)
         if capacity[i,j] - flow[i,j] > 0
             add_edge!(h, i, j)
         end
@@ -195,7 +193,7 @@ function maximum_flow{G<:ADiGraph, T<:Number}(
     elseif algorithm == PushRelabelAlgorithm()
         c = _complete(flow_graph, capacity_matrix)
         pos = poslist(flow_graph)
-        f, Fvec = push_relabel(flow_graph, source, target, c, pos)
+        f, Fvec = push_relabel_impl(flow_graph, source, target, c, pos)
         F = spzeros(T, nv(g), nv(g))
         for i=1:nv(g)
             for (k,j) in enumerate(neighbors(flow_graph, i))
@@ -215,7 +213,7 @@ function maximum_flow{G<:ADiGraph, T<:Number}(
         capacities::Vector{Vector{T}}
     )
     pos = poslist(flow_graph)
-    f, F = push_relabel(flow_graph, source, target, capacities, pos)
+    f, F = push_relabel_impl(flow_graph, source, target, capacities, pos)
     labels = cut_labels(flow_graph, source, capacities, F)
     return f, F, labels
 end
