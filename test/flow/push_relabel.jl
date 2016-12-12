@@ -88,5 +88,5 @@ M448 =[0 1 0 0 1 1
        0 0 0 0 0 0
        1 0 1 0 0 1
        0 0 0 0 1 0]
-g448 = DiGraph(M448)
+g448 = DG(M448)
 @test maximum_flow(g448, 1, 2, M448, algorithm=PushRelabelAlgorithm())[1] == 1

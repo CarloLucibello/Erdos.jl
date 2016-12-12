@@ -54,7 +54,7 @@ graphs = [
 ]
 
 for (nvertices, flow_edges, s, t, froutes, breakpts, ffloat) in graphs
-    flow_graph = DiGraph(nvertices)
+    flow_graph = DG(nvertices)
     capacity_matrix = zeros(Int, nvertices, nvertices)
     for e in flow_edges
         u, v, f = e

@@ -27,7 +27,7 @@ graphs = [
 ]
 
 for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
-    flow_graph = DiGraph(nvertices)
+    flow_graph = DG(nvertices)
     capacity_matrix = zeros(Int,nvertices,nvertices)
     for e in flow_edges
         u,v,f = e
@@ -43,10 +43,17 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
     @test typeof(transpose(d)) == FatGraphs.DefaultCapacity{DG}
     @test typeof(ctranspose(d)) == FatGraphs.DefaultCapacity{DG}
 
+    fdef1, Fdef1, labdef1 = maximum_flow(flow_graph,s,t)
+    fdef2, Fdef2, labdef2 = maximum_flow(flow_graph,s,t, capacity_matrix)
     # Test all algorithms
     for ALGO in [EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm]
-      @test maximum_flow(flow_graph,s,t,algorithm=ALGO())[1] == fdefault
-      @test maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO())[1] == fcustom
-      @test maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO(),restriction=caprestrict)[1] == frestrict
+        f, F, lab = maximum_flow(flow_graph,s,t,algorithm=ALGO())
+        @test f == fdefault
+        @test lab == labdef1
+
+        f, F, lab = maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO())
+        @test f == fcustom
+        @test lab == labdef2
+    #   @test maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO(),restriction=caprestrict)[1] == frestrict
     end
 end

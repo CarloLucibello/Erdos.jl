@@ -287,7 +287,7 @@ end
 NeighborhoodVisitor(d::Int) = NeighborhoodVisitor(d, Vector{Int}())
 
 function examine_neighbor!(visitor::NeighborhoodVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
-    -ucolor > visitor.d && return false # color is negative for not-closed vertices
+    -ucolor > visitor.d && return false # color is negative for non-closed vertices
     if vcolor == 0
         push!(visitor.neigs, v)
     end

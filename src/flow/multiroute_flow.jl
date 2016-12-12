@@ -193,7 +193,7 @@ function multiroute_flow{T<:Real, R<:Real}(
   )
   # a flow with a set of 1-disjoint pathes is a classical max-flow
   (routes == 1) &&
-  return maximum_flow(flow_graph, source, target, capacity_matrix, flow_algorithm)
+  return maximum_flow(flow_graph, source, target, capacity_matrix, algorithm=flow_algorithm)
 
   # routes > λ (connectivity) → f = 0
   λ = maximum_flow(flow_graph, source, target, DefaultCapacity(flow_graph),
