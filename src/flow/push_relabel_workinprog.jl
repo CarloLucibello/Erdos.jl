@@ -6,27 +6,40 @@ end
 typealias Comp LessThan2
 
 type PushRelabelHeap{T}
-    data::MutableBinaryHeap{Pair{Int,T},Comp}
-    handles::Vector{Int}
+    heightsbin::Vector{Set{Int}}
+    heights::Vector{Int}
+    inbin::BitVector
+    maxh::Int
 
-    function PushRelabelHeap(N::Int)
-        handles = zeros(Int, N)
-        data = MutableBinaryHeap{Pair{Int,T},Comp}(Comp())
-        return new(data, handles)
+    function PushRelabelHeap(n::Int)
+        heights = zeros(Int, n)
+        heightsbin = [Set{Int}() for i=1:2n+1]
+        minh = 2n
+        inbin = falses(n)
+        return new(heights, heightsbin, inbin, minh)
     end
 end
 
-
 function push!(h::PushRelabelHeap, k::Int, v)
-    a = push!(h.data, k=>v)
-    h.handles[k] = a
+    push!(h.heightsbin[v+1], k)
+    h.heights[k] = v
+    inbin[k] = true
+    h.minh = min(h.minh, v)
 end
 
 function update!(h::PushRelabelHeap, k::Int, v)
-    a = h.handles[k]
-    a > 0 && update!(h.data, a, k=>v)
+    !inbin[k] && return
+    vold = h.heights[k]
+    delete!(h.heightsbin[vold+1], k)
+    push!(h.heightsbin[v+1], k)
+    h.heights[k] = v
+    h.hmin = min(h.hmin, v)
+    while length(h.heightsbin[h.hmin+1]) == 0 && h.hmin < length(h.heightsbin)
+        h.hmin +=1
+    end
 end
 
+#TODO from here
 function pop!(h::PushRelabelHeap)
     k = pop!(h.data)[1]
     h.handles[k] = 0
