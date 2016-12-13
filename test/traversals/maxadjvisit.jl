@@ -34,13 +34,13 @@ end
 @test nv(g) == 8
 @test ne(g) == m
 
-parity, bestcut = mincut(g, eweights)
+bestcut, cut, parity = minimum_cut(g, eweights)
 
 @test length(parity) == 8
 @test parity == [2, 2, 1, 1, 2, 2, 1, 1]
 @test bestcut == 4.0
 
-parity, bestcut = mincut(g)
+bestcut, cut, parity = minimum_cut(g)
 
 @test length(parity) == 8
 @test parity == [2, 1, 1, 1, 1, 1, 1, 1]

@@ -173,22 +173,36 @@ end
 #################################################
 
 
-"""Returns a tuple `(parity, bestcut)`, where `parity` is a vector of integer
-values that determines the partition in `g` (1 or 2) and `bestcut` is the
-weight of the cut that makes this partition. An optional `distmx` matrix may
-be specified; if omitted, edge distances are assumed to be 1.
+
 """
-function mincut{T}(
-    graph::ASimpleGraph,
-    distmx::AbstractArray{T, 2}
-)
-    visitor = MinCutVisitor(graph, distmx)
-    colormap = zeros(Int, nv(graph))
-    traverse_graph!(graph, T, MaximumAdjacency(), 1, visitor, colormap)
-    return(visitor.parities + 1, visitor.bestweight)
+    minimum_cut(g, dist_matrix=DefaultDistance())
+
+Finds the `cut` of minimum total weight.
+
+Returns a tuple `(f, cut, labels)`, where `f` is the weight of the cut,
+`cut` is a vector of the edges in the cut, and `labels` gives a partitioning
+of the vertices in two sets, according to the cut.
+An optional `dist_matrix` matrix maybe specified; if omitted, edge distances are assumed to be 1.
+"""
+function minimum_cut{T}(
+        g::ASimpleGraph,
+        distmx::AbstractMatrix{T}
+    )
+    visitor = MinCutVisitor(g, distmx)
+    colormap = zeros(Int, nv(g))
+    traverse_graph!(g, T, MaximumAdjacency(), 1, visitor, colormap)
+    labels = visitor.parities + 1
+    E = edgetype(g)
+    cut = Vector{E}()
+    for e in edges(g)
+        if labels[src(e)] != labels[dst(e)]
+            push!(cut, e)
+        end
+    end
+    return visitor.bestweight, cut, labels
 end
 
-mincut(graph::ASimpleGraph) = mincut(graph,DefaultDistance())
+minimum_cut(graph::ASimpleGraph) = minimum_cut(graph, DefaultDistance())
 
 """Returns the vertices in `g` traversed by maximum adjacency search. An optional
 `distmx` matrix may be specified; if omitted, edge distances are assumed to
