@@ -6,7 +6,7 @@
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 
-A graph library entirely written in Julia.
+A graph library entirely written in Julia, derived from the beautiful library [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl).
 
 ## Documentation
 Full documentation available at [GitHub Pages](https://juliagraphs.github.io/FatGraphs.jl/latest).
@@ -15,7 +15,7 @@ Documentation for methods is also available via the Julia REPL help system.
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.add("FatGraphs")
+julia> Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
 ```
 
 ## Usage Examples
