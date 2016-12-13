@@ -8,8 +8,6 @@ using LightXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 using StatsBase: fit, Histogram
 import BlossomV # matching
-using JuMP # matching/interdiction
-using MathProgBase # interdiction
 import Clustering: kmeans # community detection
 import MatrixDepot: matrixdepot
 using Iterators: distinct, chain # all_neighbors
@@ -17,7 +15,6 @@ using Iterators: distinct, chain # all_neighbors
 
 import DataStructures: MutableBinaryHeap, update!, compare  # push_relabel
 
-# more imports in interdiction.jl
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
@@ -141,9 +138,6 @@ minimum_spanning_tree, count_spanning_trees,
 #matching
 MatchingResult, minimum_weight_perfect_matching,
 
-#interdiction
-# more imports/export in interdiction.jl
-
 # matrixdepot
 matrixdepot
 
@@ -212,7 +206,6 @@ include("flow/maximum_flow.jl")
     include("flow/multiroute_flow.jl")
     include("flow/kishimoto.jl")
     include("flow/ext_multiroute_flow.jl")
-include("interdiction/interdiction.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("factory/graphdigraph.jl")

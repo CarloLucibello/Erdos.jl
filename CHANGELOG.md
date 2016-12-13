@@ -4,7 +4,8 @@
 - add Changelog
 - removed member vertices from graph types
 - removed graphmatrices (LinAlg submodule)
-- bring in Matching, Interdiction, MatrixDepot, Community from LightGraphExtras
+- bring in Matching, MatrixDepot, Community from LightGraphExtras
+- removed linear programming matching on bipartite graphs in favor of BlossomV
 - change name to FatGraphs
 - improved docs
 - file and folders reorganization

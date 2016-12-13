@@ -47,7 +47,6 @@ tests = [
     "spanningtrees/spanningtrees",
     "spanningtrees/kruskal",
     "matching/matching",
-    "interdiction/interdiction",
     "utils"
 ]
 
