@@ -79,7 +79,7 @@ writegraph("mygraph.gml", g, :gml)
 
 - **flow operations:** maximum flow, minimum s-t cut
 
-- **matching:** maximum weight  matching on arbitrary graphs (through BlossomV algorithm)
+- **matching:** maximum weight matching on arbitrary graphs (through BlossomV algorithm)
 
 - **clique enumeration:** maximal cliques
 
