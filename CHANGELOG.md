@@ -1,4 +1,4 @@
-## v0.8 (changes from LigtGraphs 0.7.1)
+## v0.1 (changes from LigtGraphs 0.7.1)
 - Edge is now its own type (not a Pair{Int,Int} anymore)
 - drop lg graph format
 - add Changelog
@@ -32,4 +32,5 @@
 - add oriented option for incidence_matrix
 - fix num connected components for empty graphs (now is one)
 - add all_edges
-- vastly improve maximum_flow performance
+- improve maximum_flow performance
+- add minimum s-t cut
