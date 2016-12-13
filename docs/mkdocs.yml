@@ -24,7 +24,6 @@ pages:
   - 'Centrality Measures': 'centrality.md'
   - 'Community Structures': 'community.md'
   - 'Flow and Cut': 'flow.md'
-  - 'Interdiction': 'interdiction.md'
   - 'Matching': 'matching.md'
   - 'Spanning Trees': 'spanningtrees.md'
   - 'Integration with other packages': 'integration.md'

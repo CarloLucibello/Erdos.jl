@@ -2,14 +2,14 @@
 
 [![Build Status](https://travis-ci.org/CarloLucibello/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/FatGraphs.jl)
 [![codecov.io](http://codecov.io/github/CarloLucibello/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/FatGraphs.jl?branch=master)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/FatGraphs.jl/latest)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/FatGraphs.jl/latest)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 [![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs)
 
 A graph library entirely written in Julia, derived from the beautiful library [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl).
 
 ## Documentation
-Full documentation available at [GitHub Pages](https://juliagraphs.github.io/FatGraphs.jl/latest).
+Full documentation available at [GitHub Pages](https://carlolucibello.github.io/FatGraphs.jl/latest).
 Documentation for methods is also available via the Julia REPL help system.
 
 ## Installation
@@ -79,7 +79,7 @@ savegraph("mygraph.gml", g, :gml)
 
 - **flow operations:** maximum flow, minimum s-t cut
 
-- **matching:** minimum/maximum optimal matching on bipartite and arbitrary graphs
+- **matching:** maximum weight perfect matching on arbitrary graphs (through BlossomV algorithm)
 
 - **clique enumeration:** maximal cliques
 
