@@ -54,6 +54,54 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
         f, F, lab = maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO())
         @test f == fcustom
         @test lab == labdef2
-    #   @test maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO(),restriction=caprestrict)[1] == frestrict
+
+        @test maximum_flow(flow_graph,s,t,capacity_matrix,algorithm=ALGO(),restriction=caprestrict)[1] == frestrict
     end
+end
+
+n = 30
+s = n+1
+t = n+2
+g = random_regular_digraph(n, 3, DG)
+c = spzeros(n+2,n+2)
+for e in edges(g)
+    c[src(e), dst(e)] = rand()
+end
+add_vertices!(g, 2)
+for i=1:10
+    j = rand(1:n)
+    add_edge!(g, s, j)
+    c[s, j] = rand()
+
+    j = rand(1:n)
+    add_edge!(g, j, t)
+    c[j, t] = rand()
+end
+
+fdef, Fdef, labdef = maximum_flow(g,s,t)
+fcustom, Fcustom, labcustom = maximum_flow(g,s,t, c)
+
+enedef, cutdef, labd = minimum_cut(g,s,t)
+enecustom, cutcustom, labc = minimum_cut(g,s,t, c)
+@test enedef ≈ fdef
+@test enecustom ≈ fcustom
+@test labd == labdef
+@test labc == labcustom
+for e in cutcustom
+    @test has_edge(g, e)
+    @test labc[src(e)] == labc[s]
+    @test labc[dst(e)] == labc[t]
+end
+for e in cutdef
+    @test has_edge(g, e)
+    @test labd[src(e)] == labd[s]
+    @test labd[dst(e)] == labd[t]
+end
+for ALGO in [EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm]
+    f, F, lab = maximum_flow(g,s,t,algorithm=ALGO())
+    @test f ≈ fdef
+    @test lab == labdef
+    f, F, lab = maximum_flow(g,s,t,c,algorithm=ALGO())
+    @test f ≈ fcustom
+    @test lab == labcustom
 end

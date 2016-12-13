@@ -31,11 +31,8 @@ g = Graph(10, 30) # a graph with 10 vertices and 30 randomly placed edges
 @assert ne(g) == 30
 
 add_edge!(g, 4, 5)
-
 add_vertex!(g)
-
 rem_vertex!(g, 2)
-
 neighbors(g, 4)
 
 # iterate over the edges
@@ -80,7 +77,7 @@ savegraph("mygraph.gml", g, :gml)
 
 - **traversal operations:** cycle detection, BFS and DFS DAGs, BFS and DFS traversals with visitors, DFS topological sort, maximum adjacency / minimum cut, multiple random walks
 
-- **flow operations:** maximum flow
+- **flow operations:** maximum flow, minimum s-t cut
 
 - **matching:** minimum/maximum optimal matching on bipartite and arbitrary graphs
 

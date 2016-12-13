@@ -277,3 +277,5 @@ function has_edge(g::DiGraph, u::Int, v::Int)
         return length(searchsorted(in_neighbors(g,v), u)) > 0
     end
 end
+
+edgetype(g::SimpleGraph) = Edge

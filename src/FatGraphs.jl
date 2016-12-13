@@ -111,6 +111,7 @@ readgraph, writegraph,
 # flow
 maximum_flow, EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm,
 multiroute_flow, KishimotoAlgorithm, ExtendedMultirouteFlowAlgorithm,
+minimum_cut,
 
 # randgraphs
 erdos_renyi, watts_strogatz, random_regular_graph, random_regular_digraph, random_configuration_model,
