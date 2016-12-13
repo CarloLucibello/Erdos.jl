@@ -53,7 +53,7 @@ dijkstra_shortest_paths(g, 4, distmx=distmx).dists
 
 # graph I/O
 g = readgraph("mygraph.gml", :gml)
-savegraph("mygraph.gml", g, :gml)
+writegraph("mygraph.gml", g, :gml)
 ```
 
 ## Current functionality
