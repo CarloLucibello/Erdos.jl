@@ -3,8 +3,6 @@
 [![Build Status](https://travis-ci.org/CarloLucibello/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/FatGraphs.jl)
 [![codecov.io](http://codecov.io/github/CarloLucibello/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/FatGraphs.jl?branch=master)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/FatGraphs.jl)
-[//]: # ([![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.5.svg)](http://pkg.julialang.org/?pkg=FatGraphs))
-[//]: # ([![FatGraphs](http://pkg.julialang.org/badges/FatGraphs_0.6.svg)](http://pkg.julialang.org/?pkg=FatGraphs))
 
 A graph library entirely written in Julia, derived from the beautiful library [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl).
 

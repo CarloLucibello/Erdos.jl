@@ -49,7 +49,9 @@ function _complete{T}(g::ADiGraph, capacity_matrix::AbstractMatrix{T})
         push!(c, zeros(T, length(neigs)))
         for (k, j) in enumerate(neigs)
             if has_edge(g, i, j)
-                c[i][k] = capacity_matrix[i, j]
+                val = capacity_matrix[i, j]
+                @assert val >= 0 "Capacities should be non-negative"
+                c[i][k] = val
             end #else 0
         end
     end
