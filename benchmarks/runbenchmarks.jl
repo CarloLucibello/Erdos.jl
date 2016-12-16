@@ -5,17 +5,17 @@ using Base.Dates
 import JLD: load, save
 
 TUNE = false
-# TUNE = true
-# LOAD_PARS = false
 LOAD_PARS = true
 SAVE_RES = false
-# SAVE_RES = true
 
 bench_dir = Base.source_dir()
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
-GROUPS = ["generators","flow"]
+GLIST = [Graph]
+DGLIST = [DiGraph, GTDiGraph]
+GROUPS = ["core", "generators","flow"]
+# GROUPS = ["core"]
 for group in GROUPS
     include("$group/$group.jl")
 end
@@ -31,7 +31,6 @@ end
 function loadpars!(suite)
     path = joinpath(bench_dir, "parameters")
     files = readdir(path)
-    println(files)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
     f = joinpath(bench_dir, "parameters","$(maximum(dates)).jld")
     loadparams!(suite, load(f, "suite"), :evals, :samples)
