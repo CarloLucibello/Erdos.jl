@@ -25,3 +25,4 @@ h = TestDiGraph()
 @test out_neighbors(h, 1) == nothing
 @test graphtype(h) == nothing
 @test digraphtype(g) == nothing
+@test edgetype(g) == nothing

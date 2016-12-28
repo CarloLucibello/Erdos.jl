@@ -20,11 +20,11 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims, transpose,
             ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!
+            sort, push!, pop!, iteratorsize
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
-    graphtype, digraphtype,
+    graphtype, digraphtype, edgetype,
 
 # edge
 Edge, is_ordered, reverse, #sort

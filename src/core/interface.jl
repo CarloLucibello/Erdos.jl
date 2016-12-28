@@ -17,6 +17,7 @@ Functions to implement:
     rem_vertex!(g, v)
     graphtype(g)
     digraphtype(g)
+    edgetype(g)
 
 Reccomended Overrides:
     in_adjlist(g) #digraph
@@ -131,6 +132,14 @@ Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
 in `g`.
 """
 edge(g::ASimpleGraph, u::Int, v::Int) = nothing
+
+"""
+    edgetype(g)
+
+Returns the type of edges of graph `g`.
+"""
+edgetype(g::ASimpleGraph) = nothing
+
 
 graphtype(g::ADiGraph) = nothing
 digraphtype(g::AGraph) = nothing

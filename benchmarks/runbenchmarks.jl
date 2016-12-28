@@ -1,4 +1,4 @@
-# include("../src/FatGraphs.jl")
+include("../src/FatGraphs.jl")
 using FatGraphs
 using BenchmarkTools
 using Base.Dates
