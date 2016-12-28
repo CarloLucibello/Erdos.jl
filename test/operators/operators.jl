@@ -179,7 +179,9 @@ sg, vm = subgraph(CompleteGraph(10), 5:8)
 @test ne(sg) == 6
 
 gg = CompleteGraph(10)
-sg, vm = subgraph(gg, edges(gg, 5:8))
+r = 5:8
+edg = (e for e in edges(gg) if (src(e) ∈ r && dst(e) ∈ r))
+sg, vm = subgraph(gg, edg)
 @test nv(sg) == 4
 @test ne(sg) == 6
 

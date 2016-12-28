@@ -1,5 +1,4 @@
-include("../src/FatGraphs.jl")
-using FatGraphs
+using LightGraphs
 using BenchmarkTools
 using Base.Dates
 import JLD: load, save
@@ -13,7 +12,7 @@ bench_dir = Base.source_dir()
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
 GLIST = [Graph]
-DGLIST = [DiGraph, GTDiGraph]
+DGLIST = [DiGraph]
 GROUPS = ["core", "generators","flow"]
 # GROUPS = ["core"]
 for group in GROUPS
