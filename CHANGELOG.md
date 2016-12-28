@@ -35,3 +35,5 @@
 - add all_edges
 - improve maximum_flow performance
 - add minimum s-t cut
+
+- add Benchmarks through BenchmarkTools
