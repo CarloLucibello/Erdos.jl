@@ -23,7 +23,7 @@ end
  NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
  Returns 1 (number of graphs written).
 """
-function readpajek(f::IO)
+function readpajek{G}(f::IO, ::Type{G})
     line =readline(f)
     # skip comments
     while startswith(line, "%")
@@ -34,11 +34,9 @@ function readpajek(f::IO)
         line = fline
         (ismatch(r"^\*Arcs",line) || ismatch(r"^\*Edges",line)) && break
     end
-    if ismatch(r"^\*Arcs",line)
-        g = DiGraph(n)
-    else
-        g = Graph(n)
-    end
+    dir = ismatch(r"^\*Arcs",line)
+    g = G(n)
+    g = dir ? digraph(g) : graph(g)
     while ismatch(r"^\*Arcs",line)
         for fline in eachline(f)
             line = fline

@@ -1,12 +1,9 @@
-function readgml(io::IO)
+function readgml{G}(io::IO, ::Type{G})
     gs = first(GML.parse_dict(readall(io))[:graph])
     dir = Bool(get(gs, :directed, 0))
     nodes = [x[:id] for x in gs[:node]]
-    if dir
-        g = DiGraph(length(nodes))
-    else
-        g = Graph(length(nodes))
-    end
+    g = G(length(nodes))
+    g = dir ? digraph(g) : graph(g)
     mapping = Dict{Int,Int}()
     for (i,n) in enumerate(nodes)
         mapping[n] = i

@@ -41,8 +41,8 @@ function minimum_spanning_tree{T<:Real}(
     sizehint!(edge_list, ne(g))
     sizehint!(mst, ne(g))
 
-    for e in edges(g)
-        heappush!(edge_list, KruskalHeapEntry{T}(e, distmx[src(e), dst(e)]))
+    for (i,j) in edges(g)
+        heappush!(edge_list, KruskalHeapEntry{T}(Edge(i,j), distmx[i,j]))
     end
 
     while !isempty(edge_list) && length(mst) < nv(g) - 1

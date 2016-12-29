@@ -12,18 +12,18 @@ B[i->j, k->l] = δ(j,k)* (1 - δ(i,l))
 returns a matrix B, and an edgemap storing the oriented edges' positions in B
 """
 function non_backtracking_matrix(g::ASimpleGraph)
-    # idedgemap = Dict{Int, Edge}()
     edgeidmap = Dict{Edge, Int}()
     m = 0
     for e in edges(g)
         m += 1
-        edgeidmap[e] = m
+        edgeidmap[Edge(src(e),dst(e))] = m
     end
 
     if !is_directed(g)
         for e in edges(g)
             m += 1
-            edgeidmap[reverse(e)] = m
+            ee = Edge(src(e),dst(e))
+            edgeidmap[reverse(ee)] = m
         end
     end
 
@@ -71,13 +71,15 @@ function Nonbacktracking(g::ASimpleGraph)
     edgeidmap = Dict{Edge, Int}()
     m = 0
     for e in edges(g)
+        ee = Edge(src(e),dst(e))
         m += 1
-        edgeidmap[e] = m
+        edgeidmap[ee] = m
     end
     if !is_directed(g)
         for e in edges(g)
+            ee = Edge(src(e),dst(e))
             m += 1
-            edgeidmap[reverse(e)] = m
+            edgeidmap[reverse(ee)] = m
         end
     end
     return Nonbacktracking(g, edgeidmap, m)
@@ -108,7 +110,7 @@ function A_mul_B!(C, nbt::Nonbacktracking, B)
     return C
 end
 
-function coo_sparse(nbt::Nonbacktracking)
+function coo_sparse{G}(nbt::Nonbacktracking{G})
     m = nbt.m
     #= I,J = zeros(Int, m), zeros(Int, m) =#
     I,J = zeros(Int, 0), zeros(Int, 0)
@@ -139,7 +141,7 @@ end
 """contract!(vertexspace, nbt, edgespace) in place version of
 contract(nbt, edgespace). modifies first argument
 """
-function contract!(vertexspace::Vector, nbt::Nonbacktracking, edgespace::Vector)
+function contract!{G}(vertexspace::Vector, nbt::Nonbacktracking{G}, edgespace::Vector)
     for i=1:nv(nbt.g)
         for j in neighbors(nbt.g, i)
             u = nbt.edgeidmap[i > j ? Edge(j,i) : Edge(i,j)]

@@ -3,12 +3,13 @@ using FatGraphs
 using Base.Test
 
 tests = [
+    "factory/graphdigraph",
+    "factory/gtgraph",
     "core/edge",
     "core/interface",
     "core/core",
     "core/edgeiter",
     "operators/operators",
-    "factory/graphdigraph",
     "distances/distance",
     "distances/edit_distance",
     "linalg/spectral",
@@ -53,7 +54,9 @@ tests = [
 
 testdir = dirname(@__FILE__)
 (G, DG) = (Graph, DiGraph)
-# (G, DG) = (Graph, GTDiGraph)
+E = Edge
+# (G, DG) = (GTGraph, GTDiGraph)
+# E = GTEdge
 
 # @testset "FatGraphs Testing" begin
     for t in tests

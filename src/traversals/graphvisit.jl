@@ -28,15 +28,15 @@ end
 # This is the common base for BreadthFirst and DepthFirst
 abstract SimpleGraphVisitAlgorithm
 
-typealias AbstractEdgeMap{T} Associative{Edge,T}
+typealias AbstractEdgeMap{E,T} Associative{E,T}
 typealias AbstractVertexMap{T} Union{AbstractVector{T},Associative{Int, T}}
 
-type DummyEdgeMap <: AbstractEdgeMap{Int}
+type DummyEdgeMap <: AbstractEdgeMap{Void, Int}
 end
 
-getindex(d::DummyEdgeMap, e::Edge) = 0
-setindex!(d::DummyEdgeMap, x::Int, e::Edge) = x
-get(d::DummyEdgeMap, e::Edge, x::Int) = x
+getindex(d::DummyEdgeMap, e::AEdge) = 0
+setindex!(d::DummyEdgeMap, x::Int, e::AEdge) = x
+get(d::DummyEdgeMap, e::AEdge, x::Int) = x
 
 
 ###########################################################

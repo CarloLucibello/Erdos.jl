@@ -1,6 +1,6 @@
 # TODO: implement writing a dict of graphs
 
-function _graphml_read_one_graph(e::XMLElement, isdirected::Bool)
+function _graphml_read_one_graph{G}(e::XMLElement, ::Type{G})
     nodes = Dict{String,Int}()
     edges = Vector{Edge}()
 
@@ -18,14 +18,14 @@ function _graphml_read_one_graph(e::XMLElement, isdirected::Bool)
         end
     end
     #Put data in graph
-    g = (isdirected ? DiGraph : Graph)(length(nodes))
+    g = G(length(nodes))
     for edge in edges
         add_edge!(g, edge)
     end
     return g
 end
 
-function readgraphml(io::IO)
+function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
     xdoc = parse_string(readall(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "graphml" || error("Not a GraphML file")
@@ -43,7 +43,8 @@ function readgraphml(io::IO)
                 # else
                 #     graphname =  isdir ? "digraph" : "graph"
                 # end
-                return _graphml_read_one_graph(e, isdir)
+                T = isdir ? digraphtype(G()) : graphtype(G())
+                return _graphml_read_one_graph(e, T)
             else
                 warn("Skipping unknown XML element '$(name(e))'")
             end

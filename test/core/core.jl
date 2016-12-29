@@ -1,4 +1,3 @@
-g3 = PathGraph(5, G)
 g4 = PathDiGraph(5, DG)
 g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
@@ -10,11 +9,11 @@ h4 = DG(7)
 h5 = DG()
 
 
-e1 = Edge(1,2)
-e2 = Edge(1,3)
-e3 = Edge(1,4)
-e4 = Edge(2,5)
-e5 = Edge(3,5)
+e1 = E(1,2)
+e2 = E(1,3)
+e3 = E(1,4)
+e4 = E(2,5)
+e5 = E(3,5)
 
 g = G(5)
 @test add_edge!(g, 1, 2)
@@ -39,7 +38,7 @@ end
 @test i == 5
 @test has_edge(g,3,5)
 # @test edges(g) == Set([e1, e2, e3, e4, e5])
-# @test Set{Edge}(edges(g)) == Set([e1, e2, e3, e4, e5])
+# @test Set{E}(edges(g)) == Set([e1, e2, e3, e4, e5])
 #
 @test degree(g) == [3, 2, 2, 1, 2]
 @test in_degree(g) == [3, 2, 2, 1, 2]
@@ -190,7 +189,7 @@ g10 = CycleGraph(5, G)
 @test rem_vertex!(g10, 5)
 @test g10 == PathGraph(4, G)
 
-g10 = PathGraph(3)
+g10 = PathGraph(3, G)
 @test rem_vertex!(g10, 2)
 @test g10 == G(2)
 
@@ -207,6 +206,7 @@ g10 = CompleteGraph(5, G)
 @test sprint(show, h1) == "{5, 0} undirected graph"
 @test sprint(show, h3) == "empty undirected graph"
 
+g3 = PathGraph(5, G)
 @test graph(digraph(g3)) == g3
 
 @test degree(g3, 1) == 1
@@ -216,10 +216,10 @@ g10 = CompleteGraph(5, G)
 g = G(5)
 @test add_edge!(g, 1, 2)
 
-e2 = Edge(1,3)
-e3 = Edge(1,4)
-e4 = Edge(2,5)
-e5 = Edge(3,5)
+e2 = E(1,3)
+e3 = E(1,4)
+e4 = E(2,5)
+e5 = E(3,5)
 
 @test add_edge!(g, e2)
 @test add_edge!(g, e3)
@@ -250,11 +250,11 @@ for i=1:5
 end
 
 
-@test adjlist(g)[1] == out_neighbors(g,1) ==
-    in_adjlist(g)[1] == in_neighbors(g,1) ==
+@test adjlist(g)[1] == collect(out_neighbors(g,1)) ==
+    in_adjlist(g)[1] == collect(in_neighbors(g,1)) ==
     adjlist(g)[1] == [2,3,4]
 
-e0 = Edge(2, 3)
+e0 = E(2, 3)
 @test sprint(show, h4) == "{7, 0} directed graph"
 @test sprint(show, h5) == "empty directed graph"
 @test has_edge(g, e1)
@@ -282,13 +282,10 @@ badadjmx = [ 0 1 0; 1 0 1]
 @test_throws ErrorException G(sparse(badadjmx))
 @test_throws ErrorException DG(badadjmx)
 @test_throws ErrorException DG(sparse(badadjmx))
-@test_throws ErrorException G([1 0; 1 1])
 
 
 @test !add_edge!(g, 100, 100)
 @test !add_edge!(h, 100, 100)
-
-@test_throws ErrorException G(sparse(adjmx2))
 
 g = G(sparse(adjmx1))
 h = DG(sparse(adjmx1))
@@ -300,3 +297,17 @@ h = DG(sparse(adjmx1))
 @test collect(neighbors(WheelDiGraph(10, DG),2)) ==
     collect(out_neighbors(WheelDiGraph(10, DG),2))
 @test collect(out_neighbors(WheelDiGraph(10, DG),2)) == [3]
+
+gg = DG(4)
+add_edge!(gg, 1, 2)
+add_edge!(gg, 1, 3)
+
+g = reverse(gg)
+@test ne(g) == ne(gg)
+@test E(2,1) in edges(g)
+@test !(E(1,2) in edges(g))
+@test E(3,1) in edges(g)
+@test !(E(1,3) in edges(g))
+
+reverse!(g)
+@test g == gg

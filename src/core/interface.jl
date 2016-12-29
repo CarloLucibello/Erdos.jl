@@ -29,6 +29,7 @@ Reccomended Overrides:
     rem_edge!(g, e)
     graph(dg)
     digraph(g)
+    reverse!(dg) #digraph
 """
 abstract AGraph
 
@@ -143,3 +144,27 @@ edgetype(g::ASimpleGraph) = nothing
 
 graphtype(g::ADiGraph) = nothing
 digraphtype(g::AGraph) = nothing
+
+
+abstract AEdge
+
+"""
+    src(e)
+
+Returns the source of an edge.
+"""
+src(e::AEdge) = nothing
+
+"""
+    dst(e)
+
+Returns the destination of an edge.
+"""
+dst(e::AEdge) = nothing
+
+"""
+    reverse(e::Edge)
+
+Swap `e.src` and `e.dst`.
+"""
+reverse(e::AEdge) = nothing

@@ -26,5 +26,5 @@ g = G(10, 20)
 
 # dummy edge map test
 d = FatGraphs.DummyEdgeMap()
-e = Edge(1,2)
+e = E(1,2)
 @test d[e] == 0

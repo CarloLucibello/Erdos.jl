@@ -272,17 +272,20 @@ all_edges(g::AGraph, v::Int) = out_edges(g, v)
 all_edges(g::ADiGraph, v::Int) = chain(out_edges(g, v), in_edges(g, v))
 #TODO fix chain eltype, since collect gives Any[...]
 
-#TODO define for abstract types
 """
-    reverse(g::DiGraph)
+    reverse(g::ADiGraph)
 
 Produces a graph where all edges are reversed from the
 original.
 """
-reverse(g::ADiGraph) = nothing
+function reverse{G<:ADiGraph}(g::G)
+    h = G(nv(g))
+    for e in edges(g)
+        add_edge!(h, reverse(e))
+    end
+    return h
+end
 
-
-#TODO define for abstract types
 """
     reverse!(g::DiGraph)
 

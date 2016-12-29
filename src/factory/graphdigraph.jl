@@ -1,3 +1,4 @@
+
 """
     type Graph <: AGraph
         ne::Int
@@ -60,10 +61,9 @@ end
 function Graph{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-    issymmetric(adjmx) || error("Adjacency / distance matrices must be symmetric")
 
     g = Graph(dima)
-    for i in find(triu(adjmx))
+    for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
     end

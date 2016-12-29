@@ -117,11 +117,11 @@ function digraph{G<:ADiGraph}(s::Symbol, ::Type{G} = DiGraph)
 end
 
 DiamondGraph{G<:AGraph}(::Type{G}) =
-    graph(4, [(1,2), (1,3), (2,3), (2,4), (3,4)])
+    graph(4, [(1,2), (1,3), (2,3), (2,4), (3,4)], G)
 
 
 BullGraph{G<:AGraph}(::Type{G}) =
-    graph(5, [(1,2), (1,3), (2,3), (2,4), (3,5)])
+    graph(5, [(1,2), (1,3), (2,3), (2,4), (3,5)], G)
 
 
 function ChvatalGraph{G<:AGraph}(::Type{G})

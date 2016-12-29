@@ -34,10 +34,10 @@ distmx[4,3] = 3
 
 # Testing Kruskal's algorithm
 mst = minimum_spanning_tree(g, distmx)
-vec_mst = Vector{Edge}()
-push!(vec_mst, Edge(1, 2))
-push!(vec_mst, Edge(3, 4))
-push!(vec_mst, Edge(2, 3))
+vec_mst = Vector{E}()
+push!(vec_mst, E(1, 2))
+push!(vec_mst, E(3, 4))
+push!(vec_mst, E(2, 3))
 
 @test mst == vec_mst
 
@@ -95,14 +95,14 @@ distmx_sec[5,8] = 0.37
 distmx_sec[8,5] = 0.37
 
 mst2 = minimum_spanning_tree(g, distmx_sec)
-vec2 = Vector{Edge}()
-push!(vec2, Edge(1, 8))
-push!(vec2, Edge(3, 4))
-push!(vec2, Edge(2, 8))
-push!(vec2, Edge(1, 3))
-push!(vec2, Edge(6, 8))
-push!(vec2, Edge(5, 6))
-push!(vec2, Edge(3, 7))
+vec2 = Vector{E}()
+push!(vec2, E(1, 8))
+push!(vec2, E(3, 4))
+push!(vec2, E(2, 8))
+push!(vec2, E(1, 3))
+push!(vec2, E(6, 8))
+push!(vec2, E(5, 6))
+push!(vec2, E(3, 7))
 
 @test mst2 == vec2
 

@@ -42,7 +42,7 @@ rem_vertex!, edge, clean_vertex!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,
-GTDiGraph,
+GTDiGraph, GTGraph, SimpleGTGraph, GTEdge,
 
 # distance
 eccentricity, diameter, periphery, radius, center,
@@ -160,8 +160,8 @@ more traditional and better-optimized mechanisms.
 FatGraphs
 
 include("core/interface.jl")
-    include("core/edge.jl")
     include("core/core.jl")
+    include("core/edge.jl")
     include("core/edgeiter.jl")
     include("core/misc.jl")
 include("operators/operators.jl")
@@ -182,7 +182,6 @@ include("persistence/common.jl")
     include("persistence/gml.jl")
     include("persistence/graphml.jl")
     include("persistence/net.jl")
-    include("persistence/jld.jl")
 include("generators/staticgraphs.jl")
     include("generators/randgraphs.jl")
     include("generators/euclideangraphs.jl")

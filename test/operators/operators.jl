@@ -53,14 +53,14 @@ z = symmetric_difference(h,g3)
 
 h = G(6)
 add_edge!(h, 5, 6)
-e = Edge(5, 6)
+e = E(5, 6)
 z = union(g3, h)
 @test has_edge(z, e)
 @test z == PathGraph(6, G)
 
 h = DG(6)
 add_edge!(h, 5, 6)
-e = Edge(5, 6)
+e = E(5, 6)
 z = union(g4, h)
 @test has_edge(z, e)
 @test z == PathDiGraph(6, DG)
@@ -125,7 +125,8 @@ h = tensor_product(g22, g22)
 @test ne(h) == 1
 
 nx = 20; ny = 21
-gg = PathGraph(ny, G); hh = PathGraph(nx, G)
+gg = PathGraph(ny, G)
+hh = PathGraph(nx, G)
 c = cartesian_product(gg, hh)
 g = crosspath(ny, PathGraph(nx, G));
 @test g == c
@@ -174,11 +175,11 @@ h2, vm = subgraph(g, r)
 @test vm == collect(r)
 @test h2 == g[r]
 
-sg, vm = subgraph(CompleteGraph(10), 5:8)
+sg, vm = subgraph(CompleteGraph(10, G), 5:8)
 @test nv(sg) == 4
 @test ne(sg) == 6
 
-gg = CompleteGraph(10)
+gg = CompleteGraph(10, G)
 r = 5:8
 edg = (e for e in edges(gg) if (src(e) ∈ r && dst(e) ∈ r))
 sg, vm = subgraph(gg, edg)
@@ -186,17 +187,17 @@ sg, vm = subgraph(gg, edg)
 @test ne(sg) == 6
 
 
-sg2, vm = subgraph(CompleteGraph(10), [5,6,7,8])
+sg2, vm = subgraph(CompleteGraph(10, G), [5,6,7,8])
 @test sg2 == sg
 @test vm[4] == 8
 
-gg5 = CompleteGraph(10)
-elist = [Edge(1,2),Edge(2,3),Edge(3,4),Edge(4,5),Edge(5,1)]
+gg5 = CompleteGraph(10, G)
+elist = [E(1,2),E(2,3),E(3,4),E(4,5),E(5,1)]
 sg, vm = subgraph(gg5, elist)
-@test sg == CycleGraph(5)
+@test sg == CycleGraph(5, G)
 @test sort(vm) == [1:5;]
 
 
-g10 = StarGraph(10)
+g10 = StarGraph(10, G)
 @test egonet(g10, 1, 0) == G(1,0)
 @test egonet(g10, 1, 1) == g10

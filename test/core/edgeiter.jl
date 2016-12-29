@@ -37,7 +37,7 @@ for e in eit
 end
 @test i == ne(ga)
 
-@test [e for e in eit] == [Edge(2, 3), Edge(3, 10), Edge(5,10)]
+@test [e for e in eit] == [E(2, 3), E(3, 10), E(5,10)]
 
 ga = DG(10)
 add_edge!(ga, 3, 2)
@@ -47,7 +47,7 @@ add_edge!(ga, 10, 3)
 
 eit = edges(ga)
 
-@test [e for e in eit] == [Edge(3, 2), Edge(3, 10), Edge(5,10), Edge(10,3)]
+@test [e for e in eit] == [E(3, 2), E(3, 10), E(5,10), E(10,3)]
 @test collect(eit) == [e for e in eit]
 # g = CompleteGraph(10)
 # @test collect(edges(g,1:3)) == collect(edges(g,[1:3;]))

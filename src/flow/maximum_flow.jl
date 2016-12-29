@@ -68,7 +68,7 @@ function poslist(g::ASimpleGraph)
     for i=1:nv(g)
         push!(pl, zeros(Int, degree(g, i)))
         for (k,j) in enumerate(neighbors(g, i))
-            p = findfirst(neighbors(g,j), i)
+            p = countfirst(neighbors(g,j), i)
             @assert p > 0
             pl[i][k] = p
         end

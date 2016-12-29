@@ -185,7 +185,8 @@ end
 
 Replicate `len` times `h` and connect each vertex with its copies in a path
 """
-crosspath(len::Integer, g::AGraph) = cartesian_product(PathGraph(len), g)
+crosspath{G<:AGraph}(len::Integer, g::G) =
+                cartesian_product(PathGraph(len, G), g)
 
 """
     cartesian_product(g, h)
@@ -201,8 +202,7 @@ function cartesian_product{G<:ASimpleGraph}(g::G, h::G)
         end
     end
 
-    for e in edges(h)
-        j1, j2 = src(e), dst(e)
+    for (j1, j2) in edges(h)
         for i=1:nv(g)
             add_edge!(z, id(i,j1), id(i,j2))
         end

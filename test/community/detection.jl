@@ -6,7 +6,7 @@
 
 return : a matrix ϕ where ϕ[:,i] are the coordinates for vertex i.
 """
-function nonbacktrack_embedding_dense(g::Graph, k::Int)
+function nonbacktrack_embedding_dense(g::AGraph, k::Int)
     B, edgeid = non_backtracking_matrix(g)
     λ,eigv,conv = eigs(B, nev=k+1, v0=ones(Float64, size(B,1)))
     ϕ = zeros(Complex64, k-1, nv(g))
@@ -27,7 +27,7 @@ function nonbacktrack_embedding_dense(g::Graph, k::Int)
 end
 
 n = 10; k = 5
-pg = PathGraph(n)
+pg = PathGraph(n, G)
 ϕ1 = nonbacktrack_embedding(pg, k)'
 
 nbt = Nonbacktracking(pg)
@@ -51,7 +51,7 @@ z = B * x
 
 #check that this recovers communities in the path of cliques
 n=10
-g10 = CompleteGraph(n)
+g10 = CompleteGraph(n, G)
 z = copy(g10)
 for k=2:5
     z = blkdiag(z, g10)
@@ -89,7 +89,7 @@ for k=2:5
 end
 
 n=10
-g10 = CompleteGraph(n)
+g10 = CompleteGraph(n, G)
 z = copy(g10)
 for k=2:5
     z = blkdiag(z, g10)
