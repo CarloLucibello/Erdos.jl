@@ -19,7 +19,7 @@ function erdos_renyi{G<:ASimpleGraph}(n::Int, p::Real, ::Type{G} = Graph;
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     if seed >= 0
         # init dsfmt generator without altering GLOBAL_RNG
-        Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+1)
+        Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
     end
     ne = rand(Binomial(m, p)) # sadly StatsBase doesn't support non-global RNG
     return erdos_renyi(n, m, G; seed=seed)
