@@ -7,15 +7,24 @@ const filemap = Dict{Symbol, Tuple{Function, Function}}()
         # ....
 
 """
-    readgraph(file, t, G=Graph)
+    readgraph(file, t, G=Graph; compressed=false)
 
-Reads a graph from  `file` in the format `t`.
+Reads a graph from  `file` in the format `t`. Returns a graph of type `G`.
+Compressed files can eventually be read.
 
 Supported formats are `:gml, :dot, :graphml, :gexf, :NET`.
 """
-function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph)
-    GZip.open(fn,"r") do io
-        readgraph(io, t, G)
+function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
+    if compressed
+        io = GZip.open(fn,"r")
+        g = readgraph(io, t, G)
+        close(io)
+        return g
+    else
+        io = open(fn,"r")
+        g = readgraph(io, t, G)
+        close(io)
+        return g
     end
 end
 
