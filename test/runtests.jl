@@ -3,7 +3,7 @@ using FatGraphs
 using Base.Test
 
 tests = [
-    "factory/graphdigraph",
+    "factory/graph",
     "factory/gtgraph",
     "core/edge",
     "core/interface",
