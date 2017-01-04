@@ -9,23 +9,24 @@ type PushRelabelHeap{T}
     data::MutableBinaryHeap{Pair{Int,T},Comp}
     handles::Vector{Int}
 
-    function PushRelabelHeap(N::Int)
+    function PushRelabelHeap(N)
         handles = zeros(Int, N)
         data = MutableBinaryHeap{Pair{Int,T},Comp}(Comp())
         return new(data, handles)
     end
 end
 
-
-function push!(h::PushRelabelHeap, k::Int, v)
+function push!(h::PushRelabelHeap, k::Int, v::Int)
     a = push!(h.data, k=>v)
     h.handles[k] = a
 end
+push!(h::PushRelabelHeap, k::Integer, v::Integer) = push!(h, Int(k), Int(v))
 
-function update!(h::PushRelabelHeap, k::Int, v)
+function update!(h::PushRelabelHeap, k::Int, v::Int)
     a = h.handles[k]
     a > 0 && update!(h.data, a, k=>v)
 end
+update!(h::PushRelabelHeap, k::Integer, v::Integer) = update!(h, Int(k), Int(v))
 
 function pop!(h::PushRelabelHeap)
     k = pop!(h.data)[1]
@@ -52,14 +53,14 @@ Maintains the following auxillary arrays:
 Requires arguments:
 
 - g::ADiGraph                # the input graph
-- source::Int                            # the source vertex
-- target::Int                            # the target vertex
+- source                            # the source vertex
+- target                            # the target vertex
 - capacity_matrix::AbstractArray{T,2}    # edge flow capacities
 """
 function push_relabel_impl{T<:Number}(
         g::ADiGraph,               # the input graph
-        source::Int,                           # the source vertex
-        target::Int,                           # the target vertex
+        source,                           # the source vertex
+        target,                           # the target vertex
         capacity_matrix::Vector{Vector{T}},   # edge flow capacities
         pos
     )
@@ -112,14 +113,14 @@ Pushes inactive nodes into the queue and activates them.
 Requires arguments:
 
 - Q::PushRelabelHeap
-- v::Int
+- v
 - active::AbstractArray{Bool,1}
 - excess::AbstractArray{T,1}
 """
 
 function enqueue_vertex!{T<:Number}(
         Q::PushRelabelHeap,
-        v::Int,                                # input vertex
+        v,                                # input vertex
         active::AbstractVector{Bool},
         excess::Vector{T},
         height::Vector{Int})
@@ -137,8 +138,8 @@ Pushes as much flow as possible through the given edge.
 Requires arguements:
 
 - g::ADiGraph              # the input graph
-- u::Int                               # input from-vertex
-- v::Int                               # input to-vetex
+- u                               # input from-vertex
+- v                               # input to-vetex
 - capacity_matrix::AbstractArray{T,2}
 - flow_matrix::AbstractArray{T,2}
 - excess::AbstractArray{T,1}
@@ -148,9 +149,9 @@ Requires arguements:
 """
 function push_flow!{T<:Number}(
         g::ADiGraph,             # the input graph
-        u::Int,                              # input from-vertex
-        v::Int,                                 # input to-vetex
-        k::Int,                                 #index of v as neig of u
+        u,                              # input from-vertex
+        v,                                 # input to-vetex
+        k,                                 #index of v as neig of u
         capacity_matrix,
         flow_matrix,
         excess::Vector{T},
@@ -184,7 +185,7 @@ Reduces the number of relabels required.
 Requires arguments:
 
 - g::ADiGraph                # the input graph
-- h::Int                                 # cutoff height
+- h                                 # cutoff height
 - excess::AbstractArray{T,1}
 - height::AbstractArray{Int,1}
 - active::AbstractArray{Bool,1}
@@ -193,7 +194,7 @@ Requires arguments:
 """
 function gap!{T<:Number}(
         g::ADiGraph,               # the input graph
-        h::Int,                                # cutoff height
+        h,                                # cutoff height
         excess::AbstractArray{T,1},
         height::AbstractArray{Int,1},
         active::AbstractArray{Bool,1},
@@ -221,7 +222,7 @@ edge.
 Requires arguments:
 
 - g::ADiGraph                 # the input graph
-- v::Int                                  # input vertex to be relabeled
+- v                                  # input vertex to be relabeled
 - capacity_matrix::AbstractArray{T,2}
 - flow_matrix::AbstractArray{T,2}
 - excess::AbstractArray{T,1}
@@ -233,7 +234,7 @@ Requires arguments:
 
 function relabel!{T<:Number}(
         g::ADiGraph,                # the input graph
-        v::Int,                                 # input vertex to be relabeled
+        v,                                 # input vertex to be relabeled
         capacity_matrix,
         flow_matrix,
         excess::Vector{T},
@@ -264,7 +265,7 @@ vertex if the excess remains non-zero.
 Requires arguments:
 
 - g::ADiGraph                 # the input graph
-- v::Int                                  # vertex to be discharged
+- v                                  # vertex to be discharged
 - capacity_matrix::AbstractArray{T,2}
 - flow_matrix::AbstractArray{T,2}
 - excess::AbstractArray{T,1}
@@ -275,7 +276,7 @@ Requires arguments:
 """
 function discharge!{T<:Number}(
         g::ADiGraph,                # the input graph
-        v::Int,                                 # vertex to be discharged
+        v,                                 # vertex to be discharged
         capacity_matrix,
         flow_matrix,
         excess::Vector{T},

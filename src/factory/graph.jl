@@ -20,7 +20,7 @@ type Graph{T<:Integer} <: AGraph
     ne::Int
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
 
-    function Graph(n::T = zero(T))
+    function Graph(n = 0)
         fadjlist = Vector{Vector{T}}()
         sizehint!(fadjlist,n)
         for i = 1:n
@@ -29,7 +29,7 @@ type Graph{T<:Integer} <: AGraph
         return new(0, fadjlist)
     end
 
-    Graph(ne, fadj::Vector{Vector{T}}) = new(ne, fadj)
+    Graph(ne, fadj::Vector{Vector{T}}) = new(Int(ne), fadj)
 
     Graph(n, m; seed = -1) = erdos_renyi(n, m, Graph{T}; seed=seed)
 
@@ -74,7 +74,7 @@ type DiGraph{T<:Integer} <: ADiGraph
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
 
-    function DiGraph(n::T=zero(T))
+    function DiGraph(n=0)
         fadjlist = Vector{Vector{T}}()
         badjlist = Vector{Vector{T}}()
         for i = 1:n
@@ -85,7 +85,7 @@ type DiGraph{T<:Integer} <: ADiGraph
     end
 
     DiGraph(ne, fadj::Vector{Vector{T}}, badj::Vector{Vector{T}}) = new(ne, fadj, badj)
-    DiGraph(nv::T, ne::T; seed = -1) = erdos_renyi(nv, ne, DiGraph{T}, seed=seed)
+    DiGraph(nv, ne; seed = -1) = erdos_renyi(nv, ne, DiGraph{T}, seed=seed)
 
     function DiGraph{S}(adjmx::AbstractMatrix{S})
         dima,dimb = size(adjmx)

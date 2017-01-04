@@ -34,6 +34,11 @@ immutable Edge{T} <: AEdge
     dst::T
 end
 
+function Edge{T,S}(u::T, v::S)
+    V = promote_type(T,S)
+    return Edge{V}(promote(u, v)...)
+end
+
 Edge(g::ASimpleGraph, u, v) = Edge(u, v)
 
 src(e::Edge) = e.src

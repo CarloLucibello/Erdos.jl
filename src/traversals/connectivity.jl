@@ -134,7 +134,7 @@ type TarjanVisitor <: SimpleGraphVisitor
     components::Vector{Vector{Int}}
 end
 
-TarjanVisitor(n::Int) = TarjanVisitor(
+TarjanVisitor(n) = TarjanVisitor(
     Vector{Int}(),
     falses(n),
     Vector{Int}(),
@@ -150,7 +150,7 @@ function discover_vertex!(vis::TarjanVisitor, v)
     return true
 end
 
-function examine_neighbor!(vis::TarjanVisitor, v, w, v_color::Int, w_color::Int, e_color::Int)
+function examine_neighbor!(vis::TarjanVisitor, v, w, v_color, w_color, e_color)
     if w_color != 0 && vis.onstack[w] # != 0 means seen
         while vis.index[w] > 0 && vis.index[w] < vis.lowlink[end]
             pop!(vis.lowlink)
@@ -284,9 +284,9 @@ type NeighborhoodVisitor <: SimpleGraphVisitor
     neigs::Vector{Int}
 end
 
-NeighborhoodVisitor(d::Int) = NeighborhoodVisitor(d, Vector{Int}())
+NeighborhoodVisitor(d) = NeighborhoodVisitor(d, Vector{Int}())
 
-function examine_neighbor!(visitor::NeighborhoodVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::NeighborhoodVisitor, u, v, ucolor, vcolor, ecolor)
     -ucolor > visitor.d && return false # color is negative for non-closed vertices
     if vcolor == 0
         push!(visitor.neigs, v)
@@ -302,7 +302,7 @@ Returns a vector of the vertices in `g` at distance less or equal to `d`
 from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
 the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
 """
-function neighborhood(g::ASimpleGraph, v::Int, d::Int; dir=:out)
+function neighborhood(g::ASimpleGraph, v, d; dir=:out)
     @assert d >= 0 "Distance has to be greater then zero."
     visitor = NeighborhoodVisitor(d)
     push!(visitor.neigs, v)
