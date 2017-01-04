@@ -213,9 +213,7 @@ end
 function add_edge!(g::DiGraph, s, d)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
-    if inserted
-        g.ne += 1
-    end
+    g.ne = ifelse(inserted, g.ne+1, g.ne)
     return inserted && _insert_and_dedup!(g.badjlist[d], s)
 end
 
@@ -272,7 +270,6 @@ in_adjlist(g::DiGraph) = g.badjlist
 =={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
-
 function has_edge(g::Graph, u, v)
     u > nv(g) || v > nv(g) && return false
     if degree(g, u) > degree(g, v)
@@ -291,3 +288,30 @@ function has_edge(g::DiGraph, u, v)
 end
 
 edgetype(g::SimpleGraph) = Edge
+
+# UNSAFE METHODS
+
+function unsafe_add_edge!(g::Graph, s, d)
+    push!(g.fadjlist[s], d)
+    s != d && push!(g.fadjlist[d], s)
+end
+
+function rebuild!(g::Graph)
+    for neigs in g.fadjlist
+        sort!(neigs)
+    end
+end
+
+function unsafe_add_edge!(g::DiGraph, s, d)
+    push!(g.fadjlist[s], d)
+    push!(g.badjlist[d], s)
+end
+
+function rebuild!(g::DiGraph)
+    for neigs in g.fadjlist
+        sort!(neigs)
+    end
+    for neigs in g.badjlist
+        sort!(neigs)
+    end
+end
