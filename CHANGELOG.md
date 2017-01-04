@@ -37,3 +37,5 @@
 - add minimum s-t cut
 
 - add Benchmarks through BenchmarkTools
+- Vertex type for Graph can be any integer,
+    i.e. we have Graph{Int32} and the default Graph{Int64}

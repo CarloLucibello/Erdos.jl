@@ -15,7 +15,7 @@ discover_vertex!(vis::SimpleGraphVisitor, v) = true
 open_vertex!(vis::SimpleGraphVisitor, v) = true
 
 # invoked when a neighbor is discovered & examined
-examine_neighbor!(vis::SimpleGraphVisitor, u, v, ucolor::Int, vcolor::Int, ecolor::Int) = true
+examine_neighbor!(vis::SimpleGraphVisitor, u, v, ucolor, vcolor, ecolor) = true
 
 # invoked when all of v's neighbors have been examined
 close_vertex!(vis::SimpleGraphVisitor, v) = true
@@ -35,8 +35,8 @@ type DummyEdgeMap <: AbstractEdgeMap{Void, Int}
 end
 
 getindex(d::DummyEdgeMap, e::AEdge) = 0
-setindex!(d::DummyEdgeMap, x::Int, e::AEdge) = x
-get(d::DummyEdgeMap, e::AEdge, x::Int) = x
+setindex!(d::DummyEdgeMap, x, e::AEdge) = x
+get(d::DummyEdgeMap, e::AEdge, x) = x
 
 
 ###########################################################
@@ -57,7 +57,7 @@ type VertexListVisitor <: SimpleGraphVisitor
     end
 end
 
-function discover_vertex!(visitor::VertexListVisitor, v::Int)
+function discover_vertex!(visitor::VertexListVisitor, v)
     push!(visitor.vertices, v)
     return true
 end
@@ -79,22 +79,22 @@ type LogGraphVisitor{S<:IO} <: SimpleGraphVisitor
     io::S
 end
 
-function discover_vertex!(vis::LogGraphVisitor, v::Int)
+function discover_vertex!(vis::LogGraphVisitor, v)
     println(vis.io, "discover vertex: $v")
     return true
 end
 
-function open_vertex!(vis::LogGraphVisitor, v::Int)
+function open_vertex!(vis::LogGraphVisitor, v)
     println(vis.io, "open vertex: $v")
     return true
 end
 
-function close_vertex!(vis::LogGraphVisitor, v::Int)
+function close_vertex!(vis::LogGraphVisitor, v)
     println(vis.io, "close vertex: $v")
     return true
 end
 
-function examine_neighbor!(vis::LogGraphVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(vis::LogGraphVisitor, u, v, ucolor, vcolor, ecolor)
     println(vis.io, "examine neighbor: $u -> $v (ucolor = $ucolor, vcolor = $vcolor, edgecolor= $ecolor)")
     return true
 end

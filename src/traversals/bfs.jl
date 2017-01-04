@@ -124,7 +124,7 @@ type TreeBFSVisitorVector <: SimpleGraphVisitor
     tree::Vector{Int}
 end
 
-function TreeBFSVisitorVector(n::Int)
+function TreeBFSVisitorVector(n::Integer)
     return TreeBFSVisitorVector(fill(0, n))
 end
 
@@ -143,8 +143,8 @@ end
 
 tree(parents::TreeBFSVisitorVector) = tree(parents.tree)
 
-function examine_neighbor!(visitor::TreeBFSVisitorVector, u::Int, v::Int,
-                            ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::TreeBFSVisitorVector, u, v,
+                            ucolor, vcolor, ecolor)
     if u != v && vcolor == 0
         visitor.tree[v] = u
     end
@@ -174,7 +174,7 @@ and returns a directed acyclic graph of vertices in the order they were discover
 
 This function is a high level wrapper around bfs_tree!, use that function for more performance.
 """
-function bfs_tree(g::ASimpleGraph, s::Int)
+function bfs_tree(g::ASimpleGraph, s)
     nvg = nv(g)
     visitor = TreeBFSVisitorVector(nvg)
     bfs_tree!(visitor, g, s)
@@ -190,8 +190,8 @@ type ComponentVisitorVector <: SimpleGraphVisitor
     seed::Int
 end
 
-function examine_neighbor!(visitor::ComponentVisitorVector, u::Int, v::Int,
-                            ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::ComponentVisitorVector, u, v,
+                            ucolor, vcolor, ecolor)
     if u != v && vcolor == 0
         visitor.labels[v] = visitor.seed
     end
@@ -206,10 +206,10 @@ type BipartiteVisitor <: SimpleGraphVisitor
     is_bipartite::Bool
 end
 
-BipartiteVisitor(n::Int) = BipartiteVisitor(zeros(UInt8,n), true)
+BipartiteVisitor(n) = BipartiteVisitor(zeros(UInt8,n), true)
 
-function examine_neighbor!(visitor::BipartiteVisitor, u::Int, v::Int,
-        ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::BipartiteVisitor, u, v,
+        ucolor, vcolor, ecolor)
     if vcolor == 0
         visitor.bipartitemap[v] = (visitor.bipartitemap[u] == 1) ? 2 : 1
     else
@@ -236,11 +236,11 @@ function is_bipartite(g::AGraph)
     return true
 end
 
-is_bipartite(g::AGraph, v::Int) = _is_bipartite(g, v)
+is_bipartite(g::AGraph, v) = _is_bipartite(g, v)
 
-_is_bipartite(g::AGraph, v::Int; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
+_is_bipartite(g::AGraph, v; vmap = Dict{Int,Int}()) = _bipartite_visitor(g, v, vmap=vmap).is_bipartite
 
-function _bipartite_visitor(g::AGraph, s::Int; vmap=Dict{Int,Int}())
+function _bipartite_visitor(g::AGraph, s; vmap=Dict{Int,Int}())
     nvg = nv(g)
     visitor = BipartiteVisitor(nvg)
     for v in keys(vmap) #have to reset vmap, otherway problems with digraphs
@@ -269,5 +269,5 @@ function bipartite_map(g::AGraph)
 end
 
 is_bipartite(g::ADiGraph) = is_bipartite(graph(g))
-is_bipartite(g::ADiGraph, v::Int) = is_bipartite(graph(g), v)
+is_bipartite(g::ADiGraph, v) = is_bipartite(graph(g), v)
 bipartite_map(g::ADiGraph) = bipartite_map(graph(g), v)

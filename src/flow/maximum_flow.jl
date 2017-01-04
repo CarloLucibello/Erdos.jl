@@ -37,7 +37,7 @@ type DefaultCapacity{G<:ADiGraph} <: AbstractMatrix{Int}
 end
 DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, nv(g))
 
-getindex(d::DefaultCapacity, s::Int, t::Int) = has_edge(d.g, s , t) ? 1 : 0
+getindex(d::DefaultCapacity, s, t) = has_edge(d.g, s , t) ? 1 : 0
 size(d::DefaultCapacity) = (d.nv, d.nv)
 transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
 ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
@@ -174,8 +174,8 @@ f, F, labels = maximum_flow(g,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm
 """
 function maximum_flow{G<:ADiGraph, T<:Number}(
         g::G,                   # the input graph
-        source::Int,                           # the source vertex
-        target::Int,                           # the target vertex
+        source,                           # the source vertex
+        target,                           # the target vertex
         capacity_matrix::AbstractMatrix{T} =  # edge flow capacities
             DefaultCapacity(g);
         algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
@@ -210,8 +210,8 @@ end
 
 function maximum_flow{G<:ADiGraph, T<:Number}(
         flow_graph::G,                   # the input graph
-        source::Int,                           # the source vertex
-        target::Int,                           # the target vertex
+        source,                           # the source vertex
+        target,                           # the target vertex
         capacities::Vector{Vector{T}}
     )
     pos = poslist(flow_graph)

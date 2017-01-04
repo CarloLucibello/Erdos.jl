@@ -23,7 +23,7 @@ in_adjlist(g::AGraph) = out_adjlist(g)
 Add `n` new vertices to the graph `g`. Returns the final number
 of vertices.
 """
-function add_vertices!(g::ASimpleGraph, n::Integer)
+function add_vertices!(g::ASimpleGraph, n)
     added = true
     for i = 1:n
         add_vertex!(g)
@@ -31,28 +31,17 @@ function add_vertices!(g::ASimpleGraph, n::Integer)
     return nv(g)
 end
 
-
-
 """
     has_vertex(g, v)
 
 Return true if `v` is a vertex of `g`.
 """
-has_vertex(g::ASimpleGraph, v::Int) = v in vertices(g)
+has_vertex(g::ASimpleGraph, v) = v in vertices(g)
 
-function show(io::IO, g::AGraph)
-    if nv(g) == 0
-        print(io, "empty undirected graph")
-    else
-        print(io, "{$(nv(g)), $(ne(g))} undirected graph")
-    end
-end
-function show(io::IO, g::ADiGraph)
-    if nv(g) == 0
-        print(io, "empty directed graph")
-    else
-        print(io, "{$(nv(g)), $(ne(g))} directed graph")
-    end
+function show{G<:ASimpleGraph}(io::IO, g::G)
+    print(io, split("$G",'.')[end],
+        "($(nv(g)), $(ne(g)))")
+        # is_directed(g) ? " undirected graph" : " directed graph")
 end
 
 
@@ -71,21 +60,21 @@ is_directed{G<:ADiGraph}(::Type{G}) = true
 
 Returns the number of edges which start at vertex `v`.
 """
-in_degree(g::ASimpleGraph, v::Int) = length(in_neighbors(g,v))
+in_degree(g::ASimpleGraph, v) = length(in_neighbors(g,v))
 
 """
     out_degree(g, v)
 
 Returns the number of edges which end at vertex `v`.
 """
-out_degree(g::ASimpleGraph, v::Int) = length(out_neighbors(g,v))
+out_degree(g::ASimpleGraph, v) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
 
 Return the number of edges  from the vertex `v`.
 """
-degree(g::ASimpleGraph, v::Int) = out_degree(g, v)
+degree(g::ASimpleGraph, v) = out_degree(g, v)
 
 in_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [in_degree(g,x) for x in v]
 out_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [out_degree(g,x) for x in v]
@@ -100,17 +89,17 @@ For directed graph, this is equivalent to [`out_neighbors`](@ref)(g, v).
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-neighbors(g::ASimpleGraph, v::Int) = out_neighbors(g, v)
-in_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
+neighbors(g::ASimpleGraph, v) = out_neighbors(g, v)
+in_neighbors(g::AGraph, v) = out_neighbors(g, v)
 
 """
     all_neighbors(g, v)
 
 Iterates over all distinct in/out neighbors of vertex `v` in `g`.
 """
-all_neighbors(g::AGraph, v::Int) = out_neighbors(g, v)
+all_neighbors(g::AGraph, v) = out_neighbors(g, v)
 
-all_neighbors(g::ADiGraph, v::Int) =
+all_neighbors(g::ADiGraph, v) =
     distinct(chain(out_neighbors(g, v), in_neighbors(g, v)))
 
 """
@@ -128,7 +117,7 @@ density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
 
 Remove all incident edges on vertex `v` in `g`.
 """
-function clean_vertex!(g::ASimpleGraph, v::Int)
+function clean_vertex!(g::ASimpleGraph, v)
     edgs = collect(all_edges(g, v))
     for e in edgs
         rem_edge!(g, e)
@@ -217,7 +206,7 @@ out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:
 
 Returns true if the graph `g` has an edge `e` (from `u` to `v`).
 """
-function has_edge(g::AGraph, u::Int, v::Int)
+function has_edge(g::AGraph, u, v)
     u > nv(g) || v > nv(g) && return false
     if degree(g, u) > degree(g, v)
         u, v = v, u
@@ -225,7 +214,7 @@ function has_edge(g::AGraph, u::Int, v::Int)
     return v ∈ neighbors(g, u)
 end
 
-function has_edge(g::ADiGraph, u::Int, v::Int)
+function has_edge(g::ADiGraph, u, v)
     (u > nv(g) || v > nv(g)) && return false
     if out_degree(g, u) < in_degree(g, v)
         return v ∈ out_neighbors(g, u)
@@ -240,7 +229,7 @@ end
 Returns an iterator to the edges in `g` going to vertex `v`.
 `v == dst(e)` for each returned edge `e`.
 """
-in_edges(g::ASimpleGraph, v::Int) = (edge(g, x, v) for x in in_neighbors(g, v))
+in_edges(g::ASimpleGraph, v) = (edge(g, x, v) for x in in_neighbors(g, v))
 
 """
     out_edges(g, v)
@@ -248,7 +237,7 @@ in_edges(g::ASimpleGraph, v::Int) = (edge(g, x, v) for x in in_neighbors(g, v))
 Returns an iterator to the edges in `g` coming from vertex `v`.
 `v == src(e)` for each returned edge `e`.
 """
-out_edges(g::ASimpleGraph, v::Int) = (edge(g, v, x) for x in out_neighbors(g, v))
+out_edges(g::ASimpleGraph, v) = (edge(g, v, x) for x in out_neighbors(g, v))
 
 """
     edges(g, v)
@@ -261,15 +250,15 @@ It is equivalent to [`out_edges`](@ref).
 For digraphs, use [`all_edges`](@ref) to iterate over
 both in and out edges.
 """
-edges(g::ASimpleGraph, v::Int) = out_edges(g, v)
+edges(g::ASimpleGraph, v) = out_edges(g, v)
 
 """
     all_edges(g, v)
 
 Iterates over all in and out edges of vertex `v` in `g`.
 """
-all_edges(g::AGraph, v::Int) = out_edges(g, v)
-all_edges(g::ADiGraph, v::Int) = chain(out_edges(g, v), in_edges(g, v))
+all_edges(g::AGraph, v) = out_edges(g, v)
+all_edges(g::ADiGraph, v) = chain(out_edges(g, v), in_edges(g, v))
 #TODO fix chain eltype, since collect gives Any[...]
 
 """

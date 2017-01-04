@@ -5,15 +5,15 @@ Returns the value of the maximum flow as well as the final flow matrix.
 Use a default capacity of 1 when the capacity matrix isn\'t specified.
 Requires arguments:
 - residual_graph::ADiGraph                # the input graph
-- source::Int                            # the source vertex
-- target::Int                            # the target vertex
+- source                            # the source vertex
+- target                            # the target vertex
 - capacity_matrix::AbstractArray{T,2}    # edge flow capacities
 """
 
 function edmonds_karp_impl{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
+    source,                           # the source vertex
+    target,                           # the target vertex
     capacity_matrix::AbstractArray{T,2}    # edge flow capacities
     )
     n = nv(residual_graph)                     # number of vertexes
@@ -63,9 +63,9 @@ Requires arguments:
 """
 
 function augment_path!{T<:Number}(
-    path::Vector{Int},                     # input path
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
-    capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+    path::Vector,                     # input path
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
+    capacity_matrix::AbstractMatrix{T}    # edge flow capacities
     )
     augment = typemax(T)                   # initialize augment
     for i in 1:length(path)-1              # calculate min capacity along path
@@ -95,8 +95,8 @@ Flag Values:
 """
 function fetch_path{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
+    source,                           # the source vertex
+    target,                           # the target vertex
     flow_matrix::AbstractArray{T,2},       # the current flow matrix
     capacity_matrix::AbstractArray{T,2}    # edge flow capacities
     )
@@ -123,8 +123,8 @@ Flag Values:
 2 => No Path to source
 Requires arguments:
     residual_graph::ADiGraph                # the input graph
-    source::Int                            # the source vertex
-    target::Int                            # the target vertex
+    source                            # the source vertex
+    target                            # the target vertex
     flow_matrix::AbstractArray{T,2}        # the current flow matrix
     capacity_matrix::AbstractArray{T,2}    # edge flow capacities
     P::Vector{Int}                         # parent table of path init to -1s
@@ -132,8 +132,8 @@ Requires arguments:
 """
 function fetch_path!{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
+    source,                           # the source vertex
+    target,                           # the target vertex
     flow_matrix::AbstractArray{T,2},       # the current flow matrix
     capacity_matrix::AbstractArray{T,2},   # edge flow capacities
     P::Vector{Int},                        # parent table of path init to -1s

@@ -19,13 +19,17 @@ In case of error try to change the optional argument `tmaxscale` (default is `tm
 """
 function minimum_weight_perfect_matching end
 
-function minimum_weight_perfect_matching{T<:AbstractFloat}(g::AGraph, w::Dict{Edge,T}
-        , cutoff = typemax(T); tmaxscale=10.)
+function minimum_weight_perfect_matching{T<:AbstractFloat, E<:Edge}(
+        g::AGraph,
+        w::Dict{E,T},
+        cutoff = typemax(T);
+        tmaxscale=10.)
+
     cmax = convert(T, min(maximum(values(w)), cutoff))
     cmin = minimum(values(w))
     tmax = typemax(Int32)  / tmaxscale # /10 is kinda arbitrary,
-                                # hopefully high enough to not incurr in overflow problems
-    wnew = Dict{Edge, Int32}()
+
+    wnew = Dict{E, Int32}()
     for (e, c) in w
         if c < cutoff
             wnew[e] = round(Int32, (c-cmin) / (cmax-cmin) * tmax)
@@ -36,13 +40,17 @@ function minimum_weight_perfect_matching{T<:AbstractFloat}(g::AGraph, w::Dict{Ed
     for i=1:nv(g)
         j = match.mate[i]
         if j > i
-            weight += w[Edge(i, j)]
+            weight += w[E(i, j)]
         end
     end
     return MatchingResult(weight, match.mate)
 end
 
-function minimum_weight_perfect_matching{T<:Integer}(g::AGraph, w::Dict{Edge,T}, cutoff = typemax(T))
+function minimum_weight_perfect_matching{T<:Integer, E<:Edge}(
+        g::AGraph,
+        w::Dict{E,T},
+        cutoff = typemax(T))
+
     m = BlossomV.Matching(nv(g))
     for (e, c) in w
         if c < cutoff
@@ -57,7 +65,7 @@ function minimum_weight_perfect_matching{T<:Integer}(g::AGraph, w::Dict{Edge,T},
         j = BlossomV.get_match(m, i-1) + 1
         mate[i] = j <= 0 ? -1 : j
         if i < j
-            totweight += w[Edge(i, j)]
+            totweight += w[E(i, j)]
         end
     end
     return MatchingResult(totweight, mate)
