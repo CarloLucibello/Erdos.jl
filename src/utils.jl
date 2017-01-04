@@ -27,7 +27,7 @@ getRNG(seed::Integer = -1) = seed >= 0 ? MersenneTwister(seed) : Base.Random.GLO
 
 # modified from http://stackoverflow.com/questions/25678112/insert-item-into-a-sorted-list-with-julia-with-and-without-duplicates
 # returns true if insert succeeded, false if it was a duplicate
-_insert_and_dedup!(v::Vector{Int}, x::Int) = isempty(splice!(v, searchsorted(v,x), x))
+_insert_and_dedup!(v::Vector, x) = isempty(splice!(v, searchsorted(v,x), x))
 
 function countfirst(itr, v)
     c = 0

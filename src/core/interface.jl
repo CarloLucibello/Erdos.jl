@@ -73,7 +73,7 @@ Add to `g` an edge from `u` to `v`.
 Will return false if add fails (e.g., if vertices are not in the graph or the edge
 is already present) and true otherwise.
 """
-add_edge!(g::ASimpleGraph, u::Int, v::Int) = nothing
+add_edge!(g::ASimpleGraph, u, v) = nothing
 
 
 """
@@ -87,7 +87,7 @@ Remove the edge from `u` to `v`.
 
 Returns false if edge removal fails (e.g., if the edge does not exist) and true otherwise.
 """
-rem_edge!(g::ASimpleGraph, u::Int, v::Int) = nothing
+rem_edge!(g::ASimpleGraph, u, v) = nothing
 
 
 """
@@ -104,27 +104,27 @@ add_vertex!(g::ASimpleGraph) = nothing
 Remove the vertex `v` from graph `g`.
 It may change the index of other vertices (usually of the last one).
 """
-rem_vertex!(g::ASimpleGraph, i::Int) = nothing
+rem_vertex!(g::ASimpleGraph, i) = nothing
 
 # length() has to be appliable to the result
 """
-    in_neighbors(g, v::Int)
+    in_neighbors(g, v)
 
 Returns an iterable to all neighbors connected to vertex `v` by an incoming edge.
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-in_neighbors(g::ADiGraph, v::Int) = nothing
+in_neighbors(g::ADiGraph, v) = nothing
 
 # length() has to be appliable to the result
 """
-    out_neighbors(g::ASimpleGraph, v::Int)
+    out_neighbors(g::ASimpleGraph, v)
 
 Returns an iterable to all neighbors connected to vertex `v` by an outgoing edge.
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-out_neighbors(g::ASimpleGraph, v::Int) = nothing
+out_neighbors(g::ASimpleGraph, v) = nothing
 
 """
     edge(g, u, v)
@@ -132,7 +132,7 @@ out_neighbors(g::ASimpleGraph, v::Int) = nothing
 Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
 in `g`.
 """
-edge(g::ASimpleGraph, u::Int, v::Int) = nothing
+edge(g::ASimpleGraph, u, v) = nothing
 
 """
     edgetype(g)

@@ -203,8 +203,9 @@ g10 = CompleteGraph(5, G)
 @test rem_vertex!(g10, 3)
 @test g10 == CompleteGraph(4, G)
 
-@test sprint(show, h1) == "{5, 0} undirected graph"
-@test sprint(show, h3) == "empty undirected graph"
+s = split("$G",'.')[end]
+@test sprint(show, h1) == s*"(5, 0)"
+@test sprint(show, h3) == s*"(0, 0)"
 
 g3 = PathGraph(5, G)
 @test graph(digraph(g3)) == g3
@@ -255,8 +256,9 @@ end
     adjlist(g)[1] == [2,3,4]
 
 e0 = E(2, 3)
-@test sprint(show, h4) == "{7, 0} directed graph"
-@test sprint(show, h5) == "empty directed graph"
+s = split("$DG",'.')[end]
+@test sprint(show, h4) == s*"(7, 0)"
+@test sprint(show, h5) == s*"(0, 0)"
 @test has_edge(g, e1)
 @test has_edge(h, e1)
 @test !has_edge(g, e0)

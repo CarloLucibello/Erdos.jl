@@ -53,7 +53,7 @@ tests = [
 
 
 testdir = dirname(@__FILE__)
-(G, DG) = (Graph, DiGraph)
+(G, DG) = (Graph{Int64}, DiGraph{Int64})
 E = Edge
 # (G, DG) = (GTGraph, GTDiGraph)
 # E = GTEdge

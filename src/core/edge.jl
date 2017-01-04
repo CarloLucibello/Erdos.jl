@@ -29,12 +29,12 @@ A type representing an edge between two vertices of a graph.
 
 # concrete Edge
 
-immutable Edge <: AEdge
-    src::Int
-    dst::Int
+immutable Edge{T} <: AEdge
+    src::T
+    dst::T
 end
 
-Edge(g::ASimpleGraph, u::Int, v::Int) = Edge(u, v)
+Edge(g::ASimpleGraph, u, v) = Edge(u, v)
 
 src(e::Edge) = e.src
 dst(e::Edge) = e.dst

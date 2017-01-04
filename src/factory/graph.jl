@@ -1,7 +1,7 @@
 
 """
     type Graph <: AGraph
-        ne::Int
+        ne
         fadjlist::Vector{Vector{Int}}
     end
 
@@ -16,14 +16,44 @@ Construct an empty Graph with `n` vertices.
 
 Construct a `Graph` from the adjacency matrix `adjmx`.
 """
-type Graph <: AGraph
+type Graph{T<:Integer} <: AGraph
     ne::Int
-    fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
+    fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
+
+    function Graph(n::T = zero(T))
+        fadjlist = Vector{Vector{T}}()
+        sizehint!(fadjlist,n)
+        for i = 1:n
+            push!(fadjlist, Vector{T}())
+        end
+        return new(0, fadjlist)
+    end
+
+    Graph(ne, fadj::Vector{Vector{T}}) = new(ne, fadj)
+
+    Graph(n, m; seed = -1) = erdos_renyi(n, m, Graph{T}; seed=seed)
+
+    function Graph{S}(adjmx::AbstractMatrix{S})
+        dima,dimb = size(adjmx)
+        isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
+
+        g = Graph{T}(dima)
+        for i in find(adjmx)
+            ind = ind2sub((dima,dimb), i)
+            add_edge!(g, ind...)
+        end
+        return g
+    end
 end
+
+Graph{T}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
+Graph{T}(n::T) = Graph{T}(n)
+Graph() = Graph{Int}()
+
 
 """
     type DiGraph <: ADiGraph
-        ne::Int
+        ne
         fadjlist::Vector{Vector{Int}}
         badjlist::Vector{Vector{Int}}
     end
@@ -39,40 +69,44 @@ Construct an empty DiGraph with `n` vertices.
 
 Construct a `DiGraph` from the adjacency matrix `adjmx`.
 """
-type DiGraph <: ADiGraph
-    ne::Int
-    fadjlist::Vector{Vector{Int}} # [src]: (dst, dst, dst)
-    badjlist::Vector{Vector{Int}} # [dst]: (src, src, src)
+type DiGraph{T<:Integer} <: ADiGraph
+    ne
+    fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
+    badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
+
+    function DiGraph(n::T=zero(T))
+        fadjlist = Vector{Vector{T}}()
+        badjlist = Vector{Vector{T}}()
+        for i = 1:n
+            push!(badjlist, Vector{T}())
+            push!(fadjlist, Vector{T}())
+        end
+        return new(0, badjlist, fadjlist)
+    end
+
+    DiGraph(ne, fadj::Vector{Vector{T}}, badj::Vector{Vector{T}}) = new(ne, fadj, badj)
+    DiGraph(nv::T, ne::T; seed = -1) = erdos_renyi(nv, ne, DiGraph{T}, seed=seed)
+
+    function DiGraph{S}(adjmx::AbstractMatrix{S})
+        dima,dimb = size(adjmx)
+        isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
+
+        g = DiGraph{T}(dima)
+        for i in find(adjmx)
+            ind = ind2sub((dima,dimb),i)
+            add_edge!(g,ind...)
+        end
+        return g
+    end
 end
+
+DiGraph{T}(n::T) = DiGraph{T}(n)
+DiGraph() = DiGraph{Int}()
+
 
 typealias SimpleGraph Union{Graph, DiGraph}
 
 
-#### GRAPH CONSTRUCTORS
-function Graph(n::Int = 0)
-    fadjlist = Vector{Vector{Int}}()
-    sizehint!(fadjlist,n)
-    for i = 1:n
-        push!(fadjlist, Vector{Int}())
-    end
-    return Graph(0, fadjlist)
-end
-
-function Graph{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = Graph(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-Graph(n::Int, m::Int; seed::Int = -1) = erdos_renyi(n, m, Graph; seed=seed)
-
-###################
 nv(g::SimpleGraph) = length(g.fadjlist)
 ne(g::SimpleGraph) = g.ne
 
@@ -87,7 +121,7 @@ After removal the vertices in the ` g` will be indexed by 1:n-1.
 This is an O(k^2) operation, where `k` is the max of the degrees of vertices `v` and `n`.
 Returns false if removal fails (e.g., if vertex is not in the graph); true otherwise.
 =#
-function rem_vertex!(g::SimpleGraph, v::Int)
+function rem_vertex!(g::SimpleGraph, v)
     v in vertices(g) || return false
     n = nv(g)
 
@@ -115,7 +149,7 @@ function rem_vertex!(g::SimpleGraph, v::Int)
     return true
 end
 
-function add_edge!(g::Graph, s::Int, d::Int)
+function add_edge!(g::Graph, s, d)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     if inserted
@@ -127,7 +161,7 @@ function add_edge!(g::Graph, s::Int, d::Int)
     return inserted
 end
 
-function rem_edge!(g::Graph, u::Int, v::Int)
+function rem_edge!(g::Graph, u, v)
     i = searchsorted(g.fadjlist[u], v)
     length(i) > 0 || return false   # edge not in graph
     deleteat!(g.fadjlist[u], i[1])
@@ -140,22 +174,13 @@ function rem_edge!(g::Graph, u::Int, v::Int)
 end
 
 
-function add_vertex!(g::Graph)
-    push!(g.fadjlist, Vector{Int}())
+function add_vertex!{T}(g::Graph{T})
+    push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
 
 
 ##### DIGRAPH CONSTRUCTORS  #############
-function DiGraph(n::Int = 0)
-    fadjlist = Vector{Vector{Int}}()
-    badjlist = Vector{Vector{Int}}()
-    for i = 1:n
-        push!(badjlist, Vector{Int}())
-        push!(fadjlist, Vector{Int}())
-    end
-    return DiGraph(0, badjlist, fadjlist)
-end
 
 
 function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
@@ -176,29 +201,16 @@ function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
     return g
 end
 
-function DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = DiGraph(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-
-DiGraph(nv::Int, ne::Int; seed::Int = -1) = erdos_renyi(nv, ne, DiGraph, seed=seed)
 #########
 
 
 
-function copy(g::DiGraph)
-    return DiGraph(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
+function copy{T}(g::DiGraph{T})
+    return DiGraph{T}(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
-function add_edge!(g::DiGraph, s::Int, d::Int)
+function add_edge!(g::DiGraph, s, d)
     (s in vertices(g) && d in vertices(g)) || return false
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     if inserted
@@ -207,7 +219,7 @@ function add_edge!(g::DiGraph, s::Int, d::Int)
     return inserted && _insert_and_dedup!(g.badjlist[d], s)
 end
 
-function rem_edge!(g::DiGraph, u::Int, v::Int)
+function rem_edge!(g::DiGraph, u, v)
     has_edge(g,u,v) || return false
     i = searchsorted(g.fadjlist[u],v)[1]
     deleteat!(g.fadjlist[u], i)
@@ -217,16 +229,16 @@ function rem_edge!(g::DiGraph, u::Int, v::Int)
     return true
 end
 
-function add_vertex!(g::DiGraph)
-    push!(g.badjlist, Vector{Int}())
-    push!(g.fadjlist, Vector{Int}())
+function add_vertex!{T}(g::DiGraph{T})
+    push!(g.badjlist, Vector{T}())
+    push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
 
-function reverse(g::DiGraph)
+function reverse{T}(g::DiGraph{T})
     gnv = nv(g)
     gne = ne(g)
-    h = DiGraph(gnv)
+    h = DiGraph{T}(gnv)
     h.fadjlist = deepcopy(g.badjlist)
     h.badjlist = deepcopy(g.fadjlist)
     h.ne = gne
@@ -240,19 +252,19 @@ function reverse!(g::DiGraph)
 end
 
 
-out_neighbors(g::SimpleGraph,v::Int) = g.fadjlist[v]
-in_neighbors(g::DiGraph,v::Int) = g.badjlist[v]
+out_neighbors(g::SimpleGraph,v) = g.fadjlist[v]
+in_neighbors(g::DiGraph,v) = g.badjlist[v]
 
-graphtype(g::DiGraph) = Graph
-digraphtype(g::Graph) = DiGraph
+graphtype{T}(g::DiGraph{T}) = Graph{T}
+digraphtype{T}(g::Graph{T}) = DiGraph{T}
 
-edge(g::DiGraph, u::Int, v::Int) = Edge(u, v)
-edge(g::Graph, u::Int, v::Int) = Edge(u, v)
-# edge(g::Graph, u::Int, v::Int) = u <= v ? Edge(u, v) : Edge(v, u)
+edge(g::DiGraph, u, v) = Edge(u, v)
+edge(g::Graph, u, v) = Edge(u, v)
+# edge(g::Graph, u, v) = u <= v ? Edge(u, v) : Edge(v, u)
 
 #### fallbaks override #######
 
-digraph(g::Graph) = DiGraph(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
+digraph{T}(g::Graph{T}) = DiGraph{T}(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
 
 out_adjlist(g::SimpleGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
@@ -261,15 +273,15 @@ in_adjlist(g::DiGraph) = g.badjlist
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 
-function has_edge(g::Graph, u::Int, v::Int)
+function has_edge(g::Graph, u, v)
     u > nv(g) || v > nv(g) && return false
-    if degree(g,u) > degree(g,v)
+    if degree(g, u) > degree(g, v)
         u, v = v, u
     end
     return length(searchsorted(neighbors(g,u), v)) > 0
 end
 
-function has_edge(g::DiGraph, u::Int, v::Int)
+function has_edge(g::DiGraph, u, v)
     u > nv(g) || v > nv(g) && return false
     if out_degree(g,u) < in_degree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0
