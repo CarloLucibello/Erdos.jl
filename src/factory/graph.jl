@@ -294,6 +294,7 @@ edgetype(g::SimpleGraph) = Edge
 function unsafe_add_edge!(g::Graph, s, d)
     push!(g.fadjlist[s], d)
     s != d && push!(g.fadjlist[d], s)
+    g.ne += 1
 end
 
 function rebuild!(g::Graph)
@@ -305,6 +306,7 @@ end
 function unsafe_add_edge!(g::DiGraph, s, d)
     push!(g.fadjlist[s], d)
     push!(g.badjlist[d], s)
+    g.ne += 1
 end
 
 function rebuild!(g::DiGraph)
