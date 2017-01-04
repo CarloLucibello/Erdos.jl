@@ -39,6 +39,7 @@ has_vertex, has_edge, is_directed,
 nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
 in_degree, out_degree, degree, has_self_loops, num_self_loops,
 rem_vertex!, edge, clean_vertex!,
+unsafe_add_edge!, rebuild!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,
@@ -176,12 +177,6 @@ include("distances/distance.jl")
 include("shortestpaths/shortestpaths.jl")
 include("linalg/nonbacktracking.jl")
     include("linalg/spectral.jl")
-include("persistence/common.jl")
-    include("persistence/dot.jl")
-    include("persistence/gexf.jl")
-    include("persistence/gml.jl")
-    include("persistence/graphml.jl")
-    include("persistence/net.jl")
 include("generators/staticgraphs.jl")
     include("generators/randgraphs.jl")
     include("generators/euclideangraphs.jl")
@@ -207,9 +202,14 @@ include("flow/maximum_flow.jl")
     include("flow/ext_multiroute_flow.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
-# include("factory/graphdigraph.jl")
 include("factory/graph.jl")
-include("factory/gtgraph.jl")
+    include("factory/gtgraph.jl")
+include("persistence/common.jl")
+    include("persistence/dot.jl")
+    include("persistence/gexf.jl")
+    include("persistence/gml.jl")
+    include("persistence/graphml.jl")
+    include("persistence/net.jl")
 include("utils.jl")
 include("deprecate.jl")
 end # module

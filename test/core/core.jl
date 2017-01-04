@@ -1,6 +1,12 @@
-g4 = PathDiGraph(5, DG)
 g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
+
+g6 = DG(4)
+unsafe_add_edge!(g6,1,2); unsafe_add_edge!(g6,2,3);
+unsafe_add_edge!(g6,1,3); unsafe_add_edge!(g6,3,4)
+@test g6 == g5
+rebuild!(g6)
+@test g6 == g5
 
 h1 = G(5)
 h2 = G(3)
@@ -22,6 +28,15 @@ g = G(5)
 @test add_edge!(g, e4)
 @test add_edge!(g, e5)
 
+g6 = G(5)
+unsafe_add_edge!(g6, 1, 2)
+unsafe_add_edge!(g6, e2)
+unsafe_add_edge!(g6, e3)
+unsafe_add_edge!(g6, e4)
+unsafe_add_edge!(g6, e5)
+@test g6 == g
+rebuild!(g6)
+@test g6 == g
 
 h = DG(5)
 @test add_edge!(h, 1, 2)
@@ -264,6 +279,7 @@ s = split("$DG",'.')[end]
 @test !has_edge(g, e0)
 @test !has_edge(h, e0)
 
+g4 = PathDiGraph(5, DG)
 @test degree(g4, 1) == 1
 # @test neighbors(g4, 3) == [4]
 @test density(g4) == 0.2

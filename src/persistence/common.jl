@@ -32,7 +32,7 @@ Save a graph `g` to `file` in the format `t`.
 
 Eventually the resulting file can be compressed in the gzip format.
 
-Currently supported formats are `:lg, :gml, :graphml, :gexf, :dot, :NET`.
+Currently supported formats are `:gml, :graphml, :gexf, :dot, :NET`.
 """
 function writegraph(io::IO, g::ASimpleGraph, t::Symbol)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")

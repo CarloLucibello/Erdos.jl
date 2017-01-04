@@ -285,3 +285,28 @@ reverse!(g::ADiGraph) = nothing
 add_edge!(g::ASimpleGraph, e::AEdge) = add_edge!(g, src(e), dst(e))
 rem_edge!(g::ASimpleGraph, e::AEdge) = rem_edge!(g, src(e), dst(e))
 has_edge(g::ASimpleGraph, e::AEdge) = has_edge(g, src(e), dst(e))
+
+"""
+    unsafe_add_edge!(g, u, v)
+
+Possibly faster and unsafer version of [`add_edge!`](@ref), which doesn't guarantee
+some graph invariant properties.
+
+For example, some graph types (e.g. `Graph`) assume sorted adjacency lists as members.
+In this case order is not preserved while inserting new edges, resulting in a
+faster construction of the graph. As a consequence though, some functions such
+`has_edge(g, u, v)` could give incorrect results.
+
+To restore the correct behaviour, call [`rebuild!`](@ref)(g) after the last
+call to `unsafe_add_edge!`.
+"""
+unsafe_add_edge!(g::ASimpleGraph, u, v) = add_edge!(g, u, v)
+unsafe_add_edge!(g::ASimpleGraph, e::AEdge) = unsafe_add_edge!(g, src(e), dst(e))
+
+"""
+    rebuild!(g)
+
+Check and restore the structure of `g`, which could be corrupted by the
+use of unsafe functions (e. g. [`unsafe_add_edge!`](@ref))
+"""
+rebuild!(g::ASimpleGraph) = nothing
