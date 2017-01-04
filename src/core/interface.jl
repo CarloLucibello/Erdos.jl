@@ -29,7 +29,9 @@ Reccomended Overrides:
     rem_edge!(g, e)
     graph(dg)
     digraph(g)
-    reverse!(dg) #digraph
+    reverse!(g) #digraph
+    unsafe_add_edge!(g, u, v)
+    rebuild!(g)
 """
 abstract AGraph
 

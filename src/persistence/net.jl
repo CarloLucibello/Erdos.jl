@@ -19,9 +19,11 @@ function writepajek(f::IO, g::ASimpleGraph)
 end
 
 
-"""Reads a graph from file `fname` in the [Pajek
- NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
- Returns 1 (number of graphs written).
+"""
+    readpajek{G}(f::IO, ::Type{G})
+
+Reads a graph from file `f` in the [Pajek NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
+Returns 1 (number of graphs written).
 """
 function readpajek{G}(f::IO, ::Type{G})
     line =readline(f)
@@ -37,12 +39,31 @@ function readpajek{G}(f::IO, ::Type{G})
     dir = ismatch(r"^\*Arcs",line)
     g = G(n)
     g = dir ? digraph(g) : graph(g)
-    while ismatch(r"^\*Arcs",line)
+    readpajek_edges!(g, f, line)
+    return g
+end
+
+function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
+    while ismatch(r"^\*Edges",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
             length(m) < 2 && break
-            add_edge!(g, parse(Int, m[1]), parse(Int, m[2]))
+            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            unsafe_add_edge!(g, i1, i2)
+        end
+    end
+    rebuild!(g)
+end
+
+function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
+    while ismatch(r"^\*Arcs",line) # add edges in both directions
+        for fline in eachline(f)
+            line = fline
+            m = matchall(r"\d+",line)
+            length(m) < 2 && break
+            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            unsafe_add_edge!(g, i1, i2)
         end
     end
     while ismatch(r"^\*Edges",line) # add edges in both directions
@@ -50,12 +71,12 @@ function readpajek{G}(f::IO, ::Type{G})
             line = fline
             m = matchall(r"\d+",line)
             length(m) < 2 && break
-            i1,i2 = parse(Int, m[1]), parse(Int, m[2])
-            add_edge!(g, i1, i2)
-            add_edge!(g, i2, i1)
+            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            unsafe_add_edge!(g, i1, i2)
+            unsafe_add_edge!(g, i2, i1)
         end
     end
-    return g
+    rebuild!(g)
 end
 
 filemap[:NET] = (readpajek, writepajek)
