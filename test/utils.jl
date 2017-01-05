@@ -9,3 +9,6 @@ s = FatGraphs.sample!([1:10;], 6, exclude=[1,2])
 for  e in s
     @test 3 <= e <= 10
 end
+
+@test FatGraphs.nth((i for i in 11:21), 2) == 12
+@test_throws BoundsError FatGraphs.nth((i for i in 1:10), 11)

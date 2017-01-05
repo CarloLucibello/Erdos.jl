@@ -17,15 +17,12 @@ Supported formats are `:gml, :dot, :graphml, :gexf, :NET`.
 function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
     if compressed
         io = GZip.open(fn,"r")
-        g = readgraph(io, t, G)
-        close(io)
-        return g
     else
         io = open(fn,"r")
-        g = readgraph(io, t, G)
-        close(io)
-        return g
     end
+    g = readgraph(io, t, G)
+    close(io)
+    return g
 end
 
 function readgraph{G<:ASimpleGraph}(io::IO, t::Symbol, ::Type{G}=Graph)
