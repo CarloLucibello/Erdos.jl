@@ -1,5 +1,36 @@
+if !isdefined(:test_blocking_flow)
+    # Test on disconnected graphs
+    function test_blocking_flow(residual_graph, source, target, capacity_matrix, flow_matrix)
+        #disconnect source
+        h = copy(residual_graph)
+        for dst in collect(neighbors(residual_graph, source))
+            rem_edge!(h, source, dst)
+        end
+        @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix, flow_matrix) == 0
+
+        #disconnect target and add unreachable vertex
+        h = copy(residual_graph)
+        for src in collect(in_neighbors(residual_graph, target))
+            rem_edge!(h, src, target)
+        end
+        @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix, flow_matrix) == 0
+
+        # unreachable vertex (covers the case where a vertex isn't reachable from the source)
+        h = copy(residual_graph)
+        add_vertex!(h)
+        add_edge!(h, nv(residual_graph)+1, target)
+        capacity_matrix_ = vcat(hcat(capacity_matrix, zeros(Int, nv(residual_graph))), zeros(Int, 1, nv(residual_graph)+1))
+        flow_graph_  = vcat(hcat(flow_matrix, zeros(Int, nv(residual_graph))), zeros(Int, 1, nv(residual_graph)+1))
+
+        @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix_, flow_graph_ ) > 0
+
+        #test with connected graph
+        @test FatGraphs.blocking_flow!(residual_graph, source, target, capacity_matrix, flow_matrix) > 0
+    end
+end
+
 # Construct DiGraph
-flow_graph = DiGraph(8)
+flow_graph = DG(8)
 
 # Load custom dataset
 flow_edges = [
@@ -24,35 +55,6 @@ residual_graph = complete(flow_graph)
 
 # Test with capacity matrix
 @test FatGraphs.dinic_impl(residual_graph, 1, 8, capacity_matrix)[1] == 28
-
-# Test on disconnected graphs
-function test_blocking_flow(residual_graph, source, target, capacity_matrix, flow_matrix)
-    #disconnect source
-    h = copy(residual_graph)
-    for dst in collect(neighbors(residual_graph, source))
-        rem_edge!(h, source, dst)
-    end
-    @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix, flow_matrix) == 0
-
-    #disconnect target and add unreachable vertex
-    h = copy(residual_graph)
-    for src in collect(in_neighbors(residual_graph, target))
-        rem_edge!(h, src, target)
-    end
-    @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix, flow_matrix) == 0
-
-    # unreachable vertex (covers the case where a vertex isn't reachable from the source)
-    h = copy(residual_graph)
-    add_vertex!(h)
-    add_edge!(h, nv(residual_graph)+1, target)
-    capacity_matrix_ = vcat(hcat(capacity_matrix, zeros(Int, nv(residual_graph))), zeros(Int, 1, nv(residual_graph)+1))
-    flow_graph_  = vcat(hcat(flow_matrix, zeros(Int, nv(residual_graph))), zeros(Int, 1, nv(residual_graph)+1))
-
-    @test FatGraphs.blocking_flow!(h, source, target, capacity_matrix_, flow_graph_ ) > 0
-
-    #test with connected graph
-    @test FatGraphs.blocking_flow!(residual_graph, source, target, capacity_matrix, flow_matrix) > 0
-end
 
 flow_matrix = zeros(Int, nv(residual_graph), nv(residual_graph))
 test_blocking_flow(residual_graph, 1, 8, capacity_matrix, flow_matrix)

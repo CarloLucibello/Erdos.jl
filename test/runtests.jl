@@ -53,20 +53,28 @@ tests = [
 
 
 testdir = dirname(@__FILE__)
-(G, DG) = (Graph{Int32}, DiGraph{Int32})
+# (G, DG) = (Graph{Int32}, DiGraph{Int32})
 E = Edge
 # (G, DG) = (GTGraph, GTDiGraph)
 # E = GTEdge
+GLIST =    [
+            (Graph{Int64}, DiGraph{Int64}),
+            (Graph{UInt32}, DiGraph{UInt32}),
+            (GTGraph, GTDiGraph)
+            ]
 
 # @testset "FatGraphs Testing" begin
+for x in GLIST
+    global G = x[1]
+    global DG = x[2]
+    println("@@ TESTING $G and $DG")
     for t in tests
         tp = joinpath(testdir,"$(t).jl")
         # (G, DG) = (Graph, DiGraph)
-        print("running $t.jl ...")
+        println("running $t.jl")
         #TODO stop when failing a testset
         # @testset "$t" begin
             include(tp)
         # end
-        println(" done")
     end
-# end
+end

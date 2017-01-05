@@ -38,3 +38,34 @@ function countfirst(itr, v)
     end
     return found ? c : 0
 end
+
+# from Iterators.jl
+"""
+    nth(xs, n::Integer)
+
+Return the n'th element of xs. Mostly useful for non indexable collections.
+"""
+function nth(xs, n::Integer)
+    n > 0 || throw(BoundsError(xs, n))
+    # catch, if possible
+    applicable(length, xs) && (n ≤ length(xs) || throw(BoundsError(xs, n)))
+    s = start(xs)
+    i = 0
+    while !done(xs, s)
+        (val, s) = next(xs, s)
+        i += 1
+        i == n && return val
+    end
+    # catch iterators with no length but actual finite size less then n
+    throw(BoundsError(xs, n))
+end
+
+nth(xs::AbstractArray, n::Integer) = xs[n]
+
+
+# myrand(a::AbstractArray) = a[_myrand(length(a))]
+
+# for generic iterables with length
+myrand(itr) = nth(itr, _myrand(length(itr)))
+
+_myrand{T<:Integer}(n::T) = ceil(T, rand() * n)

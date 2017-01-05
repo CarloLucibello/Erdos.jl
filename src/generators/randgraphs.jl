@@ -178,8 +178,6 @@ function barabasi_albert!(g::ASimpleGraph, n::Int, k::Int; seed::Int=-1)
     # seed random number generator
     seed > 0 && srand(seed)
 
-    # add missing vertices
-    sizehint!(g.fadjlist, n)
     add_vertices!(g, n - n0)
 
     # if initial graph doesn't contain any edges
@@ -277,7 +275,7 @@ function static_fitness_model{T<:Real,S<:Real, G<:ADiGraph}(m::Int, fitness_out:
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness_out)
     @assert(length(fitness_in) == n, "fitness_in must have the same size as fitness_out")
-    m == 0 && return DiGraph(n)
+    m == 0 && return G(n)
     # avoid getting into an infinite loop when too many edges are requested
     outnodes = innodes = nodes = 0
     @inbounds for i=1:n

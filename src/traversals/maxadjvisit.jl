@@ -41,7 +41,7 @@ function traverse_graph!(
     graph::ASimpleGraph,
     T::DataType,
     alg::MaximumAdjacency,
-    s::Int,
+    s,
     visitor::AbstractMASVisitor,
     colormap::Vector{Int})
 
@@ -103,14 +103,14 @@ function MinCutVisitor{T}(graph::ASimpleGraph, distmx::AbstractArray{T, 2})
     )
 end
 
-function discover_vertex!(vis::MinCutVisitor, v::Int)
+function discover_vertex!(vis::MinCutVisitor, v)
     vis.parities[v] = false
     vis.colormap[v] = 1
     push!(vis.vertices,v)
     return true
 end
 
-function examine_neighbor!(vis::MinCutVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(vis::MinCutVisitor, u, v, ucolor, vcolor, ecolor)
     ew = vis.distmx[u, v]
 
     # if the target of e is already marked then decrease cutweight
@@ -124,7 +124,7 @@ function examine_neighbor!(vis::MinCutVisitor, u::Int, v::Int, ucolor::Int, vcol
     return true
 end
 
-function close_vertex!(vis::MinCutVisitor, v::Int)
+function close_vertex!(vis::MinCutVisitor, v)
     vis.colormap[v] = 2
     vis.visited += 1
 
@@ -150,18 +150,18 @@ type MASVisitor{T} <: AbstractMASVisitor
     log::Bool
 end
 
-function discover_vertex!{T}(visitor::MASVisitor{T}, v::Int)
+function discover_vertex!{T}(visitor::MASVisitor{T}, v)
     push!(visitor.vertices,v)
     visitor.log ? println(visitor.io, "discover vertex: $v") : nothing
     return true
 end
 
-function examine_neighbor!(visitor::MASVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::MASVisitor, u, v, ucolor, vcolor, ecolor)
     visitor.log ? println(visitor.io, " -- examine neighbor from $u to $v") : nothing
     return true
 end
 
-function close_vertex!(visitor::MASVisitor, v::Int)
+function close_vertex!(visitor::MASVisitor, v)
     visitor.log ? println(visitor.io, "close vertex: $v") : nothing
     return true
 end

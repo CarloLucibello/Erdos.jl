@@ -1,7 +1,4 @@
-
 g3 = PathGraph(5, G)
-g4 = PathDiGraph(5, DG)
-
 @test adjacency_matrix(g3)[3,2] == 1
 @test adjacency_matrix(g3)[2,4] == 0
 @test laplacian_matrix(g3)[3,2] == -1
@@ -9,7 +6,7 @@ g4 = PathDiGraph(5, DG)
 @test laplacian_spectrum(g3)[5] == 3.6180339887498945
 @test adjacency_spectrum(g3)[1] == -1.732050807568878
 
-g5 = DiGraph(4)
+g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 @test laplacian_spectrum(g5)[3] == laplacian_spectrum(g5,:out)[3] == 1.0
 @test laplacian_spectrum(g5,:all)[3] == 3.0
@@ -20,7 +17,7 @@ g = copy(g3)
 add_edge!(g,1,1)
 @test adjacency_matrix(g)[1,1] == 2
 
-g10 = CompleteGraph(10)
+g10 = CompleteGraph(10, G)
 B, em = non_backtracking_matrix(g10)
 @test length(em) == 2*ne(g10)
 @test size(B) == (2*ne(g10),2*ne(g10))
@@ -73,7 +70,7 @@ for dir in [:in, :out, :all]
     @test_approx_eq_eps minimum(evals) 0 1e-13
 end
 
-
+g4 = PathDiGraph(5, DG)
 # testing incidence_matrix, first directed graph
 @test size(incidence_matrix(g4)) == (5,4)
 @test incidence_matrix(g4)[1,1] == -1
@@ -82,7 +79,6 @@ end
 
 
 g3 = PathGraph(5, G)
-g4 = PathDiGraph(5, DG)
 # now undirected graph
 @test size(incidence_matrix(g3)) == (5,4)
 @test incidence_matrix(g3)[1,1] == 1
@@ -96,7 +92,7 @@ i3o = incidence_matrix(g3; oriented=true)
 # TESTS FOR Nonbacktracking operator.
 
 n = 10; k = 5
-pg = CompleteGraph(n)
+pg = CompleteGraph(n, G)
 # ϕ1 = nonbacktrack_embedding(pg, k)'
 
 nbt = Nonbacktracking(pg)
@@ -123,10 +119,12 @@ z = B * x
 B₁ = Nonbacktracking(g10)
 
 # just so that we can assert equality of matrices
-import Base: full
-full(nbt::Nonbacktracking) = full(sparse(nbt))
 
-@test full(B₁) == full(B)
+if !isdefined(:test_full)
+    test_full(nbt::Nonbacktracking) = full(sparse(nbt))
+end
+
+@test test_full(B₁) == full(B)
 @test  B₁ * ones(size(B₁)[2]) == B*ones(size(B)[2])
 @test size(B₁) == size(B)
 # @test_approx_eq_eps norm(eigs(B₁)[1] - eigs(B)[1]) 0.0 1e-8 #TODO change test, it is unstable

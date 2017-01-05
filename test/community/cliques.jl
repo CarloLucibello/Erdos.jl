@@ -5,23 +5,25 @@
 #
 ##################################################################
 
-function setofsets(array_of_arrays)
-    Set(map(Set, array_of_arrays))
+if !isdefined(:setofsets)
+    function setofsets(array_of_arrays)
+        Set(map(Set, array_of_arrays))
+    end
+
+    function test_cliques(graph, expected)
+        # Make test results insensitive to ordering
+        setofsets(maximal_cliques(graph)) == setofsets(expected)
+    end
 end
 
-function test_cliques(graph, expected)
-    # Make test results insensitive to ordering
-    setofsets(maximal_cliques(graph)) == setofsets(expected)
-end
-
-g = Graph(3)
+g = G(3)
 add_edge!(g, 1, 2)
 @test test_cliques(g, Array[[1,2], [3]])
 add_edge!(g, 2, 3)
 @test test_cliques(g, Array[[1,2], [2,3]])
 
 # Test for "pivotdonenbrs not defined" bug
-h = Graph(6)
+h = G(6)
 add_edge!(h, 1, 2)
 add_edge!(h, 1, 3)
 add_edge!(h, 1, 4)
@@ -35,7 +37,7 @@ add_edge!(h, 5, 6)
 
 # test for extra cliques bug
 
-h = Graph(7)
+h = G(7)
 add_edge!(h,1,3)
 add_edge!(h,2,6)
 add_edge!(h,3,5)

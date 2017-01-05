@@ -1,7 +1,7 @@
 using FatGraphs
 using Base.Test
 
-g = Graph(4)
+g = G(4)
 add_edge!(g, 1,2)
 add_edge!(g, 1,3)
 add_edge!(g, 1,4)
@@ -42,7 +42,7 @@ push!(vec_mst, E(2, 3))
 @test mst == vec_mst
 
 #second test
-g = Graph(8)
+g = G(8)
 add_edge!(g, 2,8)
 add_edge!(g, 1,3)
 add_edge!(g, 6,8)
