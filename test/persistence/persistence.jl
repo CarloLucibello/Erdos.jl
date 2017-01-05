@@ -52,6 +52,16 @@ g10 = PathDiGraph(10, DG)
 @test readgraph(fname,:NET, G) == g10
 rm(fname)
 
+
+g10 = PathDiGraph(10, DG)
+@test writegraph(fname, g10, :NET) == 1
+@test readgraph(fname,:NET, G) == g10
+rm(fname)
+
+@test writegraph(fname, g10, :NET, compress=true) == 1
+@test readgraph(fname,:NET, G, compressed=true) == g10
+rm(fname)
+
 g10 = readgraph(joinpath(testdir, "testdata", "kinship.net"), :NET, G)
 @test nv(g10) == 6
 @test ne(g10) == 8

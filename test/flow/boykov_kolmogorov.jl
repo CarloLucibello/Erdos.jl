@@ -1,5 +1,5 @@
 # construct graph
-g = DiGraph(3)
+g = DG(3)
 add_edge!(g,1,2)
 add_edge!(g,2,3)
 

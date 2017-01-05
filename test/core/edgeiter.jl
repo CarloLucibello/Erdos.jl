@@ -1,7 +1,7 @@
 @test length(collect(edges(G()))) == 0
 
-ga = Graph(10,20; seed=1)
-gb = Graph(10,20; seed=1)
+ga = G(10,20; seed=1)
+gb = G(10,20; seed=1)
 
 @test length(collect(edges(ga))) == 20
 @test collect(edges(ga)) == collect(edges(gb))

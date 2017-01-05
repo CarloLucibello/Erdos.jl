@@ -10,8 +10,10 @@ h = DG(10)
 @test digraph(g) != nothing
 @test digraph(h) != nothing
 
-type TestGraph <: AGraph; end
-type TestDiGraph <: ADiGraph; end
+if !isdefined(:TestGraph)
+    type TestGraph <: AGraph; end
+    type TestDiGraph <: ADiGraph; end
+end
 g = TestGraph()
 h = TestDiGraph()
 

@@ -3,7 +3,7 @@
 using FatGraphs
 using Base.Test
 
-g = Graph(8)
+g = G(8)
 
 # Original example by Stoer
 

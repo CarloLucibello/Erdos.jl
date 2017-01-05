@@ -1,11 +1,13 @@
-function readcentrality(f::AbstractString)
-    f = open(f,"r")
-    c = Vector{Float64}()
-    while !eof(f)
-        line = chomp(readline(f))
-        push!(c, float(line))
+if !isdefined(:readcentrality)
+    function readcentrality(f::AbstractString)
+        f = open(f,"r")
+        c = Vector{Float64}()
+        while !eof(f)
+            line = chomp(readline(f))
+            push!(c, float(line))
+        end
+        return c
     end
-    return c
 end
 
 
@@ -30,7 +32,7 @@ s1 = graph(s2)
 @test betweenness_centrality(s1) == [0, 1, 0]
 @test betweenness_centrality(s2) == [0, 0.5, 0]
 
-g = Graph(2)
+g = G(2)
 add_edge!(g,1,2)
 z = betweenness_centrality(g; normalize=true)
 @test z[1] == z[2] == 0.0

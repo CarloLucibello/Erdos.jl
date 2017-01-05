@@ -26,7 +26,7 @@ function _graphml_read_one_graph{G}(e::XMLElement, ::Type{G})
 end
 
 function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
-    xdoc = parse_string(readall(io))
+    xdoc = parse_string(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "graphml" || error("Not a GraphML file")
 

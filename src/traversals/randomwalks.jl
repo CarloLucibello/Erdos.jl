@@ -15,7 +15,7 @@ function randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
     i += 1
     nbrs = out_neighbors(g,currs)
     length(nbrs) == 0 && break
-    currs = rand(nbrs)
+    currs = myrand(nbrs)
   end
   return visited[1:i-1]
 end
@@ -39,17 +39,17 @@ function non_backtracking_randomwalk(g::AGraph, s::Integer, niter::Integer)
     nbrs = out_neighbors(g,currs)
     length(nbrs) == 0 && return visited[1:i-1]
     prev = currs
-    currs = rand(nbrs)
+    currs = myrand(nbrs)
 
     while i <= niter
         push!(visited, currs)
         i += 1
         nbrs = out_neighbors(g,currs)
         length(nbrs) == 1 && break
-        idnext = rand(1:length(nbrs)-1)
-        next = nbrs[idnext]
+        idnext = myrand(1:length(nbrs)-1)
+        next = nth(nbrs, idnext)
         if next == prev
-            next = nbrs[end]
+            next = nth(nbrs, length(nbrs))
         end
         prev = currs
         currs = next
@@ -70,13 +70,13 @@ function non_backtracking_randomwalk(g::ADiGraph, s::Integer, niter::Integer)
         i += 1
         nbrs = out_neighbors(g,currs)
         length(nbrs) == 0 && break
-        next = rand(nbrs)
+        next = myrand(nbrs)
         if next == prev
             length(nbrs) == 1 && break
-            idnext = rand(1:length(nbrs)-1)
-            next = nbrs[idnext]
+            idnext = myrand(1:length(nbrs)-1)
+            next = nth(nbrs, idnext)
             if next == prev
-                next = nbrs[end]
+                next = nth(nbrs, length(nbrs))
             end
         end
         prev = currs

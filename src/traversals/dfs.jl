@@ -68,7 +68,7 @@ end
 function traverse_graph!(
     graph::ASimpleGraph,
     alg::DepthFirst,
-    s::Int,
+    s,
     visitor::SimpleGraphVisitor;
     vertexcolormap = Dict{Int, Int}(),
     edgecolormap = DummyEdgeMap())
@@ -99,11 +99,11 @@ end
 
 function examine_neighbor!(
     vis::DFSCyclicTestVisitor,
-    u::Int,
-    v::Int,
-    ucolor::Int,
-    vcolor::Int,
-    ecolor::Int)
+    u,
+    v,
+    ucolor,
+    vcolor,
+    ecolor)
 
     if vcolor < 0 && ecolor == 0
         vis.found_cycle = true
@@ -136,7 +136,7 @@ end
 type TopologicalSortVisitor <: SimpleGraphVisitor
     vertices::Vector{Int}
 
-    function TopologicalSortVisitor(n::Int)
+    function TopologicalSortVisitor(n)
         vs = Array(Int, 0)
         sizehint!(vs, n)
         new(vs)
@@ -144,11 +144,11 @@ type TopologicalSortVisitor <: SimpleGraphVisitor
 end
 
 
-function examine_neighbor!(visitor::TopologicalSortVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::TopologicalSortVisitor, u, v, ucolor, vcolor, ecolor)
     (vcolor < 0 && ecolor == 0) && error("The input graph contains at least one loop.")
 end
 
-function close_vertex!(visitor::TopologicalSortVisitor, v::Int)
+function close_vertex!(visitor::TopologicalSortVisitor, v)
     push!(visitor.vertices, v)
 end
 
@@ -167,14 +167,14 @@ function topological_sort_by_dfs(graph::ASimpleGraph)
 end
 
 
-type TreeDFSVisitor <:SimpleGraphVisitor
-    tree::ADiGraph
+type TreeDFSVisitor{G <:ADiGraph} <:SimpleGraphVisitor
+    tree::G
     predecessor::Vector{Int}
 end
 
-TreeDFSVisitor(n::Int) = TreeDFSVisitor(DiGraph(n), zeros(Int,n))
+TreeDFSVisitor{G}(n, ::Type{G}) = TreeDFSVisitor(digraph(G(n)), zeros(Int,n))
 
-function examine_neighbor!(visitor::TreeDFSVisitor, u::Int, v::Int, ucolor::Int, vcolor::Int, ecolor::Int)
+function examine_neighbor!(visitor::TreeDFSVisitor, u, v, ucolor, vcolor, ecolor)
     if (vcolor == 0)
         visitor.predecessor[v] = u
     end
@@ -182,17 +182,16 @@ function examine_neighbor!(visitor::TreeDFSVisitor, u::Int, v::Int, ucolor::Int,
 end
 
 """
-    dfs_tree(g, s::Int)
+    dfs_tree(g, s)
 
 Provides a depth-first traversal of the graph `g` starting with source vertex `s`,
 and returns a directed acyclic graph of vertices in the order they were discovered.
 """
-function dfs_tree(g::ASimpleGraph, s::Int)
+function dfs_tree{G}(g::G, s)
     nvg = nv(g)
-    visitor = TreeDFSVisitor(nvg)
+    visitor = TreeDFSVisitor(nvg, G)
     traverse_graph!(g, DepthFirst(), s, visitor)
-    # visitor = traverse_dfs(g, s, TreeDFSVisitor(nvg))
-    h = DiGraph(nvg)
+    h = digraph(G(nvg))
     for (v, u) in enumerate(visitor.predecessor)
         if u != 0
             add_edge!(h, u, v)

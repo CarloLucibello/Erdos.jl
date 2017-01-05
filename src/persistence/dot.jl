@@ -3,7 +3,7 @@
 # TODO: implement save
 
 function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
-    pg = first(DOT.parse_dot(readall(io)))
+    pg = first(DOT.parse_dot(readstring(io)))
 
     isdir = pg.directed
     nvg = length(DOT.nodes(pg))

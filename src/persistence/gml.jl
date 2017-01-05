@@ -1,5 +1,5 @@
 function readgml{G}(io::IO, ::Type{G})
-    gs = first(GML.parse_dict(readall(io))[:graph])
+    gs = first(GML.parse_dict(readstring(io))[:graph])
     dir = Bool(get(gs, :directed, 0))
     nodes = [x[:id] for x in gs[:node]]
     g = G(length(nodes))

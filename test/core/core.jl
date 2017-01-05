@@ -121,13 +121,16 @@ add_edge!(g, 1, 2)
 @test rem_edge!(h, 1, 2)
 @test !rem_edge!(h, 1, 2)
 
-function test_rem_edge(g, srcv)
-    srcv = 2
-    for dstv in collect(neighbors(g, srcv))
-        rem_edge!(g, srcv, dstv)
+if !isdefined(:test_rem_edge)
+    function test_rem_edge(g, srcv)
+        srcv = 2
+        for dstv in collect(neighbors(g, srcv))
+            rem_edge!(g, srcv, dstv)
+        end
+        @test length(neighbors(g,srcv)) == 0
     end
-    @test length(neighbors(g,srcv)) == 0
 end
+
 for v in vertices(g)
     test_rem_edge(copy(g),v)
 end

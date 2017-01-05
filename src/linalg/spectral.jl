@@ -29,7 +29,8 @@ function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = out_neighbors
     elseif dir == :all
         if is_directed(g)
-            neighborfn = (h,j)->[in_neighbors(h, j); out_neighbors(h, j)]
+            #TODO use chain and check performance
+            neighborfn = (h,j)->[collect(in_neighbors(h, j)); collect(out_neighbors(h, j))]
             nz *= 2
         else
             neighborfn = out_neighbors
@@ -47,7 +48,7 @@ function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
         colpt[j+1] = colpt[j] + length(dsts)
         append!(rowval, sort!(dsts))
     end
-    spmx = SparseMatrixCSC(n_v,n_v,colpt,rowval,ones(T,nz))
+    spmx = SparseMatrixCSC(n_v, n_v, colpt, rowval, ones(T,nz))
 
     # this is inefficient. There should be a better way of doing this.
     # the issue is that adjacency matrix entries for self-loops are 2,

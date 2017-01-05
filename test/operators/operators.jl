@@ -131,18 +131,21 @@ c = cartesian_product(gg, hh)
 g = crosspath(ny, PathGraph(nx, G));
 @test g == c
 
-function crosspath_slow(len, h)
-    g = h
-    m = nv(h)
-    for i in 1:len-1
-        k = nv(g)
-        g = blkdiag(g,h)
-        for v in 1:m
-            add_edge!(g, v+(k-m), v+k)
+if !isdefined(:crosspath_slow)
+    function crosspath_slow(len, h)
+        g = h
+        m = nv(h)
+        for i in 1:len-1
+            k = nv(g)
+            g = blkdiag(g,h)
+            for v in 1:m
+                add_edge!(g, v+(k-m), v+k)
+            end
         end
+        return g
     end
-    return g
 end
+
 @test crosspath_slow(2, g22) == crosspath(2,g22)
 
 
