@@ -53,9 +53,8 @@ tests = [
 
 
 testdir = dirname(@__FILE__)
-# (G, DG) = (Graph{Int32}, DiGraph{Int32})
 E = Edge
-# (G, DG) = (GTGraph, GTDiGraph)
+
 # E = GTEdge
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),
@@ -70,7 +69,6 @@ for x in GLIST
     println("@@ TESTING $G and $DG")
     for t in tests
         tp = joinpath(testdir,"$(t).jl")
-        # (G, DG) = (Graph, DiGraph)
         println("running $t.jl")
         #TODO stop when failing a testset
         # @testset "$t" begin
