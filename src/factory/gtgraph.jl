@@ -68,7 +68,7 @@ function GTDiGraph(n::Int = 0)
         push!(out_edges, Vector{Pair{Int,Int}}())
         push!(in_edges, Vector{Pair{Int,Int}}())
     end
-    keep_epos = false
+    keep_epos = true
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
     return GTDiGraph(0, 0, out_edges, in_edges, keep_epos, epos, free_indexes)
@@ -114,10 +114,8 @@ function add_edge!(g::GTDiGraph, u::Int, v::Int)
     g.ne += 1
 
     if g.keep_epos
-        lenght(epos) < idx && resize!(epos, idx)
-        ei = epos[idx]
-        ei.first = length(oes)
-        ei.second = length(ies)
+        length(g.epos) < idx && resize!(g.epos, idx)
+        g.epos[idx] = Pair(length(oes), length(ies))
     end
 
     return true
@@ -138,7 +136,7 @@ function rem_edge!(g::GTDiGraph, s::Int, t::Int)
         pi == 0 && error("rem_edge")
         deleteat!(ies, pi)
     else
-        return rem_edge(g, edge(s, t, g));
+        return rem_edge!(g, edge(g, s, t));
     end
     return true
 end
@@ -147,6 +145,7 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
     s = e.src
     t = e.dst
     idx = e.idx
+    idx <= 0 && return false
     oes = g.out_edges[s]
     ies = g.in_edges[t]
     if !g.keep_epos # O(k_s + k_t)
@@ -160,22 +159,21 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
         deleteat!(ies, pi)
 
     else # O(1)
-        if idx <= length(g.epos)
+        idx > length(g.epos) && return false
 
-                back = last(oes)
-                pindex = g.epos[idx].first
-                g.epos[back.idx].first = pindex
-                oes[pindex] = back
-                pop!(oes)
+        back = last(oes)
+        p1 = g.epos[idx].first
+        p2 = g.epos[back.second].second
+        g.epos[back.second] = Pair(p1, p2)
+        oes[p1] = back
+        pop!(oes)
 
-                back = last(ies)
-                pindex = g.epos[idx].second
-                g.epos[back.idx].second = pindex
-                ies[pindex] = back
-                pop!(ies)
-        else
-            return false
-        end
+        back = last(ies)
+        p1 = g.epos[back.second].first
+        p2 = g.epos[idx].second
+        g.epos[back.second] = Pair(p1, p2)
+        ies[p2] = back
+        pop!(ies)
     end
 
     g.ne -= 1
@@ -219,7 +217,6 @@ end
 function rem_vertex!(g::SimpleGTGraph, v::Int)
     v in vertices(g) || return false
     n = nv(g)
-
     clean_vertex!(g, v)
 
     if v != n
@@ -246,8 +243,8 @@ end
 
 function reverse!(g::GTDiGraph)
     g.out_edges, g.in_edges = g.in_edges, g.out_edges
-    for p in g.epos
-        p.first, p.second = p.second, p.first
+    for i=1:length(g.epos)
+        g.epos[i] = reverse(g.epos[i])
     end
     return g
 end
@@ -265,7 +262,7 @@ function GTGraph(n::Int = 0)
     for i=1:n
         push!(out_edges, Vector{Pair{Int,Int}}())
     end
-    keep_epos = false
+    keep_epos = true
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
     return GTGraph(0, 0, out_edges, keep_epos, epos, free_indexes)
@@ -312,10 +309,8 @@ function add_edge!(g::GTGraph, u::Int, v::Int)
     g.ne += 1
 
     if g.keep_epos
-        lenght(epos) < idx && resize!(epos, idx)
-        ei = epos[idx]
-        ei.first = length(oes)
-        ei.second = length(ies)
+        length(g.epos) < idx && resize!(g.epos, idx)
+        g.epos[idx] = Pair(length(oes), length(ies))
     end
 
     return true
@@ -337,7 +332,7 @@ function rem_edge!(g::GTGraph, s::Int, t::Int)
             deleteat!(ies, pi)
         end
     else
-        return rem_edge(g, edge(g, s, t));
+        return rem_edge!(g, edge(g, s, t));
     end
     return true
 end
@@ -349,7 +344,7 @@ function rem_edge!(g::GTGraph, e::GTEdge)
         s,t = t,s
     end
     idx = e.idx
-    @assert idx > 0
+    idx <= 0 && return false
     oes = g.out_edges[s]
     ies = g.out_edges[t]
     if !g.keep_epos # O(k_s + k_t)
@@ -363,23 +358,32 @@ function rem_edge!(g::GTGraph, e::GTEdge)
             deleteat!(ies, pi)
         end
     else # O(1)
-        if idx <= length(g.epos)
-            back = last(oes)
-            pindex = g.epos[idx].first
-            g.epos[back.idx].first = pindex
-            s == t && (g.epos[back.idx].second = pindex) #self loops
-            oes[pindex] = back
-            pop!(oes)
 
-            if s != t
-                back = last(ies)
-                pindex = g.epos[idx].second
-                g.epos[back.idx].second = pindex
-                ies[pindex] = back
-                pop!(ies)
-            end
+        idx > length(g.epos) && return false
+        back = last(oes)
+        p1 = g.epos[idx].first
+        if back.first > s
+            p2 = g.epos[back.second].second
+            g.epos[back.second] = Pair(p1 , p2)
         else
-            return false
+            p2 = g.epos[back.second].first
+            g.epos[back.second] = Pair(p2 , p1)
+        end
+        oes[p1] = back
+        pop!(oes)
+
+        if s != t
+            back = last(ies)
+            p1 = g.epos[idx].second
+            if back.first > t
+                p2 = g.epos[back.second].second
+                g.epos[back.second] = Pair(p1 , p2)
+            else
+                p2 = g.epos[back.second].first
+                g.epos[back.second] = Pair(p2 , p1)
+            end
+            ies[p1] = back
+            pop!(ies)
         end
     end
 
@@ -388,8 +392,39 @@ function rem_edge!(g::GTGraph, e::GTEdge)
     return true
 end
 
-
 function in_edges(g::GTGraph, i::Int)
     ies = g.out_edges[i]
     return (GTEdge(j, i, idx) for (j, idx) in ies)
+end
+
+function test_consistency(g::GTGraph)
+    if g.keep_epos
+        for i=1:nv(g)
+            for (k, p) in  enumerate(g.out_edges[i])
+                j = p.first
+                id = p.second
+                if i < j
+                    @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
+                else
+                    @assert g.epos[id].second == k
+                end
+                @assert findfirst(e->e.first==i, g.out_edges[j]) > 0
+            end
+        end
+    end
+end
+
+function test_consistency(g::GTDiGraph)
+    if g.keep_epos
+        for i=1:nv(g)
+            for (k, p) in  enumerate(g.out_edges[i])
+                j = p.first
+                id = p.second
+                @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
+                posin = findfirst(e->e.first==i, g.in_edges[j])
+                @assert posin > 0
+                @assert g.in_edges[j][posin].second == id
+            end
+        end
+    end
 end

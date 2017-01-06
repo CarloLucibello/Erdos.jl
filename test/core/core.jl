@@ -1,3 +1,13 @@
+if !isdefined(:test_rem_edge)
+    function test_rem_edge(g, srcv)
+        for dstv in collect(neighbors(g, srcv))
+            rem_edge!(g, srcv, dstv)
+        end
+        @test length(neighbors(g,srcv)) == 0
+    end
+end
+
+
 g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 
@@ -38,6 +48,8 @@ unsafe_add_edge!(g6, e5)
 rebuild!(g6)
 @test g6 == g
 
+FatGraphs.test_consistency(g6)
+FatGraphs.test_consistency(g)
 h = DG(5)
 @test add_edge!(h, 1, 2)
 @test add_edge!(h, e2)
@@ -80,6 +92,8 @@ end
 @test !is_directed(g)
 @test is_directed(h)
 
+FatGraphs.test_consistency(g)
+
 @test δ(g) == δin(g) == δout(g) == 0
 @test Δ(g) == Δout(g) == 3
 @test Δin(h) == 2
@@ -100,37 +114,44 @@ end
 @test common_inneighbors(h, 2, 3) == [1]
 @test common_outneighbors(h, 2, 3) == [5]
 
+FatGraphs.test_consistency(g)
+
 @test add_edge!(g, 1, 1)
 @test has_self_loops(g)
 @test num_self_loops(g) == 1
 @test !add_edge!(g, 1, 1)
 @test rem_edge!(g, 1, 1)
 @test !rem_edge!(g, 1, 1)
+
+FatGraphs.test_consistency(g)
+FatGraphs.test_consistency(h)
+
+
 @test ne(g) == 5
 @test rem_edge!(g, 1, 2)
 @test ne(g) == 4
+FatGraphs.test_consistency(g)
+FatGraphs.test_consistency(h)
+
 @test !rem_edge!(g, 2, 1)
 add_edge!(g, 1, 2)
 @test ne(g) == 5
+
+FatGraphs.test_consistency(g)
+FatGraphs.test_consistency(h)
 
 @test has_edge(g,2,1)
 @test has_edge(g,1,2)
 @test rem_edge!(g, 2, 1)
 @test add_edge!(h, 1, 1)
 @test rem_edge!(h, 1, 1)
+FatGraphs.test_consistency(h)
 @test rem_edge!(h, 1, 2)
+FatGraphs.test_consistency(h)
+
 @test !rem_edge!(h, 1, 2)
 
-if !isdefined(:test_rem_edge)
-    function test_rem_edge(g, srcv)
-        srcv = 2
-        for dstv in collect(neighbors(g, srcv))
-            rem_edge!(g, srcv, dstv)
-        end
-        @test length(neighbors(g,srcv)) == 0
-    end
-end
-
+FatGraphs.test_consistency(h)
 for v in vertices(g)
     test_rem_edge(copy(g),v)
 end
