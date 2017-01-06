@@ -166,10 +166,10 @@ If `periodic=true` the resulting lattice will have periodic boundary condition i
 """
 function Grid{T<:Integer,G<:AGraph}(dims::AbstractVector{T}, ::Type{G} = Graph;
         periodic=false)
-    func = periodic ? CycleGraph : PathGraph
-    g = func(dims[1])
+    f = periodic ? d->CycleGraph(d, G) : d->PathGraph(d, G)
+    g = f(dims[1])
     for d in dims[2:end]
-        g = cartesian_product(func(d, G), g)
+        g = cartesian_product(f(d), g)
     end
     return g
 end

@@ -21,10 +21,10 @@ function local_clustering(g::ASimpleGraph, v::Integer)
     k <= 1 && return (0, 0)
     neighs = neighbors(g, v)
     c = 0
-    for i=1:length(neighs)
-        for j=1:length(neighs)
+    for i in neighs
+        for j in neighs
             i == j && continue
-            if has_edge(g, neighs[i], neighs[j])
+            if has_edge(g, i, j)
                 c += 1
             end
         end
@@ -82,10 +82,10 @@ function global_clustering_coefficient(g::ASimpleGraph)
     ntriangles = 0
     for v in 1:nv(g)
         neighs = neighbors(g, v)
-        for i=1:length(neighs)
-            for j=1:length(neighs)
+        for i in neighs
+            for j in neighs
                 i == j && continue
-                if has_edge(g, neighs[i], neighs[j])
+                if has_edge(g, i, j)
                     c += 1
                 end
             end

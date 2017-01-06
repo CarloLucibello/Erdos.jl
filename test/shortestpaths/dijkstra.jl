@@ -16,7 +16,7 @@ z = dijkstra_shortest_paths(g4, 2, d2; allpaths=true)
     enumerate_paths(z,4) ==
     enumerate_paths(y,4) == [2,3,4]
 
-g = PathGraph(5)
+g = PathGraph(5, G)
 add_edge!(g,2,4)
 d = ones(Int, 5,5)
 d[2,3] = 100
