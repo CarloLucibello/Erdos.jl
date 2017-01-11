@@ -23,6 +23,7 @@ deploydocs(
     deps = Deps.pip("pygments", "mkdocs", "mkdocs-material", "python-markdown-math"),
     repo   = "github.com/CarloLucibello/FatGraphs.jl.git"
 #    julia  = "release"
+
 )
 
 rm(normpath(@__FILE__, "../src/index.md"))
