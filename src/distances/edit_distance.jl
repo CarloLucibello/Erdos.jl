@@ -1,4 +1,10 @@
 """
+    edit_distance(G₁, G₂;
+           insert_cost::Function=v->1.0,
+           delete_cost::Function=u->1.0,
+           subst_cost::Function=(u,v)->0.5,
+           heuristic::Function=DefaultEditHeuristic)
+
 Computes the edit distance between graphs G₁ and G₂.
 
 Returns the minimum edit cost and edit path to transform graph
@@ -14,19 +20,16 @@ By default, the algorithm uses constant operation costs. The
 user can provide classical Minkowski costs computed from vertex
 labels μ₁ (for G₁) and μ₂ (for G₂) in order to further guide the
 search, for example:
-
 ```
 edit_distance(G₁, G₂, subst_cost=MinkowskiCost(μ₁, μ₂))
 ```
-
 A custom heuristic can be provided to the A* search in case the
 default heuristic is not satisfactory.
-
 Performance tips:
 -----------------
-- Given two graphs |G₁| < |G₂|, `edit_distance(G₁, G₂)` is faster to
+- Given two graphs ``|G₁| < |G₂|``, `edit_distance(G₁, G₂)` is faster to
 compute than `edit_distance(G₂, G₁)`. Consider swapping the arguments
-if involved costs are ``symmetric''.
+if involved costs are `symmetric`.
 - The use of simple Minkowski costs can improve performance considerably.
 - Exploit vertex attributes when designing operation costs.
 
@@ -55,7 +58,7 @@ function edit_distance(G₁::ASimpleGraph, G₂::ASimpleGraph;
 
   while true
     # minimum (partial) edit path
-    λ, cost = Collections.peek(OPEN)
+    λ, cost = peek(OPEN)
     dequeue!(OPEN)
 
     if is_complete_path(λ, G₁, G₂)
