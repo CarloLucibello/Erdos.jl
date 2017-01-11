@@ -88,7 +88,7 @@ Returns the [connected components](https://en.wikipedia.org/wiki/Connectivity_(g
 of `g` as a vector of components, each represented by a
 vector of vertices belonging to the component.
 
-See also [weakly_connected_components](@ref) and [strongly_connected_components](@ref)
+See also [`weakly_connected_components`](@ref) and [`strongly_connected_components`](@ref)
 for directed graphs.
 """
 function connected_components(g::AGraph)
