@@ -59,7 +59,7 @@ digraphtype(g::GTGraph) = GTDiGraph
 
 Construct an empty graph with `n` vertices.
 """
-function GTDiGraph(n::Int = 0)
+function GTDiGraph(n::Integer = 0)
     out_edges = Vector{Vector{Pair{Int,Int}}}()
     in_edges = Vector{Vector{Pair{Int,Int}}}()
     sizehint!(out_edges,n)
@@ -87,7 +87,7 @@ function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
 end
 
 
-GTDiGraph(n::Int, m::Int; seed::Int=-1) = erdos_renyi(n, m, GTDiGraph; seed=seed)
+GTDiGraph(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, GTDiGraph; seed=seed)
 
 nv(g::SimpleGTGraph) = length(g.out_edges)
 ne(g::SimpleGTGraph) = g.ne
@@ -98,7 +98,7 @@ function add_vertex!(g::GTDiGraph)
     return nv(g)
 end
 
-function add_edge!(g::GTDiGraph, u::Int, v::Int)
+function add_edge!(g::GTDiGraph, u::Integer, v::Integer)
     (u in vertices(g) && v in vertices(g)) || return false
     has_edge(g, u, v) && return false # could be removed for multigraphs
     if isempty(g.free_indexes)
@@ -121,7 +121,7 @@ function add_edge!(g::GTDiGraph, u::Int, v::Int)
     return true
 end
 
-function rem_edge!(g::GTDiGraph, s::Int, t::Int)
+function rem_edge!(g::GTDiGraph, s::Integer, t::Integer)
     if !g.keep_epos
         oes = g.out_edges[s]
         po = findfirst(e->e.first==t, oes)
@@ -182,7 +182,7 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
 end
 
 # TODO can be improved (see graph/digraph)
-function edge(g::SimpleGTGraph, i::Int, j::Int)
+function edge(g::SimpleGTGraph, i::Integer, j::Integer)
     (i > nv(g) || j > nv(g)) && return GTEdge(i, j, -1)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
@@ -193,28 +193,28 @@ function edge(g::SimpleGTGraph, i::Int, j::Int)
     end
 end
 
-function out_edges(g::SimpleGTGraph, i::Int)
+function out_edges(g::SimpleGTGraph, i::Integer)
     oes = g.out_edges[i]
     return (GTEdge(i, j, idx) for (j, idx) in oes)
 end
 
-function out_neighbors(g::SimpleGTGraph, i::Int)
+function out_neighbors(g::SimpleGTGraph, i::Integer)
     oes = g.out_edges[i]
     return (j for (j, idx) in oes)
 end
 
-function in_edges(g::GTDiGraph, i::Int)
+function in_edges(g::GTDiGraph, i::Integer)
     ies = g.in_edges[i]
     return (GTEdge(j, i, idx) for (j, idx) in ies)
 end
 
 
-function in_neighbors(g::GTDiGraph, i::Int)
+function in_neighbors(g::GTDiGraph, i::Integer)
     ies = g.in_edges[i]
     return (j for (j, idx) in ies)
 end
 
-function rem_vertex!(g::SimpleGTGraph, v::Int)
+function rem_vertex!(g::SimpleGTGraph, v::Integer)
     v in vertices(g) || return false
     n = nv(g)
     clean_vertex!(g, v)
@@ -256,7 +256,7 @@ end
 
 Construct an empty graph with `n` vertices.
 """
-function GTGraph(n::Int = 0)
+function GTGraph(n::Integer = 0)
     out_edges = Vector{Vector{Pair{Int,Int}}}()
     sizehint!(out_edges,n)
     for i=1:n
@@ -280,14 +280,14 @@ function GTGraph{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-GTGraph(n::Int, m::Int; seed::Int=-1) = erdos_renyi(n, m, GTGraph; seed=seed)
+GTGraph(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, GTGraph; seed=seed)
 
 function add_vertex!(g::GTGraph)
     push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-function add_edge!(g::GTGraph, u::Int, v::Int)
+function add_edge!(g::GTGraph, u::Integer, v::Integer)
     (u in vertices(g) && v in vertices(g)) || return false
     has_edge(g, u, v) && return false # could be removed for multigraphs
 
@@ -316,7 +316,7 @@ function add_edge!(g::GTGraph, u::Int, v::Int)
     return true
 end
 
-function rem_edge!(g::GTGraph, s::Int, t::Int)
+function rem_edge!(g::GTGraph, s::Integer, t::Integer)
     if !g.keep_epos
         oes = g.out_edges[s]
         po = findfirst(e->e.first==t, oes)
@@ -392,7 +392,7 @@ function rem_edge!(g::GTGraph, e::GTEdge)
     return true
 end
 
-function in_edges(g::GTGraph, i::Int)
+function in_edges(g::GTGraph, i::Integer)
     ies = g.out_edges[i]
     return (GTEdge(j, i, idx) for (j, idx) in ies)
 end

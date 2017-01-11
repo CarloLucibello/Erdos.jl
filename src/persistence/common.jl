@@ -12,7 +12,7 @@ const filemap = Dict{Symbol, Tuple{Function, Function}}()
 Reads a graph from  `file` in the format `t`. Returns a graph of type `G`.
 Compressed files can eventually be read.
 
-Supported formats are `:gml, :dot, :graphml, :gexf, :NET`.
+Supported formats are `:gml, :dot, :graphml, :gexf, :NET, :gt`.
 """
 function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
     if compressed
@@ -38,7 +38,7 @@ Save a graph `g` to `file` in the format `t`.
 
 Eventually the resulting file can be compressed in the gzip format.
 
-Currently supported formats are `:gml, :graphml, :gexf, :dot, :NET`.
+Currently supported formats are `:gml, :graphml, :gexf, :dot, :NET, :gt`.
 """
 function writegraph(io::IO, g::ASimpleGraph, t::Symbol)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")

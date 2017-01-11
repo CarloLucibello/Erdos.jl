@@ -210,6 +210,7 @@ include("persistence/common.jl")
     include("persistence/gml.jl")
     include("persistence/graphml.jl")
     include("persistence/net.jl")
+    include("persistence/gt.jl")
 include("utils.jl")
 include("deprecate.jl")
 end # module

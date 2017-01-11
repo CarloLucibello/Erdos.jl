@@ -40,3 +40,5 @@
 - Vertex type for Graph can be any integer,
     i.e. we have Graph{Int32} and the default Graph{Int64}
 - unsafe_add_edge! for faster graph creation
+- add graph-tool  i/o format (.gt)
+- add datasets directory. Graphs from graph-tool collection
