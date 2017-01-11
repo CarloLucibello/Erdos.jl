@@ -3,7 +3,6 @@ module FatGraphs
 
 using GZip
 using Distributions: Binomial # randgraphs
-using Base.Collections
 using LightXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 using StatsBase: fit, Histogram
@@ -13,8 +12,9 @@ import MatrixDepot: matrixdepot
 using Iterators: distinct, chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
-import DataStructures: MutableBinaryHeap, update!, compare  # push_relabel
-
+import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
+                        PriorityQueue, dequeue!, peek, heappush!, heappop!,
+                        enqueue!
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,

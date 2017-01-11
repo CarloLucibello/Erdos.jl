@@ -7,6 +7,7 @@ a2 = DG(adjmx2)
 distmx1 = [Inf 2.0 Inf; 2.0 Inf 4.2; Inf 4.2 Inf]
 distmx2 = [Inf 2.0 Inf; 3.2 Inf 4.2; 5.5 6.1 Inf]
 
+g4 = PathDiGraph(5, DG)
 @test_throws ErrorException eccentricity(g4)
 z = eccentricity(a1, distmx1)
 @test z == [6.2, 4.2, 6.2]
