@@ -53,7 +53,7 @@ tests = [
 
 
 testdir = dirname(@__FILE__)
-datasets_dir = joinpath(Pkg.dir(), "datasets")
+datasets_dir = joinpath(Pkg.dir("FatGraphs"), "datasets")
 # datasets_dir = "datasets"
 
 E = Edge
