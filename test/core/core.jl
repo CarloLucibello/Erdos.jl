@@ -7,7 +7,6 @@ if !isdefined(:test_rem_edge)
     end
 end
 
-
 g5 = DG(4)
 add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 
@@ -90,22 +89,12 @@ end
 @test !is_directed(g)
 @test is_directed(h)
 
-@test δ(g) == δin(g) == δout(g) == 0
-@test Δ(g) == Δout(g) == 3
-@test Δin(h) == 2
-@test δ(h) == δout(h)
-@test δin(h) == 0
-@test δout(h) == 0
 @test CompleteGraph(4, G) == CompleteGraph(4, G)
 @test CompleteGraph(4, G) != PathGraph(4, G)
 @test CompleteDiGraph(4, DG) != PathDiGraph(4, DG)
 @test CompleteDiGraph(4, DG) == CompleteDiGraph(4, DG)
 
 @test collect(neighbors(g, 1)) == [2, 3, 4]
-@test common_neighbors(g, 2, 3) == [1, 5]
-@test common_neighbors(h, 2, 3) == common_outneighbors(h, 2, 3)
-@test common_inneighbors(h, 2, 3) == [1]
-@test common_outneighbors(h, 2, 3) == [5]
 
 @test add_edge!(g, 1, 1)
 @test has_self_loops(g)
@@ -113,8 +102,6 @@ end
 @test !add_edge!(g, 1, 1)
 @test rem_edge!(g, 1, 1)
 @test !rem_edge!(g, 1, 1)
-
-
 
 @test ne(g) == 5
 @test rem_edge!(g, 1, 2)

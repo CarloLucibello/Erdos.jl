@@ -76,10 +76,7 @@ randomwalk, self_avoiding_randomwalk, non_backtracking_randomwalk,
 # connectivity
 connected_components, strongly_connected_components, weakly_connected_components,
 is_connected, is_strongly_connected, is_weakly_connected, period,
-condensation, attracting_components, neighborhood, isgraphical,
-Δ, δ, Δout, Δin, δout, δin, degree_histogram, density,
-common_neighbors, common_inneighbors, common_outneighbors,
-
+condensation, attracting_components, neighborhood, isgraphical, density,
 
 # maximum_adjacency_visit
 MaximumAdjacency, AbstractMASVisitor, mincut, maximum_adjacency_visit,
