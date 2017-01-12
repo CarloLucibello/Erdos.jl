@@ -101,9 +101,6 @@ end
 @test CompleteDiGraph(4, DG) != PathDiGraph(4, DG)
 @test CompleteDiGraph(4, DG) == CompleteDiGraph(4, DG)
 
-@test degree_histogram(CompleteDiGraph(10, DG)).weights == [10]
-@test degree_histogram(CompleteGraph(10, G)).weights == [10]
-
 @test collect(neighbors(g, 1)) == [2, 3, 4]
 @test common_neighbors(g, 2, 3) == [1, 5]
 @test common_neighbors(h, 2, 3) == common_outneighbors(h, 2, 3)

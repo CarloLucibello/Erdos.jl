@@ -42,40 +42,37 @@ function noallocextreme(f, comparison, initial, g)
 end
 
 """
-    degree_histogram(g)
-
-Returns a `StatsBase.Histogram` of the degrees of vertices in `g`.
-"""
-degree_histogram(g::ASimpleGraph) = fit(Histogram, degree(g))
-
-"
     common_neighbors(g, u, v)
 
-Returns the neighbors common to vertices `u` and `v` in `g`."
+Returns the neighbors common to vertices `u` and `v` in `g`.
+"""
 common_neighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(neighbors(g,u), neighbors(g,v))
 
-"
+"""
     common_inneighbors(g, u, v)
 
-Returns the inneighbors common to vertices `u` and `v` in `g`."
+Returns the inneighbors common to vertices `u` and `v` in `g`.
+"""
 common_inneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(in_neighbors(g,u), in_neighbors(g,v))
 
-"
+"""
     common_outneighbors(g, u, v)
 
-Returns the outneighbors common to vertices `u` and `v` in `g`."
+Returns the outneighbors common to vertices `u` and `v` in `g`.
+"""
 common_outneighbors(g::ASimpleGraph, u::Int, v::Int) = intersect(out_neighbors(g,u), out_neighbors(g,v))
 
 
-"
+"""
     has_self_loops(g)
 
-Returns true if `g` has any self loops."
-
+Returns true if `g` has any self loops.
+"""
 has_self_loops(g::ASimpleGraph) = any(v->has_edge(g, v, v), vertices(g))
 
-"
+"""
     num_self_loops(g)
 
-Returns the number of self loops in `g`."
+Returns the number of self loops in `g`.
+"""
 num_self_loops(g::ASimpleGraph) = sum(v->has_edge(g, v, v), vertices(g))

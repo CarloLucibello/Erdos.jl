@@ -5,7 +5,6 @@ using GZip
 using Distributions: Binomial # randgraphs
 using LightXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
-using StatsBase: fit, Histogram
 import BlossomV # matching
 import Clustering: kmeans # community detection
 import MatrixDepot: matrixdepot
