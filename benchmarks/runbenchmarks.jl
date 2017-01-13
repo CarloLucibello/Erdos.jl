@@ -4,9 +4,9 @@ using BenchmarkTools
 using Base.Dates
 import JLD: load, save
 
-TUNE = true
+TUNE = false
 LOAD_PARS = true
-SAVE_RES = true
+SAVE_RES = false
 
 bench_dir = Base.source_dir()
 
