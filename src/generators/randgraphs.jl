@@ -28,7 +28,7 @@ end
 function erdos_renyi{G<:ASimpleGraph}(n::Int, m::Int, ::Type{G} = Graph;
         seed::Int = -1)
     maxe = is_directed(G) ? n * (n-1) : div(n * (n-1), 2)
-    @assert(m <= maxe, "Maximum number of edges for this /src/generators is $maxe")
+    @assert(m <= maxe, "Maximum number of edges for this generator is $maxe")
     m > 2/3 * maxe && return complement(erdos_renyi(n, maxe-m, G; seed=seed))
 
     rng = getRNG(seed)
