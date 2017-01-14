@@ -202,5 +202,5 @@ sg, vm = subgraph(gg5, elist)
 
 
 g10 = StarGraph(10, G)
-@test egonet(g10, 1, 0) == G(1,0)
+@test egonet(g10, 1, 0) == G(1, 0)
 @test egonet(g10, 1, 1) == g10

@@ -51,13 +51,10 @@ tests = [
     "utils"
 ]
 
-
 testdir = dirname(@__FILE__)
-datasets_dir = joinpath(Pkg.dir("FatGraphs"), "datasets")
-# datasets_dir = "datasets"
+datasets_dir = normpath(joinpath(@__FILE__,"..","..","datasets"))
 
 E = Edge
-
 # E = GTEdge
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),
@@ -65,17 +62,21 @@ GLIST =    [
             (GTGraph, GTDiGraph)
             ]
 
-# @testset "FatGraphs Testing" begin
-for x in GLIST
-    global G = x[1]
-    global DG = x[2]
-    println("@@ TESTING $G and $DG")
-    for t in tests
-        tp = joinpath(testdir,"$(t).jl")
-        println("running $t.jl")
-        #TODO stop when failing a testset
-        # @testset "$t" begin
-            include(tp)
-        # end
-    end
+# println("## Testing FatGraphs")
+# @testset "$(x[1])" for x in GLIST
+#     global G = x[1]
+#     global DG = x[2]
+#     @testset "$t" for t in tests
+#         include(joinpath(testdir,"$(t).jl"))
+#     end
+# end
+# println("## Finished Testing FatGraphs")
+
+println("Testing FatGraphs")
+@testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
+    global G = GDG[1]
+    global DG = GDG[2]
+    # println("$x")
+    include(joinpath(testdir,"$(t).jl"))
 end
+println("Finished testing FatGraphs")
