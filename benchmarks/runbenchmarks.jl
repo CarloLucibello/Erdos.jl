@@ -14,7 +14,13 @@ bench_dir = Base.source_dir()
 suite = BenchmarkGroup()
 GLIST = [Graph, GTGraph]
 DGLIST = [DiGraph, GTDiGraph]
-GROUPS = ["core", "generators","flow"]
+GROUPS = [
+            "core",
+            "generators",
+            "flow",
+            "centrality"
+         ]
+
 # GROUPS = ["core"]
 for group in GROUPS
     include("$group/$group.jl")
@@ -90,4 +96,14 @@ if SAVE_RES
     println("Results saved!")
 else
     println("Results not saved. Save the with `saveres(res)`")
+end
+
+function myjudge(names::String...)
+    s = res
+    sold = resold
+    for n in names
+        s = s[n]
+        sold = sold[n]
+    end
+    return judge(median(s),median(sold))
 end

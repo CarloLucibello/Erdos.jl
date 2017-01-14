@@ -1,4 +1,3 @@
-
 adjmx1 = [0 1 0; 1 0 1; 0 1 0] # graph
 adjmx2 = [0 1 0; 1 0 1; 1 1 0] # digraph
 a1 = G(adjmx1)

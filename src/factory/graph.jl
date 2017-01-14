@@ -100,9 +100,9 @@ type DiGraph{T<:Integer} <: ADiGraph
     end
 end
 
+DiGraph{T}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
 DiGraph{T}(n::T) = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
-
 
 typealias SimpleGraph Union{Graph, DiGraph}
 
