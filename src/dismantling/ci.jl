@@ -1,44 +1,45 @@
-function ci_dismantling(g::AGraph, l::Integer, niters = nv(g)÷10)
-    gnew, h, lneigs = ci_dismantling_init(g, l)
-    for it=1:niters
-        ci_dismantling_oneiter!(gnew, h, lneigs, l)
-        println("edges $(ne(gnew))")
-        cc = connected_components(gnew)
-        println("num conn comp $(length(cc))")
-        println("size max comp $(maximum(length, cc))")
+"""
+    dismantle_ci(g::AGraph, l::Integer, nrem = -1)
+
+Applies the CI heuristic distance with distance parameter `l` (tipically `l=3,4`),
+to remove `nrem` vertices from `g` while trying to minimize the size of the
+maximum connected component of the resulting graph.
+If `nrem < 0` stops when the maximum influence is zero.
+
+Returns `gnew, remlist`.
+"""
+function dismantle_ci(g::AGraph, l::Integer, nrem = -1)
+    gnew, heap, lneigs = dismantle_ci_init(g, l)
+    remlist = Int[]
+    for it=1:nrem
+        irem = dismantle_ci_oneiter!(gnew, heap, lneigs, l)
+        irem <= 0 && break
+        push!(remlist, irem)
     end
-    return gnew
+    return gnew, remlist
 end
 
-function ci_dismantling_init(g, l)
-    lneigs = Vector{Vector{Int}}()
-    for i=1:nv(g)
-        neigs = collect(neighborhood(g, i, l))
-        deleteat!(neigs, findfirst(neigs, i))
-        push!(lneigs, neigs)
-    end
-
+function dismantle_ci_init(g::AGraph, l::Integer)
+    lneigs = [neighborhood(g, i, l) for i=1:nv(g)]
     h = MutableBinaryHeap{Pair{Int,Int},GreaterThan2}(GreaterThan2())
     for i=1:nv(g)
          j = push!(h, i=>ci(g, lneigs[i], i))
-         @assert j == i
     end
     return deepcopy(g), h, lneigs
 end
 
-function ci_dismantling_oneiter!(g, h, lneigs, l)
+function dismantle_ci_oneiter!(g::AGraph, h, lneigs::Vector{Vector}, l::Integer)
     itop, citop = top(h)
+    citop <= 0 && return -1
     clean_vertex!(g, itop)
-    update!(h, itop, itop=>0)
-    for j in lneigs[itop]
-        neigs = collect(neighborhood(g, j, l))
-        deleteat!(neigs, findfirst(neigs, j))
-        lneigs[j] = neigs
-        # deleteat!(lneigs[j], findfirst(lneigs[j], i))
+    neigstop = collect(lneigs[itop])
+    for j in neigstop
+        lneigs[j] = neighborhood(g, j, l)
         update!(h, j, j=>ci(g, lneigs[j], j))
     end
+    return itop
 end
 
-function ci(g::AGraph, neigs::Vector, i)
-    return sum(degree(g, j) - 1  for j in neigs)  * (degree(g, i) - 1)
+function ci(g::AGraph, neigs::Vector, i::Integer)
+    return (sum(degree(g, j) - 1  for j in neigs) - (degree(g, i) - 1))* (degree(g, i) - 1)
 end
