@@ -310,3 +310,132 @@ Check and restore the structure of `g`, which could be corrupted by the
 use of unsafe functions (e. g. [`unsafe_add_edge!`](@ref))
 """
 rebuild!(g::ASimpleGraph) = nothing
+
+"""
+    rem_vertex!(g, v)
+
+Remove the vertex `v` from graph `g`.
+It will change the label of the last vertex of the old graph to `v`.
+
+See also [`rem_vertices!`](@ref)
+"""
+function rem_vertex!(g::ASimpleGraph, v)
+    v in vertices(g) || return false
+    clean_vertex!(g, v)
+    swap_vertices!(g, v, nv(g))
+    pop_vertex!(g)
+    return true
+end
+
+
+"""
+    rem_vertex!(g, vs)
+
+Remove the vertices in `vs` from graph `g`.
+Returns a vector mapping the vertices in the new graph to the
+old ones.
+"""
+function rem_vertices!(g::ASimpleGraph, vs)
+    vlist = sort(union(vs))
+    n = nv(g)
+    nrem = length(vlist)
+    vmap = [1:n-nrem;]
+    vswap = n-nrem+1
+    for v in vlist
+        @assert 1 <= v <= n
+        if v <= n-nrem
+            while vswap in vlist
+                vswap += 1
+            end
+            @assert vswap <= n
+            clean_vertex!(g, v)
+            vmap[v] = vswap
+            vswap += 1
+        end
+    end
+
+    for v in vs
+        if v <= n-nrem
+            swap_vertices!(g, v, vmap[v])
+        end
+    end
+    for i=1:nrem
+        pop_vertex!(g)
+    end
+    return vmap
+end
+
+"""
+    swap_vertices!(g, u, v)
+
+Swap the labels of vertices `u` and `v`
+In the new graph all old neighbors of vertex `n` will be neighbors of `v` and
+viceversa.
+"""
+function swap_vertices!(g::AGraph, u::Integer, v::Integer)
+    if u != v
+
+        # cannot do removal and addition in the same loop
+        # since can add and edge already present
+        ev = collect(out_edges(g, v))
+        for e in ev
+            rem_edge!(g, e)
+        end
+        eu = collect(out_edges(g, u))
+        for e in eu
+            rem_edge!(g, e)
+        end
+
+        for e in ev
+            d = dst(e) == v ? u :
+                dst(e) == u ? v : dst(e)
+            add_edge!(g, u, d)
+        end
+        for e in eu
+            d = dst(e) == u ? v : dst(e)
+                # : dst(e) == u : v
+            add_edge!(g, v, d)
+        end
+    end
+end
+
+function swap_vertices!(g::ADiGraph, u::Integer, v::Integer)
+    if u != v
+        # outgoing
+        ev = collect(out_edges(g, v))
+        for e in ev
+            rem_edge!(g, e)
+        end
+        eu = collect(out_edges(g, u))
+        for e in eu
+            rem_edge!(g, e)
+        end
+
+        # incoming
+        evi = collect(in_edges(g, v))
+        for e in evi
+            rem_edge!(g, e)
+        end
+        eui = collect(in_edges(g, u))
+        for e in eui
+            rem_edge!(g, e)
+        end
+        for e in ev
+            d = dst(e) == v ? u :
+                dst(e) == u ? v : dst(e)
+            add_edge!(g, u, d)
+        end
+        for e in eu
+            d = dst(e) == u ? v :
+                dst(e) == v ? u : dst(e)
+            add_edge!(g, v, d)
+        end
+
+        for e in evi
+            add_edge!(g, src(e), u)
+        end
+        for e in eui
+            add_edge!(g, src(e), v)
+        end
+    end
+end

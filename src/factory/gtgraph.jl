@@ -160,7 +160,9 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
 
     else # O(1)
         idx > length(g.epos) && return false
-
+        length(oes) == 0 && return false
+        p1 = g.epos[idx].first
+        p1 < 0 && return false
         back = last(oes)
         p1 = g.epos[idx].first
         p2 = g.epos[back.second].second
@@ -174,6 +176,8 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
         g.epos[back.second] = Pair(p1, p2)
         ies[p2] = back
         pop!(ies)
+
+        g.epos[idx] = Pair(-1,-1)
     end
 
     g.ne -= 1
@@ -214,32 +218,9 @@ function in_neighbors(g::GTDiGraph, i::Integer)
     return (j for (j, idx) in ies)
 end
 
-function rem_vertex!(g::SimpleGTGraph, v::Integer)
-    v in vertices(g) || return false
-    n = nv(g)
-    clean_vertex!(g, v)
-
-    if v != n
-        edgs = collect(out_edges(g, n))
-        for e in edgs
-            rem_edge!(g, e)
-            add_edge!(g, v, dst(e))
-        end
-        if is_directed(g)
-            edgs = collect(in_edges(g, n))
-            for e in edgs
-                rem_edge!(g, e)
-                add_edge!(g, src(e), v)
-            end
-        end
-    end
-
-    pop!(g.out_edges)
-    if is_directed(g)
-        pop!(g.in_edges)
-    end
-    return true
-end
+pop_vertex!(g::GTGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
+pop_vertex!(g::GTDiGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
+                          pop!(g.in_edges); nv(g)+1)
 
 function reverse!(g::GTDiGraph)
     g.out_edges, g.in_edges = g.in_edges, g.out_edges
@@ -354,17 +335,21 @@ function rem_edge!(g::GTGraph, e::GTEdge)
 
         if s != t
             pi = findfirst(e->e.first==s && e.second==idx, ies)
-            pi == 0 && error("rem_edge")
             deleteat!(ies, pi)
         end
     else # O(1)
 
         idx > length(g.epos) && return false
-        back = last(oes)
+        length(oes) == 0 && return false
         p1 = g.epos[idx].first
+        p1 < 0 && return false
+
+        back = last(oes)
         if back.first > s
             p2 = g.epos[back.second].second
             g.epos[back.second] = Pair(p1 , p2)
+        elseif back.first == s #fix self-edges
+            g.epos[back.second] = Pair(p1, p1)
         else
             p2 = g.epos[back.second].first
             g.epos[back.second] = Pair(p2 , p1)
@@ -378,6 +363,8 @@ function rem_edge!(g::GTGraph, e::GTEdge)
             if back.first > t
                 p2 = g.epos[back.second].second
                 g.epos[back.second] = Pair(p1 , p2)
+            elseif back.first == t #fix self-edges
+                g.epos[back.second] = Pair(p1 , p1)
             else
                 p2 = g.epos[back.second].first
                 g.epos[back.second] = Pair(p2 , p1)
@@ -385,6 +372,8 @@ function rem_edge!(g::GTGraph, e::GTEdge)
             ies[p1] = back
             pop!(ies)
         end
+
+        g.epos[idx] = Pair(-1,-1)
     end
 
     g.ne -= 1
