@@ -160,7 +160,7 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
 
     else # O(1)
         idx > length(g.epos) && return false
-
+        length(oes) == 0 && return false
         back = last(oes)
         p1 = g.epos[idx].first
         p2 = g.epos[back.second].second
@@ -214,32 +214,9 @@ function in_neighbors(g::GTDiGraph, i::Integer)
     return (j for (j, idx) in ies)
 end
 
-function rem_vertex!(g::SimpleGTGraph, v::Integer)
-    v in vertices(g) || return false
-    n = nv(g)
-    clean_vertex!(g, v)
-
-    if v != n
-        edgs = collect(out_edges(g, n))
-        for e in edgs
-            rem_edge!(g, e)
-            add_edge!(g, v, dst(e))
-        end
-        if is_directed(g)
-            edgs = collect(in_edges(g, n))
-            for e in edgs
-                rem_edge!(g, e)
-                add_edge!(g, src(e), v)
-            end
-        end
-    end
-
-    pop!(g.out_edges)
-    if is_directed(g)
-        pop!(g.in_edges)
-    end
-    return true
-end
+pop_vertex!(g::GTGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
+pop_vertex!(g::GTDiGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
+                          pop!(g.in_edges); nv(g)+1)
 
 function reverse!(g::GTDiGraph)
     g.out_edges, g.in_edges = g.in_edges, g.out_edges
@@ -354,12 +331,12 @@ function rem_edge!(g::GTGraph, e::GTEdge)
 
         if s != t
             pi = findfirst(e->e.first==s && e.second==idx, ies)
-            pi == 0 && error("rem_edge")
             deleteat!(ies, pi)
         end
     else # O(1)
 
         idx > length(g.epos) && return false
+        length(oes) == 0 && return false
         back = last(oes)
         p1 = g.epos[idx].first
         if back.first > s

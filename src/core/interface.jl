@@ -14,7 +14,7 @@ Functions to implement:
     add_edge!(g, u, v)
     rem_edge!(g, u, v)
     add_vertex!(g)
-    rem_vertex!(g, v)
+    pop_vertex!(g)
     graphtype(g)
     digraphtype(g)
     edgetype(g)
@@ -32,6 +32,7 @@ Reccomended Overrides:
     reverse!(g) #digraph
     unsafe_add_edge!(g, u, v)
     rebuild!(g)
+    rem_vertex!(g, v)
 """
 abstract AGraph
 
@@ -99,15 +100,6 @@ Add a new vertex to the graph `g`.
 """
 add_vertex!(g::ASimpleGraph) = nothing
 
-
-"""
-    rem_vertex!(g, v)
-
-Remove the vertex `v` from graph `g`.
-It may change the index of other vertices (usually of the last one).
-"""
-rem_vertex!(g::ASimpleGraph, i) = nothing
-
 # length() has to be appliable to the result
 """
     in_neighbors(g, v)
@@ -170,3 +162,10 @@ dst(e::AEdge) = nothing
 Swap `e.src` and `e.dst`.
 """
 reverse(e::AEdge) = nothing
+
+"""
+    pop_vertex!(g)
+
+Remove the last vertex of `g`. Equivalent to rem_vertex!(g, nv(g)).
+"""
+pop_vertex!(g::ASimpleGraph) = nothing
