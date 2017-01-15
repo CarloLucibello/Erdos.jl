@@ -1,4 +1,5 @@
-suite["flow"] = BenchmarkGroup()
+s = BenchmarkGroup()
+suite["flow"] = s
 
 edgs = [
   (1,2,10),(1,3,5),(1,4,15),(2,3,4),(2,5,9),
@@ -14,7 +15,7 @@ for e in edgs
     capacity_matrix[u,v] = f
 end
 
-suite["flow"]["push_relabel"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+s["push_relabel"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=PushRelabelAlgorithm())
-suite["flow"]["dinic"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+s["dinic"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=DinicAlgorithm())
