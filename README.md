@@ -79,6 +79,8 @@ writegraph("mygraph.gml", g, :gml)
 
 - **matching:** maximum weight matching on arbitrary graphs (through BlossomV algorithm)
 
+- **dismantling:** collective influencer heuristic
+
 - **clique enumeration:** maximal cliques
 
 - **linear algebra / spectral graph theory:** adjacency matrix (works as input to [GraphLayout](https://github.com/IainNZ/GraphLayout.jl) and [Metis](https://github.com/JuliaSparse/Metis.jl)), Laplacian matrix, non-backtracking matrix

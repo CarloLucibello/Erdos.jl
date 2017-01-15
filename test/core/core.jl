@@ -387,21 +387,29 @@ swap_vertices!(g, 1, 2)
 @test has_edge(g, 2, 2)
 @test has_edge(g, 1, 1)
 
-g = DG(2)
-add_edge!(g, 1, 2); add_edge!(g, 1, 1);
+g = DG(3)
+add_edge!(g, 1, 2); add_edge!(g, 1, 1); add_edge!(g, 3, 1)
 swap_vertices!(g, 1, 2)
-@test ne(g) == 2
+@test ne(g) == 3
 @test !has_edge(g, 1, 2)
 @test has_edge(g, 2, 1)
 @test has_edge(g, 2, 2)
 @test !has_edge(g, 1, 1)
+@test has_edge(g, 3, 2)
+@test !has_edge(g, 3, 1)
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 3)
 add_edge!(g, 1, 1)
 swap_vertices!(g, 1, 2)
-@test ne(g) == 3
+@test ne(g) == 4
 @test has_edge(g, 1, 2)
 @test !has_edge(g, 2, 1)
 @test has_edge(g, 2, 2)
 @test has_edge(g, 1, 1)
+@test !has_edge(g, 3, 2)
+@test has_edge(g, 3, 1)
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 3)
 
 g = WheelGraph(10, G)
 @test degree(g, 1) == 9
