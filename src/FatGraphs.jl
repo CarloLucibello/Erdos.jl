@@ -140,7 +140,7 @@ MatchingResult, minimum_weight_perfect_matching,
 matrixdepot,
 
 # dismantling
-ci_dismantling, ci_dismantling_init, ci_dismantling_oneiter!
+dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!
 
 """An optimized graphs package.
 
@@ -202,7 +202,7 @@ include("flow/maximum_flow.jl")
     include("flow/ext_multiroute_flow.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
-# include("dismantling/ci.jl")
+include("dismantling/ci.jl")
 include("factory/graph.jl")
     include("factory/gtgraph.jl")
 include("persistence/common.jl")

@@ -44,3 +44,4 @@
 - add datasets directory. Graphs from graph-tool collection
 - add swap_vertices!
 - add rem_vertices! returning a map from the new nodes to old ones
+- add dismantling
