@@ -12,8 +12,8 @@ bench_dir = Base.source_dir()
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
-GLIST = [Graph, GTGraph]
-DGLIST = [DiGraph, GTDiGraph]
+GLIST = [Graph{Int64}, GTGraph]
+DGLIST = [DiGraph{Int64}, GTDiGraph]
 GROUPS = [
             "core",
             "generators",
@@ -98,6 +98,9 @@ else
     println("Results not saved. Save the with `saveres(res)`")
 end
 
+"""
+example: myjudge("core", "edges")
+"""
 function myjudge(names::String...)
     s = res
     sold = resold
