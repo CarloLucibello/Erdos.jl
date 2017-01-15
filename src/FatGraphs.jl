@@ -39,6 +39,7 @@ nv, ne, add_edge!, rem_edge!, add_vertex!, add_vertices!,
 in_degree, out_degree, degree, has_self_loops, num_self_loops,
 rem_vertex!, edge, clean_vertex!,
 unsafe_add_edge!, rebuild!,
+rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,
