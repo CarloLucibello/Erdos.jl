@@ -132,12 +132,14 @@ euclidean_graph,
 # Spanning Trees
 minimum_spanning_tree, count_spanning_trees,
 
-#matching
+# matching
 MatchingResult, minimum_weight_perfect_matching,
 
 # matrixdepot
-matrixdepot
+matrixdepot,
 
+# dismantling
+ci_dismantling, ci_dismantling_init, ci_dismantling_oneiter!
 
 """An optimized graphs package.
 
@@ -156,6 +158,7 @@ more traditional and better-optimized mechanisms.
 """
 FatGraphs
 
+include("utils.jl")
 include("core/interface.jl")
     include("core/core.jl")
     include("core/edge.jl")
@@ -198,6 +201,7 @@ include("flow/maximum_flow.jl")
     include("flow/ext_multiroute_flow.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
+# include("dismantling/ci.jl")
 include("factory/graph.jl")
     include("factory/gtgraph.jl")
 include("persistence/common.jl")
@@ -207,6 +211,5 @@ include("persistence/common.jl")
     include("persistence/graphml.jl")
     include("persistence/net.jl")
     include("persistence/gt.jl")
-include("utils.jl")
 include("deprecate.jl")
 end # module
