@@ -1,17 +1,10 @@
-immutable GreaterThan2
-end
-immutable LessThan2
-end
-
-typealias Comp LessThan2
-
 type PushRelabelHeap{T}
-    data::MutableBinaryHeap{Pair{Int,T},Comp}
+    data::MutableBinaryHeap{Pair{Int,T},LessThan2}
     handles::Vector{Int}
 
     function PushRelabelHeap(N)
         handles = zeros(Int, N)
-        data = MutableBinaryHeap{Pair{Int,T},Comp}(Comp())
+        data = MutableBinaryHeap{Pair{Int,T},LessThan2}(LessThan2())
         return new(data, handles)
     end
 end
@@ -35,9 +28,6 @@ function pop!(h::PushRelabelHeap)
 end
 
 length(h::PushRelabelHeap) = length(h.data)
-
-compare(c::GreaterThan2, x, y) = x[2] > y[2]
-compare(c::LessThan2, x, y) = x[2] < y[2]
 
 """
 Implementation of the push relabel algorithm with gap and highest excess heuristics.

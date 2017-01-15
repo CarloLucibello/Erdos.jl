@@ -28,3 +28,4 @@ h = TestDiGraph()
 @test graphtype(h) == nothing
 @test digraphtype(g) == nothing
 @test edgetype(g) == nothing
+@test pop_vertex!(g) == nothing

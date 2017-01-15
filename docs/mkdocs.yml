@@ -25,6 +25,7 @@ pages:
   - 'Community Structures': 'community.md'
   - 'Flow and Cut': 'flow.md'
   - 'Matching': 'matching.md'
+  - 'Dismantling': 'dismantling.md'
   - 'Spanning Trees': 'spanningtrees.md'
   - 'Integration with other packages': 'integration.md'
   - 'Contributing': 'contributing.md'

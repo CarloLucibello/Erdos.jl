@@ -106,48 +106,11 @@ DiGraph() = DiGraph{Int}()
 
 typealias SimpleGraph Union{Graph, DiGraph}
 
-
 nv(g::SimpleGraph) = length(g.fadjlist)
 ne(g::SimpleGraph) = g.ne
 
-#=
-    rem_vertex!(g, v)
-
-Remove the vertex `v` from graph `g`.
-This operation has to be performed carefully if one keeps external data structures indexed by
-edges or vertices in the graph, since internally the removal is performed swapping the vertices `v`  and `n=nv(g)`,
-and removing the vertex `n` from the graph.
-After removal the vertices in the ` g` will be indexed by 1:n-1.
-This is an O(k^2) operation, where `k` is the max of the degrees of vertices `v` and `n`.
-Returns false if removal fails (e.g., if vertex is not in the graph); true otherwise.
-=#
-function rem_vertex!(g::SimpleGraph, v)
-    v in vertices(g) || return false
-    n = nv(g)
-
-    clean_vertex!(g, v)
-
-    if v != n
-        neigs = collect(out_neighbors(g, n))
-        for u in neigs
-            rem_edge!(g, n, u)
-            add_edge!(g, v, u)
-        end
-        if is_directed(g)
-            neigs = collect(in_neighbors(g, n))
-            for u in neigs
-                rem_edge!(g, u, n)
-                add_edge!(g, u, v)
-            end
-        end
-    end
-
-    pop!(g.fadjlist)
-    if is_directed(g)
-        pop!(g.badjlist)
-    end
-    return true
-end
+pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
+pop_vertex!(g::DiGraph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); pop!(g.badjlist); nv(g)+1)
 
 function add_edge!(g::Graph, s, d)
     (s in vertices(g) && d in vertices(g)) || return false

@@ -42,3 +42,6 @@
 - unsafe_add_edge! for faster graph creation
 - add graph-tool  i/o format (.gt)
 - add datasets directory. Graphs from graph-tool collection
+- add swap_vertices!
+- add rem_vertices! returning a map from the new nodes to old ones
+- add dismantling

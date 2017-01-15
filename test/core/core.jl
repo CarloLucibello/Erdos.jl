@@ -135,6 +135,21 @@ g10 = CompleteGraph(5, G)
 @test g10 == CompleteGraph(3, G)
 @test !rem_vertex!(g10, 9)
 
+g = G(2)
+add_edge!(g, 1, 2)
+@test rem_edge!(g, 1, 2)
+@test !rem_edge!(g, 1, 2)
+add_edge!(g, 1, 2)
+edgs = collect(edges(g))
+@test rem_edge!(g, edgs[1])
+@test !rem_edge!(g, edgs[1])
+
+g = CompleteGraph(5, G)
+edgs = collect(edges(g))
+@test rem_edge!(g, edgs[1])
+@test ne(g) == 9
+@test !rem_edge!(g, edgs[1])
+@test ne(g) == 9
 
 g = G(10)
 add_edge!(g, 1, 2)
@@ -320,3 +335,109 @@ g = reverse(gg)
 
 reverse!(g)
 @test g == gg
+
+g = G(4)
+add_edge!(g, 1, 2); add_edge!(g, 3, 4);
+
+swap_vertices!(g, 1, 3)
+@test ne(g) == 2
+@test has_edge(g, 1, 4)
+@test has_edge(g, 3, 2)
+@test !has_edge(g, 1, 2)
+@test !has_edge(g, 3, 4)
+
+add_edge!(g, 1, 2)
+@test ne(g) == 3
+swap_vertices!(g, 1, 3)
+h = G(4)
+add_edge!(h, 1, 2); add_edge!(h, 3, 4); add_edge!(h, 3, 2);
+@test g == h
+
+g = DG(4)
+add_edge!(g, 1, 2); add_edge!(g, 3, 4);
+
+swap_vertices!(g, 1, 3)
+@test ne(g) == 2
+@test has_edge(g, 1, 4)
+@test has_edge(g, 3, 2)
+@test !has_edge(g, 1, 2)
+@test !has_edge(g, 3, 4)
+
+add_edge!(g, 1, 2)
+swap_vertices!(g, 1, 3)
+@test !has_edge(g, 1, 4)
+@test has_edge(g, 3, 2)
+@test has_edge(g, 1, 2)
+@test has_edge(g, 3, 4)
+@test !has_edge(g, 2, 3)
+@test !has_edge(g, 2, 1)
+@test !has_edge(g, 4, 3)
+
+g = G(2)
+add_edge!(g, 1, 2); add_edge!(g, 1, 1);
+swap_vertices!(g, 1, 2)
+@test ne(g) == 2
+@test has_edge(g, 1, 2)
+@test has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+add_edge!(g, 1, 1)
+swap_vertices!(g, 1, 2)
+@test ne(g) == 3
+@test has_edge(g, 1, 2)
+@test has_edge(g, 2, 2)
+@test has_edge(g, 1, 1)
+
+g = DG(3)
+add_edge!(g, 1, 2); add_edge!(g, 1, 1); add_edge!(g, 3, 1)
+swap_vertices!(g, 1, 2)
+@test ne(g) == 3
+@test !has_edge(g, 1, 2)
+@test has_edge(g, 2, 1)
+@test has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+@test has_edge(g, 3, 2)
+@test !has_edge(g, 3, 1)
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 3)
+add_edge!(g, 1, 1)
+swap_vertices!(g, 1, 2)
+@test ne(g) == 4
+@test has_edge(g, 1, 2)
+@test !has_edge(g, 2, 1)
+@test has_edge(g, 2, 2)
+@test has_edge(g, 1, 1)
+@test !has_edge(g, 3, 2)
+@test has_edge(g, 3, 1)
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 3)
+
+g = WheelGraph(10, G)
+@test degree(g, 1) == 9
+@test degree(g, 10) == 3
+swap_vertices!(g, 1, 10)
+@test degree(g, 1) == 3
+@test degree(g, 10) == 9
+
+g = CompleteGraph(10, G)
+vmap = rem_vertices!(g, 6:10)
+@test g == CompleteGraph(5, G)
+@test length(vmap) == length(unique(vmap)) == 5
+@test sort(vmap) == [1:5;]
+
+g = CompleteGraph(10, G)
+vmap = rem_vertices!(g, 1:5)
+@test g == CompleteGraph(5, G)
+@test length(vmap) == length(unique(vmap)) == 5
+@test sort(vmap) == [6:10;]
+
+g = G(10,20)
+h = copy(g)
+pop_vertex!(g)
+rem_vertex!(h, 10)
+@test g == h
+
+g = DG(10,20)
+h = copy(g)
+pop_vertex!(g)
+rem_vertex!(h, 10)
+@test g == h
