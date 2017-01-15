@@ -412,22 +412,22 @@ function swap_vertices!(g::ADiGraph, u::Integer, v::Integer)
         end
 
         # incoming
-        eui = collect(in_edges(g, u))
-        for e in ev
-            rem_edge!(g, e)
-        end
         evi = collect(in_edges(g, v))
-        for e in eu
+        for e in evi
             rem_edge!(g, e)
         end
-
+        eui = collect(in_edges(g, u))
+        for e in eui
+            rem_edge!(g, e)
+        end
         for e in ev
             d = dst(e) == v ? u :
                 dst(e) == u ? v : dst(e)
             add_edge!(g, u, d)
         end
         for e in eu
-            d = dst(e) == u ? v : dst(e)
+            d = dst(e) == u ? v :
+                dst(e) == v ? u : dst(e)
             add_edge!(g, v, d)
         end
 

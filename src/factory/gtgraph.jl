@@ -161,6 +161,8 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
     else # O(1)
         idx > length(g.epos) && return false
         length(oes) == 0 && return false
+        p1 = g.epos[idx].first
+        p1 < 0 && return false
         back = last(oes)
         p1 = g.epos[idx].first
         p2 = g.epos[back.second].second
@@ -174,6 +176,8 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
         g.epos[back.second] = Pair(p1, p2)
         ies[p2] = back
         pop!(ies)
+
+        g.epos[idx] = Pair(-1,-1)
     end
 
     g.ne -= 1
@@ -337,11 +341,15 @@ function rem_edge!(g::GTGraph, e::GTEdge)
 
         idx > length(g.epos) && return false
         length(oes) == 0 && return false
-        back = last(oes)
         p1 = g.epos[idx].first
+        p1 < 0 && return false
+
+        back = last(oes)
         if back.first > s
             p2 = g.epos[back.second].second
             g.epos[back.second] = Pair(p1 , p2)
+        elseif back.first == s #fix self-edges
+            g.epos[back.second] = Pair(p1, p1)
         else
             p2 = g.epos[back.second].first
             g.epos[back.second] = Pair(p2 , p1)
@@ -355,6 +363,8 @@ function rem_edge!(g::GTGraph, e::GTEdge)
             if back.first > t
                 p2 = g.epos[back.second].second
                 g.epos[back.second] = Pair(p1 , p2)
+            elseif back.first == t #fix self-edges
+                g.epos[back.second] = Pair(p1 , p1)
             else
                 p2 = g.epos[back.second].first
                 g.epos[back.second] = Pair(p2 , p1)
@@ -362,6 +372,8 @@ function rem_edge!(g::GTGraph, e::GTEdge)
             ies[p1] = back
             pop!(ies)
         end
+
+        g.epos[idx] = Pair(-1,-1)
     end
 
     g.ne -= 1

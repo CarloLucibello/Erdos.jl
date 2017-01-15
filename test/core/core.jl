@@ -144,6 +144,12 @@ edgs = collect(edges(g))
 @test rem_edge!(g, edgs[1])
 @test !rem_edge!(g, edgs[1])
 
+g = CompleteGraph(5, G)
+edgs = collect(edges(g))
+@test rem_edge!(g, edgs[1])
+@test ne(g) == 9
+@test !rem_edge!(g, edgs[1])
+@test ne(g) == 9
 
 g = G(10)
 add_edge!(g, 1, 2)
@@ -363,10 +369,39 @@ swap_vertices!(g, 1, 3)
 @test has_edge(g, 3, 2)
 @test has_edge(g, 1, 2)
 @test has_edge(g, 3, 4)
-
 @test !has_edge(g, 2, 3)
 @test !has_edge(g, 2, 1)
 @test !has_edge(g, 4, 3)
+
+g = G(2)
+add_edge!(g, 1, 2); add_edge!(g, 1, 1);
+swap_vertices!(g, 1, 2)
+@test ne(g) == 2
+@test has_edge(g, 1, 2)
+@test has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+add_edge!(g, 1, 1)
+swap_vertices!(g, 1, 2)
+@test ne(g) == 3
+@test has_edge(g, 1, 2)
+@test has_edge(g, 2, 2)
+@test has_edge(g, 1, 1)
+
+g = DG(2)
+add_edge!(g, 1, 2); add_edge!(g, 1, 1);
+swap_vertices!(g, 1, 2)
+@test ne(g) == 2
+@test !has_edge(g, 1, 2)
+@test has_edge(g, 2, 1)
+@test has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+add_edge!(g, 1, 1)
+swap_vertices!(g, 1, 2)
+@test ne(g) == 3
+@test has_edge(g, 1, 2)
+@test !has_edge(g, 2, 1)
+@test has_edge(g, 2, 2)
+@test has_edge(g, 1, 1)
 
 g = WheelGraph(10, G)
 @test degree(g, 1) == 9
