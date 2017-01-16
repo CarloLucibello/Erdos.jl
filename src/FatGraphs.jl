@@ -23,7 +23,7 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
-    graphtype, digraphtype, edgetype,
+    graphtype, digraphtype, edgetype, vertextype,
 
 # edge
 Edge, is_ordered, reverse, #sort

@@ -50,8 +50,7 @@ typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
 edgetype(g::SimpleGTGraph) = GTEdge
 graphtype(g::GTDiGraph) = GTGraph
 digraphtype(g::GTGraph) = GTDiGraph
-
-
+vertextype(g::SimpleGTGraph) = Int
 
 #### GRAPH CONSTRUCTORS
 """

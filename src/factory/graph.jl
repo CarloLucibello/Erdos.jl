@@ -250,7 +250,11 @@ function has_edge(g::DiGraph, u, v)
     end
 end
 
-edgetype(g::SimpleGraph) = Edge
+edgetype{T}(g::Graph{T}) = Edge{T}
+edgetype{T}(g::DiGraph{T}) = Edge{T}
+vertextype{T}(g::Graph{T}) = T
+vertextype{T}(g::DiGraph{T}) = T
+
 
 # UNSAFE METHODS
 

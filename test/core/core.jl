@@ -145,6 +145,9 @@ edgs = collect(edges(g))
 @test !rem_edge!(g, edgs[1])
 
 g = CompleteGraph(5, G)
+for e in edges(g)
+    @test typeof(e) == edgetype(g)
+end
 edgs = collect(edges(g))
 @test rem_edge!(g, edgs[1])
 @test ne(g) == 9
@@ -161,6 +164,9 @@ add_edge!(ga, 1, 4)
 @test ga != g
 
 g10 = CompleteDiGraph(5, DG)
+for e in edges(g10)
+    @test typeof(e) == edgetype(g10)
+end
 for i=2:5
     @test rem_edge!(g10, 1, i)
     @test ne(g10) == 21-i

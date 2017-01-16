@@ -18,6 +18,7 @@ Functions to implement:
     graphtype(g)
     digraphtype(g)
     edgetype(g)
+    vertextype(g)
 
 Reccomended Overrides:
     in_adjlist(g) #digraph
@@ -134,6 +135,14 @@ edge(g::ASimpleGraph, u, v) = nothing
 Returns the type of edges of graph `g`.
 """
 edgetype(g::ASimpleGraph) = nothing
+
+
+"""
+    vertextype(g)
+
+Returns the integer type of vertices of graph `g`.
+"""
+vertextype(g::ASimpleGraph) = nothing
 
 
 graphtype(g::ADiGraph) = nothing
