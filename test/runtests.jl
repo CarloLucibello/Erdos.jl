@@ -10,8 +10,8 @@ tests = [
     "core/core",
     "core/edgeiter",
     "operators/operators",
-    "distances/distance",
-    "distances/edit_distance",
+    # "distances/distance",
+    # "distances/edit_distance",
     "linalg/spectral",
     "persistence/persistence",
     "generators/randgraphs",
@@ -19,13 +19,13 @@ tests = [
     "generators/smallgraphs",
     "generators/euclideangraphs",
     "generators/matrixdepot",
-    "shortestpaths/astar",
+    # "shortestpaths/astar",
     "shortestpaths/bellman-ford",
-    "shortestpaths/dijkstra",
+    # "shortestpaths/dijkstra",
     "shortestpaths/floyd-warshall",
     "traversals/bfs",
     "traversals/dfs",
-    "traversals/maxadjvisit",
+    # "traversals/maxadjvisit",
     "traversals/graphvisit",
     "traversals/randomwalks",
     "traversals/connectivity",
@@ -34,29 +34,28 @@ tests = [
     "community/modularity",
     "community/clustering",
     "community/detection",
-    "centrality/betweenness",
-    "centrality/closeness",
+    # "centrality/betweenness",
+    # "centrality/closeness",
     "centrality/degree",
     "centrality/katz",
     "centrality/pagerank",
     "centrality/kcore",
-    "flow/edmonds_karp",
-    "flow/dinic",
-    "flow/boykov_kolmogorov",
-    "flow/push_relabel",
-    "flow/maximum_flow",
-    "flow/multiroute_flow",
+    # "flow/edmonds_karp",
+    # "flow/dinic",
+    # "flow/boykov_kolmogorov",
+    # "flow/push_relabel",
+    # "flow/maximum_flow",
+    # "flow/multiroute_flow",
     "spanningtrees/spanningtrees",
-    "spanningtrees/kruskal",
+    # "spanningtrees/kruskal",
     "matching/matching",
-    "dismantling/dismantling",
+    # "dismantling/dismantling",
     "utils"
 ]
 
 testdir = dirname(@__FILE__)
 datasets_dir = normpath(joinpath(@__FILE__,"..","..","datasets"))
 
-E = Edge
 # E = GTEdge
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),
@@ -78,6 +77,7 @@ println("Testing FatGraphs")
 @testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
     global G = GDG[1]
     global DG = GDG[2]
+    global E = edgetype(G())
     # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end

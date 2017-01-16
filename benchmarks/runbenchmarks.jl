@@ -17,9 +17,9 @@ DGLIST = [DiGraph{Int64}, GTDiGraph]
 GROUPS = [
             "core",
             "generators",
-            "flow",
+            # "flow",
             "centrality",
-            "dismantling",
+            # "dismantling",
             "connectivity"
          ]
 
