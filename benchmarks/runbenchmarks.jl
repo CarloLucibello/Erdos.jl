@@ -18,7 +18,9 @@ GROUPS = [
             "core",
             "generators",
             "flow",
-            "centrality"
+            "centrality",
+            "dismantling",
+            "connectivity"
          ]
 
 # GROUPS = ["core"]

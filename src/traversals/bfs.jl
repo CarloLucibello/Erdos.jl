@@ -29,9 +29,8 @@ function breadth_first_visit_impl!(
     vertexcolormap::AbstractVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
     edgecolormap::AbstractEdgeMap,        # an (initialized) color-map to indicate status of edges
     visitor::SimpleGraphVisitor,            # the visitor
-    dir::Symbol)                        # direction [:in,:out]
+    fneig)                        # direction [:in,:out]
 
-    fneig = dir == :out ? out_neighbors : in_neighbors
     while !isempty(queue)
         u = shift!(queue)
         open_vertex!(visitor, u)
@@ -69,9 +68,10 @@ function traverse_graph!(
         discover_vertex!(visitor, s) || return
         push!(queue, s)
     end
+    fneig = dir == :out ? out_neighbors : in_neighbors
 
     breadth_first_visit_impl!(graph, queue, vertexcolormap, edgecolormap
-            , visitor, dir)
+            , visitor, fneig)
 end
 
 
