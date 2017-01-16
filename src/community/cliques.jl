@@ -52,7 +52,7 @@ function maximal_cliques(g::AGraph)
     done = Set{Int}()
     stack = Vector{Tuple{Set{Int}, Set{Int}, Set{Int}}}()
     clique_so_far = Vector{Int}()
-    cliques = Vector{Array{Int}}()
+    cliques = Vector{Vector{Int}}()
 
     # Start main loop
     while !isempty(smallcand) || !isempty(stack)

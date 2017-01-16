@@ -2,7 +2,7 @@
 
 function _graphml_read_one_graph{G}(e::XMLElement, ::Type{G})
     nodes = Dict{String,Int}()
-    edges = Vector{Edge}()
+    edges = Vector{Edge{Int}}()
 
     nodeid = 1
     for f in child_elements(e)

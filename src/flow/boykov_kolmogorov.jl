@@ -18,7 +18,7 @@ Requires arguments:
 residual_graph::ADiGraph                # the input graph
 source::Int                            # the source vertex
 target::Int                            # the target vertex
-capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 
 Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)
 """
@@ -27,7 +27,7 @@ function boykov_kolmogorov_impl{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+    capacity_matrix::AbstractMatrix{T}    # edge flow capacities
     )
 
     n = nv(residual_graph)
@@ -64,8 +64,8 @@ function find_path!{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     PARENT::Vector{Int},                   # parent table
     TREE::Vector{Int},                     # tree table
     A::Vector{Int}                         # active set
@@ -116,8 +116,8 @@ end
 
 function augment!{T<:Number}(
     path::AbstractVector,                  # path from source to target
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     PARENT::Vector{Int},                   # parent table
     TREE::Vector{Int},                     # tree table
     O::Vector{Int}                         # orphan set
@@ -157,8 +157,8 @@ function adopt!{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     PARENT::Vector{Int},                   # parent table
     TREE::Vector{Int},                     # tree table
     A::Vector{Int},                        # active set

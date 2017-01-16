@@ -410,7 +410,7 @@ end
 
 
 """
-    random_configuration_model(n::Int, k::Array{Int}; seed=-1, check_graphical=false)
+    random_configuration_model(n::Int, k::Vector{Int}; seed=-1, check_graphical=false)
 
 Creates a random undirected graph according to the [configuraton model]
 (http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf).
@@ -422,7 +422,7 @@ approximately ``nc^2`` time.
 
 If `check_graphical=true` makes sure that `k` is a graphical sequence (see `isgraphical`).
 """
-function random_configuration_model{G<:AGraph}(n::Int, k::Array{Int}, ::Type{G}=Graph;
+function random_configuration_model{G<:AGraph}(n::Int, k::Vector{Int}, ::Type{G}=Graph;
         seed::Int=-1, check_graphical::Bool=false)
     @assert(n == length(k), "a degree sequence of length n has to be provided")
     m = sum(k)
@@ -472,8 +472,8 @@ function random_regular_digraph{G<:ADiGraph}(n::Int, k::Int, ::Type{G}=DiGraph;
     rng = getRNG(seed)
     cs = collect(2:n)
     i = 1
-    I = Array(Int, n*k)
-    J = Array(Int, n*k)
+    I = Vector{Int}(n*k)
+    J = Vector{Int}(n*k)
     V = fill(true, n*k)
     for r in 1:n
         l = (r-1)*k+1 : r*k

@@ -8,7 +8,7 @@ function a_star_impl!{T<:Number}(
     t::Int, # the end vertex
     frontier,               # an initialized heap containing the active vertices
     colormap::Vector{Int},  # an (initialized) color-map to indicate status of vertices
-    distmx::AbstractArray{T, 2},
+    distmx::AbstractMatrix{T},
     heuristic::Function    # heuristic fn (under)estimating distance to target
     )
 
@@ -38,7 +38,7 @@ end
 
 """
     a_star(g, s, t, distmx=DefaultDistance(), heuristic = n->0)
-    
+
 Computes the shortest path between vertices `s` and `t` using the
 [A\* search algorithm](http://en.wikipedia.org/wiki/A%2A_search_algorithm). An
 optional heuristic function and edge distance matrix may be supplied.
@@ -51,8 +51,8 @@ function a_star{T<:Real}(
     heuristic::Function = n -> 0
     )
             # heuristic (under)estimating distance to target
-    frontier = PriorityQueue(Tuple{T,Array{Edge,1},Int},T)
-    frontier[(zero(T), Vector{Edge}(), s)] = zero(T)
+    frontier = PriorityQueue(Tuple{T,Vector{Edge{Int}},Int},T)
+    frontier[(zero(T), Vector{Edge{Int}}(), s)] = zero(T)
     colormap = zeros(Int, nv(graph))
     colormap[s] = 1
     a_star_impl!(graph, t, frontier, colormap, distmx, heuristic)

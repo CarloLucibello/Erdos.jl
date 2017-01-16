@@ -40,7 +40,7 @@ function f(g::AS, v::Integer)
     return inner!(storage, g, v)
 end
 
-function inner!(storage::AbstractArray{Int,1}, g::AS, v::Integer)
+function inner!(storage::AbstractVector{Int}, g::AS, v::Integer)
     # some code operating on storage, g, and v.
     for i in 1:nv(g)
         storage[i] = v-i

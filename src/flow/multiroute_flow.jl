@@ -19,7 +19,7 @@ end
 # 1) When using Boykov-Kolmogorov as a flow subroutine
 # 2) Other flow algorithm
 function empty_flow{T<:Real}(
-  capacity_matrix::AbstractArray{T, 2},     # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},     # edge flow capacities
   flow_algorithm::BoykovKolmogorovAlgorithm # keyword argument for algorithm
   )
   n = size(capacity_matrix, 1)
@@ -27,7 +27,7 @@ function empty_flow{T<:Real}(
 end
 # 2) Other flow algorithm
 function empty_flow{T<:Real}(
-  capacity_matrix::AbstractArray{T, 2},     # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},     # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm     # keyword argument for algorithm
   )
   n = size(capacity_matrix, 1)
@@ -39,7 +39,7 @@ function multiroute_flow{T<:Real}(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
-  capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   mrf_algorithm::KishimotoAlgorithm,     # keyword argument for algorithm
   routes::Int                            # keyword argument for routes
@@ -53,7 +53,7 @@ function multiroute_flow{T<:Real, R<:Real}(
   flow_graph::ADiGraph,                            # the input graph
   source::Int,                                    # the source vertex
   target::Int,                                    # the target vertex
-  capacity_matrix::AbstractArray{T, 2},           # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},           # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm,          # keyword argument for algorithm
   mrf_algorithm::ExtendedMultirouteFlowAlgorithm, # keyword argument for algorithm
   routes::R                                       # keyword argument for routes
@@ -75,7 +75,7 @@ function multiroute_flow{T1<:Real, T2<:Real, R<:Real}(
   flow_graph::ADiGraph,                      # the input graph
   source::Int,                              # the source vertex
   target::Int,                              # the target vertex
-  capacity_matrix::AbstractArray{T2, 2} =    # edge flow capacities
+  capacity_matrix::AbstractMatrix{T2} =    # edge flow capacities
     DefaultCapacity(flow_graph);
   flow_algorithm::AbstractFlowAlgorithm  =  # keyword argument for algorithm
     PushRelabelAlgorithm()
@@ -84,7 +84,7 @@ function multiroute_flow{T1<:Real, T2<:Real, R<:Real}(
 
   # For other cases, capacities need to be Floats
   if !(T2<:AbstractFloat)
-    capacity_matrix = convert(AbstractArray{Float64, 2}, capacity_matrix)
+    capacity_matrix = convert(AbstractMatrix{Float64}, capacity_matrix)
   end
 
   return maximum_flow(flow_graph, source, target, capacity_matrix,
@@ -107,7 +107,7 @@ When the input is a network, it requires the following arguments:
 - flow_graph::ADiGraph                   # the input graph
 - source::Int                           # the source vertex
 - target::Int                           # the target vertex
-- capacity_matrix::AbstractArray{T, 2}  # edge flow capacities with T<:Real
+- capacity_matrix::AbstractMatrix{T}  # edge flow capacities with T<:Real
 - flow_algorithm::AbstractFlowAlgorithm # keyword argument for flow algorithm
 - mrf_algorithm::AbstractFlowAlgorithm  # keyword argument for multiroute flow algorithm
 - routes::R<:Real                       # keyword argument for the number of routes
@@ -126,7 +126,7 @@ and the network descriptors, it requires the following arguments:
 - flow_graph::ADiGraph                        # the input graph
 - source::Int                                # the source vertex
 - target::Int                                # the target vertex
-- capacity_matrix::AbstractArray{T2, 2}      # optional edge flow capacities (T2<:Real)
+- capacity_matrix::AbstractMatrix{T2}      # optional edge flow capacities (T2<:Real)
 - flow_algorithm::AbstractFlowAlgorithm      # keyword argument for algorithm
 
 The function defaults to the Push-relabel (classical flow) and Kishimoto
@@ -183,7 +183,7 @@ function multiroute_flow{T<:Real, R<:Real}(
   flow_graph::ADiGraph,                    # the input graph
   source::Int,                            # the source vertex
   target::Int,                            # the target vertex
-  capacity_matrix::AbstractArray{T, 2} =  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T} =  # edge flow capacities
     DefaultCapacity(flow_graph);
   flow_algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
     PushRelabelAlgorithm(),
@@ -202,7 +202,7 @@ function multiroute_flow{T<:Real, R<:Real}(
 
   # For other cases, capacities need to be Floats
   if !(T<:AbstractFloat)
-    capacity_matrix = convert(AbstractArray{Float64, 2}, capacity_matrix)
+    capacity_matrix = convert(AbstractMatrix{Float64}, capacity_matrix)
   end
 
   # Ask for all possible values (breaking points)

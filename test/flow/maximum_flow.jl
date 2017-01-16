@@ -37,7 +37,7 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
 
     # Test DefaultCapacity
     d = FatGraphs.DefaultCapacity(flow_graph)
-    @test typeof(d) <: AbstractArray{Int, 2}
+    @test typeof(d) <: AbstractMatrix{Int}
     @test d[s,t] == 0
     @test size(d) == (nvertices,nvertices)
     @test typeof(transpose(d)) == FatGraphs.DefaultCapacity{DG}

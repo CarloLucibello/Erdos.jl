@@ -21,7 +21,7 @@ end
 
 """
     minimum_spanning_tree{T<:Real}(
-        g, distmx::AbstractArray{T, 2} = DefaultDistance()
+        g, distmx::AbstractMatrix{T} = DefaultDistance()
     )
 
 Performs [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
@@ -31,11 +31,11 @@ that contains the containing edges and its weights.
 """
 function minimum_spanning_tree{T<:Real}(
     g::AGraph,
-    distmx::AbstractArray{T, 2} = DefaultDistance()
+    distmx::AbstractMatrix{T} = DefaultDistance()
 )
 
     edge_list = Vector{KruskalHeapEntry{T}}()
-    mst = Vector{Edge}()
+    mst = Vector{Edge{Int}}()
     connected_nodes = Vector{Int}(1:nv(g))
 
     sizehint!(edge_list, ne(g))

@@ -137,7 +137,7 @@ type TopologicalSortVisitor <: SimpleGraphVisitor
     vertices::Vector{Int}
 
     function TopologicalSortVisitor(n)
-        vs = Array(Int, 0)
+        vs = Vector{Int}()
         sizehint!(vs, n)
         new(vs)
     end

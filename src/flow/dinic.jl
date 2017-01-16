@@ -9,14 +9,14 @@ Requires arguments:
 residual_graph::ADiGraph                # the input graph
 source::Int                            # the source vertex
 target::Int                            # the target vertex
-capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
 
 function dinic_impl{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+    capacity_matrix::AbstractMatrix{T}    # edge flow capacities
     )
     n = nv(residual_graph)                     # number of vertexes
 
@@ -42,15 +42,15 @@ Requires arguments:
 residual_graph::ADiGraph                # the input graph
 source::Int                            # the source vertex
 target::Int                            # the target vertex
-capacity_matrix::AbstractArray{T,2}    # edge flow capacities
-flow_matrix::AbstractArray{T,2}        # the current flow matrix
+capacity_matrix::AbstractMatrix{T}    # edge flow capacities
+flow_matrix::AbstractMatrix{T}        # the current flow matrix
 """
 function blocking_flow!{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
     )
     P = zeros(T, nv(residual_graph))
     return blocking_flow!(residual_graph,
@@ -70,18 +70,18 @@ Requires arguments:
 residual_graph::ADiGraph                # the input graph
 source::Int                            # the source vertex
 target::Int                            # the target vertex
-capacity_matrix::AbstractArray{T,2}    # edge flow capacities
-flow_matrix::AbstractArray{T,2}        # the current flow matrix
-P::AbstractArray{Int, 1}               # Parent vector to store Level Graph
+capacity_matrix::AbstractMatrix{T}    # edge flow capacities
+flow_matrix::AbstractMatrix{T}        # the current flow matrix
+P::AbstractVector{Int}               # Parent vector to store Level Graph
 """
 
 function blocking_flow!{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
-    capacity_matrix::AbstractArray{T,2},   # edge flow capacities
-    flow_matrix::AbstractArray{T,2},       # the current flow matrix
-    P::AbstractArray{Int, 1}               # Parent vector to store Level Graph
+    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
+    flow_matrix::AbstractMatrix{T},       # the current flow matrix
+    P::AbstractVector{Int}               # Parent vector to store Level Graph
     )
     n = nv(residual_graph)                     # number of vertexes
 
