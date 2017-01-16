@@ -254,10 +254,17 @@ e5 = E(3,5)
 @test add_edge!(g, e4)
 @test add_edge!(g, e5)
 
+for i in out_neighbors(g, 1)
+    @test typeof(i) == vertextype(g)
+end
+
 h = DG(10, 20)
 for i=1:10
     u = sort(union(in_neighbors(h,i), out_neighbors(h,i)))
     @test sort(collect(all_neighbors(h, i))) == u
+end
+for i in out_neighbors(h, 1)
+    @test typeof(i) == vertextype(h)
 end
 
 h = DG(5)

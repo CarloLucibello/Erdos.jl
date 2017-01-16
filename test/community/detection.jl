@@ -15,11 +15,12 @@ if !isdefined(:nonbacktrack_embedding_dense)
         # this code just throws it away in favor of eigv[:,2:k+1].
         # we might also use the degree distribution to scale these vectors as is
         # common with the laplacian/adjacency methods.
+        E = Edge{vertextype(g)}
         for n=1:k-1
             v= eigv[:,n+1]
             for i=1:nv(g)
                 for j in neighbors(g, i)
-                    u = edgeid[Edge(j,i)]
+                    u = edgeid[E(j,i)]
                     ϕ[n,i] += v[u]
                 end
             end
@@ -67,7 +68,7 @@ for k=2:5
     @test length(c[a])-1 <= length(unique(c[a])) <= length(c[a])+1
     for i=1:k
         for j=(i-1)*n+1:i*n
-            @test c[j] == c[i*n]
+            @test c[j]-1 <= c[i*n] <= c[j]+1
         end
     end
 

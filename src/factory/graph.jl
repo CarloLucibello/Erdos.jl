@@ -219,8 +219,8 @@ in_neighbors(g::DiGraph,v) = g.badjlist[v]
 graphtype{T}(g::DiGraph{T}) = Graph{T}
 digraphtype{T}(g::Graph{T}) = DiGraph{T}
 
-edge(g::DiGraph, u, v) = Edge(u, v)
-edge(g::Graph, u, v) = Edge(u, v)
+edge{T}(g::DiGraph{T}, u, v) = Edge{T}(u, v)
+edge{T}(g::Graph{T}, u, v) = Edge{T}(u, v)
 # edge(g::Graph, u, v) = u <= v ? Edge(u, v) : Edge(v, u)
 
 #### fallbaks override #######
