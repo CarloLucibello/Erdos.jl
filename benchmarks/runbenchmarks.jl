@@ -79,9 +79,9 @@ for group in GROUPS
     regr = regressions(judgement)
     if length(regr) > 0
         has_regressions = false
-        print_with_color(:light_red, "REGRESSIONS FOUND:\n")
+        print_with_color(:red, "REGRESSIONS FOUND:\n")
         println(regr)
-        print_with_color(:light_red, "****************\n")
+        print_with_color(:red, "****************\n")
     end
     improvs = improvements(judgement)
     if length(improvs) > 0

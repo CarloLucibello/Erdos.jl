@@ -127,7 +127,7 @@ out_neighbors(g::ASimpleGraph, v) = nothing
 Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
 in `g`.
 """
-edge(g::ASimpleGraph, u, v) = nothing
+edge(g::ASimpleGraph, u, v) = Edge{Int}(u, v)
 
 """
     edgetype(g)
@@ -135,7 +135,7 @@ edge(g::ASimpleGraph, u, v) = nothing
 
 Returns the type of edges of graph `g` (or graph type `G`).
 """
-edgetype{G<:ASimpleGraph}(::Type{G}) = nothing
+edgetype{G<:ASimpleGraph}(::Type{G}) = Edge{Int}
 
 
 """
@@ -144,12 +144,10 @@ edgetype{G<:ASimpleGraph}(::Type{G}) = nothing
 
 Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
-vertextype{G<:ASimpleGraph}(::Type{G}) = nothing
-
+vertextype{G<:ASimpleGraph}(::Type{G}) = Int
 
 graphtype{G<:ASimpleGraph}(::Type{G}) = nothing
 digraphtype{G<:ASimpleGraph}(::Type{G}) = nothing
-
 
 abstract AEdge
 
