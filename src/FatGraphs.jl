@@ -90,6 +90,7 @@ floyd_warshall_shortest_paths,
 # centrality
 betweenness_centrality, closeness_centrality, degree_centrality,
 in_degree_centrality, out_degree_centrality, katz_centrality, pagerank,
+cores, kcore,
 
 # spectral
 adjacency_matrix,laplacian_matrix, adjacency_spectrum, laplacian_spectrum,
@@ -187,6 +188,7 @@ include("centrality/betweenness.jl")
     include("centrality/degree.jl")
     include("centrality/katz.jl")
     include("centrality/pagerank.jl")
+    include("centrality/kcore.jl")
 include("community/modularity.jl")
     include("community/core-periphery.jl")
     include("community/clustering.jl")

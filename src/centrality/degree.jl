@@ -18,10 +18,10 @@ end
 # TODO avoid repetition of this docstring
 """Calculates the [degree centrality](https://en.wikipedia.org/wiki/Centrality#Degree_centrality)
 of the graph `g`, with optional (default) normalization."""
-degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 0; all...)
+degree_centrality(g::ASimpleGraph; kws...) = _degree_centrality(g, 0; kws...)
 """Calculates the [degree centrality](https://en.wikipedia.org/wiki/Centrality#Degree_centrality)
 of the graph `g`, with optional (default) normalization."""
-in_degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 1; all...)
+in_degree_centrality(g::ASimpleGraph; kws...) = _degree_centrality(g, 1; kws...)
 """Calculates the [degree centrality](https://en.wikipedia.org/wiki/Centrality#Degree_centrality)
 of the graph `g`, with optional (default) normalization."""
-out_degree_centrality(g::ASimpleGraph; all...) = _degree_centrality(g, 2; all...)
+out_degree_centrality(g::ASimpleGraph; kws...) = _degree_centrality(g, 2; kws...)
