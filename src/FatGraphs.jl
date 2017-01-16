@@ -144,7 +144,7 @@ matrixdepot,
 dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
 # maps
-AVertexMap, ConstVertexMap
+AVertexMap, ConstVertexMap, hasindex, VertexMap
 
 """An optimized graphs package.
 
@@ -169,7 +169,7 @@ include("core/interface.jl")
     include("core/edge.jl")
     include("core/edgeiter.jl")
     include("core/misc.jl")
-include("maps/vmap.jl")
+include("maps/vertexmap.jl")
 include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")

@@ -9,6 +9,7 @@ tests = [
     "core/interface",
     "core/core",
     "core/edgeiter",
+    "maps/vertexmap",
     "operators/operators",
     # "distances/distance",
     # "distances/edit_distance",
