@@ -61,7 +61,7 @@ writegraph("mygraph.gml", g, :gml)
 
 - **distance between graphs:** spectral_distance, edit_distance
 
-- **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood
+- **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood, k-core
 
 - **operators:** complement, reverse, reverse!, union, join, intersect, difference, symmetric difference, blkdiag, induced subgraphs, products (cartesian/scalar)
 

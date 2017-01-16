@@ -39,6 +39,7 @@ tests = [
     "centrality/degree",
     "centrality/katz",
     "centrality/pagerank",
+    "centrality/kcore",
     "flow/edmonds_karp",
     "flow/dinic",
     "flow/boykov_kolmogorov",

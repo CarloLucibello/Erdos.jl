@@ -45,3 +45,4 @@
 - add swap_vertices!
 - add rem_vertices! returning a map from the new nodes to old ones
 - add dismantling
+- add cores and kcore
