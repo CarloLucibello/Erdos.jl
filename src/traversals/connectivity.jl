@@ -31,7 +31,7 @@ function connected_components!(label::Vector{Int}, g::AGraph)
         if label[v] == 0
             visitor.labels[v] = v
             visitor.seed = v
-            traverse_graph!(g, BreadthFirst(), v, visitor; vertexcolormap=colormap, queue=queue)
+            traverse_graph!(g, BreadthFirst(), v, visitor; vcolormap=colormap, queue=queue)
         end
     end
     return label
@@ -150,7 +150,7 @@ function discover_vertex!(vis::TarjanVisitor, v)
     return true
 end
 
-function examine_neighbor!(vis::TarjanVisitor, v, w, v_color, w_color, e_color)
+function examine_neighbor!(vis::TarjanVisitor, v, w, vcolor, w_color, ecolor)
     if w_color != 0 && vis.onstack[w] # != 0 means seen
         while vis.index[w] > 0 && vis.index[w] < vis.lowlink[end]
             pop!(vis.lowlink)
@@ -183,7 +183,7 @@ function strongly_connected_components(g::ADiGraph)
     for v in vertices(g)
         if cmap[v] == 0 # 0 means not visited yet
             visitor = TarjanVisitor(nvg)
-            traverse_graph!(g, DepthFirst(), v, visitor, vertexcolormap=cmap)
+            traverse_graph!(g, DepthFirst(), v, visitor, vcolormap=cmap)
             for component in visitor.components
                 push!(components, component)
             end
@@ -307,6 +307,6 @@ function neighborhood(g::ASimpleGraph, v, d; dir=:out)
     visitor = NeighborhoodVisitor(d)
     push!(visitor.neigs, v)
     traverse_graph!(g, BreadthFirst(), v, visitor,
-        vertexcolormap=Dict{Int,Int}(), dir=dir)
+        vcolormap=Dict{Int,Int}(), dir=dir)
     return visitor.neigs
 end

@@ -29,7 +29,6 @@ end
 abstract SimpleGraphVisitAlgorithm
 
 typealias AbstractEdgeMap{E,T} Associative{E,T}
-typealias AbstractVertexMap{T} Union{AbstractVector{T},Associative{Int, T}}
 
 type DummyEdgeMap <: AbstractEdgeMap{Void, Int}
 end
@@ -63,13 +62,13 @@ function discover_vertex!(visitor::VertexListVisitor, v)
 end
 
 function visited_vertices(
-    graph::ASimpleGraph,
+    g::ASimpleGraph,
     alg::SimpleGraphVisitAlgorithm,
     sources)
 
-    visitor = VertexListVisitor(nv(graph))
-    traverse_graph!(graph, alg, sources, visitor)
-    visitor.vertices::Vector{Int}
+    visitor = VertexListVisitor(nv(g))
+    traverse_graph!(g, alg, sources, visitor)
+    return visitor.vertices
 end
 
 
@@ -106,5 +105,5 @@ function traverse_graph_withlog(
     io::IO = STDOUT
 )
     visitor = LogGraphVisitor(io)
-    traverse_graph!(g, alg, sources, visitor)
+    return traverse_graph!(g, alg, sources, visitor)
 end

@@ -59,8 +59,8 @@ datasets_dir = normpath(joinpath(@__FILE__,"..","..","datasets"))
 E = Edge
 # E = GTEdge
 GLIST =    [
-            (Graph{UInt32}, DiGraph{UInt32}),
             (Graph{Int64}, DiGraph{Int64}),
+            (Graph{UInt32}, DiGraph{UInt32}),
             (GTGraph, GTDiGraph)
             ]
 

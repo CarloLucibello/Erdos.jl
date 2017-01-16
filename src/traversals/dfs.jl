@@ -27,8 +27,8 @@ end
 function depth_first_visit_impl!(
     graph::ASimpleGraph,      # the graph
     stack,                          # an (initialized) stack of vertex
-    vertexcolormap::AbstractVertexMap,    # an (initialized) color-map to indicate status of vertices
-    edgecolormap::AbstractEdgeMap,      # an (initialized) color-map to indicate status of edges
+    vcolormap::AVertexMap,    # an (initialized) color-map to indicate status of vertices
+    ecolormap::AbstractEdgeMap,      # an (initialized) color-map to indicate status of edges
     visitor::SimpleGraphVisitor)  # the visitor
 
 
@@ -38,17 +38,17 @@ function depth_first_visit_impl!(
 
         while !done(udsts, tstate) && !found_new_vertex
             v, tstate = next(udsts, tstate)
-            u_color = get(vertexcolormap, u, 0)
-            v_color = get(vertexcolormap, v, 0)
+            ucolor = get(vcolormap, u, 0)
+            vcolor = get(vcolormap, v, 0)
             v_edge = Edge(u,v)
-            e_color = get(edgecolormap, v_edge, 0)
-            examine_neighbor!(visitor, u, v, u_color, v_color, e_color) #no return here
+            ecolor = get(ecolormap, v_edge, 0)
+            examine_neighbor!(visitor, u, v, ucolor, vcolor, ecolor) #no return here
 
-            edgecolormap[v_edge] = 1
+            ecolormap[v_edge] = 1
 
-            if v_color == 0
+            if vcolor == 0
                 found_new_vertex = true
-                vertexcolormap[v] = vertexcolormap[u] - 1 #negative numbers
+                vcolormap[v] = vcolormap[u] - 1 #negative numbers
                 discover_vertex!(visitor, v) || return
                 push!(stack, (u, udsts, tstate))
 
@@ -60,7 +60,7 @@ function depth_first_visit_impl!(
 
         if !found_new_vertex
             close_vertex!(visitor, u)
-            vertexcolormap[u] *= -1
+            vcolormap[u] *= -1
         end
     end
 end
@@ -70,17 +70,17 @@ function traverse_graph!(
     alg::DepthFirst,
     s,
     visitor::SimpleGraphVisitor;
-    vertexcolormap = Dict{Int, Int}(),
-    edgecolormap = DummyEdgeMap())
+    vcolormap = Dict{Int, Int}(),
+    ecolormap = DummyEdgeMap())
 
-    vertexcolormap[s] = -1
+    vcolormap[s] = -1
     discover_vertex!(visitor, s) || return
 
     sdsts = out_neighbors(graph, s)
     sstate = start(sdsts)
     stack = [(s, sdsts, sstate)]
 
-    depth_first_visit_impl!(graph, stack, vertexcolormap, edgecolormap, visitor)
+    depth_first_visit_impl!(graph, stack, vcolormap, ecolormap, visitor)
 end
 
 #################################################
@@ -124,7 +124,7 @@ function is_cyclic(g::ASimpleGraph)
 
     for s in vertices(g)
         if cmap[s] == 0
-            traverse_graph!(g, DepthFirst(), s, visitor, vertexcolormap=cmap)
+            traverse_graph!(g, DepthFirst(), s, visitor, vcolormap=cmap)
         end
         visitor.found_cycle && return true
     end
@@ -159,7 +159,7 @@ function topological_sort_by_dfs(graph::ASimpleGraph)
 
     for s in vertices(graph)
         if cmap[s] == 0
-            traverse_graph!(graph, DepthFirst(), s, visitor, vertexcolormap=cmap)
+            traverse_graph!(graph, DepthFirst(), s, visitor, vcolormap=cmap)
         end
     end
 
