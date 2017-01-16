@@ -11,9 +11,9 @@ import MatrixDepot: matrixdepot
 using Iterators: distinct, chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
-# import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
-#                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
-#                         enqueue!
+import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
+                        PriorityQueue, dequeue!, peek, heappush!, heappop!,
+                        enqueue!, compare, top
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
@@ -176,7 +176,7 @@ include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")
     include("traversals/dfs.jl")
-    # include("traversals/maxadjvisit.jl")
+    include("traversals/maxadjvisit.jl")
     include("traversals/randomwalks.jl")
     include("traversals/connectivity.jl")
 include("distances/distance.jl")
@@ -200,14 +200,14 @@ include("community/modularity.jl")
     include("community/clustering.jl")
     include("community/cliques.jl")
     include("community/detection.jl")
-# include("flow/maximum_flow.jl")
-#     include("flow/edmonds_karp.jl")
-#     include("flow/dinic.jl")
-#     include("flow/boykov_kolmogorov.jl")
-#     include("flow/push_relabel.jl")
-#     include("flow/multiroute_flow.jl")
-#     include("flow/kishimoto.jl")
-#     include("flow/ext_multiroute_flow.jl")
+include("flow/maximum_flow.jl")
+    include("flow/edmonds_karp.jl")
+    include("flow/dinic.jl")
+    include("flow/boykov_kolmogorov.jl")
+    include("flow/push_relabel.jl")
+    include("flow/multiroute_flow.jl")
+    include("flow/kishimoto.jl")
+    include("flow/ext_multiroute_flow.jl")
 include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("dismantling/ci.jl")

@@ -1,5 +1,5 @@
-immutable KruskalHeapEntry{T<:Real}
-    edge::Edge
+immutable KruskalHeapEntry{E, T<:Real}
+    edge::E
     dist::T
 end
 
@@ -9,7 +9,7 @@ isless(e1::KruskalHeapEntry, e2::KruskalHeapEntry) = e1.dist < e2.dist
 on a given pair of nodes `p`and `q`, and makes a connection between them
 in the vector `nodes`.
 """
-function quick_find!(nodes, p, q)
+function quick_find!(nodes::Vector, p, q)
     pid = nodes[p]
     qid = nodes[q]
     for i in 1:length(nodes)
@@ -33,16 +33,17 @@ function minimum_spanning_tree{T<:Real}(
     g::AGraph,
     distmx::AbstractMatrix{T} = DefaultDistance()
 )
-
-    edge_list = Vector{KruskalHeapEntry{T}}()
-    mst = Vector{Edge{Int}}()
-    connected_nodes = Vector{Int}(1:nv(g))
+    E = edgetype(g)
+    V = vertextype(g)
+    edge_list = Vector{KruskalHeapEntry{E,T}}()
+    mst = Vector{E}()
+    connected_nodes = Vector{V}(1:nv(g))
 
     sizehint!(edge_list, ne(g))
     sizehint!(mst, ne(g))
 
-    for (i,j) in edges(g)
-        heappush!(edge_list, KruskalHeapEntry{T}(Edge(i,j), distmx[i,j]))
+    for e in edges(g)
+        heappush!(edge_list, KruskalHeapEntry(e, distmx[src(e),dst(e)]))
     end
 
     while !isempty(edge_list) && length(mst) < nv(g) - 1

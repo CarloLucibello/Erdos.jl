@@ -71,7 +71,7 @@ myrand(itr) = nth(itr, _myrand(length(itr)))
 _myrand{T<:Integer}(n::T) = ceil(T, rand() * n)
 
 #used in flow and dismantling
-# immutable GreaterThan2 end
-# immutable LessThan2 end
-# DataStructures.compare(c::GreaterThan2, x, y) = x[2] > y[2]
-# DataStructures.compare(c::LessThan2, x, y) = x[2] < y[2]
+immutable GreaterThan2 end
+immutable LessThan2 end
+compare(c::GreaterThan2, x, y) = x[2] > y[2]
+compare(c::LessThan2, x, y) = x[2] < y[2]
