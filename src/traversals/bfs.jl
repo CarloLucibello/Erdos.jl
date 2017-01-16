@@ -27,7 +27,7 @@ function breadth_first_visit_impl!(
     g::ASimpleGraph,                 # the graph
     queue::Vector{Int},                 # an (initialized) queue that stores the active vertices
     vcolormap::AVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
-    ecolormap::AbstractEdgeMap,        # an (initialized) color-map to indicate status of edges
+    ecolormap::AEdgeMap,        # an (initialized) color-map to indicate status of edges
     visitor::SimpleGraphVisitor,            # the visitor
     fneig)                        # direction [:in,:out]
 
@@ -59,7 +59,7 @@ function traverse_graph!(
     source,
     visitor::SimpleGraphVisitor;
     vcolormap::AVertexMap = VertexMap(g, Int),
-    ecolormap::AbstractEdgeMap = DummyEdgeMap(),
+    ecolormap::AEdgeMap = ConstEdgeMap(0),
     queue = Vector{Int}(),
     dir = :out)
 

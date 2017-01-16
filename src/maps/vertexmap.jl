@@ -1,9 +1,9 @@
 """
-    typealias AVertexMap{T,V} Union{AbstractVector{T}, Dict{V,T}}
+    typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
 
 Type represented an abstract vertex map.
 """
-typealias AVertexMap{T,V} Union{AbstractVector{T}, Dict{V,T}}
+typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
 
 """
     hasindex(v, i::Integer)
@@ -22,7 +22,6 @@ function VertexMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
     return Dict{V,T}()
 end
-
 
 """
     immutable ConstVertexMap{T} <: AbstractVector{T}

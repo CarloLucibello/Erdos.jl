@@ -106,6 +106,13 @@ DiGraph() = DiGraph{Int}()
 
 typealias SimpleGraph Union{Graph, DiGraph}
 
+edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
+edgetype{T}(::Type{Graph{T}}) = Edge{T}
+graphtype{T}(::Type{DiGraph{T}}) = Graph{T}
+digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
+vertextype{T}(::Type{Graph{T}}) = T
+vertextype{T}(::Type{DiGraph{T}}) = T
+
 nv(g::SimpleGraph) = length(g.fadjlist)
 ne(g::SimpleGraph) = g.ne
 
@@ -216,9 +223,6 @@ end
 out_neighbors(g::SimpleGraph,v) = g.fadjlist[v]
 in_neighbors(g::DiGraph,v) = g.badjlist[v]
 
-graphtype{T}(g::DiGraph{T}) = Graph{T}
-digraphtype{T}(g::Graph{T}) = DiGraph{T}
-
 edge{T}(g::DiGraph{T}, u, v) = Edge{T}(u, v)
 edge{T}(g::Graph{T}, u, v) = Edge{T}(u, v)
 # edge(g::Graph, u, v) = u <= v ? Edge(u, v) : Edge(v, u)
@@ -249,12 +253,6 @@ function has_edge(g::DiGraph, u, v)
         return length(searchsorted(in_neighbors(g,v), u)) > 0
     end
 end
-
-edgetype{T}(g::Graph{T}) = Edge{T}
-edgetype{T}(g::DiGraph{T}) = Edge{T}
-vertextype{T}(g::Graph{T}) = T
-vertextype{T}(g::DiGraph{T}) = T
-
 
 # UNSAFE METHODS
 

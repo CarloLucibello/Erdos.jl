@@ -28,16 +28,6 @@ end
 # This is the common base for BreadthFirst and DepthFirst
 abstract SimpleGraphVisitAlgorithm
 
-typealias AbstractEdgeMap{E,T} Associative{E,T}
-
-type DummyEdgeMap <: AbstractEdgeMap{Void, Int}
-end
-
-getindex(d::DummyEdgeMap, e::AEdge) = 0
-setindex!(d::DummyEdgeMap, x, e::AEdge) = x
-get(d::DummyEdgeMap, e::AEdge, x) = x
-
-
 ###########################################################
 #
 #   General algorithms based on graph traversal

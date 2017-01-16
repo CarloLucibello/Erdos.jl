@@ -25,10 +25,10 @@ type DepthFirst <: SimpleGraphVisitAlgorithm
 end
 
 function depth_first_visit_impl!(
-    graph::ASimpleGraph,      # the graph
+    g::ASimpleGraph,      # the graph
     stack,                          # an (initialized) stack of vertex
     vcolormap::AVertexMap,    # an (initialized) color-map to indicate status of vertices
-    ecolormap::AbstractEdgeMap,      # an (initialized) color-map to indicate status of edges
+    ecolormap::AEdgeMap,      # an (initialized) color-map to indicate status of edges
     visitor::SimpleGraphVisitor)  # the visitor
 
 
@@ -53,7 +53,7 @@ function depth_first_visit_impl!(
                 push!(stack, (u, udsts, tstate))
 
                 open_vertex!(visitor, v)
-                vdsts = out_neighbors(graph, v)
+                vdsts = out_neighbors(g, v)
                 push!(stack, (v, vdsts, start(vdsts)))
             end
         end
@@ -66,21 +66,22 @@ function depth_first_visit_impl!(
 end
 
 function traverse_graph!(
-    graph::ASimpleGraph,
-    alg::DepthFirst,
-    s,
-    visitor::SimpleGraphVisitor;
-    vcolormap = Dict{Int, Int}(),
-    ecolormap = DummyEdgeMap())
+        g::ASimpleGraph,
+        alg::DepthFirst,
+        s,
+        visitor::SimpleGraphVisitor;
+        vcolormap = VertexMap(g, Int),
+        ecolormap = ConstEdgeMap(0)
+    )
 
     vcolormap[s] = -1
     discover_vertex!(visitor, s) || return
 
-    sdsts = out_neighbors(graph, s)
+    sdsts = out_neighbors(g, s)
     sstate = start(sdsts)
     stack = [(s, sdsts, sstate)]
 
-    depth_first_visit_impl!(graph, stack, vcolormap, ecolormap, visitor)
+    depth_first_visit_impl!(g, stack, vcolormap, ecolormap, visitor)
 end
 
 #################################################
@@ -152,14 +153,14 @@ function close_vertex!(visitor::TopologicalSortVisitor, v)
     push!(visitor.vertices, v)
 end
 
-function topological_sort_by_dfs(graph::ASimpleGraph)
-    nvg = nv(graph)
+function topological_sort_by_dfs(g::ASimpleGraph)
+    nvg = nv(g)
     cmap = zeros(Int, nvg)
     visitor = TopologicalSortVisitor(nvg)
 
-    for s in vertices(graph)
+    for s in vertices(g)
         if cmap[s] == 0
-            traverse_graph!(graph, DepthFirst(), s, visitor, vcolormap=cmap)
+            traverse_graph!(g, DepthFirst(), s, visitor, vcolormap=cmap)
         end
     end
 

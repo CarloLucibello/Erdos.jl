@@ -131,22 +131,24 @@ edge(g::ASimpleGraph, u, v) = nothing
 
 """
     edgetype(g)
+    edgetype(G)
 
-Returns the type of edges of graph `g`.
+Returns the type of edges of graph `g` (or graph type `G`).
 """
-edgetype(g::ASimpleGraph) = nothing
+edgetype{G<:ASimpleGraph}(::Type{G}) = nothing
 
 
 """
     vertextype(g)
+    vertextype(G)
 
-Returns the integer type of vertices of graph `g`.
+Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
-vertextype(g::ASimpleGraph) = nothing
+vertextype{G<:ASimpleGraph}(::Type{G}) = nothing
 
 
-graphtype(g::ADiGraph) = nothing
-digraphtype(g::AGraph) = nothing
+graphtype{G<:ASimpleGraph}(::Type{G}) = nothing
+digraphtype{G<:ASimpleGraph}(::Type{G}) = nothing
 
 
 abstract AEdge

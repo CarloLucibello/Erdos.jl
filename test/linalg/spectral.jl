@@ -40,8 +40,8 @@ zprime = contract(n10, v)
 @test z == zprime
 @test z == 9*ones(Float64, nv(g10))
 
-# @test_approx_eq_eps(adjacency_spectrum(g5)[3],0.311, 0.001)
-@test adjacency_spectrum(g5)[3] ≈ 0.311  atol=0.001
+@test_approx_eq_eps(adjacency_spectrum(g5)[3],0.311, 0.001)
+# @test adjacency_spectrum(g5)[3] ≈ 0.311  atol=0.001
 
 @test adjacency_matrix(g3) ==
     adjacency_matrix(g3, :out) ==
@@ -68,8 +68,8 @@ for dir in [:in, :out, :all]
     @test isa(lmat, SparseMatrixCSC{Float64, Int64})
     evals = eigvals(full(lmat))
     @test all(evals .>= -1e-15) # positive semidefinite
-    # @test_approx_eq_eps minimum(evals) 0 1e-13
-    @test minimum(evals) ≈ 0 atol=1e-13
+    @test_approx_eq_eps minimum(evals) 0 1e-13
+    # @test minimum(evals) ≈ 0 atol=1e-13
 end
 
 g4 = PathDiGraph(5, DG)
@@ -101,8 +101,8 @@ nbt = Nonbacktracking(pg)
 B, emap = non_backtracking_matrix(pg)
 Bs = sparse(nbt)
 @test sparse(B) == Bs
-# @test_approx_eq_eps(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], 1e-5)
-@test eigs(nbt, nev=1)[1] ≈ eigs(B, nev=1)[1] atol=1e-5
+@test_approx_eq_eps(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], 1e-5)
+# @test eigs(nbt, nev=1)[1] ≈ eigs(B, nev=1)[1] atol=1e-5
 
 
 # check that matvec works

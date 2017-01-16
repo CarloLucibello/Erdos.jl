@@ -22,8 +22,3 @@ g = G(10, 20)
 # this just exercises some graph visitors
 @test traverse_graph!(g, BreadthFirst(), 1, TrivialGraphVisitor()) == nothing
 @test traverse_graph!(g, BreadthFirst(), 1, LogGraphVisitor(IOBuffer())) == nothing
-
-# dummy edge map test
-d = FatGraphs.DummyEdgeMap()
-e = E(1,2)
-@test d[e] == 0
