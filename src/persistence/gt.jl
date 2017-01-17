@@ -7,7 +7,7 @@ function minutype(n::Integer)
     if n < 2^8
         return UInt8
     elseif n < 2^16
-        return UInt8
+        return UInt16
     elseif n < 2^32
         return UInt32
     elseif n < 2^64
