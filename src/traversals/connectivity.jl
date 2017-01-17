@@ -307,6 +307,6 @@ function neighborhood(g::ASimpleGraph, v, d; dir=:out)
     visitor = NeighborhoodVisitor(d)
     push!(visitor.neigs, v)
     traverse_graph!(g, BreadthFirst(), v, visitor,
-        vcolormap=Dict{Int,Int}(), dir=dir)
+        vcolormap=VertexMap(g, Int), dir=dir)
     return visitor.neigs
 end

@@ -12,14 +12,14 @@ end
 for G in GLIST
     for n in [100]
         g = CompleteGraph(n, G)
-        s["edges","edge iter","fullyconn","$G-$n"] = @benchmarkable b_edgeiter($g)
+        s["edges","edge iter","fullyconn","$g"] = @benchmarkable b_edgeiter($g)
     end
 end
 
 for G in DGLIST
     for n in [100]
         g = CompleteDiGraph(n , G)
-        s["edges","edge iter","fullyconn","$G-$n"] = @benchmarkable b_edgeiter($g)
+        s["edges","edge iter","fullyconn","$g"] = @benchmarkable b_edgeiter($g)
     end
 end
 
@@ -27,14 +27,14 @@ end
 for G in GLIST
     for n in [1000]
         g = random_regular_graph(n, 5, G)
-        s["edges","edge iter","rrg","$G-$n"] = @benchmarkable b_edgeiter($g)
+        s["edges","edge iter","rrg","$g"] = @benchmarkable b_edgeiter($g)
     end
 end
 
 for G in DGLIST
     for n in [1000]
         g = random_regular_digraph(n, 5, G)
-        s["edges","edge iter","rrg","$G-$n"] = @benchmarkable b_edgeiter($g)
+        s["edges","edge iter","rrg","$g"] = @benchmarkable b_edgeiter($g)
     end
 end
 
@@ -52,27 +52,27 @@ vs1000 = [rand(1:n-i+1) for i=1:n÷4]
 for G in GLIST
     for n in [100]
         g = CompleteGraph(n, G)
-        s["vertex","rem vert","fullyconn","$G-$n"] = @benchmarkable b_rem_vert($g, $vs100)
+        s["vertex","rem vert","fullyconn","$g"] = @benchmarkable b_rem_vert($g, $vs100)
     end
 end
 
 for G in DGLIST
     for n in [100]
         g = CompleteDiGraph(n , G)
-        s["vertex","rem vert","fullyconn","$G-$n"] = @benchmarkable b_rem_vert($g, $vs100)
+        s["vertex","rem vert","fullyconn","$g"] = @benchmarkable b_rem_vert($g, $vs100)
     end
 end
 
 for G in GLIST
     for n in [1000]
         g = random_regular_graph(n, 5, G)
-        s["vertex","rem vert","rrg","$G-$n"] = @benchmarkable b_rem_vert($g, $vs1000)
+        s["vertex","rem vert","rrg","$g"] = @benchmarkable b_rem_vert($g, $vs1000)
     end
 end
 
 for G in DGLIST
     for n in [1000]
         g = random_regular_digraph(n, 5, G)
-        s["vertex","rem vert","rrg","$G-$n"] = @benchmarkable b_rem_vert($g, $vs1000)
+        s["vertex","rem vert","rrg","$g"] = @benchmarkable b_rem_vert($g, $vs1000)
     end
 end
