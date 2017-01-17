@@ -4,7 +4,7 @@ using BenchmarkTools
 using Base.Dates
 import JLD: load, save
 
-TUNE = false
+TUNE = true
 LOAD_PARS = true
 SAVE_RES = false
 
@@ -20,7 +20,8 @@ GROUPS = [
             "flow",
             "centrality",
             "dismantling",
-            "connectivity"
+            "connectivity",
+            "persistence"
          ]
 
 # GROUPS = ["core"]
