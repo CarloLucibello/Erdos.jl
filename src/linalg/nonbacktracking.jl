@@ -12,17 +12,18 @@ B[i->j, k->l] = δ(j,k)* (1 - δ(i,l))
 returns a matrix B, and an edgemap storing the oriented edges' positions in B
 """
 function non_backtracking_matrix(g::ASimpleGraph)
-    edgeidmap = Dict{Edge, Int}()
+    E = Edge{vertextype(g)}
+    edgeidmap = Dict{E, Int}()
     m = 0
     for e in edges(g)
         m += 1
-        edgeidmap[Edge(src(e),dst(e))] = m
+        edgeidmap[E(src(e),dst(e))] = m
     end
 
     if !is_directed(g)
         for e in edges(g)
             m += 1
-            ee = Edge(src(e),dst(e))
+            ee = E(src(e),dst(e))
             edgeidmap[reverse(ee)] = m
         end
     end
@@ -33,7 +34,7 @@ function non_backtracking_matrix(g::ASimpleGraph)
         i, j = src(e), dst(e)
         for k in in_neighbors(g,i)
             k == j && continue
-            v = edgeidmap[Edge(k, i)]
+            v = edgeidmap[E(k, i)]
             B[v, u] = 1
         end
     end
@@ -61,23 +62,24 @@ for computed eigenvectors and conducting linear solves.
 Additionally the contract!(vertexspace, nbt, edgespace) method takes vectors represented in
 the domain of B and represents them in the domain of the adjacency matrix of g.
 """
-type Nonbacktracking{G}
+type Nonbacktracking{G, E}
     g::G
-    edgeidmap::Dict{Edge,Int}
+    edgeidmap::Dict{E,Int}
     m::Int
 end
 
 function Nonbacktracking(g::ASimpleGraph)
-    edgeidmap = Dict{Edge, Int}()
+    E = Edge{vertextype(g)}
+    edgeidmap = Dict{E, Int}()
     m = 0
     for e in edges(g)
-        ee = Edge(src(e),dst(e))
+        ee = E(src(e),dst(e))
         m += 1
         edgeidmap[ee] = m
     end
     if !is_directed(g)
         for e in edges(g)
-            ee = Edge(src(e),dst(e))
+            ee = E(src(e),dst(e))
             m += 1
             edgeidmap[reverse(ee)] = m
         end
@@ -90,6 +92,7 @@ eltype(nbt::Nonbacktracking) = Float64
 issymmetric(nbt::Nonbacktracking) = false
 
 function *{G, T<:Number}(nbt::Nonbacktracking{G}, x::Vector{T})
+    E = Edge{vertextype(nbt.g)}
     length(x) == nbt.m || error("dimension mismatch")
     y = zeros(T, length(x))
     for (e,u) in nbt.edgeidmap
@@ -111,6 +114,7 @@ function A_mul_B!(C, nbt::Nonbacktracking, B)
 end
 
 function coo_sparse{G}(nbt::Nonbacktracking{G})
+    E = Edge{vertextype(nbt.g)}
     m = nbt.m
     #= I,J = zeros(Int, m), zeros(Int, m) =#
     I,J = zeros(Int, 0), zeros(Int, 0)
@@ -118,7 +122,7 @@ function coo_sparse{G}(nbt::Nonbacktracking{G})
         i, j = src(e), dst(e)
         for k in in_neighbors(nbt.g,i)
             k == j && continue
-            v = nbt.edgeidmap[Edge(k, i)]
+            v = nbt.edgeidmap[E(k, i)]
             #= J[u] = v =#
             #= I[u] = u =#
             push!(I, v)
@@ -142,9 +146,10 @@ end
 contract(nbt, edgespace). modifies first argument
 """
 function contract!{G}(vertexspace::Vector, nbt::Nonbacktracking{G}, edgespace::Vector)
+    E = Edge{vertextype(nbt.g)}
     for i=1:nv(nbt.g)
         for j in neighbors(nbt.g, i)
-            u = nbt.edgeidmap[i > j ? Edge(j,i) : Edge(i,j)]
+            u = nbt.edgeidmap[i > j ? E(j,i) : E(i,j)]
             vertexspace[i] += edgespace[u]
         end
     end

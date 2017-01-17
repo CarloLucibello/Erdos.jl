@@ -12,7 +12,7 @@ Requires arguments:
 - flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
-- capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 - flow_algorithm::AbstractFlowAlgorithm  # keyword argument for algorithm
 - routes::Int                            # keyword argument for routes
 """
@@ -22,7 +22,7 @@ function emrf{T<:AbstractFloat, R<:Real}(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
-  capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   routes::R = 0
   )
@@ -42,14 +42,14 @@ Requires arguments:
 - flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
-- capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
 
 function auxiliaryPoints{T<:AbstractFloat}(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
-  capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+  capacity_matrix::AbstractMatrix{T}   # edge flow capacities
   )
   # Problem descriptors
   λ = maximum_flow(flow_graph, source, target)[1] # Connectivity
@@ -107,14 +107,14 @@ Requires arguments:
 - flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
-- capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
 
 function breakingPoints{T<:AbstractFloat}(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
-  capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+  capacity_matrix::AbstractMatrix{T}   # edge flow capacities
   )
   auxpoints = auxiliaryPoints(flow_graph, source, target, capacity_matrix)
   λ = length(auxpoints) - 1
@@ -144,14 +144,14 @@ Note: this is more efficient than maximum() / minimum() / extrema()
 since we have to ignore zero values.since we have to ignore zero values.
 
 Requires argument:
-- capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
 
 # Function to get the nonzero min and max function of a Matrix
 # note: this is more efficient than maximum() / minimum() / extrema()
 #       since we have to ignore zero values.
 function minmaxCapacity{T<:AbstractFloat}(
-  capacity_matrix::AbstractArray{T, 2}    # edge flow capacities
+  capacity_matrix::AbstractMatrix{T}    # edge flow capacities
   )
   cmin, cmax = typemax(T), typemin(T)
   for c in capacity_matrix
@@ -168,14 +168,14 @@ Function to get the slope of the restricted flow. The slope is initialized at 0
 and is incremented for each non saturated edge in the restricted min-cut.
 Requires argument:
   flow_graph::ADiGraph,                   # the input graph
-  capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
 """
 # Function to get the slope of the restricted flow
 function slope{T<:AbstractFloat}(
   flow_graph::ADiGraph,                   # the input graph
-  capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
   )

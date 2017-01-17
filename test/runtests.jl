@@ -9,6 +9,7 @@ tests = [
     "core/interface",
     "core/core",
     "core/edgeiter",
+    "maps/vertexmap",
     "operators/operators",
     "distances/distance",
     "distances/edit_distance",
@@ -56,7 +57,6 @@ tests = [
 testdir = dirname(@__FILE__)
 datasets_dir = normpath(joinpath(@__FILE__,"..","..","datasets"))
 
-E = Edge
 # E = GTEdge
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),
@@ -78,6 +78,7 @@ println("Testing FatGraphs")
 @testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
     global G = GDG[1]
     global DG = GDG[2]
+    global E = edgetype(G())
     # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end

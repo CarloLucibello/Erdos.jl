@@ -13,7 +13,7 @@ using Iterators: distinct, chain # all_neighbors
 
 import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
-                        enqueue!
+                        enqueue!, compare, top
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
@@ -23,7 +23,7 @@ import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
-    graphtype, digraphtype, edgetype,
+    graphtype, digraphtype, edgetype, vertextype,
 
 # edge
 Edge, is_ordered, reverse, #sort
@@ -141,7 +141,11 @@ MatchingResult, minimum_weight_perfect_matching,
 matrixdepot,
 
 # dismantling
-dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!
+dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
+
+# maps
+AVertexMap, ConstVertexMap, hasindex, VertexMap,
+AEdgeMap, ConstEdgeMap
 
 """An optimized graphs package.
 
@@ -166,6 +170,8 @@ include("core/interface.jl")
     include("core/edge.jl")
     include("core/edgeiter.jl")
     include("core/misc.jl")
+include("maps/vertexmap.jl")
+    include("maps/edgemap.jl")
 include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")

@@ -24,53 +24,53 @@ type BreadthFirst <: SimpleGraphVisitAlgorithm
 end
 
 function breadth_first_visit_impl!(
-    graph::ASimpleGraph,                 # the graph
+    g::ASimpleGraph,                 # the graph
     queue::Vector{Int},                 # an (initialized) queue that stores the active vertices
-    vertexcolormap::AbstractVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
-    edgecolormap::AbstractEdgeMap,        # an (initialized) color-map to indicate status of edges
+    vcolormap::AVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
+    ecolormap::AEdgeMap,        # an (initialized) color-map to indicate status of edges
     visitor::SimpleGraphVisitor,            # the visitor
     fneig)                        # direction [:in,:out]
 
     while !isempty(queue)
         u = shift!(queue)
         open_vertex!(visitor, u)
-        u_color = vertexcolormap[u]
+        ucolor = vcolormap[u]
 
-        for v in fneig(graph, u)
-            v_color = get(vertexcolormap, v, 0)
-            v_edge = edge(graph, u, v)
-            e_color = get(edgecolormap, v_edge, 0)
-            examine_neighbor!(visitor, u, v, u_color, v_color, e_color) || return
-            edgecolormap[v_edge] = 1
-            if v_color == 0
-                vertexcolormap[v] = u_color - 1
+        for v in fneig(g, u)
+            vcolor = get(vcolormap, v, 0)
+            e = edge(g, u, v)
+            ecolor = get(ecolormap, e, 0)
+            examine_neighbor!(visitor, u, v, ucolor, vcolor, ecolor) || return
+            ecolormap[e] = 1
+            if vcolor == 0
+                vcolormap[v] = ucolor - 1
                 discover_vertex!(visitor, v) || return
                 push!(queue, v)
             end
         end
         close_vertex!(visitor, u)
-        vertexcolormap[u] *= -1
+        vcolormap[u] *= -1
     end
 end
 
 function traverse_graph!(
-    graph::ASimpleGraph,
+    g::ASimpleGraph,
     alg::BreadthFirst,
     source,
     visitor::SimpleGraphVisitor;
-    vertexcolormap::AbstractVertexMap = Dict{Int, Int}(),
-    edgecolormap::AbstractEdgeMap = DummyEdgeMap(),
+    vcolormap::AVertexMap = VertexMap(g, Int),
+    ecolormap::AEdgeMap = ConstEdgeMap(0),
     queue = Vector{Int}(),
     dir = :out)
 
     for s in source
-        vertexcolormap[s] = -1
+        vcolormap[s] = -1
         discover_vertex!(visitor, s) || return
         push!(queue, s)
     end
     fneig = dir == :out ? out_neighbors : in_neighbors
 
-    breadth_first_visit_impl!(graph, queue, vertexcolormap, edgecolormap
+    breadth_first_visit_impl!(g, queue, vcolormap, ecolormap
             , visitor, fneig)
 end
 
@@ -96,7 +96,7 @@ Fills `dists` with the geodesic distances of vertices in  `g` from vertex/vertic
 """
 function gdistances!(g::ASimpleGraph, source, dists)
     visitor = GDistanceVisitor()
-    traverse_graph!(g, BreadthFirst(), source, visitor, vertexcolormap=dists)
+    traverse_graph!(g, BreadthFirst(), source, visitor, vcolormap=dists)
     for i in eachindex(dists)
         dists[i] -= 1
     end
@@ -160,12 +160,12 @@ end
 function bfs_tree!(visitor::TreeBFSVisitorVector,
         g::ASimpleGraph,
         s::Int;
-        vertexcolormap = Dict{Int,Int}(),
+        vcolormap = Dict{Int,Int}(),
         queue = Vector{Int}())
 
     length(visitor.tree) >= nv(g) || error("visitor.tree too small for graph")
     visitor.tree[s] = s
-    traverse_graph!(g, BreadthFirst(), s, visitor; vertexcolormap=vertexcolormap, queue=queue)
+    traverse_graph!(g, BreadthFirst(), s, visitor; vcolormap=vcolormap, queue=queue)
 end
 
 """
@@ -245,7 +245,7 @@ function _bipartite_visitor(g::AGraph, s; vmap=Dict{Int,Int}())
     for v in keys(vmap) #have to reset vmap, otherway problems with digraphs
         vmap[v] = 0
     end
-    traverse_graph!(g, BreadthFirst(), s, visitor, vertexcolormap=vmap)
+    traverse_graph!(g, BreadthFirst(), s, visitor, vcolormap=vmap)
     return visitor
 end
 

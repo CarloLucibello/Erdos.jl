@@ -79,16 +79,16 @@ end
 
 type MinCutVisitor{T} <: AbstractMASVisitor
     graph::ASimpleGraph
-    parities::AbstractArray{Bool,1}
+    parities::AbstractVector{Bool}
     colormap::Vector{Int}
     bestweight::T
     cutweight::T
     visited::Integer
-    distmx::AbstractArray{T, 2}
+    distmx::AbstractMatrix{T}
     vertices::Vector{Int}
 end
 
-function MinCutVisitor{T}(graph::ASimpleGraph, distmx::AbstractArray{T, 2})
+function MinCutVisitor{T}(graph::ASimpleGraph, distmx::AbstractMatrix{T})
     n = nv(graph)
     parities = falses(n)
     return MinCutVisitor(
@@ -146,7 +146,7 @@ end
 type MASVisitor{T} <: AbstractMASVisitor
     io::IO
     vertices::Vector{Int}
-    distmx::AbstractArray{T, 2}
+    distmx::AbstractMatrix{T}
     log::Bool
 end
 
@@ -212,7 +212,7 @@ displayed.
 """
 function maximum_adjacency_visit{T}(
     graph::ASimpleGraph,
-    distmx::AbstractArray{T, 2},
+    distmx::AbstractMatrix{T},
     log::Bool,
     io::IO
 )

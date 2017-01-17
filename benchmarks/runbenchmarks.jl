@@ -8,6 +8,7 @@ TUNE = false
 LOAD_PARS = true
 SAVE_RES = false
 
+VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
 bench_dir = Base.source_dir()
 
 ### ADD BENCHMARKS  ###############
@@ -20,7 +21,9 @@ GROUPS = [
             "flow",
             "centrality",
             "dismantling",
-            "connectivity"
+            "connectivity",
+            "persistence",
+            "shortestpaths"
          ]
 
 # GROUPS = ["core"]
@@ -32,28 +35,28 @@ end
 
 function tune_and_savepars!(suite)
     tune!(suite)
-    path = joinpath(bench_dir,"parameters","$(Date(now())).jld")
+    path = joinpath(bench_dir,"parameters",VERS,"$(Date(now())).jld")
     save(path, "suite", params(suite))
 end
 
 function loadpars!(suite)
-    path = joinpath(bench_dir, "parameters")
+    path = joinpath(bench_dir, "parameters",VERS)
     files = readdir(path)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(bench_dir, "parameters","$(maximum(dates)).jld")
+    f = joinpath(bench_dir, "parameters",VERS,"$(maximum(dates)).jld")
     loadparams!(suite, load(f, "suite"), :evals, :samples)
 end
 
 function saveres(res)
-    path = joinpath(bench_dir,"results","$(Date(now())).jld")
+    path = joinpath(bench_dir,"results",VERS,"$(Date(now())).jld")
     save(path, "res", res)
 end
 
 function loadres()
-    path = joinpath(bench_dir, "results")
+    path = joinpath(bench_dir, "results",VERS)
     files = readdir(path)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(bench_dir, "results","$(maximum(dates)).jld")
+    f = joinpath(bench_dir, "results",VERS,"$(maximum(dates)).jld")
     return load(f, "res")
 end
 
@@ -79,14 +82,16 @@ for group in GROUPS
     regr = regressions(judgement)
     if length(regr) > 0
         has_regressions = false
-        warn("REGRESSIONS FOUND:")
+        print_with_color(:red, "REGRESSIONS FOUND:\n")
         println(regr)
+        print_with_color(:red, "******************\n")
     end
     improvs = improvements(judgement)
     if length(improvs) > 0
         has_improves = true
         print_with_color(:green, "IMPROVEMENTS FOUND:\n")
         println(improvs)
+        print_with_color(:green, "******************\n")
     end
 end
 

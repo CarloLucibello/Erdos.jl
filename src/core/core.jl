@@ -126,8 +126,14 @@ end
 
 copy(g::ASimpleGraph) = deepcopy(g)
 
-graphtype{G<:AGraph}(g::G) = G
-digraphtype{G<:ADiGraph}(g::G) = G
+graphtype{G<:AGraph}(::Type{G}) = G
+digraphtype{G<:ADiGraph}(::Type{G}) = G
+
+edgetype{G<:ASimpleGraph}(g::G) = edgetype(G)
+graphtype{G<:ASimpleGraph}(g::G) = graphtype(G)
+digraphtype{G<:ASimpleGraph}(g::G) = digraphtype(G)
+vertextype{G<:ASimpleGraph}(g::G) = vertextype(G)
+
 
 graph(g::AGraph) = g
 digraph(g::ADiGraph) = g

@@ -36,7 +36,7 @@ endpoints: bool, optional
 
 **Returns**
 
-betweenness: Array{Float64}
+betweenness: Vector{Float64}
     Betweenness centrality value per node id.
 
 

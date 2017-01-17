@@ -28,17 +28,6 @@ end
 # This is the common base for BreadthFirst and DepthFirst
 abstract SimpleGraphVisitAlgorithm
 
-typealias AbstractEdgeMap{E,T} Associative{E,T}
-typealias AbstractVertexMap{T} Union{AbstractVector{T},Associative{Int, T}}
-
-type DummyEdgeMap <: AbstractEdgeMap{Void, Int}
-end
-
-getindex(d::DummyEdgeMap, e::AEdge) = 0
-setindex!(d::DummyEdgeMap, x, e::AEdge) = x
-get(d::DummyEdgeMap, e::AEdge, x) = x
-
-
 ###########################################################
 #
 #   General algorithms based on graph traversal
@@ -63,13 +52,13 @@ function discover_vertex!(visitor::VertexListVisitor, v)
 end
 
 function visited_vertices(
-    graph::ASimpleGraph,
+    g::ASimpleGraph,
     alg::SimpleGraphVisitAlgorithm,
     sources)
 
-    visitor = VertexListVisitor(nv(graph))
-    traverse_graph!(graph, alg, sources, visitor)
-    visitor.vertices::Vector{Int}
+    visitor = VertexListVisitor(nv(g))
+    traverse_graph!(g, alg, sources, visitor)
+    return visitor.vertices
 end
 
 
@@ -106,5 +95,5 @@ function traverse_graph_withlog(
     io::IO = STDOUT
 )
     visitor = LogGraphVisitor(io)
-    traverse_graph!(g, alg, sources, visitor)
+    return traverse_graph!(g, alg, sources, visitor)
 end

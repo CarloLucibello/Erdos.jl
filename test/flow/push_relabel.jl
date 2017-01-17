@@ -19,7 +19,7 @@
 # residual_graph = FatGraphs.residual(flow_graph)
 #
 # # Test enqueue_vertex
-# Q = Array{Int,1}()
+# Q = Vector{Int}()
 # excess = [0, 1, 0, 1]
 # active = [false, false, true, true]
 # @test FatGraphs.enqueue_vertex!(Q, 1, active, excess) == nothing
@@ -30,7 +30,7 @@
 # @test length(Q) == 1
 #
 # # Test push_flow
-# Q = Array{Int,1}()
+# Q = Vector{Int}()
 # excess = [15, 1, 1, 0, 0, 0, 0, 0]
 # height = [8, 0, 0, 0, 0, 0, 0, 0]
 # active = [true, false, false, false, false, false, false, true]
@@ -43,7 +43,7 @@
 # @test flow_matrix[2,3] == 0
 #
 # # Test gap
-# Q = Array{Int,1}()
+# Q = Vector{Int}()
 # excess = [15, 1, 1, 0, 0, 0, 0, 0]
 # height = [8, 2, 2, 1, 3, 3, 4, 5]
 # active = [true, false, false, false, false, false, false, true]
@@ -54,7 +54,7 @@
 # @test length(Q) == 2
 #
 # # Test relabel
-# Q = Array{Int,1}()
+# Q = Vector{Int}()
 # excess = [15, 1, 1, 0, 0, 0, 0, 0]
 # height = [8, 1, 1, 1, 1, 1, 1, 0]
 # active = [true, false, false, false, false, false, false, true]
@@ -65,7 +65,7 @@
 # @test length(Q) == 1
 #
 # # Test discharge
-# Q = Array{Int,1}()
+# Q = Vector{Int}()
 # excess = [50, 1, 1, 0, 0, 0, 0, 0]
 # height = [8, 0, 0, 0, 0, 0, 0, 0]
 # active = [true, false, false, false, false, false, false, true]

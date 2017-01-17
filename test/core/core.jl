@@ -145,6 +145,9 @@ edgs = collect(edges(g))
 @test !rem_edge!(g, edgs[1])
 
 g = CompleteGraph(5, G)
+for e in edges(g)
+    @test typeof(e) == edgetype(g)
+end
 edgs = collect(edges(g))
 @test rem_edge!(g, edgs[1])
 @test ne(g) == 9
@@ -161,6 +164,9 @@ add_edge!(ga, 1, 4)
 @test ga != g
 
 g10 = CompleteDiGraph(5, DG)
+for e in edges(g10)
+    @test typeof(e) == edgetype(g10)
+end
 for i=2:5
     @test rem_edge!(g10, 1, i)
     @test ne(g10) == 21-i
@@ -248,10 +254,17 @@ e5 = E(3,5)
 @test add_edge!(g, e4)
 @test add_edge!(g, e5)
 
+for i in out_neighbors(g, 1)
+    @test typeof(i) == vertextype(g)
+end
+
 h = DG(10, 20)
 for i=1:10
     u = sort(union(in_neighbors(h,i), out_neighbors(h,i)))
     @test sort(collect(all_neighbors(h, i))) == u
+end
+for i in out_neighbors(h, 1)
+    @test typeof(i) == vertextype(h)
 end
 
 h = DG(5)

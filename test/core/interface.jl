@@ -20,12 +20,13 @@ h = TestDiGraph()
 @test nv(g) == nothing
 @test nv(h) == nothing
 @test neighbors(g, 1) == nothing
-@test edge(g, 1, 2) == nothing
-@test edge(h, 1, 2) == nothing
+@test edge(g, 1, 2) == Edge{Int}(1, 2)
+@test edge(h, 1, 2) == Edge{Int}(1, 2)
 @test neighbors(g, 1) == nothing
 @test in_neighbors(h, 1) == nothing
 @test out_neighbors(h, 1) == nothing
 @test graphtype(h) == nothing
 @test digraphtype(g) == nothing
-@test edgetype(g) == nothing
+@test edgetype(g) == Edge{Int}
 @test pop_vertex!(g) == nothing
+@test vertextype(g) == Int

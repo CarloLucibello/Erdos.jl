@@ -82,22 +82,23 @@ function watts_strogatz{G<:ASimpleGraph}(n::Int, k::Int, β::Real, ::Type{G} = G
     return g
 end
 
-function _suitable(edges::Set{Edge}, potential_edges::Dict{Int, Int})
+function _suitable{T}(edges::Set{Edge{T}}, potential_edges::Dict{T, T})
     isempty(potential_edges) && return true
     list = keys(potential_edges)
     for s1 in list, s2 in list
         s1 >= s2 && continue
-        (Edge(s1, s2) ∉ edges) && return true
+        (Edge{T}(s1, s2) ∉ edges) && return true
     end
     return false
 end
 
-_try_creation(n::Int, k::Int, rng::AbstractRNG) = _try_creation(n, fill(k,n), rng)
+_try_creation_rrg{T<:Integer}(n::T, k::T, rng::AbstractRNG) = _try_creation_rrg(n, fill(k,n), rng)
 
-function _try_creation(n::Int, k::Vector{Int}, rng::AbstractRNG)
-    edges = Set{Edge}()
+function _try_creation_rrg{T<:Integer}(n::T, k::Vector{T}, rng::AbstractRNG)
+    E = Edge{T}
+    edges = Set{E}()
     m = 0
-    stubs = zeros(Int, sum(k))
+    stubs = zeros(T, sum(k))
     for i=1:n
         for j = 1:k[i]
             m += 1
@@ -107,14 +108,14 @@ function _try_creation(n::Int, k::Vector{Int}, rng::AbstractRNG)
     # stubs = vcat([fill(i, k[i]) for i=1:n]...) # slower
 
     while !isempty(stubs)
-        potential_edges =  Dict{Int,Int}()
+        potential_edges =  Dict{T,T}()
         shuffle!(rng, stubs)
         for i in 1:2:length(stubs)
-            s1,s2 = stubs[i:i+1]
+            s1, s2 = stubs[i:i+1]
             if (s1 > s2)
                 s1, s2 = s2, s1
             end
-            e = Edge(s1, s2)
+            e = E(s1, s2)
             if s1 != s2 && ∉(e, edges)
                 push!(edges, e)
             else
@@ -124,10 +125,10 @@ function _try_creation(n::Int, k::Vector{Int}, rng::AbstractRNG)
         end
 
         if !_suitable(edges, potential_edges)
-            return Set{Edge}()
+            return Set{E}()
         end
 
-        stubs = Vector{Int}()
+        stubs = Vector{T}()
         for (e, ct) in potential_edges
             append!(stubs, fill(e, ct))
         end
@@ -395,11 +396,11 @@ function random_regular_graph{G<:AGraph}(n::Int, k::Int, ::Type{G}=Graph;
 
     rng = getRNG(seed)
 
-    edges = _try_creation(n, k, rng)
+    T = vertextype(G)
+    edges = _try_creation_rrg(T(n), T(k), rng)
     while isempty(edges)
-        edges = _try_creation(n, k, rng)
+        edges = _try_creation_rrg(T(n), T(k), rng)
     end
-
     g = G(n)
     for edge in edges
         add_edge!(g, edge)
@@ -410,7 +411,7 @@ end
 
 
 """
-    random_configuration_model(n::Int, k::Array{Int}; seed=-1, check_graphical=false)
+    random_configuration_model(n::Int, k::Vector{Int}; seed=-1, check_graphical=false)
 
 Creates a random undirected graph according to the [configuraton model]
 (http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf).
@@ -422,7 +423,7 @@ approximately ``nc^2`` time.
 
 If `check_graphical=true` makes sure that `k` is a graphical sequence (see `isgraphical`).
 """
-function random_configuration_model{G<:AGraph}(n::Int, k::Array{Int}, ::Type{G}=Graph;
+function random_configuration_model{G<:AGraph}(n::Int, k::Vector{Int}, ::Type{G}=Graph;
         seed::Int=-1, check_graphical::Bool=false)
     @assert(n == length(k), "a degree sequence of length n has to be provided")
     m = sum(k)
@@ -433,9 +434,9 @@ function random_configuration_model{G<:AGraph}(n::Int, k::Array{Int}, ::Type{G}=
     end
     rng = getRNG(seed)
 
-    edges = _try_creation(n, k, rng)
+    edges = _try_creation_rrg(n, k, rng)
     while m > 0 && isempty(edges)
-        edges = _try_creation(n, k, rng)
+        edges = _try_creation_rrg(n, k, rng)
     end
 
     g = G(n)
@@ -472,8 +473,8 @@ function random_regular_digraph{G<:ADiGraph}(n::Int, k::Int, ::Type{G}=DiGraph;
     rng = getRNG(seed)
     cs = collect(2:n)
     i = 1
-    I = Array(Int, n*k)
-    J = Array(Int, n*k)
+    I = Vector{Int}(n*k)
+    J = Vector{Int}(n*k)
     V = fill(true, n*k)
     for r in 1:n
         l = (r-1)*k+1 : r*k

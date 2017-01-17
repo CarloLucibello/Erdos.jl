@@ -18,6 +18,7 @@ Functions to implement:
     graphtype(g)
     digraphtype(g)
     edgetype(g)
+    vertextype(g)
 
 Reccomended Overrides:
     in_adjlist(g) #digraph
@@ -126,19 +127,27 @@ out_neighbors(g::ASimpleGraph, v) = nothing
 Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
 in `g`.
 """
-edge(g::ASimpleGraph, u, v) = nothing
+edge(g::ASimpleGraph, u, v) = Edge{Int}(u, v)
 
 """
     edgetype(g)
+    edgetype(G)
 
-Returns the type of edges of graph `g`.
+Returns the type of edges of graph `g` (or graph type `G`).
 """
-edgetype(g::ASimpleGraph) = nothing
+edgetype{G<:ASimpleGraph}(::Type{G}) = Edge{Int}
 
 
-graphtype(g::ADiGraph) = nothing
-digraphtype(g::AGraph) = nothing
+"""
+    vertextype(g)
+    vertextype(G)
 
+Returns the integer type of vertices of graph `g` (or graph type `G`).
+"""
+vertextype{G<:ASimpleGraph}(::Type{G}) = Int
+
+graphtype{G<:ASimpleGraph}(::Type{G}) = nothing
+digraphtype{G<:ASimpleGraph}(::Type{G}) = nothing
 
 abstract AEdge
 

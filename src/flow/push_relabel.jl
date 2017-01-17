@@ -45,7 +45,7 @@ Requires arguments:
 - g::ADiGraph                # the input graph
 - source                            # the source vertex
 - target                            # the target vertex
-- capacity_matrix::AbstractArray{T,2}    # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
 function push_relabel_impl{T<:Number}(
         g::ADiGraph,               # the input graph
@@ -104,8 +104,8 @@ Requires arguments:
 
 - Q::PushRelabelHeap
 - v
-- active::AbstractArray{Bool,1}
-- excess::AbstractArray{T,1}
+- active::AbstractVector{Bool}
+- excess::AbstractVector{T}
 """
 
 function enqueue_vertex!{T<:Number}(
@@ -130,11 +130,11 @@ Requires arguements:
 - g::ADiGraph              # the input graph
 - u                               # input from-vertex
 - v                               # input to-vetex
-- capacity_matrix::AbstractArray{T,2}
-- flow_matrix::AbstractArray{T,2}
-- excess::AbstractArray{T,1}
-- height::AbstractArray{Int,1}
-- active::AbstractArray{Bool,1}
+- capacity_matrix::AbstractMatrix{T}
+- flow_matrix::AbstractMatrix{T}
+- excess::AbstractVector{T}
+- height::AbstractVector{Int}
+- active::AbstractVector{Bool}
 - Q::PushRelabelHeap
 """
 function push_flow!{T<:Number}(
@@ -176,19 +176,19 @@ Requires arguments:
 
 - g::ADiGraph                # the input graph
 - h                                 # cutoff height
-- excess::AbstractArray{T,1}
-- height::AbstractArray{Int,1}
-- active::AbstractArray{Bool,1}
-- count::AbstractArray{Int,1}
+- excess::AbstractVector{T}
+- height::AbstractVector{Int}
+- active::AbstractVector{Bool}
+- count::AbstractVector{Int}
 - Q::PushRelabelHeap
 """
 function gap!{T<:Number}(
         g::ADiGraph,               # the input graph
         h,                                # cutoff height
-        excess::AbstractArray{T,1},
-        height::AbstractArray{Int,1},
-        active::AbstractArray{Bool,1},
-        count::AbstractArray{Int,1},
+        excess::AbstractVector{T},
+        height::AbstractVector{Int},
+        active::AbstractVector{Bool},
+        count::AbstractVector{Int},
         Q::PushRelabelHeap
     )
 
@@ -213,13 +213,13 @@ Requires arguments:
 
 - g::ADiGraph                 # the input graph
 - v                                  # input vertex to be relabeled
-- capacity_matrix::AbstractArray{T,2}
-- flow_matrix::AbstractArray{T,2}
-- excess::AbstractArray{T,1}
-- height::AbstractArray{Int,1}
-- active::AbstractArray{Bool,1}
-- count::AbstractArray{Int,1}
-- Q::AbstractArray{Int,1}
+- capacity_matrix::AbstractMatrix{T}
+- flow_matrix::AbstractMatrix{T}
+- excess::AbstractVector{T}
+- height::AbstractVector{Int}
+- active::AbstractVector{Bool}
+- count::AbstractVector{Int}
+- Q::AbstractVector{Int}
 """
 
 function relabel!{T<:Number}(
@@ -256,12 +256,12 @@ Requires arguments:
 
 - g::ADiGraph                 # the input graph
 - v                                  # vertex to be discharged
-- capacity_matrix::AbstractArray{T,2}
-- flow_matrix::AbstractArray{T,2}
-- excess::AbstractArray{T,1}
-- height::AbstractArray{Int,1}
-- active::AbstractArray{Bool,1}
-- count::AbstractArray{Int,1}
+- capacity_matrix::AbstractMatrix{T}
+- flow_matrix::AbstractMatrix{T}
+- excess::AbstractVector{T}
+- height::AbstractVector{Int}
+- active::AbstractVector{Bool}
+- count::AbstractVector{Int}
 - Q::PushRelabelHeap
 """
 function discharge!{T<:Number}(
@@ -271,7 +271,7 @@ function discharge!{T<:Number}(
         flow_matrix,
         excess::Vector{T},
         height::Vector{Int},
-        active::AbstractArray{Bool,1},
+        active::AbstractVector{Bool},
         count::Vector{Int},
         Q::PushRelabelHeap,
         pos

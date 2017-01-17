@@ -4,7 +4,7 @@ function kishimoto{T<:AbstractFloat}(
   flow_graph::ADiGraph,                       # the input graph
   source::Int,                               # the source vertex
   target::Int,                               # the target vertex
-  capacity_matrix::AbstractArray{T, 2},      # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},      # edge flow capacities
   flow_algorithm::BoykovKolmogorovAlgorithm, # keyword argument for algorithm
   routes::Int                                # keyword argument for routes
   )
@@ -40,7 +40,7 @@ Requires arguments:
 - flow_graph::ADiGraph                    # the input graph
 - source::Int                            # the source vertex
 - target::Int                            # the target vertex
-- capacity_matrix::AbstractArray{T, 2}   # edge flow capacities
+- capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 - flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
 - routes::Int                            # keyword argument for routes
 """
@@ -49,7 +49,7 @@ function kishimoto{T<:AbstractFloat}(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
-  capacity_matrix::AbstractArray{T, 2},  # edge flow capacities
+  capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   routes::Int                            # keyword argument for routes
   )

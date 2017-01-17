@@ -47,11 +47,10 @@ end
 
 typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
 
-edgetype(g::SimpleGTGraph) = GTEdge
-graphtype(g::GTDiGraph) = GTGraph
-digraphtype(g::GTGraph) = GTDiGraph
-
-
+edgetype{G<:SimpleGTGraph}(::Type{G}) = GTEdge
+graphtype(::Type{GTDiGraph}) = GTGraph
+digraphtype(::Type{GTGraph}) = GTDiGraph
+vertextype{G<:SimpleGTGraph}(::Type{G}) = Int
 
 #### GRAPH CONSTRUCTORS
 """
