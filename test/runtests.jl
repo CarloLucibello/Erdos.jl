@@ -67,7 +67,9 @@ println("Testing FatGraphs")
 @testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
     global G = GDG[1]
     global DG = GDG[2]
-    global E = edgetype(G())
+    global E = edgetype(G)
+    global V = vertextype(G)
+
     # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end

@@ -255,7 +255,7 @@ e5 = E(3,5)
 @test add_edge!(g, e5)
 
 for i in out_neighbors(g, 1)
-    @test typeof(i) == vertextype(g)
+    @test typeof(i) == V
 end
 
 h = DG(10, 20)
@@ -264,7 +264,7 @@ for i=1:10
     @test sort(collect(all_neighbors(h, i))) == u
 end
 for i in out_neighbors(h, 1)
-    @test typeof(i) == vertextype(h)
+    @test typeof(i) == V
 end
 
 h = DG(5)

@@ -31,22 +31,21 @@ end
 Type that returns 1 if a forward edge exists, and 0 otherwise
 """
 
-type DefaultCapacity{G<:ADiGraph} <: AbstractMatrix{Int}
+type DefaultCapacity{G<:ADiGraph, I<:Integer} <: AbstractMatrix{I}
     g::G
-    nv::Int
+    nv::I
 end
-DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, nv(g))
+DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, signed(nv(g)))
 
 getindex(d::DefaultCapacity, s, t) = has_edge(d.g, s , t) ? 1 : 0
 size(d::DefaultCapacity) = (d.nv, d.nv)
-transpose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
-ctranspose(d::DefaultCapacity) = DefaultCapacity(reverse(d.g))
 
 function _complete{T}(g::ADiGraph, capacity_matrix::AbstractMatrix{T})
-    c = Vector{Vector{T}}()
+    S = signedtype(T)
+    c = Vector{Vector{S}}()
     for i=1:nv(g)
         neigs = neighbors(g, i)
-        push!(c, zeros(T, length(neigs)))
+        push!(c, zeros(S, length(neigs)))
         for (k, j) in enumerate(neigs)
             if has_edge(g, i, j)
                 val = capacity_matrix[i, j]
@@ -183,7 +182,7 @@ function maximum_flow{G<:ADiGraph, T<:Number}(
         restriction::T = zero(T)
     )
     if restriction > zero(T)
-        capacity_matrix = min(restriction, capacity_matrix)
+        capacity_matrix = min.(restriction, capacity_matrix)
     end
     flow_graph = complete(g)
     if  algorithm == DinicAlgorithm()

@@ -16,8 +16,8 @@ function pagerank(g::ADiGraph, α=0.85, n=100, ϵ = 1.0e-6)
     M = A' # need a separate line due to bug #17456 in julia
     M = (Diagonal(S) * M)'
     N = nv(g)
-    x = repmat([1.0/N], N)
-    p = repmat([1.0/N], N)
+    x = repmat([1.0/N], Int(N)) # julia 20112
+    p = repmat([1.0/N], Int(N))
     dangling_weights = p
     is_dangling = find(S .== 0)
 

@@ -1,25 +1,25 @@
-type PushRelabelHeap{T}
-    data::MutableBinaryHeap{Pair{Int,T},LessThan2}
-    handles::Vector{Int}
+type PushRelabelHeap{V<:Integer,T<:Integer}
+    data::MutableBinaryHeap{Pair{V,T},LessThan2}
+    handles::Vector{V}
 
-    function PushRelabelHeap(N)
-        handles = zeros(Int, N)
-        data = MutableBinaryHeap{Pair{Int,T},LessThan2}(LessThan2())
+    function PushRelabelHeap(n)
+        handles = zeros(V, n)
+        data = MutableBinaryHeap{Pair{V,T},LessThan2}(LessThan2())
         return new(data, handles)
     end
 end
 
-function push!(h::PushRelabelHeap, k::Int, v::Int)
+function push!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::V, v::T)
     a = push!(h.data, k=>v)
     h.handles[k] = a
 end
-push!(h::PushRelabelHeap, k::Integer, v::Integer) = push!(h, Int(k), Int(v))
+push!{V,T}(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) = push!(h, V(k), T(v))
 
-function update!(h::PushRelabelHeap, k::Int, v::Int)
+function update!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::V, v::T)
     a = h.handles[k]
     a > 0 && update!(h.data, a, k=>v)
 end
-update!(h::PushRelabelHeap, k::Integer, v::Integer) = update!(h, Int(k), Int(v))
+update!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) = update!(h, V(k), T(v))
 
 function pop!(h::PushRelabelHeap)
     k = pop!(h.data)[1]
@@ -56,7 +56,6 @@ function push_relabel_impl{T<:Number}(
     )
 
     n = nv(g)
-
     # flow_matrix = zeros(T, n, n)
     flow_matrix = deepcopy(capacity_matrix) # initialize flow matrix
     for i=1:n
@@ -76,7 +75,7 @@ function push_relabel_impl{T<:Number}(
     active[source] = true
     active[target] = true
 
-    Q = PushRelabelHeap{Int}(n)
+    Q = PushRelabelHeap{Int,Int}(n)
 
     for (k, u) in enumerate(neighbors(g, source))
         push_flow!(g, source, u, k, capacity_matrix, flow_matrix, excess, height, active, Q, pos)

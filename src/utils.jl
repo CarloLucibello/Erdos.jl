@@ -75,3 +75,7 @@ immutable GreaterThan2 end
 immutable LessThan2 end
 compare(c::GreaterThan2, x, y) = x[2] > y[2]
 compare(c::LessThan2, x, y) = x[2] < y[2]
+
+
+signedtype{T<:Integer}(::Type{T}) = typeof(signed(T(0)))
+signedtype{T<:AbstractFloat}(::Type{T}) = T

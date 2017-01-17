@@ -11,10 +11,10 @@ Requires arguments:
 """
 
 function edmonds_karp_impl{T<:Number}(
-    residual_graph::ADiGraph,               # the input graph
-    source,                           # the source vertex
-    target,                           # the target vertex
-    capacity_matrix::AbstractMatrix{T}    # edge flow capacities
+        residual_graph::ADiGraph,               # the input graph
+        source,                           # the source vertex
+        target,                           # the target vertex
+        capacity_matrix::AbstractMatrix{T}    # edge flow capacities
     )
     n = nv(residual_graph)                     # number of vertexes
     flow = 0
@@ -61,7 +61,6 @@ Requires arguments:
 - flow_matrix::AbstractMatrix{T}        # the current flow matrix
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-
 function augment_path!{T<:Number}(
     path::Vector,                     # input path
     flow_matrix::AbstractMatrix{T},       # the current flow matrix

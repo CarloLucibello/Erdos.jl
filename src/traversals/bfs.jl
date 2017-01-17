@@ -59,7 +59,7 @@ function traverse_graph!(
     source,
     visitor::SimpleGraphVisitor;
     vcolormap::AVertexMap = VertexMap(g, Int),
-    ecolormap::AEdgeMap = ConstEdgeMap(0),
+    ecolormap::AEdgeMap = ConstEdgeMap(g, 0),
     queue = Vector{Int}(),
     dir = :out)
 

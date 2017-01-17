@@ -25,15 +25,15 @@ Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)
 
 function boykov_kolmogorov_impl{T<:Number}(
     residual_graph::ADiGraph,               # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
+    source,                           # the source vertex
+    target,                           # the target vertex
     capacity_matrix::AbstractMatrix{T}    # edge flow capacities
     )
 
     n = nv(residual_graph)
 
     flow = 0
-    flow_matrix = zeros(T, n, n)
+    flow_matrix = spzeros(T, n, n)
 
     TREE = zeros(Int, n)
     TREE[source] = 1
@@ -61,14 +61,14 @@ function boykov_kolmogorov_impl{T<:Number}(
 end
 
 function find_path!{T<:Number}(
-    residual_graph::ADiGraph,               # the input graph
-    source::Int,                           # the source vertex
-    target::Int,                           # the target vertex
-    flow_matrix::AbstractMatrix{T},       # the current flow matrix
-    capacity_matrix::AbstractMatrix{T},   # edge flow capacities
-    PARENT::Vector{Int},                   # parent table
-    TREE::Vector{Int},                     # tree table
-    A::Vector{Int}                         # active set
+        residual_graph::ADiGraph,               # the input graph
+        source,                           # the source vertex
+        target,                           # the target vertex
+        flow_matrix::AbstractMatrix{T},       # the current flow matrix
+        capacity_matrix::AbstractMatrix{T},   # edge flow capacities
+        PARENT::Vector{Int},                   # parent table
+        TREE::Vector{Int},                     # tree table
+        A::Vector{Int}                         # active set
     )
 
     tree_cap(p,q) = TREE[p] == 1 ? capacity_matrix[p,q] - flow_matrix[p,q] :
