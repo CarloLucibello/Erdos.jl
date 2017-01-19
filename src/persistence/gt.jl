@@ -68,9 +68,21 @@ function readgt_adj!{T}(io::IO, g::ASimpleGraph, ::Type{T})
         k = read(io, UInt64)
         for _=1:k
             j = read(io, T) + 1
-            add_edge!(g, i, j)
+            unsafe_add_edge!(g, i, j)
         end
     end
+    rebuild!(g)
 end
+#
+# function readgt_adj!{S, T}(io::IO, g::DiGraph{S}, ::Type{T})
+#     for i=1:nv(g)
+#         k = read(io, UInt64)
+#         for _=1:k
+#             j = read(io, T) + 1
+#             unsafe_add_edge!(g, i, j)
+#         end
+#     end
+#     rebuild!(g)
+# end
 
 filemap[:gt] = (readgt, writegt)

@@ -265,9 +265,12 @@ function unsafe_add_edge!(g::Graph, s, d)
 end
 
 function rebuild!(g::Graph)
+    g.ne = 0
     for neigs in g.fadjlist
+        g.ne += length(neigs)
         sort!(neigs)
     end
+    g.ne /= 2
 end
 
 function unsafe_add_edge!(g::DiGraph, s, d)
@@ -277,8 +280,10 @@ function unsafe_add_edge!(g::DiGraph, s, d)
 end
 
 function rebuild!(g::DiGraph)
+    g.ne = 0
     for neigs in g.fadjlist
         sort!(neigs)
+        g.ne += length(neigs)
     end
     for neigs in g.badjlist
         sort!(neigs)
