@@ -59,3 +59,11 @@ match = minimum_weight_perfect_matching(g, w, 50)
 @test match.mate[2] == 3
 @test match.mate[3] == 2
 @test match.weight == 11.5
+
+w = (s=sprand(100,100,0.2); s=s+s'; s-Diagonal(s))
+g = Graph(w)
+match = minimum_weight_perfect_matching(g, EdgeMap(g, w))
+for i=1:nv(g)
+    j = match.mate[i]
+    @test match.mate[j] == i
+end

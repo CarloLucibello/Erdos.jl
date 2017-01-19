@@ -26,7 +26,8 @@ GROUPS = [
             "connectivity",
             "persistence",
             "shortestpaths",
-            "traversals"
+            "traversals",
+            "matching"
          ]
 
 # GROUPS = ["core"]
