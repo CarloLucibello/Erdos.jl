@@ -11,7 +11,7 @@ This function relies on the BlossomV.jl package, a julia wrapper
 around Kolmogorov's BlossomV algorithm.
 
 Eventually a `cutoff` argument can be given, to the reduce computational time
-excluding edges with weights higher than the cutoff.
+including only edges with weight lower than the cutoff.
 
 The returned object is of type `MatchingResult`.
 
@@ -19,40 +19,43 @@ In case of error try to change the optional argument `tmaxscale` (default is `tm
 """
 function minimum_weight_perfect_matching end
 
-function minimum_weight_perfect_matching{T<:AbstractFloat, E<:Edge}(
+function minimum_weight_perfect_matching{E, T<:AbstractFloat}(
         g::AGraph,
-        w::Dict{E,T},
+        w::AEdgeMap{E,T},
         cutoff = typemax(T);
-        tmaxscale=10.)
+        tmaxscale=1000.)
 
-    cmax = convert(T, min(maximum(values(w)), cutoff))
+    cmax = min(maximum(values(w)), cutoff)
     cmin = minimum(values(w))
     tmax = typemax(Int32)  / tmaxscale # /10 is kinda arbitrary,
 
-    wnew = Dict{E, Int32}()
-    for (e, c) in w
+    wnew = EdgeMap(g, Int32)
+    for e in edges(g)
+        c = get(w, e, cutoff)
         if c < cutoff
             wnew[e] = round(Int32, (c-cmin) / (cmax-cmin) * tmax)
         end
     end
+
     match = minimum_weight_perfect_matching(g, wnew)
     weight = T(0)
     for i=1:nv(g)
         j = match.mate[i]
         if j > i
-            weight += w[E(i, j)]
+            weight += w[i, j]
         end
     end
     return MatchingResult(weight, match.mate)
 end
 
-function minimum_weight_perfect_matching{T<:Integer, E<:Edge}(
+function minimum_weight_perfect_matching{E<:Edge, T<:Integer}(
         g::AGraph,
-        w::Dict{E,T},
+        w::AEdgeMap{E,T},
         cutoff = typemax(T))
 
     m = BlossomV.Matching(nv(g))
-    for (e, c) in w
+    for e in edges(g)
+        c = get(w, e, cutoff)
         if c < cutoff
             BlossomV.add_edge(m, src(e)-1, dst(e)-1, c)
         end
@@ -65,7 +68,7 @@ function minimum_weight_perfect_matching{T<:Integer, E<:Edge}(
         j = BlossomV.get_match(m, i-1) + 1
         mate[i] = j <= 0 ? -1 : j
         if i < j
-            totweight += w[E(i, j)]
+            totweight += w[i, j]
         end
     end
     return MatchingResult(totweight, mate)
