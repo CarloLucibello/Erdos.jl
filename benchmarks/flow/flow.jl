@@ -19,3 +19,6 @@ s["push_relabel"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=PushRelabelAlgorithm())
 s["dinic"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=DinicAlgorithm())
+
+s["boykov"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+                    , $capacity_matrix, algorithm=BoykovKolmogorovAlgorithm())

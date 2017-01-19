@@ -4,12 +4,14 @@ using BenchmarkTools
 using Base.Dates
 import JLD: load, save
 
-TUNE = false
+TUNE = true
 LOAD_PARS = true
 SAVE_RES = false
 
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
 bench_dir = Base.source_dir()
+res_dir = joinpath(bench_dir, "results", VERS)
+par_dir = joinpath(bench_dir, "parameters", VERS)
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
@@ -23,7 +25,8 @@ GROUPS = [
             "dismantling",
             "connectivity",
             "persistence",
-            "shortestpaths"
+            "shortestpaths",
+            "traversals"
          ]
 
 # GROUPS = ["core"]
@@ -35,28 +38,26 @@ end
 
 function tune_and_savepars!(suite)
     tune!(suite)
-    path = joinpath(bench_dir,"parameters",VERS,"$(Date(now())).jld")
+    path = joinpath(par_dir,"$(Date(now())).jld")
     save(path, "suite", params(suite))
 end
 
 function loadpars!(suite)
-    path = joinpath(bench_dir, "parameters",VERS)
-    files = readdir(path)
+    files = readdir(par_dir)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(bench_dir, "parameters",VERS,"$(maximum(dates)).jld")
+    f = joinpath(par_dir, "$(maximum(dates)).jld")
     loadparams!(suite, load(f, "suite"), :evals, :samples)
 end
 
 function saveres(res)
-    path = joinpath(bench_dir,"results",VERS,"$(Date(now())).jld")
+    path = joinpath(res_dir,"$(Date(now())).jld")
     save(path, "res", res)
 end
 
 function loadres()
-    path = joinpath(bench_dir, "results",VERS)
-    files = readdir(path)
+    files = readdir(res_dir)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(bench_dir, "results",VERS,"$(maximum(dates)).jld")
+    f = joinpath(res_dir, "$(maximum(dates)).jld")
     return load(f, "res")
 end
 
