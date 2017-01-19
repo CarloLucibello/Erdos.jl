@@ -11,3 +11,7 @@ g = Graph(10, 20)
 @test  ne(g) == 20
 @test typeof(g) == Graph{Int}
 @test edgetype(g) == Edge{Int}
+
+w = sprand(10,10, 0.1)
+@test Graph(w) == Graph{Int}(w)
+@test DiGraph(w) == DiGraph{Int}(w)

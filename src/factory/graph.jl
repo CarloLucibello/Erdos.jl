@@ -48,6 +48,7 @@ end
 
 Graph{T}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
 Graph{T}(n::T) = Graph{T}(n)
+Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
 Graph() = Graph{Int}()
 
 
@@ -102,6 +103,7 @@ end
 
 DiGraph{T}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
 DiGraph{T}(n::T) = DiGraph{T}(n)
+DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 DiGraph() = DiGraph{Int}()
 
 typealias SimpleGraph Union{Graph, DiGraph}
