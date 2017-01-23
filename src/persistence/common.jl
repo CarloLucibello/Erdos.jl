@@ -7,12 +7,15 @@ const filemap = Dict{Symbol, Tuple{Function, Function}}()
         # ....
 
 """
-    readgraph(file, t, G=Graph; compressed=false)
+    readgraph(filename, G=Graph)
+    readgraph(filename, t, G=Graph; compressed=false)
 
-Reads a graph from  `file` in the format `t`. Returns a graph of type `G`.
+Reads a graph from  `filename` in the format `t`. Returns a graph of type `G`.
 Compressed files can eventually be read.
 
-Supported formats are `:gml, :dot, :graphml, :gexf, :NET, :gt`.
+Supported formats are `:gml, :dot, :graphml, :gexf, :net, :gt`.
+
+If no format is provided, it will be inferred from the `filename`.
 """
 function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
     if compressed
@@ -28,6 +31,20 @@ end
 function readgraph{G<:ASimpleGraph}(io::IO, t::Symbol, ::Type{G}=Graph)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][1](io, G)
+end
+
+function readgraph{G<:ASimpleGraph}(fn::String, ::Type{G}=Graph)
+    compressed = false
+    ft = split(fn,'.')[end]
+    if ft == "gz"
+        compressed = true
+        ft = split(fn,'.')[end-1]
+    end
+    if Symbol(ft) in keys(filemap)
+        return readgraph(fn, Symbol(ft), G; compressed=compressed)
+    else
+        error("Could not infer file format.")
+    end
 end
 
 
