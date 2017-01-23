@@ -63,16 +63,6 @@ GLIST =    [
             (GTGraph, GTDiGraph)
             ]
 
-# println("## Testing FatGraphs")
-# @testset "$(x[1])" for x in GLIST
-#     global G = x[1]
-#     global DG = x[2]
-#     @testset "$t" for t in tests
-#         include(joinpath(testdir,"$(t).jl"))
-#     end
-# end
-# println("## Finished Testing FatGraphs")
-
 println("Testing FatGraphs")
 @testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
     global G = GDG[1]
