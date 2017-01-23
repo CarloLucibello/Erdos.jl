@@ -7,7 +7,6 @@ using LightXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching
 import Clustering: kmeans # community detection
-import MatrixDepot: matrixdepot
 using Iterators: distinct, chain # all_neighbors
 # using Iterators: nth # EdgeIter
 
@@ -137,9 +136,6 @@ minimum_spanning_tree, count_spanning_trees,
 # matching
 MatchingResult, minimum_weight_perfect_matching,
 
-# matrixdepot
-matrixdepot,
-
 # dismantling
 dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
@@ -188,7 +184,6 @@ include("generators/staticgraphs.jl")
     include("generators/randgraphs.jl")
     include("generators/euclideangraphs.jl")
     include("generators/smallgraphs.jl")
-    include("generators/matrixdepot.jl")
 include("centrality/betweenness.jl")
     include("centrality/closeness.jl")
     include("centrality/degree.jl")

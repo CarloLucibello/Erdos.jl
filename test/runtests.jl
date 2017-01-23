@@ -19,7 +19,6 @@ tests = [
     "generators/staticgraphs",
     "generators/smallgraphs",
     "generators/euclideangraphs",
-    "generators/matrixdepot",
     "shortestpaths/astar",
     "shortestpaths/bellman-ford",
     "shortestpaths/dijkstra",

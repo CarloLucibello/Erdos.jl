@@ -39,13 +39,3 @@ Modules = [FatGraphs]
 Pages   = [ "generators/euclideangraphs.jl"]
 Private = false
 ```
-
-## MatrixDepot
-
-Other notorious graphs are available through integration with the `MatrixDepot.jl` package.
-
-```@autodocs
-Modules = [FatGraphs]
-Pages   = [ "generators/matrixdepot.jl"]
-Private = false
-```
