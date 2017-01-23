@@ -81,7 +81,6 @@ close(fio)
 @test writegraph(fname, g10, :net) == 1
 @test readgraph(fname,:net, G) == g10
 @test_throws ErrorException readgraph(fname, G)
-
 rm(fname)
 
 g10 = PathDiGraph(10, DG)
@@ -98,6 +97,11 @@ rm(fname)
 
 @test writegraph(fname, g10, :net, compress=true) == 1
 @test readgraph(fname,:net, G, compressed=true) == g10
+rm(fname)
+
+fname = joinpath(fname * ".net.gz")
+@test writegraph(fname, g10) == 1
+@test readgraph(fname, G) == g10
 rm(fname)
 
 g10 = readgraph(joinpath(testdir, "testdata", "kinship.net"), G)

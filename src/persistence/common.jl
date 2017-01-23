@@ -15,7 +15,7 @@ Compressed files can eventually be read.
 
 Supported formats are `:gml, :dot, :graphml, :gexf, :net, :gt`.
 
-If no format is provided, it will be inferred from the `filename`.
+If no format is provided, it will be inferred from `filename`.
 """
 function readgraph{G<:ASimpleGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
     if compressed
@@ -49,20 +49,22 @@ end
 
 
 """
+    writegraph(file, g)
     writegraph(file, g, t; compress=false)
 
 Save a graph `g` to `file` in the format `t`.
 
 Eventually the resulting file can be compressed in the gzip format.
 
-Currently supported formats are `:gml, :graphml, :gexf, :dot, :NET, :gt`.
+Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
+
+If no format is provided, it will be inferred from `file` along with compression.
 """
 function writegraph(io::IO, g::ASimpleGraph, t::Symbol)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][2](io, g)
 end
 
-# save to a file
 function writegraph(fn::String, g::ASimpleGraph, t::Symbol; compress::Bool=false)
     if compress
         io = GZip.open(fn,"w")
@@ -72,4 +74,14 @@ function writegraph(fn::String, g::ASimpleGraph, t::Symbol; compress::Bool=false
     retval = writegraph(io, g, t)
     close(io)
     return retval
+end
+
+function writegraph(fn::String, g::ASimpleGraph)
+    compress = false
+    ft = split(fn,'.')[end]
+    if ft == "gz"
+        compress = true
+        ft = split(fn,'.')[end-1]
+    end
+    return writegraph(fn, g, Symbol(ft), compress=compress)
 end
