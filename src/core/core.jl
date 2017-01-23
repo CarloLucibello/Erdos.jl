@@ -318,13 +318,6 @@ use of unsafe functions (e. g. [`unsafe_add_edge!`](@ref))
 rebuild!(g::ASimpleGraph) = nothing
 
 """
-    reserve!(g, v, k)
-
-Reserve memory space assuming that the vertex `v` will have `k` neighbors.
-"""
-reserve!(g::ASimpleGraph, v, k) = nothing
-
-"""
     rem_vertex!(g, v)
 
 Remove the vertex `v` from graph `g`.

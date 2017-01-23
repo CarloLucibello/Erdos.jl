@@ -32,11 +32,24 @@ function writegt(io::IO, g::ASimpleGraph)
     return 1
 end
 
-function writegt_adj{T}(io::IO, g::ASimpleGraph, ::Type{T})
+function writegt_adj{T}(io::IO, g::ADiGraph, ::Type{T})
     for i=1:nv(g)
         write(io, UInt64(degree(g, i)))
         for v in out_neighbors(g, i)
             write(io, T(v-1))
+        end
+    end
+end
+
+function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
+    for i=1:nv(g)
+        neigs = out_neighbors(g, i)
+        k = count(j -> j>=i, neigs)
+        write(io, UInt64(k))
+        for v in neigs
+            if v >= i
+                write(io, T(v-1))
+            end
         end
     end
 end
@@ -63,7 +76,7 @@ function readgt{G}(io::IO, ::Type{G})
     return g
 end
 
-function readgt_adj!{T}(io::IO, g::ASimpleGraph, ::Type{T})
+function readgt_adj!{T}(io::IO, g::ADiGraph, ::Type{T})
     for i=1:nv(g)
         k = read(io, UInt64)
         for _=1:k
@@ -73,16 +86,16 @@ function readgt_adj!{T}(io::IO, g::ASimpleGraph, ::Type{T})
     end
     rebuild!(g)
 end
-#
-# function readgt_adj!{S, T}(io::IO, g::DiGraph{S}, ::Type{T})
-#     for i=1:nv(g)
-#         k = read(io, UInt64)
-#         for _=1:k
-#             j = read(io, T) + 1
-#             unsafe_add_edge!(g, i, j)
-#         end
-#     end
-#     rebuild!(g)
-# end
+
+function readgt_adj!{T}(io::IO, g::AGraph, ::Type{T})
+    for i=1:nv(g)
+        k = read(io, UInt64)
+        for _=1:k
+            j = read(io, T) + 1
+            unsafe_add_edge!(g, i, j)
+        end
+    end
+    rebuild!(g)
+end
 
 filemap[:gt] = (readgt, writegt)
