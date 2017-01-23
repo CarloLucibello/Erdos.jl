@@ -1,7 +1,7 @@
 
 """
 Writes a graph `g` to a file `f` in the [Pajek
-NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
+.net](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
 Returns 1 (number of graphs written).
 """
 function writepajek(f::IO, g::ASimpleGraph)
@@ -22,7 +22,7 @@ end
 """
     readpajek{G}(f::IO, ::Type{G})
 
-Reads a graph from file `f` in the [Pajek NET](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
+Reads a graph from file `f` in the [Pajek .net](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
 Returns 1 (number of graphs written).
 """
 function readpajek{G}(f::IO, ::Type{G})
@@ -79,4 +79,4 @@ function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
     rebuild!(g)
 end
 
-filemap[:NET] = (readpajek, writepajek)
+filemap[:net] = (readpajek, writepajek)
