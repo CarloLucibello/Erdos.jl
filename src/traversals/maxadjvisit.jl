@@ -79,7 +79,7 @@ end
 
 type MinCutVisitor{T} <: AbstractMASVisitor
     graph::ASimpleGraph
-    parities::AbstractVector{Bool}
+    parities::BitVector
     colormap::Vector{Int}
     bestweight::T
     cutweight::T
