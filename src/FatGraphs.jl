@@ -3,7 +3,7 @@ module FatGraphs
 
 using GZip
 using Distributions: Binomial # randgraphs
-using LightXML # persistence
+using EzXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching
 import Clustering: kmeans # community detection
