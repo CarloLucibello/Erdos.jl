@@ -30,13 +30,6 @@ function writegexf(f::IO, g::ASimpleGraph)
     return 1
 end
 
-function getchild(el::EzXML.Node, s::String)
-    childs = elements(el)
-    i = findfirst(x->name(x)==s, childs)
-    i == 0 && error("no child $s")
-    return childs[i]
-end
-
 function gexf_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
     elnodes = getchild(el, "nodes")
     nodes = Dict{String,Int}()

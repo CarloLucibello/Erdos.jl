@@ -85,3 +85,11 @@ function writegraph(fn::String, g::ASimpleGraph)
     end
     return writegraph(fn, g, Symbol(ft), compress=compress)
 end
+
+
+function getchild(el::EzXML.Node, s::String)
+    childs = elements(el)
+    i = findfirst(x->name(x)==s, childs)
+    i == 0 && error("no child $s")
+    return childs[i]
+end

@@ -4,6 +4,8 @@ p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
 # test :graphml
 @test writegraph(f, p1, :graphml) == 1
+g = readgraph(f, :graphml, G)
+@test g == p1
 graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), G)
 @test nv(graphml_g) == 13
 @test ne(graphml_g) == 15

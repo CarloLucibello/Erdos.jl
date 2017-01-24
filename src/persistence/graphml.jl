@@ -27,7 +27,7 @@ function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "graphml" || error("Not a GraphML file")
-    el = findfirst(xroot, "graph")
+    el = getchild(xroot, "graph")
     isdir = false
     if haskey(el, "edgedefault")
         isdir = el["edgedefault"] == "directed"  ? true  : false
