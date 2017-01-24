@@ -4,7 +4,7 @@ using BenchmarkTools
 using Base.Dates
 import JLD: load, save
 
-TUNE = true
+TUNE = false
 LOAD_PARS = true
 SAVE_RES = false
 
@@ -18,15 +18,15 @@ suite = BenchmarkGroup()
 GLIST = [Graph{Int64}, GTGraph]
 DGLIST = [DiGraph{Int64}, GTDiGraph]
 GROUPS = [
-            # "core",
-            # "generators",
-            # "flow",
-            # "centrality",
-            # "dismantling",
-            # "connectivity",
+            "core",
+            "generators",
+            "flow",
+            "centrality",
+            "dismantling",
+            "connectivity",
             "persistence",
-            # "shortestpaths",
-            # "traversals"
+            "shortestpaths",
+            "traversals"
          ]
 
 # GROUPS = ["core"]
