@@ -1,18 +1,20 @@
+function _readgml{G}(gs, ::Type{G})
+    mapping = Dict{Int,Int}()
+    for (i, x) in enumerate(gs[:node])
+        mapping[x[:id]] = i
+    end
+    g = G(length(mapping))
+    for e in gs[:edge]
+        add_edge!(g, mapping[e[:source]], mapping[e[:target]])
+    end
+    return g
+end
+
 function readgml{G}(io::IO, ::Type{G})
     gs = first(GML.parse_dict(readstring(io))[:graph])
     dir = Bool(get(gs, :directed, 0))
-    nodes = [x[:id] for x in gs[:node]]
-    g = G(length(nodes))
-    g = dir ? digraph(g) : graph(g)
-    mapping = Dict{Int,Int}()
-    for (i,n) in enumerate(nodes)
-        mapping[n] = i
-    end
-    sds = [(Int(x[:source]), Int(x[:target])) for x in gs[:edge]]
-    for (s,d) in (sds)
-        add_edge!(g, mapping[s], mapping[d])
-    end
-    return g
+    H = dir ? digraphtype(G) : graphtype(G)
+    return _readgml(gs, H)
 end
 
 """
