@@ -10,5 +10,9 @@ for G in GLIST
         s["write","gt","$g"] = @benchmarkable writegraph($fname, $g, :gt)
         s["write","gml","$g"] = @benchmarkable writegraph($fname, $g, :net)
         s["write","net","$g"] = @benchmarkable writegraph($fname, $g, :gml)
+
+        s["read","gt","$g"] = @benchmarkable readgraph($fname, :gt, G)
+        s["read","gml","$g"] = @benchmarkable readgraph($fname, :net, G)
+        s["read","net","$g"] = @benchmarkable readgraph($fname, :gml, G)
     end
 end
