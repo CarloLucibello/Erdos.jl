@@ -69,8 +69,9 @@ h = readgraph(f, :gt, G)
 @test g == h
 
 # test :gexf
-@test writegraph(f, p1, :gexf) == 1
-@test_throws ErrorException readgraph(STDIN, :gexf, G)
+@test writegraph(f, g, :gexf) == 1
+h = readgraph(f, :gexf, G)
+@test g == h
 
 #test :net
 g10 = CompleteGraph(10, G)

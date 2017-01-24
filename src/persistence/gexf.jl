@@ -9,9 +9,7 @@ function writegexf(f::IO, g::ASimpleGraph)
 
     xmeta = addelement!(xroot, "meta")
     xg = addelement!(xroot, "graph")
-    strdir = is_directed(g) ? "directed" : "undirected"
-    xg["defaultedgetype"] = strdir
-
+    xg["defaultedgetype"] = is_directed(g) ? "directed" : "undirected"
     xnodes = addelement!(xg, "nodes")
     for i in 1:nv(g)
         xv = addelement!(xnodes, "node")
@@ -32,4 +30,43 @@ function writegexf(f::IO, g::ASimpleGraph)
     return 1
 end
 
-filemap[:gexf] = (NI, writegexf)
+function getchild(el::EzXML.Node, s::String)
+    childs = elements(el)
+    i = findfirst(x->name(x)==s, childs)
+    i == 0 && error("no child $s")
+    return childs[i]
+end
+
+function gexf_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
+    elnodes = getchild(el, "nodes")
+    nodes = Dict{String,Int}()
+    for (i,f) in enumerate(eachelement(elnodes))
+        nodes[f["id"]] = i
+    end
+
+    g = G(length(nodes))
+
+    eledges = getchild(el, "edges")
+    for f in eachelement(eledges)
+        n1 = f["source"]
+        n2 = f["target"]
+        add_edge!(g, nodes[n1], nodes[n2])
+    end
+
+    return g
+end
+
+function readgexf{G<:ASimpleGraph}(io::IO, ::Type{G})
+    xdoc = parsexml(readstring(io))
+    xroot = root(xdoc)  # an instance of XMLElement
+    name(xroot) == "gexf" || error("Not a Gexf file")
+    el = getchild(xroot, "graph")
+    isdir = false
+    if haskey(el, "defaultedgetype")
+        isdir = el["defaultedgetype"] == "directed"  ? true  : false
+    end
+    H = isdir ? digraphtype(G) : graphtype(G)
+    return gexf_read_one_graph!(el, H)
+end
+
+filemap[:gexf] = (readgexf, writegexf)

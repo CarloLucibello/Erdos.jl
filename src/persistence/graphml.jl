@@ -27,12 +27,11 @@ function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "graphml" || error("Not a GraphML file")
-    el = first(eachelement(xroot))
-    @assert name(el) == "graph" "The XML document should contain only the graph"
-    edgedefault = el["edgedefault"]
-    isdir = edgedefault == "directed"   ? true  :
-            edgedefault == "undirected" ? false :
-            error("Unknown value of edgedefault: $edgedefault")
+    el = findfirst(xroot, "graph")
+    isdir = false
+    if haskey(el, "edgedefault")
+        isdir = el["edgedefault"] == "directed"  ? true  : false
+    end
     H = isdir ? digraphtype(G) : graphtype(G)
     return graphml_read_one_graph!(el, H)
 end
