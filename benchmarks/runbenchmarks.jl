@@ -4,7 +4,7 @@ using BenchmarkTools
 using Base.Dates
 import JLD: load, save
 
-TUNE = true
+TUNE = false
 LOAD_PARS = true
 SAVE_RES = false
 

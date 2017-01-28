@@ -9,11 +9,10 @@ connecting each pair of vertices.
 """
 function CompleteGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
     g = G(n)
-    for i = 1:n, j=1:n
-        if i < j
-            add_edge!(g, i, j)
-        end
+    for i = 1:n, j=i+1:n
+        unsafe_add_edge!(g, i, j)
     end
+    rebuild!(g)
     return g
 end
 
@@ -27,8 +26,9 @@ connecting each pair of vertices in the two sets.
 function CompleteBipartiteGraph{G<:AGraph}(n1::Integer, n2::Integer, ::Type{G} = Graph)
     g = G(n1+n2)
     for i = 1:n1, j=n1+1:n1+n2
-        add_edge!(g, i, j)
+        unsafe_add_edge!(g, i, j)
     end
+    rebuild!(g)
     return g
 end
 
@@ -40,11 +40,13 @@ connecting each pair of vertices (both an ingoing and outgoing edge).
 """
 function CompleteDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
     g = G(n)
-    for i = 1:n, j=1:n
-        if i != j
-            add_edge!(g, i,j)
-        end
+    for i = 1:n, j=1:i-1
+        unsafe_add_edge!(g, i,j)
     end
+    for i = 1:n, j=i+1:n
+        unsafe_add_edge!(g, i,j)
+    end
+    rebuild!(g)
     return g
 end
 
