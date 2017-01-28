@@ -54,7 +54,7 @@ typealias ASimpleGraph Union{AGraph, ADiGraph}
 
 The number of vertices in `g`.
 """
-nv(g::ASimpleGraph) = nothing
+nv(g::ASimpleGraph) = error("not defined")
 
 """
     ne(g)
@@ -63,7 +63,7 @@ The number of edges in `g`.
 
 Time Complexity: O(1)
 """
-ne(g::ASimpleGraph) = nothing
+ne(g::ASimpleGraph) = error("not defined")
 
 """
     add_edge!(g, e)
@@ -77,7 +77,7 @@ Add to `g` an edge from `u` to `v`.
 Will return false if add fails (e.g., if vertices are not in the graph or the edge
 is already present) and true otherwise.
 """
-add_edge!(g::ASimpleGraph, u, v) = nothing
+add_edge!(g::ASimpleGraph, u, v) = error("not defined")
 
 
 """
@@ -91,7 +91,7 @@ Remove the edge from `u` to `v`.
 
 Returns false if edge removal fails (e.g., if the edge does not exist) and true otherwise.
 """
-rem_edge!(g::ASimpleGraph, u, v) = nothing
+rem_edge!(g::ASimpleGraph, u, v) = error("not defined")
 
 
 """
@@ -99,7 +99,7 @@ rem_edge!(g::ASimpleGraph, u, v) = nothing
 
 Add a new vertex to the graph `g`.
 """
-add_vertex!(g::ASimpleGraph) = nothing
+add_vertex!(g::ASimpleGraph) = error("not defined")
 
 # length() has to be appliable to the result
 """
@@ -109,7 +109,7 @@ Returns an iterable to all neighbors connected to vertex `v` by an incoming edge
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-in_neighbors(g::ADiGraph, v) = nothing
+in_neighbors(g::ADiGraph, v) = error("not defined")
 
 # length() has to be appliable to the result
 """
@@ -119,7 +119,7 @@ Returns an iterable to all neighbors connected to vertex `v` by an outgoing edge
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-out_neighbors(g::ASimpleGraph, v) = nothing
+out_neighbors(g::ASimpleGraph, v) = error("not defined")
 
 """
     edge(g, u, v)
@@ -146,8 +146,8 @@ Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
 vertextype{G<:ASimpleGraph}(::Type{G}) = Int
 
-graphtype{G<:ASimpleGraph}(::Type{G}) = nothing
-digraphtype{G<:ASimpleGraph}(::Type{G}) = nothing
+graphtype{G<:ASimpleGraph}(::Type{G}) = error("not defined")
+digraphtype{G<:ASimpleGraph}(::Type{G}) = error("not defined")
 
 abstract AEdge
 
@@ -156,25 +156,25 @@ abstract AEdge
 
 Returns the source of an edge.
 """
-src(e::AEdge) = nothing
+src(e::AEdge) = error("not defined")
 
 """
     dst(e)
 
 Returns the destination of an edge.
 """
-dst(e::AEdge) = nothing
+dst(e::AEdge) = error("not defined")
 
 """
     reverse(e::Edge)
 
 Swap `e.src` and `e.dst`.
 """
-reverse(e::AEdge) = nothing
+reverse(e::AEdge) = error("not defined")
 
 """
     pop_vertex!(g)
 
 Remove the last vertex of `g`. Equivalent to rem_vertex!(g, nv(g)).
 """
-pop_vertex!(g::ASimpleGraph) = nothing
+pop_vertex!(g::ASimpleGraph) = error("not defined")

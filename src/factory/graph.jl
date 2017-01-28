@@ -111,6 +111,10 @@ typealias SimpleGraph Union{Graph, DiGraph}
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}
 graphtype{T}(::Type{DiGraph{T}}) = Graph{T}
+graphtype(::Type{DiGraph}) = Graph{Int}
+graphtype(::Type{Graph}) = Graph{Int}
+digraphtype(::Type{DiGraph}) = DiGraph{Int}
+digraphtype(::Type{Graph}) = DiGraph{Int}
 digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
 vertextype{T}(::Type{Graph{T}}) = T
 vertextype{T}(::Type{DiGraph{T}}) = T
