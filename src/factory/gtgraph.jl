@@ -59,14 +59,9 @@ vertextype{G<:SimpleGTGraph}(::Type{G}) = Int
 Construct an empty graph with `n` vertices.
 """
 function GTDiGraph(n::Integer = 0)
-    out_edges = Vector{Vector{Pair{Int,Int}}}()
-    in_edges = Vector{Vector{Pair{Int,Int}}}()
-    sizehint!(out_edges,n)
-    sizehint!(in_edges,n)
-    for i=1:n
-        push!(out_edges, Vector{Pair{Int,Int}}())
-        push!(in_edges, Vector{Pair{Int,Int}}())
-    end
+    out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
+    in_edges = [Vector{Pair{Int,Int}}() for _=1:n]
+
     keep_epos = true
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
@@ -237,11 +232,7 @@ end
 Construct an empty graph with `n` vertices.
 """
 function GTGraph(n::Integer = 0)
-    out_edges = Vector{Vector{Pair{Int,Int}}}()
-    sizehint!(out_edges,n)
-    for i=1:n
-        push!(out_edges, Vector{Pair{Int,Int}}())
-    end
+    out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     keep_epos = true
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()

@@ -41,8 +41,6 @@ function erdos_renyi{G<:ASimpleGraph}(n::Int, m::Int, ::Type{G} = Graph;
     return g
 end
 
-
-
 """
     watts_strogatz(n, k, β, G=Graph; seed=-1)
 

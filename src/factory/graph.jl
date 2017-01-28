@@ -21,11 +21,7 @@ type Graph{T<:Integer} <: AGraph
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
 
     function Graph(n = 0)
-        fadjlist = Vector{Vector{T}}()
-        sizehint!(fadjlist,n)
-        for i = 1:n
-            push!(fadjlist, Vector{T}())
-        end
+        fadjlist = [Vector{T}() for _=1:n]
         return new(0, fadjlist)
     end
 
@@ -76,12 +72,8 @@ type DiGraph{T<:Integer} <: ADiGraph
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
 
     function DiGraph(n=0)
-        fadjlist = Vector{Vector{T}}()
-        badjlist = Vector{Vector{T}}()
-        for i = 1:n
-            push!(badjlist, Vector{T}())
-            push!(fadjlist, Vector{T}())
-        end
+        fadjlist = [Vector{T}() for _=1:n]
+        badjlist = [Vector{T}() for _=1:n]
         return new(0, badjlist, fadjlist)
     end
 
