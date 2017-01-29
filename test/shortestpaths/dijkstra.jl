@@ -1,5 +1,5 @@
-d1 = float([ 0 1 2 3 4; 5 0 6 7 8; 9 10 0 11 12; 13 14 15 0 16; 17 18 19 20 0])
-d2 = sparse(float([ 0 1 2 3 4; 5 0 6 7 8; 9 10 0 11 12; 13 14 15 0 16; 17 18 19 20 0]))
+d1 = EdgeMap(g4,float([ 0 1 2 3 4; 5 0 6 7 8; 9 10 0 11 12; 13 14 15 0 16; 17 18 19 20 0]))
+d2 = EdgeMap(g4,sparse(float([ 0 1 2 3 4; 5 0 6 7 8; 9 10 0 11 12; 13 14 15 0 16; 17 18 19 20 0])))
 
 y = dijkstra_shortest_paths(g4, 2, d1)
 z = dijkstra_shortest_paths(g4, 2, d2)
@@ -18,8 +18,12 @@ z = dijkstra_shortest_paths(g4, 2, d2; allpaths=true)
 
 g = PathGraph(5, G)
 add_edge!(g,2,4)
-d = ones(Int, 5,5)
+d = EdgeMap(g, ones(Int, 5,5))
 d[2,3] = 100
 z = dijkstra_shortest_paths(g,1,d)
 @test z.dists == [0, 1, 3, 2, 3]
 @test z.parents == [0, 1, 4, 2, 4]
+
+z2 = shortest_paths(g,1,d)
+@test z2.dists == z.dists
+@test z2.parents == z.parents

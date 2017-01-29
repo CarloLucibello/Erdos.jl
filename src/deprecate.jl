@@ -6,3 +6,6 @@
 @deprecate maximum_weight_maximal_matching minimum_weight_perfect_matching
 @deprecate indegree(g, v) in_degree(g, v)
 @deprecate outdegree(g, v) out_degree(g, v)
+
+@deprecate radius(vec) minimum(vec)
+@deprecate diameter(vec) maximum(vec)

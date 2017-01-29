@@ -81,13 +81,16 @@ function dismantle_ci_oneiter!{T}(g::AGraph, h, lneigs::Vector{Vector{T}}, l::In
     neigstop = collect(lneigs[itop])
     for j in neigstop
         lneigs[j] = neighborhood(g, j, l)
-        update!(h, j, j=>ci(g, lneigs[j], j))
+        updateheap!(g, h, j, lneigs[j])
     end
     return itop
 end
 
-function ci(g::AGraph, neigs::Vector, i::Integer)
+function ci(g::AGraph, neigs::Vector, i::Int)
     zi = degree(g, i)- 1
     zi == -1 && return -1
     return sum(degree(g,j)-1  for j in neigs) * zi
 end
+
+updateheap!(g::AGraph, h, j::Int, neigs::Vector) = update!(h, j, j=>ci(g, neigs, j))
+updateheap!{T}(g::AGraph, h, j::T, neigs::Vector) = updateheap!(g, h, Int(j), neigs)

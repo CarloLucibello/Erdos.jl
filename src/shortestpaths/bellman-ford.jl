@@ -12,31 +12,41 @@
 type NegativeCycleError <: Exception end
 
 # AbstractPathState is defined in core
-type BellmanFordState{T<:Real} <: AbstractPathState
-    parents::Vector{Int}
+type BellmanFordState{V,T<:Real} <: AbstractPathState
+    parents::Vector{V}
     dists::Vector{T}
 end
 
-function bellman_ford_shortest_paths!{T<:Real}(
-    graph::ASimpleGraph,
-    sources::AbstractVector{Int},
-    distmx::AbstractMatrix{T},
-    state::BellmanFordState
-)
 
-    active = Set{Int}()
+"""
+    bellman_ford_shortest_paths(g, s, distmx=ConstEdgeMap(g,1))
+    bellman_ford_shortest_paths(g, sources, distmx=ConstEdgeMap(g,1))
+
+Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
+to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
+vertices `sources`). Returns a [`BellmanFordState`](@ref) with relevant traversal information.
+"""
+function bellman_ford_shortest_paths{E,T<:Real}(
+        g::ASimpleGraph,
+        sources::AbstractVector{Int},
+        distmx::AEdgeMap{E,T},
+    )
+    state = BellmanFordState(zeros(Int,nv(g)), fill(typemax(T), nv(g)))
+    V = vertextype(g)
+    active = Set{V}()
     for v in sources
         state.dists[v] = 0
         state.parents[v] = 0
         push!(active, v)
     end
     no_changes = false
-    for i in 1:nv(graph)
+    for i in 1:nv(g)
         no_changes = true
-        new_active = Set{Int}()
+        new_active = Set{V}()
         for u in active
-            for v in out_neighbors(graph, u)
-                edist = distmx[u, v]
+            for e in out_edges(g, u)
+                v = dst(e)
+                edist = distmx[e]
                 if state.dists[v] > state.dists[u] + edist
                     state.dists[v] = state.dists[u] + edist
                     state.parents[v] = u
@@ -54,81 +64,24 @@ function bellman_ford_shortest_paths!{T<:Real}(
     return state
 end
 
-"""
-    bellman_ford_shortest_paths(g, s, distmx=DefaultDistance())
-    bellman_ford_shortest_paths(g, sources, distmx=DefaultDistance())
+function bellman_ford_shortest_paths(
+        g::ASimpleGraph,
+        sources::AbstractVector{Int})
 
-Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
-to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
-vertices `sources`). Returns a `BellmanFordState` with relevant traversal information
-(see below).
-"""
-function bellman_ford_shortest_paths{T<:Real}(
-        graph::ASimpleGraph,
-        sources::AbstractVector{Int},
-        distmx::AbstractMatrix{T} = DefaultDistance())
-
-    nvg = nv(graph)
-    state = BellmanFordState(zeros(Int,nvg), fill(typemax(T), nvg))
-    bellman_ford_shortest_paths!(graph, sources, distmx, state)
+    bellman_ford_shortest_paths(g, sources, ConstEdgeMap(g,1))
 end
 
-bellman_ford_shortest_paths{T<:Real}(
-    graph::ASimpleGraph,
+bellman_ford_shortest_paths(
+    g::ASimpleGraph,
     v::Int,
-    distmx::AbstractMatrix{T} = DefaultDistance()
-) = bellman_ford_shortest_paths(graph, [v], distmx)
+    distmx::AEdgeMap=ConstEdgeMap(g,1)
+) = bellman_ford_shortest_paths(g, [v], distmx)
 
-function has_negative_edge_cycle(graph::ASimpleGraph)
+function has_negative_edge_cycle(g::ASimpleGraph)
     try
-        bellman_ford_shortest_paths(graph, vertices(graph))
+        bellman_ford_shortest_paths(g, vertices(g))
     catch e
         isa(e, NegativeCycleError) && return true
     end
     return false
 end
-
-function enumerate_paths(state::AbstractPathState, dest::Vector{Int})
-    parents = state.parents
-
-    num_dest = length(dest)
-    all_paths = Vector{Vector{Int}}(num_dest)
-    for i=1:num_dest
-        all_paths[i] = Vector{Int}()
-        index = dest[i]
-        if parents[index] != 0 || parents[index] == index
-            while parents[index] != 0
-                push!(all_paths[i], index)
-                index = parents[index]
-            end
-            push!(all_paths[i], index)
-            reverse!(all_paths[i])
-        end
-    end
-    all_paths
-end
-
-
-"""
-    enumerate_paths(state::AbstractPathState)
-    enumerate_paths(state::AbstractPathState, dest)
-
-Given a path state `state` of type `AbstractPathState` (see below), returns a
-vector (indexed by vertex) of the paths between the source vertex used to
-compute the path state and a destination vertex `v`, a set of destination
-vertices `vs`, or the entire graph. For multiple destination vertices, each
-path is represented by a vector of vertices on the path between the source and
-the destination. Nonexistent paths will be indicated by an empty vector. For
-single destinations, the path is represented by a single vector of vertices,
-and will be length 0 if the path does not exist.
-
-For Floyd-Warshall path states, please note that the output is a bit different,
-since this algorithm calculates all shortest paths for all pairs of vertices:
-`enumerate_paths(state)` will return a vector (indexed by source vertex) of
-vectors (indexed by destination vertex) of paths. `enumerate_paths(state, v)`
-will return a vector (indexed by destination vertex) of paths from source `v`
-to all other vertices. In addition, `enumerate_paths(state, v, d)` will return
-a vector representing the path from vertex `v` to vertex `d`.
-"""
-enumerate_paths(state::AbstractPathState, dest) = enumerate_paths(state, [dest])[1]
-enumerate_paths(state::AbstractPathState) = enumerate_paths(state, [1:length(state.parents);])

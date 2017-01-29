@@ -13,7 +13,6 @@ vm = rand(1:10,10)
 @test hasindex(vm, 1)
 @test !hasindex(vm, -1)
 
-V = vertextype(G())
 vm = Dict{V, Float64}()
 @test VertexMap(g, Float64) == vm
 @test typeof(vm) <: AVertexMap

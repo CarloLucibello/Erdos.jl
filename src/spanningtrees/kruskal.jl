@@ -21,7 +21,7 @@ end
 
 """
     minimum_spanning_tree{T<:Real}(
-        g, distmx::AbstractMatrix{T} = DefaultDistance()
+        g, distmx::AbstractMatrix{T} = ConstEdgeMap(g,1)
     )
 
 Performs [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
@@ -31,7 +31,7 @@ that contains the containing edges and its weights.
 """
 function minimum_spanning_tree{T<:Real}(
     g::AGraph,
-    distmx::AbstractMatrix{T} = DefaultDistance()
+    distmx::AbstractMatrix{T} = ConstEdgeMap(g,1)
 )
     E = edgetype(g)
     V = vertextype(g)

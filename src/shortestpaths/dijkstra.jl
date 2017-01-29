@@ -15,8 +15,8 @@ type DijkstraState{T}<: AbstractDijkstraState
 end
 
 """
-    dijkstra_shortest_paths(g, s, distmx=DefaultDistance(); allpaths=false)
-    dijkstra_shortest_paths(g, sources, distmx=DefaultDistance(); allpaths=false)
+    dijkstra_shortest_paths(g, s, distmx=ConstEdgeMap(g,1); allpaths=false)
+    dijkstra_shortest_paths(g, sources, distmx=ConstEdgeMap(g,1); allpaths=false)
 
 Performs [Dijkstra's algorithm](http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 on a graph, computing shortest distances between a source vertex `s` (or a vector
@@ -26,12 +26,13 @@ Returns a `DijkstraState` that contains various traversal information.
 With `allpaths=true`, returns a `DijkstraState` that keeps track of all
 predecessors of a given vertex.
 """
-function dijkstra_shortest_paths{T}(
-    g::ASimpleGraph,
-    srcs::Vector{Int},
-    distmx::AbstractMatrix{T}=DefaultDistance();
-    allpaths=false
-)
+function dijkstra_shortest_paths(
+        g::ASimpleGraph,
+        srcs::Vector{Int},
+        distmx::AEdgeMap=ConstEdgeMap(g,1);
+        allpaths=false
+    )
+    T = valtype(distmx)
     nvg = nv(g)
     dists = fill(typemax(T), nvg)
     parents = zeros(Int, nvg)
@@ -52,8 +53,9 @@ function dijkstra_shortest_paths{T}(
         hentry = heappop!(H)
         # info("Popped H - got $(hentry.vertex)")
         u = hentry.vertex
-        for v in out_neighbors(g,u)
-            alt = (dists[u] == typemax(T))? typemax(T) : dists[u] + distmx[u,v]
+        for e in out_edges(g,u)
+            v = dst(e)
+            alt = (dists[u] == typemax(T))? typemax(T) : dists[u] + distmx[e]
 
             if !visited[v]
                 dists[v] = alt
@@ -91,5 +93,5 @@ function dijkstra_shortest_paths{T}(
     return DijkstraState{T}(parents, dists, preds, pathcounts)
 end
 
-dijkstra_shortest_paths{T<:Real}(g::ASimpleGraph, src::Int, distmx::AbstractMatrix{T}=DefaultDistance(); allpaths=false) =
+dijkstra_shortest_paths(g::ASimpleGraph, src::Int, distmx::AEdgeMap=ConstEdgeMap(g,1); allpaths=false) =
   dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)

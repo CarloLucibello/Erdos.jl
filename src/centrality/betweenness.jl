@@ -139,7 +139,7 @@ function _accumulate_endpoints!(
     end
 end
 
-function _rescale!(betweenness::Vector{Float64}, n::Int, normalize::Bool, directed::Bool, k::Int)
+function _rescale!(betweenness::Vector{Float64}, n::Integer, normalize::Bool, directed::Bool, k::Integer)
     if normalize
         if n <= 2
             do_scale = false

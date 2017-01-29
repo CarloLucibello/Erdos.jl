@@ -16,16 +16,16 @@ import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
 
 import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
-            sum, size, sparse, eltype, length, ndims, transpose,
-            ctranspose, join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!, iteratorsize
+            sum, size, sparse, eltype, length, ndims,
+            join, start, next, done, eltype, get, issymmetric, A_mul_B!,
+            sort, push!, pop!, iteratorsize, values
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
     graphtype, digraphtype, edgetype, vertextype,
 
 # edge
-Edge, is_ordered, reverse, #sort
+AEdge, Edge, is_ordered, reverse, #sort
 
 # core
 vertices, edges, src, dst,
@@ -45,7 +45,7 @@ reverse!, Graph, DiGraph, SimpleGraph,
 GTDiGraph, GTGraph, SimpleGTGraph, GTEdge,
 
 # distance
-eccentricity, diameter, periphery, radius, center,
+eccentricities, eccentricity, diameter, periphery, radius, center,
 
 # distance between graphs
 spectral_distance, edit_distance,
@@ -85,6 +85,7 @@ MaximumAdjacency, AbstractMASVisitor, mincut, maximum_adjacency_visit,
 a_star, dijkstra_shortest_paths,
 bellman_ford_shortest_paths, has_negative_edge_cycle, enumerate_paths,
 floyd_warshall_shortest_paths,
+shortest_paths,
 
 # centrality
 betweenness_centrality, closeness_centrality, degree_centrality,
@@ -141,7 +142,7 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
 # maps
 AVertexMap, ConstVertexMap, hasindex, VertexMap,
-AEdgeMap, ConstEdgeMap
+AEdgeMap, ConstEdgeMap, EdgeMap
 
 """An optimized graphs package.
 

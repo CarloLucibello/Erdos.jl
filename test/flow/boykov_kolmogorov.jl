@@ -10,7 +10,7 @@ source, target = 1, 3
 capacity_matrix = FatGraphs.DefaultCapacity(g)
 
 # state variables
-flow_matrix = zeros(Int, 3, 3)
+flow_matrix = zeros(typeof(signed(V(0))), 3, 3)
 
 TREE = zeros(Int, 3)
 TREE[source] = 1

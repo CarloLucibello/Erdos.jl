@@ -34,7 +34,7 @@ end
 @test nv(g) == 8
 @test ne(g) == m
 
-bestcut, cut, parity = minimum_cut(g, eweights)
+bestcut, cut, parity = minimum_cut(g, EdgeMap(g, eweights))
 
 @test length(parity) == 8
 @test parity == [2, 2, 1, 1, 2, 2, 1, 1]

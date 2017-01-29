@@ -71,7 +71,7 @@ function traverse_graph!(
         s,
         visitor::SimpleGraphVisitor;
         vcolormap = VertexMap(g, Int),
-        ecolormap = ConstEdgeMap(0)
+        ecolormap = ConstEdgeMap(g, 0)
     )
 
     vcolormap[s] = -1

@@ -279,12 +279,13 @@ function attracting_components(g::ADiGraph)
     return scc[attracting]
 end
 
-type NeighborhoodVisitor <: SimpleGraphVisitor
+type NeighborhoodVisitor{V} <: SimpleGraphVisitor
     d::Int
-    neigs::Vector{Int}
+    neigs::Vector{V}
 end
 
-NeighborhoodVisitor(d) = NeighborhoodVisitor(d, Vector{Int}())
+NeighborhoodVisitor(g::ASimpleGraph, d::Integer) =
+    (V=vertextype(g); NeighborhoodVisitor{V}(d, Vector{V}()))
 
 function examine_neighbor!(visitor::NeighborhoodVisitor, u, v, ucolor, vcolor, ecolor)
     -ucolor > visitor.d && return false # color is negative for non-closed vertices
@@ -296,15 +297,15 @@ end
 
 
 """
-    neighborhood(g, v::Int, d::Int; dir=:out)
+    neighborhood(g, v, d; dir=:out)
 
 Returns a vector of the vertices in `g` at distance less or equal to `d`
 from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
 the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
 """
-function neighborhood(g::ASimpleGraph, v, d; dir=:out)
+function neighborhood(g::ASimpleGraph, v::Integer, d::Integer; dir=:out)
     @assert d >= 0 "Distance has to be greater then zero."
-    visitor = NeighborhoodVisitor(d)
+    visitor = NeighborhoodVisitor(g, d)
     push!(visitor.neigs, v)
     traverse_graph!(g, BreadthFirst(), v, visitor,
         vcolormap=VertexMap(g, Int), dir=dir)

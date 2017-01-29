@@ -37,11 +37,9 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
 
     # Test DefaultCapacity
     d = FatGraphs.DefaultCapacity(flow_graph)
-    @test typeof(d) <: AbstractMatrix{Int}
+    @test typeof(d) <: AbstractMatrix{typeof(signed(V(0)))}
     @test d[s,t] == 0
     @test size(d) == (nvertices,nvertices)
-    @test typeof(transpose(d)) == FatGraphs.DefaultCapacity{DG}
-    @test typeof(ctranspose(d)) == FatGraphs.DefaultCapacity{DG}
 
     fdef1, Fdef1, labdef1 = maximum_flow(flow_graph,s,t)
     fdef2, Fdef2, labdef2 = maximum_flow(flow_graph,s,t, capacity_matrix)

@@ -26,7 +26,8 @@ GROUPS = [
             "connectivity",
             "persistence",
             "shortestpaths",
-            "traversals"
+            "traversals",
+            "matching"
          ]
 
 # GROUPS = ["core"]
@@ -73,6 +74,7 @@ resold = loadres()
 has_regressions = false
 has_improves = true
 for group in GROUPS
+    println("GROUP $group")
     m = median(res[group])
     println(m)
     !haskey(resold, group) && continue

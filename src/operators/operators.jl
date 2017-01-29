@@ -31,7 +31,7 @@ end
 
 Returns true if all of the vertices and edges of `g` are contained in `h`.
 """
-function issubset{T<:ASimpleGraph}(g::T, h::T)
+function issubset{G<:ASimpleGraph}(g::G, h::G)
     return nv(g) < nv(h) && issubset(edges(g), edges(h))
 end
 
@@ -265,11 +265,11 @@ sg, vmap = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
-function subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
+function subgraph{G<:ASimpleGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
     allunique(vlist) || error("Vertices in subgraph list must be unique")
-    h = T(length(vlist))
-    newvid = Dict{Int, Int}()
-    vmap =Vector{Int}(length(vlist))
+    h = G(length(vlist))
+    newvid = Dict{V, V}()
+    vmap =Vector{V}(length(vlist))
     for (i,v) in enumerate(vlist)
         newvid[v] = i
         vmap[i] = v
@@ -287,10 +287,11 @@ function subgraph{T<:ASimpleGraph}(g::T, vlist::AbstractVector{Int})
 end
 
 
-function subgraph{T<:ASimpleGraph}(g::T, elist)
-    h = T()
-    newvid = Dict{Int, Int}()
-    vmap = Vector{Int}()
+function subgraph{G<:ASimpleGraph}(g::G, elist)
+    h = G()
+    V = vertextype(h)
+    newvid = Dict{V, V}()
+    vmap = Vector{V}()
 
     for e in elist
         u, v = src(e), dst(e)
@@ -323,7 +324,7 @@ Returns the subgraph of `g` induced by the neighbors of `v` up to distance
 the edge direction the edge direction with respect to `v` (i.e. `:in` or `:out`)
 to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
 """
-egonet(g::ASimpleGraph, v::Int, d::Int; dir=:out) = g[neighborhood(g, v, d, dir=dir)]
+egonet(g::ASimpleGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
 
 
 # The following operators allow one to use a FatGraphs.Graph as a matrix in

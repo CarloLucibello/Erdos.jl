@@ -98,7 +98,7 @@ DiGraph{T}(n::T) = DiGraph{T}(n)
 DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 DiGraph() = DiGraph{Int}()
 
-typealias SimpleGraph Union{Graph, DiGraph}
+typealias SimpleGraph{T} Union{Graph{T}, DiGraph{T}}
 
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}
@@ -111,7 +111,7 @@ digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
 vertextype{T}(::Type{Graph{T}}) = T
 vertextype{T}(::Type{DiGraph{T}}) = T
 
-nv(g::SimpleGraph) = length(g.fadjlist)
+nv{T}(g::SimpleGraph{T}) = T(length(g.fadjlist))
 ne(g::SimpleGraph) = g.ne
 
 pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
@@ -141,12 +141,10 @@ function rem_edge!(g::Graph, u, v)
     return true # edge successfully removed
 end
 
-
 function add_vertex!{T}(g::Graph{T})
     push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
-
 
 ##### DIGRAPH CONSTRUCTORS  #############
 

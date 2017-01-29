@@ -2,13 +2,13 @@
 # licensing details.
 
 
-type FloydWarshallState{T}<:AbstractPathState
+type FloydWarshallState{T,V}<:AbstractPathState
     dists::Matrix{T}
-    parents::Matrix{Int}
+    parents::Matrix{V}
 end
 
 """
-    floyd_warshall_shortest_paths(g, distmx=DefaultDistance())
+    floyd_warshall_shortest_paths(g, distmx=ConstEdgeMap(g,1))
 
 Uses the [Floyd-Warshall algorithm](http://en.wikipedia.org/wiki/Floyd–Warshall_algorithm)
 to compute shortest paths between all pairs of vertices in graph `g`. Returns a
@@ -19,14 +19,15 @@ graph.
 Note that this algorithm may return a large amount of data (it will allocate
 on the order of ``O(nv^2)``).
 """
-function floyd_warshall_shortest_paths{T}(
-    g::ASimpleGraph,
-    distmx::AbstractMatrix{T} = DefaultDistance()
-)
-
+function floyd_warshall_shortest_paths(
+        g::ASimpleGraph,
+        distmx::AEdgeMap = ConstEdgeMap(g,1)
+    )
+    T = valtype(distmx)
+    V = vertextype(g)
     n_v = nv(g)
-    dists = fill(typemax(T), (n_v,n_v))
-    parents = zeros(Int, (n_v,n_v))
+    dists = fill(typemax(T), n_v, n_v)
+    parents = zeros(V, n_v, n_v)
 
     # fws = FloydWarshallState(Matrix{T}(), Matrix{Int}())
     for v in 1:n_v
@@ -37,7 +38,7 @@ function floyd_warshall_shortest_paths{T}(
         u = src(e)
         v = dst(e)
 
-        d = distmx[u,v]
+        d = distmx[e]
 
         dists[u,v] = min(d, dists[u,v])
         parents[u,v] = u
@@ -68,14 +69,14 @@ function floyd_warshall_shortest_paths{T}(
     return fws
 end
 
-function enumerate_paths(s::FloydWarshallState, v::Integer)
+function enumerate_paths{T,V}(s::FloydWarshallState{T,V}, v::Integer)
     pathinfo = s.parents[v,:]
-    paths = Vector{Int}[]
+    paths = Vector{V}[]
     for i in 1:length(pathinfo)
         if i == v
-            push!(paths, Vector{Int}())
+            push!(paths, Vector{V}())
         else
-            path = Vector{Int}()
+            path = Vector{V}()
             currpathindex = i
             while currpathindex != 0
                 push!(path,currpathindex)
