@@ -23,3 +23,7 @@ d[2,3] = 100
 z = dijkstra_shortest_paths(g,1,d)
 @test z.dists == [0, 1, 3, 2, 3]
 @test z.parents == [0, 1, 4, 2, 4]
+
+z2 = shortest_paths(g,1,d)
+@test z2.dists == z.dists
+@test z2.parents == z.parents

@@ -25,7 +25,7 @@ export AGraph, ADiGraph, ASimpleGraph,
     graphtype, digraphtype, edgetype, vertextype,
 
 # edge
-Edge, is_ordered, reverse, #sort
+AEdge, Edge, is_ordered, reverse, #sort
 
 # core
 vertices, edges, src, dst,

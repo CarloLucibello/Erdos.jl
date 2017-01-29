@@ -10,6 +10,7 @@ tests = [
     "core/core",
     "core/edgeiter",
     "maps/vertexmap",
+    "maps/edgemap",
     "operators/operators",
     "distances/distance",
     "distances/edit_distance",
