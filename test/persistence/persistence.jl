@@ -34,9 +34,15 @@ gml1a = readgraph(f, :gml, G)
 # test :dot
 g = readgraph(joinpath(testdir, "testdata", "twographs.dot"), G)
 @test g == CompleteGraph(6, G)
-@test writegraph(f, g, :gml) == 1
-ga = readgraph(f, :gml, G)
+@test writegraph(f, g, :dot) == 1
+ga = readgraph(f, :dot, G)
 @test g == ga
+
+# test failing
+# @test g == random_regular_digraph(10, 3, DG)
+# @test writegraph(f, g, :dot) == 1
+# ga = readgraph(f, :dot, G)
+# @test g == ga
 
 # test :gt
 fname= joinpath(datasets_dir, "lesmis.gt.gz")

@@ -1,15 +1,7 @@
-
-
-# TODO: implement save
-
-function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
-    pg = first(DOT.parse_dot(readstring(io)))
-
-    isdir = pg.directed
+function _readdot{G<:ASimpleGraph}(pg, ::Type{G})
     nvg = length(DOT.nodes(pg))
     nodedict = Dict(zip(collect(DOT.nodes(pg)), 1:nvg))
     g = G(nvg)
-    g = isdir ? digraph(g) : graph(g)
     for es in DOT.edges(pg)
         s = nodedict[es[1]]
         d = nodedict[es[2]]
@@ -18,4 +10,28 @@ function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
     return g
 end
 
-filemap[:dot] = (readdot, NI)
+function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
+    pg = first(DOT.parse_dot(readstring(io)))
+    H = pg.directed ? digraphtype(G) : graphtype(G)
+    println("isdr $(pg.directed)")
+    return _readdot(pg, H)
+end
+
+function writedot(io::IO, g::ASimpleGraph)
+    if is_directed(g)
+        println(io, "strict digraph {")
+        eop = "->"
+    else
+        println(io, "strict graph {")
+        eop = "--"
+    end
+
+    for (s,t) in edges(g)
+        println(io,"\tn$s $eop n$t;")
+    end
+
+    println(io, "}")
+    return 1
+end
+
+filemap[:dot] = (readdot, writedot)
