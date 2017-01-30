@@ -15,10 +15,61 @@ for e in edgs
     capacity_matrix[u,v] = f
 end
 
-s["push_relabel"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+s["push_relabel","$flow_graph"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=PushRelabelAlgorithm())
-s["dinic"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+s["dinic","$flow_graph"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=DinicAlgorithm())
 
-s["boykov"] = @benchmarkable maximum_flow($flow_graph, 1, 8
+s["boykov","$flow_graph"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=BoykovKolmogorovAlgorithm())
+
+# from LittleScienceTools.RFIM
+srand(17)
+N = 1000
+g = random_regular_graph(N, 3, seed=1)
+h = randn(N)
+J = 1.
+
+function net_capacity{T}(g::AGraph, h::Vector{T}, J::AbstractFloat)
+    N = nv(g)
+    dg = digraph(g)
+    add_vertices!(dg, 2)
+    source = N+1
+    target = N+2
+    for i=1:N
+        if h[i] > 0
+            add_edge!(dg, source, i)
+            add_edge!(dg, i, source)
+        else
+            add_edge!(dg, i, target)
+            add_edge!(dg, target, i)
+        end
+    end
+
+    c = spzeros(N+2, N+2)
+    for i=1:N
+        neigs = neighbors(dg, i)
+        for j in neigs
+            if j <= N
+                c[i,j] = J
+            elseif j == target
+                c[i,j] = abs(h[i])
+            end
+
+        end
+    end
+    for j in neighbors(dg, source)
+        c[source,j] = abs(h[j])
+    end
+
+    return dg, c
+end
+
+dg, c = net_capacity(g, h, J)
+
+s["push_relabel","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+                    , $c, algorithm=PushRelabelAlgorithm())
+s["dinic","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+                    , $c, algorithm=DinicAlgorithm())
+s["boykov","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+                    , $c, algorithm=BoykovKolmogorovAlgorithm())

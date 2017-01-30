@@ -5,7 +5,6 @@ using Base.Dates
 import JLD: load, save
 
 TUNE = false
-LOAD_PARS = true
 SAVE_RES = false
 
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
@@ -35,15 +34,13 @@ for group in GROUPS
     include("$group/$group.jl")
 end
 
-####  TUNING / LOADING / SAVING PARAMS
-
-function tune_and_savepars!(suite)
-    tune!(suite)
+####  LOADING / SAVING PARAMS
+function savepars(suite)
     path = joinpath(par_dir,"$(Date(now())).jld")
     save(path, "suite", params(suite))
 end
 
-function loadpars!(suite)
+function loadpars(suite)
     files = readdir(par_dir)
     dates = map(x -> Date(split(x, ['.'])[1]), files)
     f = joinpath(par_dir, "$(maximum(dates)).jld")
@@ -62,8 +59,8 @@ function loadres()
     return load(f, "res")
 end
 
-TUNE && tune_and_savepars!(suite)
-LOAD_PARS && loadpars!(suite)
+TUNE && (tune!(suite); savepars(suite))
+loadpars(suite)
 
 #####  RUNNING ###################
 res = run(suite, verbose=true)
@@ -105,8 +102,10 @@ if SAVE_RES
     saveres(res)
     println("Results saved!")
 else
-    println("Results not saved. Save the with `saveres(res)`")
+    println("Results not saved. Save them with `saveres(res)`")
 end
+println("Retune the benchmarks and save the parameters with
+    `tune!(suite); savepars(suite)`")
 
 """
 example: myjudge("core", "edges")
