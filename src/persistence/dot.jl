@@ -13,7 +13,6 @@ end
 function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
     pg = first(DOT.parse_dot(readstring(io)))
     H = pg.directed ? digraphtype(G) : graphtype(G)
-    println("isdr $(pg.directed)")
     return _readdot(pg, H)
 end
 
