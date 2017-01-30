@@ -6,6 +6,7 @@ import JLD: load, save
 
 TUNE = false
 SAVE_RES = false
+RUN_BENCH = true
 
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
 bench_dir = Base.source_dir()
@@ -36,76 +37,54 @@ end
 
 ####  LOADING / SAVING PARAMS
 function savepars(suite)
-    path = joinpath(par_dir,"$(Date(now())).jld")
-    save(path, "suite", params(suite))
+    for group in GROUPS
+        d = joinpath(par_dir, group)
+        !isdir(d) && mkdir(d)
+        path = joinpath(d, "$(Date(now())).jld")
+        save(path, group, params(suite[group]))
+    end
 end
 
-function loadpars(suite)
-    files = readdir(par_dir)
-    dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(par_dir, "$(maximum(dates)).jld")
-    loadparams!(suite, load(f, "suite"), :evals, :samples)
+function loadpars!(suite)
+    for group in GROUPS
+        d = joinpath(par_dir,group)
+        !isdir(d) && mkdir(d)
+        files = readdir(d)
+        if length(files) > 0
+            dates = map(x -> Date(split(x, ['.'])[1]), files)
+            f = joinpath(d, "$(maximum(dates)).jld")
+            loadparams!(suite[group], load(f, group), :evals, :samples)
+        end
+    end
 end
 
 function saveres(res)
-    path = joinpath(res_dir,"$(Date(now())).jld")
-    save(path, "res", res)
+    for group in GROUPS
+        d = joinpath(res_dir, group)
+        !isdir(d) && mkdir(d)
+        path = joinpath(d, "$(Date(now())).jld")
+        save(path, group, res[group])
+    end
 end
 
 function loadres()
-    files = readdir(res_dir)
-    dates = map(x -> Date(split(x, ['.'])[1]), files)
-    f = joinpath(res_dir, "$(maximum(dates)).jld")
-    return load(f, "res")
+    res = BenchmarkGroup()
+    for group in GROUPS
+        d = joinpath(res_dir, group)
+        !isdir(d) && mkdir(d)
+        files = readdir(d)
+        if length(files) > 0
+            dates = map(x -> Date(split(x, ['.'])[1]), files)
+            f = joinpath(d, "$(maximum(dates)).jld")
+            res[group] = load(f, group)
+        end
+    end
+    return res
 end
 
 TUNE && (tune!(suite); savepars(suite))
-loadpars(suite)
+loadpars!(suite)
 
-#####  RUNNING ###################
-res = run(suite, verbose=true)
-
-#### COMPARISONS ##########
-resold = loadres()
-
-has_regressions = false
-has_improves = true
-for group in GROUPS
-    println("GROUP $group")
-    m = median(res[group])
-    println(m)
-    !haskey(resold, group) && continue
-
-    mold = median(resold[group])
-    judgement = judge(m, mold)
-
-    regr = regressions(judgement)
-    if length(regr) > 0
-        has_regressions = false
-        print_with_color(:red, "REGRESSIONS FOUND:\n")
-        println(regr)
-        print_with_color(:red, "******************\n")
-    end
-    improvs = improvements(judgement)
-    if length(improvs) > 0
-        has_improves = true
-        print_with_color(:green, "IMPROVEMENTS FOUND:\n")
-        println(improvs)
-        print_with_color(:green, "******************\n")
-    end
-end
-
-###  SAVING ############
-# if SAVE_RES && !has_improves && !has_regressions
-println()
-if SAVE_RES
-    saveres(res)
-    println("Results saved!")
-else
-    println("Results not saved. Save them with `saveres(res)`")
-end
-println("Retune the benchmarks and save the parameters with
-    `tune!(suite); savepars(suite)`")
 
 """
 example: myjudge("core", "edges")
@@ -119,3 +98,51 @@ function myjudge(names::String...)
     end
     return judge(median(s),median(sold))
 end
+
+if RUN_BENCH
+#####  RUNNING ###################
+    res = run(suite, verbose=true)
+
+    #### COMPARISONS ##########
+    resold = loadres()
+
+    has_regressions = false
+    has_improves = true
+    for group in GROUPS
+        println("GROUP $group")
+        m = median(res[group])
+        println(m)
+        !haskey(resold, group) && continue
+
+        mold = median(resold[group])
+        judgement = judge(m, mold)
+
+        regr = regressions(judgement)
+        if length(regr) > 0
+            has_regressions = false
+            print_with_color(:red, "REGRESSIONS FOUND:\n")
+            println(regr)
+            print_with_color(:red, "******************\n")
+        end
+        improvs = improvements(judgement)
+        if length(improvs) > 0
+            has_improves = true
+            print_with_color(:green, "IMPROVEMENTS FOUND:\n")
+            println(improvs)
+            print_with_color(:green, "******************\n")
+        end
+    end
+
+    ###  SAVING ############
+    # if SAVE_RES && !has_improves && !has_regressions
+    println()
+    if SAVE_RES
+        saveres(res)
+        println("Results saved!")
+    else
+        println("Results not saved. Save them with `saveres(res)`")
+    end
+end
+
+
+println("Retune the benchmarks and save the parameters with `tune!(suite); savepars(suite)`")
