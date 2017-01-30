@@ -48,3 +48,4 @@
 - add cores and kcore
 - move from LightXML to EzXML
 - add missing read support for gexf
+- add missing write support for dot
