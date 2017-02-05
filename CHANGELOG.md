@@ -49,3 +49,4 @@
 - move from LightXML to EzXML
 - add missing read support for gexf
 - add missing write support for dot
+- remove dependence from Distributions, add StatsFuns
