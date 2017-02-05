@@ -21,7 +21,7 @@ function erdos_renyi{G<:ASimpleGraph}(n::Int, p::Real, ::Type{G} = Graph;
         # init dsfmt generator without altering GLOBAL_RNG
         Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
     end
-    ne = rand(Binomial(m, p)) # sadly StatsBase doesn't support non-global RNG
+    ne = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
     return erdos_renyi(n, m, G; seed=seed)
 end
 
@@ -523,7 +523,7 @@ function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int}
 
             m = a==b ? div(n[a]*(n[a]-1),2) : n[a]*n[b]
             p = a==b ? n[a]*c[a,b] / (2m) : n[a]*c[a,b]/m
-            nedg = rand(Binomial(m, p))
+            nedg = randbinomial(m, p)
             rb = cum[b]+1:cum[b+1]
             i=0
             while i < nedg

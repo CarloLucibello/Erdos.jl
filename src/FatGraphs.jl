@@ -2,7 +2,7 @@ __precompile__(true)
 module FatGraphs
 
 using GZip
-using Distributions: Binomial # randgraphs
+using StatsFuns # randgraphs
 using EzXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching

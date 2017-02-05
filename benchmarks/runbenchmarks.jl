@@ -18,16 +18,16 @@ suite = BenchmarkGroup()
 GLIST = [Graph{Int64}, GTGraph]
 DGLIST = [DiGraph{Int64}, GTDiGraph]
 GROUPS = [
-            # "core",
-            # "generators",
-            # "flow",
-            # "centrality",
-            # "dismantling",
-            # "connectivity",
+            "core",
+            "generators",
+            "flow",
+            "centrality",
+            "dismantling",
+            "connectivity",
             "persistence",
-            # "shortestpaths",
-            # "traversals",
-            # "matching"
+            "shortestpaths",
+            "traversals",
+            "matching"
          ]
 
 # GROUPS = ["core"]
