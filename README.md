@@ -13,7 +13,7 @@ Documentation for methods is also available via the Julia REPL help system.
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
+Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
 ```
 
 ## Usage Examples

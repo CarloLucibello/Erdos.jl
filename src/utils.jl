@@ -165,6 +165,10 @@ myrand(itr) = nth(itr, _myrand(length(itr)))
 
 _myrand{T<:Integer}(n::T) = ceil(T, rand() * n)
 
+randbinomial(m::Integer,p::AbstractFloat) =
+    convert(Int, StatsFuns.RFunctions.binomrand(m, p))
+
+
 #used in flow and dismantling
 immutable GreaterThan2 end
 immutable LessThan2 end
