@@ -35,7 +35,7 @@ AEdge, Edge, is_ordered, reverse, #sort
 # core
 vertices, edges, src, dst,
 graph, digraph,
-adjlist, in_adjlist, out_adjlist,
+adjacency_list,
 neighbors, in_neighbors, out_neighbors, all_neighbors,
 in_edges, out_edges, all_edges,
 has_vertex, has_edge, is_directed,

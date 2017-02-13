@@ -6,16 +6,25 @@ Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
 vertices(g::ASimpleGraph) = 1:nv(g)
 
 """
-    adjlist(g)
+    adjacency_list(g::AGraph)
+    adjacency_list(g::ADiGraph, dir=:out)
 
-Returns the adjacency list of a graph (a vector of vector of ints).
-It is equivalent to  [`out_adjlist(g)`](@ref).
+Returns the adjacency list `a` of a graph (a vector of vector of ints). The `i`-th
+element of the adjacency list is a vector containing the neighbors of `i` in `g`.
 
-NOTE: For most graph types it returns a reference, not a copy,
+For directed graphs a second optional argument can be specified (`:out` or `:in`).
+The neighbors in the returned adjacency list are considered accordingly as those
+related through outgoing or incoming edges.
+
+The elements of  `a[i]` have the same order as in the iterator `(out_/in_)neighbors(g,i)`.
+
+*Attention*: For some graph types it returns a reference, not a copy,
 therefore the returned object should not be modified.
 """
-adjlist(g::ASimpleGraph) = out_adjlist(g)
-in_adjlist(g::AGraph) = out_adjlist(g)
+adjacency_list(g::AGraph) = out_adjlist(g)
+adjacency_list(g::ADiGraph, dir=:out) = dir == :out ? out_adjlist(g) :
+                                        dir == :in ? in_adjlist(g) :
+                                        error("Second argument has to be :out or :in.")
 
 """
     add_vertices!(g, n)
@@ -172,6 +181,7 @@ function =={G<:ASimpleGraph}(g::G, h::G)
 end
 
 
+#not exported
 """
     in_adjlist(g)
 
@@ -188,6 +198,7 @@ NOTE: returns a reference, not a copy. Do not modify result.
 """
 in_adjlist(g::ADiGraph) = Vector{Int}[collect(in_neighbors(g, i)) for i=1:nv(g)]
 
+#not exported
 """
     out_adjlist(g)
 

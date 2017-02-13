@@ -74,8 +74,10 @@ end
 @test in_degree(h,1) == 0
 @test out_degree(h) == [3, 1, 1, 0, 0]
 @test out_degree(h,1) == 3
-@test collect(in_neighbors(h,5)) == in_adjlist(h)[5]  == [2, 3]
-@test collect(out_neighbors(h,1)) == out_adjlist(h)[1]  == [2, 3, 4]
+@test collect(in_neighbors(h,5)) == adjacency_list(h,:in)[5]  == [2, 3]
+@test collect(out_neighbors(h,1)) == adjacency_list(h)[1]  == [2, 3, 4]
+@test_throws ErrorException adjacency_list(h, :ciao)
+@test_throws MethodError adjacency_list(g, :out)
 
 @test has_edge(g, 1, 2)
 @test collect(in_edges(g, 2)) == [e1, reverse(e4)]
@@ -285,9 +287,8 @@ for i=1:5
 end
 
 
-@test adjlist(g)[1] == collect(out_neighbors(g,1)) ==
-    in_adjlist(g)[1] == collect(in_neighbors(g,1)) ==
-    adjlist(g)[1] == [2,3,4]
+@test adjacency_list(g)[1] == collect(out_neighbors(g,1)) ==
+    collect(in_neighbors(g,1)) == [2,3,4]
 
 e0 = E(2, 3)
 s = split("$DG",'.')[end]
