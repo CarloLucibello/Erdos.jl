@@ -3,14 +3,6 @@ g3 = PathGraph(5, G)
 @test adjacency_matrix(g3)[2,4] == 0
 @test laplacian_matrix(g3)[3,2] == -1
 @test laplacian_matrix(g3)[1,3] == 0
-@test laplacian_spectrum(g3)[5] == 3.6180339887498945
-@test adjacency_spectrum(g3)[1] == -1.732050807568878
-
-g5 = DG(4)
-add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
-@test laplacian_spectrum(g5)[3] == laplacian_spectrum(g5,:out)[3] == 1.0
-@test laplacian_spectrum(g5,:all)[3] == 3.0
-@test laplacian_spectrum(g5,:in)[3] == 1.0
 
 # check adjacency matrices with self loops
 g = copy(g3)
@@ -39,9 +31,6 @@ FatGraphs.contract!(z, n10, v)
 zprime = contract(n10, v)
 @test z == zprime
 @test z == 9*ones(Float64, nv(g10))
-
-@test_approx_eq_eps(adjacency_spectrum(g5)[3],0.311, 0.001)
-# @test adjacency_spectrum(g5)[3] ≈ 0.311  atol=0.001
 
 @test adjacency_matrix(g3) ==
     adjacency_matrix(g3, :out) ==

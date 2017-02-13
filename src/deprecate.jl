@@ -9,3 +9,6 @@
 
 @deprecate radius(vec) minimum(vec)
 @deprecate diameter(vec) maximum(vec)
+
+@deprecate adjacency_spectrum(g)  eigvals(full(adjacency_matrix(g)))
+@deprecate laplacian_spectrum(g)  eigvals(full(laplacian_matrix(g)))

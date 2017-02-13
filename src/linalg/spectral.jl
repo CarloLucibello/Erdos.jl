@@ -76,28 +76,6 @@ function laplacian_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
 end
 
 """
-    laplacian_spectrum(g, dir::Symbol=:out, T::DataType=Int)
-
-Returns the eigenvalues of the Laplacian matrix for a graph `g`, indexed
-by vertex. Warning: Converts the matrix to dense with ``nv^2`` memory usage. Use
-`eigs(laplacian_matrix(g);  kwargs...)` to compute some of the
-eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
-`laplacian_matrix`. `dir` has to be `:in, :out` or `:all`.
-"""
-laplacian_spectrum(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(laplacian_matrix(g, dir, T)))
-
-"""
-Returns the eigenvalues of the adjacency matrix for a graph `g`, indexed
-by vertex. Warning: Converts the matrix to dense with ``nv^2`` memory usage. Use
-`eigs(adjacency_matrix(g);kwargs...)` to compute some of the
-eigenvalues/eigenvectors. Default values for `dir` and `T` are the same as
-`adjacency_matrix`.
-"""
-adjacency_spectrum(g::AGraph, dir::Symbol=:out, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
-adjacency_spectrum(g::ADiGraph, dir::Symbol=:all, T::DataType=Int) = eigvals(full(adjacency_matrix(g, dir, T)))
-
-
-"""
     incidence_matrix(g::ASimpleGraph, T::DataType=Int; oriented=false)
 
 Returns a sparse node-arc incidence matrix for a graph, indexed by

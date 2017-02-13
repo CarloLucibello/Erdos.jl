@@ -98,7 +98,7 @@ in_degree_centrality, out_degree_centrality, katz_centrality, pagerank,
 cores, kcore,
 
 # spectral
-adjacency_matrix,laplacian_matrix, adjacency_spectrum, laplacian_spectrum,
+adjacency_matrix,laplacian_matrix,
 CombinatorialAdjacency, non_backtracking_matrix, incidence_matrix,
 nonbacktrack_embedding, Nonbacktracking,
 contract,

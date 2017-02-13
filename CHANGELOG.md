@@ -50,3 +50,4 @@
 - add missing read support for gexf
 - add missing write support for dot
 - remove dependence from Distributions, add StatsFuns
+- deprecate adjacency_spectrum
