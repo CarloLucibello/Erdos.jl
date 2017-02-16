@@ -14,6 +14,7 @@ pages:
   - 'Getting Started': 'index.md'
   - 'Graph Types': 'factory.md'
   - 'Basic Interface': 'core.md'
+  - 'Maps' : 'maps.md'
   - 'Operators': 'operators.md'
   - 'Traversals': 'traversals.md'
   - 'Distance': 'distance.md'

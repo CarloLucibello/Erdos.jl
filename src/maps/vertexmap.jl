@@ -1,7 +1,7 @@
 """
     typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
 
-Type represented an abstract vertex map.
+Type representing an abstract vertex map.
 """
 typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
 
@@ -16,7 +16,8 @@ hasindex(v::Dict, i::Integer) = haskey(v, i)
 """
     VertexMap{T}(g, ::Type{T})
 
-Returns a dict vertex map appropriate to graph `g` and type `T`.
+Returns a map that associates values of type `T`
+to the vertices of  graph `g`.
 """
 function VertexMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
