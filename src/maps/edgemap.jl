@@ -3,7 +3,6 @@
 abstract AEdgeMap{E,T}
 
 valtype{E,T}(m::AEdgeMap{E,T}) = T
-show{E,T}(io::IO, m::AEdgeMap{E,T}) = print(io, "EdgeMap{$T}")
 
 type EdgeMap{E,T,D} <: AEdgeMap{E,T}
     data::D
@@ -11,6 +10,7 @@ type EdgeMap{E,T,D} <: AEdgeMap{E,T}
     etype::Type{E}
     vtype::Type{T}
 end
+show{E,T}(io::IO, m::EdgeMap{E,T}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
 EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(d, edgetype(g), T)
 
