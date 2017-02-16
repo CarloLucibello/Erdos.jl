@@ -1,21 +1,16 @@
 """
-    minimum_weight_perfect_matching{T<:Real, E}(g, w::Dict{E,T} [,cutoff])
+    minimum_weight_perfect_matching{T}(g, w::AEdgeMap{T},cutoff=typemax{T})
 
 Given a graph `g` and an edgemap `w` containing weights associated to edges,
 returns a matching with the mimimum total weight among the ones containing
-exactly `nv(g)/2` edges.
+exactly `nv(g)/2` edges. Edges in `g` not present in `w` will not be considered for the matching.
+The returned object is of type `MatchingResult`.
 
-Edges in `g` not present in `w` will not be considered for the matching.
+To reduce computational time, a `cutoff` argument can be given. Only edges
+with weight lower than `cutoff` will be considered for the matching.
 
 This function relies on the BlossomV.jl package, a julia wrapper
 around Kolmogorov's BlossomV algorithm.
-
-Eventually a `cutoff` argument can be given, to the reduce computational time
-including only edges with weight lower than the cutoff.
-
-The returned object is of type `MatchingResult`.
-
-In case of error try to change the optional argument `tmaxscale` (default is `tmaxscale=10`).
 """
 function minimum_weight_perfect_matching end
 
@@ -23,7 +18,7 @@ function minimum_weight_perfect_matching{E, T<:AbstractFloat}(
         g::AGraph,
         w::AEdgeMap{E,T},
         cutoff = typemax(T);
-        tmaxscale=1000.)
+        tmaxscale::Float64 =1000.)
 
     cmax = min(maximum(values(w)), cutoff)
     cmin = minimum(values(w))
