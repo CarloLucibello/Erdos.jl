@@ -141,9 +141,9 @@ Returns the destination of an edge.
 dst(e::AEdge) = error("Method not defined")
 
 """
-    reverse(e::Edge)
+    reverse(e)
 
-Swap `e.src` and `e.dst`.
+Returns an edge with swapped `src(e)` and `dst(e)`.
 """
 reverse(e::AEdge) = error("Method not defined")
 

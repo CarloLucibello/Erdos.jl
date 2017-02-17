@@ -1,20 +1,21 @@
 
 """
-    type Graph <: AGraph
-        ne
-        fadjlist::Vector{Vector{Int}}
+    type Graph{T<:Integer} <: AGraph
+        ne::Int
+        fadjlist::Vector{Vector{T}}
     end
 
 A simple graph type based on an adjacency list.
 
+    Graph{T}(n=0)
+    Graph(n=0) = Graph{Int}(n)
 
-    Graph(n=0)
+Construct a `Graph` with `n` vertices and no edges.
 
-Construct an empty Graph with `n` vertices.
+    Graph{T}(adjmx::AbstractMatrix)
+    Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
 
-    Graph(adjmx::AbstractMatrix)
-
-Construct a `Graph` from the adjacency matrix `adjmx`.
+Construct a `Graph{T}` from the adjacency matrix `adjmx`.
 """
 type Graph{T<:Integer} <: AGraph
     ne::Int
@@ -49,20 +50,21 @@ Graph() = Graph{Int}()
 
 
 """
-    type DiGraph <: ADiGraph
-        ne
-        fadjlist::Vector{Vector{Int}}
-        badjlist::Vector{Vector{Int}}
+    type DiGraph{T<:Integer} <: ADiGraph
+        ne::Int
+        fadjlist::Vector{Vector{T}}
+        badjlist::Vector{Vector{T}}
     end
 
 A simple digraph type based on two adjacency lists (forward and backward).
 
+    DiGraph{T}(n=0)
+    DiGraph(n=0) = DiGraph{Int}(n)
 
-    DiGraph(n=0)
+Construct a `DiGraph` with `n` vertices and no edges.
 
-Construct an empty DiGraph with `n` vertices.
-
-    DiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+    DiGraph{T}(adjmx::AbstractMatrix)
+    DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 
 Construct a `DiGraph` from the adjacency matrix `adjmx`.
 """

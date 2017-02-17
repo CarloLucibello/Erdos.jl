@@ -1,10 +1,23 @@
+"""
+    immutable GTEdge <: AEdge
+        src::Int
+        dst::Int
+        idx::Int
+    end
+
+An indexed edge type
+
+    GTEdge(u, v) = GTEdge(u,v,-1)
+
+Creates an edge with unvalid index.
+"""
 immutable GTEdge <: AEdge
     src::Int
     dst::Int
     idx::Int
-
-    GTEdge(u, v, idx=-1) = new(u,v,idx)
 end
+
+GTEdge(u, v) = GTEdge(u,v,-1)
 
 src(e::GTEdge) = e.src
 dst(e::GTEdge) = e.dst
@@ -12,33 +25,73 @@ id(e::GTEdge) = e.idx
 show(io::IO, e::GTEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
 reverse(e::GTEdge) = GTEdge(e.dst, e.src, e.idx)
 
-"""A type representing an undirected graph with indexed edges."""
-type GTDiGraph <: ADiGraph
+"""
+    type GTGraph <: AGraph
+        ne::Int
+        edge_index_range::Int
+        out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
+        keep_epos::Bool                # keep updated epos
+        epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
+        free_indexes::Vector{Int}       # indexes of deleted edges to be used up
+                                        # for new edges to avoid very large
+                                        # indexes, and unnecessary property map
+                                        # memory use
+    end
+
+A type representing an directed graph with indexed edges.
+
+    GTDiGraph(n=0)
+
+Construct a `GTDiGraph` with `n` vertices and no edges.
+
+    GTDiGraph(adjmx::AbstractMatrix)
+
+Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
+"""
+type GTGraph <: AGraph
     ne::Int
     edge_index_range::Int
-
-    out_edges::Vector{Vector{Pair{Int,Int}}}
-    in_edges::Vector{Vector{Pair{Int,Int}}}
-
-    keep_epos::Bool
-    epos::Vector{Pair{Int,Int}}    #position of the edge in out_edges and in_edges
-
+    out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
+    keep_epos::Bool                # keep updated epos
+    epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
     free_indexes::Vector{Int}       # indexes of deleted edges to be used up
                                     # for new edges to avoid very large
                                     # indexes, and unnecessary property map
                                     # memory use
 end
 
-"""A type representing an undirected graph with indexed edges."""
-type GTGraph <: AGraph
+"""
+    type GTDiGraph <: ADiGraph
+        ne::Int
+        edge_index_range::Int
+        out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
+        in_edges::Vector{Vector{Pair{Int,Int}}}  #unordered in_adjlist
+        keep_epos::Bool               # keep updated epos
+        epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
+        free_indexes::Vector{Int}       # indexes of deleted edges to be used up
+                                        # for new edges to avoid very large
+                                        # indexes, and unnecessary property map
+                                        # memory use
+    end
+
+
+A type representing an directed graph with indexed edges.
+
+    GTDiGraph(n=0)
+
+Construct a `GTDiGraph` with `n` vertices and no edges.
+
+    GTDiGraph(adjmx::AbstractMatrix)
+
+Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
+"""
+type GTDiGraph <: ADiGraph
     ne::Int
     edge_index_range::Int
-
-    out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
-
-    keep_epos::Bool                # keep updated epos
+    out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
+    in_edges::Vector{Vector{Pair{Int,Int}}}  #unordered in_adjlist
+    keep_epos::Bool               # keep updated epos
     epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
-
     free_indexes::Vector{Int}       # indexes of deleted edges to be used up
                                     # for new edges to avoid very large
                                     # indexes, and unnecessary property map
@@ -53,11 +106,6 @@ digraphtype(::Type{GTGraph}) = GTDiGraph
 vertextype{G<:SimpleGTGraph}(::Type{G}) = Int
 
 #### GRAPH CONSTRUCTORS
-"""
-    GTDiGraph(n=0)
-
-Construct an empty graph with `n` vertices.
-"""
 function GTDiGraph(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     in_edges = [Vector{Pair{Int,Int}}() for _=1:n]
@@ -226,11 +274,6 @@ end
 
 ## GRAPH
 
-"""
-    GTGraph(n=0)
-
-Construct an empty graph with `n` vertices.
-"""
 function GTGraph(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     keep_epos = true
