@@ -11,7 +11,7 @@ function complete(g::ADiGraph)
 end
 
 """
-    complete(g::ADiGraph)
+    complete!(g::ADiGraph)
 
 Returns a digraph containing both the edges `(u,v)`
 of `g` and their reverse `(v,u)`.
@@ -24,15 +24,6 @@ function complete!(g::ADiGraph)
         end
     end
     return g
-end
-
-"""
-    issubset(g, h)
-
-Returns true if all of the vertices and edges of `g` are contained in `h`.
-"""
-function issubset{G<:ASimpleGraph}(g::G, h::G)
-    return nv(g) < nv(h) && issubset(edges(g), edges(h))
 end
 
 """

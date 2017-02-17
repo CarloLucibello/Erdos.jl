@@ -1,15 +1,55 @@
 # Basic Interface
-*FatGraphs.jl* defines the following basic types and functionalities:
+*FatGraphs.jl* defines the following basic  functionalities:
 
-```@index
-Order = [:type, :function]
-Pages   = ["core.md"]
+```@docs
+nv
+ne
+add_vertex!
+add_vertices!
+rem_vertex!
+pop_vertex!
+rem_vertices!
+has_edge
+src
+dst
+edge
+add_edge!
+unsafe_add_edge!
+rebuild!
+rem_edge!
+degree
+in_degree
+out_degree
+neighbors
+in_neighbors
+out_neighbors
+all_neighbors
+```
+```@docs
+edges
+in_edges
+out_edges
+all_edges
+swap_vertices!
+has_vertex
+is_directed
+reverse
+reverse!
+is_ordered
+adjacency_list
+clean_vertex!
 ```
 
-
-```@autodocs
-Modules = [FatGraphs]
-Order = [:type,:function]
-Pages   = [ "core/core.jl"]
-Private = false
+```@docs
+density
+vertices
+has_self_loops
+num_self_loops
+is_graphical
+graph
+digraph
+edgetype
+vertextype
+graphtype
+digraphtype
 ```

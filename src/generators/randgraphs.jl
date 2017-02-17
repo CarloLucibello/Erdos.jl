@@ -419,7 +419,7 @@ Defining `c = mean(k)`, it allocates an array of `nc` `Int`s, and takes
 approximately ``nc^2`` time.
 
 
-If `check_graphical=true` makes sure that `k` is a graphical sequence (see `isgraphical`).
+If `check_graphical=true` makes sure that `k` is a graphical sequence (see `is_graphical`).
 """
 function random_configuration_model{G<:AGraph}(n::Int, k::Vector{Int}, ::Type{G}=Graph;
         seed::Int=-1, check_graphical::Bool=false)
@@ -428,7 +428,7 @@ function random_configuration_model{G<:AGraph}(n::Int, k::Vector{Int}, ::Type{G}
     @assert(iseven(m), "sum(k) must be even")
     @assert(all(0 .<= k .< n), "the 0 <= k[i] < n inequality must be satisfied")
     if check_graphical
-        isgraphical(k) || error("Degree sequence non graphical")
+        is_graphical(k) || error("Degree sequence non graphical")
     end
     rng = getRNG(seed)
 

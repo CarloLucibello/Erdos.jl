@@ -11,7 +11,7 @@ if !isdefined(:nonbacktrack_embedding_dense)
     return : a matrix ϕ where ϕ[:,i] are the coordinates for vertex i.
     =#
     function nonbacktrack_embedding_dense(g::AGraph, k::Int)
-        B, edgeid = non_backtracking_matrix(g)
+        B, edgeid = nonbacktracking_matrix(g)
         λ,eigv,conv = eigs(B, nev=k+1, v0=ones(Float64, size(B,1)))
         ϕ = zeros(Complex64, k-1, nv(g))
         # TODO decide what to do with the stationary distribution ϕ[:,1]
@@ -37,7 +37,7 @@ pg = PathGraph(n, G)
 ϕ1 = nonbacktrack_embedding(pg, k)'
 
 nbt = Nonbacktracking(pg)
-B, emap = non_backtracking_matrix(pg)
+B, emap = nonbacktracking_matrix(pg)
 Bs = sparse(nbt)
 @test sparse(B) == Bs
 

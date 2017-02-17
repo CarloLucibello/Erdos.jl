@@ -5,6 +5,7 @@ undirected graphs:
 
 ```@autodocs
 Modules = [FatGraphs]
-Pages   = [ "spectral.jl"]
+Pages   = [ "linalg/spectral.jl",
+            "linalg/nonbacktracking.jl"]
 Private = false
 ```

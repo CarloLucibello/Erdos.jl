@@ -12,7 +12,13 @@ Pages   = ["centrality.md"]
 
 ```@autodocs
 Modules = [FatGraphs]
-Pages   = ["centrality/betweenness.jl", "centrality/closeness.jl","centrality/degree.jl"
-            , "centrality/katz.jl","centrality/pagerank.jl"]
+Pages   = [
+            "centrality/betweenness.jl",
+            "centrality/closeness.jl",
+            "centrality/degree.jl",
+            "centrality/katz.jl",
+            "centrality/pagerank.jl",
+            "centrality/kcore.jl"
+            ]
 Private = false
 ```

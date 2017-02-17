@@ -6,6 +6,7 @@
 ```@docs
 AGraph
 ADiGraph
+ASimpleGraph
 AEdge
 ```
 

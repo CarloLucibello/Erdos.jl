@@ -1,6 +1,6 @@
 using FatGraphs 
 
-sizesnbm1 = Int64[@allocated non_backtracking_matrix(CycleGraph(2^i))for i in 4:10]
+sizesnbm1 = Int64[@allocated nonbacktracking_matrix(CycleGraph(2^i))for i in 4:10]
 sizesnbm2 = Int64[@allocated Nonbacktracking(CycleGraph(2^i)) for i in 4:10]
 
 
@@ -20,7 +20,7 @@ function bench(g)
     x  = ones(Float64, size(nbt)[1])
     info("Cycle with $n vertices has nbt in R^$(size(nbt))")
 
-    B, nmap = @storetime :Construction_Dense        non_backtracking_matrix(g)
+    B, nmap = @storetime :Construction_Dense        nonbacktracking_matrix(g)
     y  = @storetime :Multiplication_Nonbacktracking nbt*x
     z  = @storetime :Multiplication_Dense           B*x;
     S  = @storetime :Construction_DS                sparse(B)

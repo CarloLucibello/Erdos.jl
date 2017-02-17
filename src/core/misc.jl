@@ -1,12 +1,12 @@
 """
-    isgraphical(degs::Vector{Int})
+    is_graphical(degs::Vector{Int})
 
 Check whether the degree sequence `degs` is graphical, according to
 [Erdös-Gallai condition](http://mathworld.wolfram.com/GraphicSequence.html).
 
 Time complexity: O(length(degs)^2)
 """
-function isgraphical(degs::Vector{Int})
+function is_graphical(degs::Vector{Int})
     iseven(sum(degs)) || return false
     n = length(degs)
     for r=1:n-1
