@@ -28,8 +28,6 @@ pages:
   - 'Matching': 'matching.md'
   - 'Dismantling': 'dismantling.md'
   - 'Spanning Trees': 'spanningtrees.md'
-  - 'Integration with other packages': 'integration.md'
-  - 'License Information': 'license.md'
 
 extra_css:
   - assets/Documenter.css
