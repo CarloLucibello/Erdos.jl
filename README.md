@@ -17,7 +17,7 @@ See also the [CHANGELOG](https://github.com/CarloLucibello/FatGraphs.jl/blob/mas
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.add("FatGraphs")
+julia> Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
 ```
 
 ## Features
@@ -53,4 +53,4 @@ julia> Pkg.add("FatGraphs")
 
 - **community:** modularity, community detection, core-periphery, clustering coefficients
 
-- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language), [pajek .net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [graph-tool .gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
+- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [pajek .net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [graph-tool .gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
