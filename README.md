@@ -4,10 +4,9 @@
 [![codecov.io](http://codecov.io/github/CarloLucibello/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/FatGraphs.jl?branch=master)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/FatGraphs.jl)
 
-A graph library entirely written in Julia, derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl).
-
-
-We welcome contributions and bug reports!
+A graph library entirely written in Julia.
+It is derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), with the addition of an abstract
+graph interface and custom graph types, e.g. FatGraphs has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. It comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling and many more stuff. We welcome contributions and bug reports!
 
 ## Documentation
 Full documentation available at [GitHub Pages](https://carlolucibello.github.io/FatGraphs.jl).
