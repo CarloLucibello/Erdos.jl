@@ -1,43 +1,13 @@
 """
-Abstract (undirected) graph type
+    abstract AGraph
 
-Guarantees:
-    vertices are integers in 1:nv(g)
-
-Functions to implement:
-    basic constructors (e.g. MyGraph(n), MyGraph())
-    nv(g)
-    ne(g)
-    out_neighbors(g, v)
-    in_neighbors(g, v) #digraph
-    edge(g, u, v)
-    add_edge!(g, u, v)
-    rem_edge!(g, u, v)
-    add_vertex!(g)
-    pop_vertex!(g)
-    graphtype(g)
-    digraphtype(g)
-    edgetype(g)
-    vertextype(g)
-
-Reccomended Overrides:
-    in_adjlist(g) #digraph
-    out_adjlist(g)
-    has_edge(g, u, v)
-    ==(g, h)
-    out_edges(g, u)
-    in_edges(g, u) # digraph
-    rem_edge!(g, e)
-    graph(dg)
-    digraph(g)
-    reverse!(g) #digraph
-    unsafe_add_edge!(g, u, v)
-    rebuild!(g)
-    rem_vertex!(g, v)
+Abstract undirected graph type
 """
 abstract AGraph
 
 """
+    abstract ADiGraph
+
 Abstract directed graph type
 """
 abstract ADiGraph
@@ -149,6 +119,11 @@ vertextype{G<:ASimpleGraph}(::Type{G}) = Int
 graphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
 digraphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
 
+"""
+    abstract AEdge
+
+An abstract edge type.
+"""
 abstract AEdge
 
 """
