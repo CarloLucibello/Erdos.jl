@@ -12,7 +12,7 @@ extra:
 
 pages:
   - 'Getting Started': 'index.md'
-  - 'Graph Types': 'factory.md'
+  - 'Types and Constructors': 'types.md'
   - 'Basic Interface': 'core.md'
   - 'Maps' : 'maps.md'
   - 'Operators': 'operators.md'

@@ -1,10 +1,4 @@
-g3 = PathGraph(3, G)
-g4 = PathGraph(5, G)
-@test issubset(g3,g4)
 g3 = PathDiGraph(3, DG)
-g4 = PathDiGraph(5, DG)
-@test issubset(g3,g4)
-
 complete!(g3)
 @test ne(g3) == 4
 @test nv(g3) == 3

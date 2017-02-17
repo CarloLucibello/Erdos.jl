@@ -40,7 +40,7 @@ end
 
 return : a matrix ϕ where ϕ[:,i] are the coordinates for vertex i.
 
-Note does not explicitly construct the `non_backtracking_matrix`.
+Note does not explicitly construct the `nonbacktracking_matrix`.
 See `Nonbacktracking` for details.
 
 """

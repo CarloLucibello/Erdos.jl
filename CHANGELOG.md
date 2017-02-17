@@ -12,7 +12,7 @@
 - add Benchmarks through BenchmarkTools
 - add minimum s-t cut
 - unsafe_add_edge! for faster graph creation
-- add dismantling
+- add dismantling (influence propagation)
 - remove dependence from Distributions, add StatsFuns
 - add missing write support for dot
 - add rem_vertices! Returns a map from the new vertices to old ones
