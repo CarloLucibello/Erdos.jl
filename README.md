@@ -6,7 +6,7 @@
 
 A graph library entirely written in Julia.
 It is derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), with the addition of an abstract
-graph interface and custom graph types, e.g. FatGraphs has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. Also it comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling. We welcome contributions and bug reports!
+graph interface and custom graph types, e.g. FatGraphs has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. It comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling and many more stuff. We welcome contributions and bug reports!
 
 ## Documentation
 Full documentation available at [GitHub Pages](https://carlolucibello.github.io/FatGraphs.jl).

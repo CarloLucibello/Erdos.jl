@@ -66,17 +66,17 @@ for k=2:5
     c = community_detection_nback(z, k)
     @test sort(union(c)) == [1:k;]
     a = collect(n:n:k*n)
-    @test_skip length(c[a]) == length(unique(c[a]))
+    #@test_skip length(c[a]) == length(unique(c[a]))
     for i=1:k
         for j=(i-1)*n+1:i*n
-            @test_skip c[j] == c[i*n]
+            #@test_skip c[j] == c[i*n]
         end
     end
 
     c = community_detection_bethe(z, k)
     @test sort(union(c)) == [1:k;]
     a = collect(n:n:k*n)
-    @test_skip length(c[a]) == length(unique(c[a]))
+    #@test_skip length(c[a]) == length(unique(c[a]))
 
     for i=1:k
         for j=(i-1)*n+1:i*n
@@ -87,7 +87,7 @@ for k=2:5
     c = community_detection_bethe(z)
     @test sort(union(c)) == [1:k;]
     a = collect(n:n:k*n)
-    @test_skip length(c[a]) == length(unique(c[a]))
+    #@test_skip length(c[a]) == length(unique(c[a]))
     for i=1:k
         for j=(i-1)*n+1:i*n
             @test c[j] == c[i*n]
@@ -106,7 +106,7 @@ for k=2:5
     a = Int[div(i-1,n)+1 for i=1:k*n]
     # check the number of community
     @test length(unique(a)) == length(unique(c))
-    @test_skip length(unique(a))== length(unique(c))
+    #@test_skip length(unique(a))== length(unique(c))
     # check the partition
     # @test a == c
 end
