@@ -1,27 +1,40 @@
 ## v0.1 (changes from LigtGraphs 0.7.1)
-- Edge is now its own type (not a Pair{Int,Int} anymore)
+### Highlights
+- add changelog
+- `Edge` is now its own type (not a `Pair{Int,Int}` anymore)
+- improved docs
+- introduce abstract types `AGraph`, `ADiGraph`  
+- make all methods accept abstract graph types
+- vertex type for Graph can be any integer, i.e. we have Graph{Int32} along the default Graph{Int}
+- add `GTGraph` and `GTDiGraph`, graph types with indexed edges, inspired by graph-tool library
+- simplified and generic edge iterator (now a Generator)
+- improve maximum_flow performance
+- add Benchmarks through BenchmarkTools
+- add minimum s-t cut
+- unsafe_add_edge! for faster graph creation
+- add dismantling
+- remove dependence from Distributions, add StatsFuns
+- add missing write support for dot
+- add rem_vertices! Returns a map from the new vertices to old ones
+- add cores and kcore
+
+### Other Changes
 - drop lg graph format
-- add Changelog
 - removed member vertices from graph types
 - removed graphmatrices (LinAlg submodule)
 - bring in Matching, Community from LightGraphExtras
 - removed linear programming matching on bipartite graphs in favor of BlossomV
-- change name to FatGraphs
-- improved docs
 - file and folders reorganization
 - [I/O] rename save/load to readgraph/writegraph and drop support for multiple graphs in one file
 - in_edges and out_edges now return iterators and not vectors
-- introduce abstract types AGraph, ADiGraph, ASimpleGraph
-- make most methods accept abstract types
 - change the return type of add_vertex! to nv(g)
 - removed dynamic stochastic block model
 - Graph(dg) -> graph(dg)
 - remove fadj(g, v) in favor of out_neighbors(g, v)
 - more efficient equality test for DiGraph
-- remove fadj(g) in favor of out_adjlist
+- remove fadj(g) in favor of adjacency_list
 - add `graph` and `digraph`
 - add `edge`
-- simplified and generic edge iterator (now a Generator)
 - add `edges(g, v)` and `edges(g, vertices)`
 - induced_subgraph -> subgraph
 - graph generators for arbitrary graph types
@@ -33,21 +46,9 @@
 - add oriented option for incidence_matrix
 - fix num connected components for empty graphs (now is one)
 - add all_edges
-- improve maximum_flow performance
-- add minimum s-t cut
-
-- add Benchmarks through BenchmarkTools
-- Vertex type for Graph can be any integer,
-    i.e. we have Graph{Int32} and the default Graph{Int64}
-- unsafe_add_edge! for faster graph creation
 - add graph-tool  i/o format (.gt)
 - add datasets directory. Graphs from graph-tool collection
 - add swap_vertices!
-- add rem_vertices! returning a map from the new nodes to old ones
-- add dismantling
-- add cores and kcore
 - move from LightXML to EzXML
 - add missing read support for gexf
-- add missing write support for dot
-- remove dependence from Distributions, add StatsFuns
 - deprecate adjacency_spectrum

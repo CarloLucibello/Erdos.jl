@@ -24,7 +24,7 @@ end
 
 Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
 to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
-vertices `sources`). Returns a [`BellmanFordState`](@ref) with relevant traversal information.
+vertices `sources`). Returns a `BellmanFordState` with relevant traversal information.
 """
 function bellman_ford_shortest_paths{E,T<:Real}(
         g::ASimpleGraph,

@@ -14,6 +14,7 @@ pages:
   - 'Getting Started': 'index.md'
   - 'Graph Types': 'factory.md'
   - 'Basic Interface': 'core.md'
+  - 'Maps' : 'maps.md'
   - 'Operators': 'operators.md'
   - 'Traversals': 'traversals.md'
   - 'Distance': 'distance.md'
@@ -27,9 +28,6 @@ pages:
   - 'Matching': 'matching.md'
   - 'Dismantling': 'dismantling.md'
   - 'Spanning Trees': 'spanningtrees.md'
-  - 'Integration with other packages': 'integration.md'
-  - 'Contributing': 'contributing.md'
-  - 'License Information': 'license.md'
 
 extra_css:
   - assets/Documenter.css

@@ -1,12 +1,24 @@
-# abstract SimpleEdgeMap{T}
+"""
+    AEdgeMap{E,T}
 
+Type representing an abstract vertex map.
+"""
 abstract AEdgeMap{E,T}
 
 valtype{E,T}(m::AEdgeMap{E,T}) = T
 
+"""
+    type EdgeMap{E,T,D} <: AEdgeMap{E,T}
+        data::D
+        etype::Type{E}
+        vtype::Type{T}
+    end
+
+Type implementing an edge map. The underlying container `data` can be a `Dict`
+or an `AbstractMatrix`.
+"""
 type EdgeMap{E,T,D} <: AEdgeMap{E,T}
     data::D
-
     etype::Type{E}
     vtype::Type{T}
 end
@@ -14,6 +26,13 @@ show{E,T}(io::IO, m::EdgeMap{E,T}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
 EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(d, edgetype(g), T)
 
+
+"""
+    EdgeMap{T}(g, ::Type{T})
+
+Returns a map that associates values of type `T`
+to the vertices of  graph `g`.
+"""
 function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
     E = Edge{V}
@@ -71,7 +90,7 @@ values{E,T,D<:AbstractSparseMatrix}(m::EdgeMap{E,T,D}) = nonzeros(m.data)
     end
 
 A type representing a constant vector map.
-Any attempt to change the internal value, e.g. `vm[1] = 4`, will
+Any attempt to change the internal value, e.g. `emap[u,v] = 4`, will
 fail silently.
 """
 immutable ConstEdgeMap{E,T} <: AEdgeMap{E,T}
