@@ -29,7 +29,6 @@ pages:
   - 'Dismantling': 'dismantling.md'
   - 'Spanning Trees': 'spanningtrees.md'
   - 'Integration with other packages': 'integration.md'
-  - 'Contributing': 'contributing.md'
   - 'License Information': 'license.md'
 
 extra_css:

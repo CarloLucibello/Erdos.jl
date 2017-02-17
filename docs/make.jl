@@ -7,13 +7,11 @@ root, dir, files = first(walkdir("../src/"))
 nsrc = length(dir)
 root, dir, files = first(walkdir("src/"))
 ndocs = length(files)
-ndocs != nsrc && warn("Documenting $ndocs folders out of $nsrc")
 
 # index is equal to the README for the time being
 cp(normpath(@__FILE__, "../../README.md"), normpath(@__FILE__, "../src/index.md"); remove_destination=true)
 
 # same for contributing and license
-cp(normpath(@__FILE__, "../../CONTRIBUTING.md"), normpath(@__FILE__, "../src/contributing.md"); remove_destination=true)
 cp(normpath(@__FILE__, "../../LICENSE.md"), normpath(@__FILE__, "../src/license.md"); remove_destination=true)
 
 makedocs(modules=[FatGraphs], doctest = false)
@@ -27,5 +25,4 @@ deploydocs(
 )
 
 rm(normpath(@__FILE__, "../src/index.md"))
-rm(normpath(@__FILE__, "../src/contributing.md"))
 rm(normpath(@__FILE__, "../src/license.md"))
