@@ -5,12 +5,12 @@ os:
 #  - osx
 
 julia:
-  - 0.5
+  - release
   - nightly
 
 env:
   - DOCUMENTER_DEBUG=true
-  
+
 notifications:
   email: false
 
