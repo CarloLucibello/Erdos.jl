@@ -6,8 +6,11 @@ os:
 
 julia:
   - 0.5
-  - nightly 
+  - nightly
 
+env:
+  - DOCUMENTER_DEBUG=true
+  
 notifications:
   email: false
 

@@ -1,5 +1,6 @@
 # FatGraphs
-
+**FatGraphs** is a graph library written in Julia.
+  
 ## Installation
 Installation is straightforward:
 ```julia
