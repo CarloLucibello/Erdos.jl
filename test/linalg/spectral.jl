@@ -57,8 +57,7 @@ for dir in [:in, :out, :all]
     @test isa(lmat, SparseMatrixCSC{Float64, Int64})
     evals = eigvals(full(lmat))
     @test all(evals .>= -1e-15) # positive semidefinite
-    @test_approx_eq_eps minimum(evals) 0 1e-13
-    # @test minimum(evals) ≈ 0 atol=1e-13
+    @test minimum(evals) ≈ 0 atol=1e-13
 end
 
 g4 = PathDiGraph(5, DG)
@@ -90,8 +89,7 @@ nbt = Nonbacktracking(pg)
 B, emap = nonbacktracking_matrix(pg)
 Bs = sparse(nbt)
 @test sparse(B) == Bs
-@test_approx_eq_eps(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], 1e-5)
-# @test eigs(nbt, nev=1)[1] ≈ eigs(B, nev=1)[1] atol=1e-5
+@test eigs(nbt, nev=1)[1] ≈ eigs(B, nev=1)[1] atol=1e-5
 
 
 # check that matvec works
@@ -120,7 +118,7 @@ end
 @test test_full(B₁) == full(B)
 @test  B₁ * ones(size(B₁)[2]) == B*ones(size(B)[2])
 @test size(B₁) == size(B)
-# @test_approx_eq_eps norm(eigs(B₁)[1] - eigs(B)[1]) 0.0 1e-8 #TODO change test, it is unstable
+# @test eigs(B₁)[1] ≈ eigs(B)[1] atol=1e-7 #TODO unstable
 # END tests for Nonbacktracking
 
 # spectral distance checks

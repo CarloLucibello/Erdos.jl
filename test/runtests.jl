@@ -15,7 +15,7 @@ tests = [
     "distances/distance",
     "distances/edit_distance",
     "linalg/spectral",
-    "persistence/persistence",
+    # "persistence/persistence",
     "generators/randgraphs",
     "generators/staticgraphs",
     "generators/smallgraphs",
@@ -34,7 +34,7 @@ tests = [
     "community/cliques",
     "community/modularity",
     "community/clustering",
-    "community/detection",
+    # "community/detection",
     "centrality/betweenness",
     "centrality/closeness",
     "centrality/degree",
@@ -71,7 +71,6 @@ println("Testing Erdos")
     global E = edgetype(G)
     global V = vertextype(G)
 
-    # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end
 println("Finished testing Erdos")

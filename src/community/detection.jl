@@ -132,7 +132,7 @@ function label_propagation(g::ASimpleGraph; maxiter=1000)
 end
 
 """Type to record neighbor labels and their counts."""
-type NeighComm
+mutable struct NeighComm
   neigh_pos::Vector{Int}
   neigh_cnt::Vector{Int}
   neigh_last::Int

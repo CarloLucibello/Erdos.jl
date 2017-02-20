@@ -1,5 +1,5 @@
 """
-    immutable GTEdge <: AEdge
+    struct GTEdge <: AEdge
         src::Int
         dst::Int
         idx::Int
@@ -11,7 +11,7 @@ An indexed edge type
 
 Creates an edge with unvalid index.
 """
-immutable GTEdge <: AEdge
+struct GTEdge <: AEdge
     src::Int
     dst::Int
     idx::Int
@@ -26,7 +26,7 @@ show(io::IO, e::GTEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
 reverse(e::GTEdge) = GTEdge(e.dst, e.src, e.idx)
 
 """
-    type GTGraph <: AGraph
+    mutable struct GTGraph <: AGraph
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -48,7 +48,7 @@ Construct a `GTDiGraph` with `n` vertices and no edges.
 
 Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
 """
-type GTGraph <: AGraph
+mutable struct GTGraph <: AGraph
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -61,7 +61,7 @@ type GTGraph <: AGraph
 end
 
 """
-    type GTDiGraph <: ADiGraph
+    mutable struct GTDiGraph <: ADiGraph
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -85,7 +85,7 @@ Construct a `GTDiGraph` with `n` vertices and no edges.
 
 Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
 """
-type GTDiGraph <: ADiGraph
+mutable struct GTDiGraph <: ADiGraph
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -98,7 +98,7 @@ type GTDiGraph <: ADiGraph
                                     # memory use
 end
 
-typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
+const SimpleGTGraph = Union{GTGraph, GTDiGraph}
 
 edgetype{G<:SimpleGTGraph}(::Type{G}) = GTEdge
 graphtype(::Type{GTDiGraph}) = GTGraph

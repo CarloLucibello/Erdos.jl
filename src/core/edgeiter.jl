@@ -1,4 +1,4 @@
-immutable EdgeIter{G<:ASimpleGraph}
+struct EdgeIter{G<:ASimpleGraph}
     g::G
 end
 
