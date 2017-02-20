@@ -6,20 +6,18 @@ read with the `readgraph` function. Currently supported common graph formats are
 [graph-tool gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
 
 
+## Examples
+
+```julia
+writegraph("mygraph.gml", g) #format is inferred by the name
+writegraph("mygraph.graphml", g)
+
+g = readgraph("mygraph.dot")
+g = readgraph("mygraph.net")
+```
+
 ```@autodocs
 Modules = [FatGraphs]
 Pages   = [ "persistence/common.jl"]
 Private = false
-```
-
-## Examples
-
-```julia
-writegraph(STDOUT, g)
-writegraph("mygraph.gml", g, :gml)
-writegraph("mygraph.dot.gzip", g, :dot, compress=true)
-
-g = readgraph("mygraph.dot.gzip", :dot)
-g = readgraph("mygraphs.graphml", :graphml)
-g = readgraph("mygraph.gml", :gml)
 ```
