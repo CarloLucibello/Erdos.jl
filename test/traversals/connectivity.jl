@@ -190,6 +190,6 @@ g10 = StarDiGraph(10, DG)
 @test length(neighborhood(g10, 1, 2, dir=:in)) == 1
 @test length(neighborhood(g10, 2, 2, dir=:in)) == 2
 
-@test !isgraphical([1,1,1])
-@test isgraphical([2,2,2])
-@test isgraphical(fill(3,10))
+@test !is_graphical([1,1,1])
+@test is_graphical([2,2,2])
+@test is_graphical(fill(3,10))

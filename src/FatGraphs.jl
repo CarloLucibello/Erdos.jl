@@ -17,7 +17,7 @@ import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
                         enqueue!, compare, top
 
-import Base: write, ==, <, *, ≈, isless, issubset, union, intersect,
+import Base: write, ==, <, *, ≈, isless, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims,
             join, start, next, done, eltype, get, issymmetric, A_mul_B!,
@@ -76,12 +76,12 @@ BreadthFirst, gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
 DepthFirst, is_cyclic, topological_sort_by_dfs, dfs_tree,
 
 # random
-randomwalk, self_avoiding_randomwalk, non_backtracking_randomwalk,
+randomwalk, self_avoiding_randomwalk, nonbacktracking_randomwalk,
 
 # connectivity
 connected_components, strongly_connected_components, weakly_connected_components,
 is_connected, is_strongly_connected, is_weakly_connected, period,
-condensation, attracting_components, neighborhood, isgraphical, density,
+condensation, attracting_components, neighborhood, is_graphical, density,
 
 # maximum_adjacency_visit
 MaximumAdjacency, AbstractMASVisitor, mincut, maximum_adjacency_visit,
@@ -99,7 +99,7 @@ cores, kcore,
 
 # spectral
 adjacency_matrix,laplacian_matrix,
-CombinatorialAdjacency, non_backtracking_matrix, incidence_matrix,
+CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix,
 nonbacktrack_embedding, Nonbacktracking,
 contract,
 

@@ -1,8 +1,3 @@
-export non_backtracking_matrix,
-        Nonbacktracking,
-        contract!,
-        contract
-
 """
 Given two oriented edges i->j and k->l in g, the
 non-backtraking matrix B is defined as
@@ -11,7 +6,7 @@ B[i->j, k->l] = δ(j,k)* (1 - δ(i,l))
 
 returns a matrix B, and an edgemap storing the oriented edges' positions in B
 """
-function non_backtracking_matrix(g::ASimpleGraph)
+function nonbacktracking_matrix(g::ASimpleGraph)
     E = Edge{vertextype(g)}
     edgeidmap = Dict{E, Int}()
     m = 0

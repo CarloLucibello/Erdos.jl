@@ -1,49 +1,21 @@
 """
-Abstract (undirected) graph type
+    abstract AGraph
 
-Guarantees:
-    vertices are integers in 1:nv(g)
-
-Functions to implement:
-    basic constructors (e.g. MyGraph(n), MyGraph())
-    nv(g)
-    ne(g)
-    out_neighbors(g, v)
-    in_neighbors(g, v) #digraph
-    edge(g, u, v)
-    add_edge!(g, u, v)
-    rem_edge!(g, u, v)
-    add_vertex!(g)
-    pop_vertex!(g)
-    graphtype(g)
-    digraphtype(g)
-    edgetype(g)
-    vertextype(g)
-
-Reccomended Overrides:
-    in_adjlist(g) #digraph
-    out_adjlist(g)
-    has_edge(g, u, v)
-    ==(g, h)
-    out_edges(g, u)
-    in_edges(g, u) # digraph
-    rem_edge!(g, e)
-    graph(dg)
-    digraph(g)
-    reverse!(g) #digraph
-    unsafe_add_edge!(g, u, v)
-    rebuild!(g)
-    rem_vertex!(g, v)
+Abstract undirected graph type
 """
 abstract AGraph
 
 """
+    abstract ADiGraph
+
 Abstract directed graph type
 """
 abstract ADiGraph
 
 """
-Union of `AGraph` and `ADiGraph`
+    typealias ASimpleGraph Union{AGraph, ADiGraph}
+
+Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 """
 typealias ASimpleGraph Union{AGraph, ADiGraph}
 
@@ -129,11 +101,13 @@ in `g`.
 """
 edge(g::ASimpleGraph, u, v) = Edge{Int}(u, v)
 
+#TODO check consistency
 """
     edgetype(g)
     edgetype(G)
 
-Returns the type of edges of graph `g` (or graph type `G`).
+Returns the type of edges of graph `g` (or graph type `G`), i. e.
+the element type returned of the iterator `edges(g)`.
 """
 edgetype{G<:ASimpleGraph}(::Type{G}) = Edge{Int}
 
@@ -146,9 +120,27 @@ Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
 vertextype{G<:ASimpleGraph}(::Type{G}) = Int
 
+"""
+    graphtype{G<:ASimpleGraph}(::Type{G})
+
+The graph type corresponding to `G`. If `G<:AGraph` returns `G`,
+if `G<:ADiGraph` returns a type `H<:AGraph`.
+"""
 graphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
+
+"""
+    digraphtype{G<:ASimpleGraph}(::Type{G})
+
+The digraph type corresponding to `G`. If `G<:ADiGraph` returns `G`,
+if `G<:AGraph` returns a type `H<:ADiGraph`.
+"""
 digraphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
 
+"""
+    abstract AEdge
+
+An abstract edge type.
+"""
 abstract AEdge
 
 """
@@ -166,9 +158,9 @@ Returns the destination of an edge.
 dst(e::AEdge) = error("Method not defined")
 
 """
-    reverse(e::Edge)
+    reverse(e)
 
-Swap `e.src` and `e.dst`.
+Returns an edge with swapped `src(e)` and `dst(e)`.
 """
 reverse(e::AEdge) = error("Method not defined")
 

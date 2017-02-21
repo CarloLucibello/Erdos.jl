@@ -17,7 +17,7 @@ if !isdefined(:is_nonbacktracking)
     #test_nbw: check that a walk is nonbacktracking and print it if is isn't.
     #Used only for testing and debugging.
     function test_nbw(g, start, len)
-        w = non_backtracking_randomwalk(g, start, len)
+        w = nonbacktracking_randomwalk(g, start, len)
         if is_nonbacktracking(w)
             return true
         else
@@ -37,25 +37,25 @@ g = PathGraph(10, G)
 @test_throws BoundsError self_avoiding_randomwalk(g, 20, 20)
 
 g = PathGraph(10, G)
-@test non_backtracking_randomwalk(g, 1, 20) == [1:10;]
-@test_throws BoundsError non_backtracking_randomwalk(g, 20, 20)
+@test nonbacktracking_randomwalk(g, 1, 20) == [1:10;]
+@test_throws BoundsError nonbacktracking_randomwalk(g, 20, 20)
 
 g = digraph(PathGraph(10, G))
-@test non_backtracking_randomwalk(g, 1, 20) == [1:10;]
-@test_throws BoundsError non_backtracking_randomwalk(g, 20, 20)
+@test nonbacktracking_randomwalk(g, 1, 20) == [1:10;]
+@test_throws BoundsError nonbacktracking_randomwalk(g, 20, 20)
 
 g = PathDiGraph(10, DG)
-@test non_backtracking_randomwalk(g, 10, 20) == [10]
+@test nonbacktracking_randomwalk(g, 10, 20) == [10]
 
 g = PathDiGraph(10, DG)
-@test non_backtracking_randomwalk(g, 1, 20) == [1:10;]
+@test nonbacktracking_randomwalk(g, 1, 20) == [1:10;]
 
 g = CycleGraph(10, G)
-visited = non_backtracking_randomwalk(g, 1, 20)
+visited = nonbacktracking_randomwalk(g, 1, 20)
 @test visited == [1:10; 1:10;] || visited == [1; 10:-1:1; 10:-1:2;]
 
 g = CycleDiGraph(10, DG)
-@test non_backtracking_randomwalk(g, 1, 20) == [1:10; 1:10;]
+@test nonbacktracking_randomwalk(g, 1, 20) == [1:10; 1:10;]
 
 n = 10
 g = CycleGraph(n, G)

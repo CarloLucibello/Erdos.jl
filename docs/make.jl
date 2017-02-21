@@ -6,6 +6,6 @@ makedocs(modules=[FatGraphs], doctest = true)
 
 deploydocs(
     deps = Deps.pip("pygments", "mkdocs", "mkdocs-material", "python-markdown-math"),
-    repo   = "github.com/CarloLucibello/FatGraphs.jl.git"
-#    julia  = "release"
+    repo   = "github.com/CarloLucibello/FatGraphs.jl.git",
+    julia  = "release"
     )

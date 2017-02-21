@@ -10,7 +10,7 @@ add_edge!(g,1,1)
 @test adjacency_matrix(g)[1,1] == 2
 
 g10 = CompleteGraph(10, G)
-B, em = non_backtracking_matrix(g10)
+B, em = nonbacktracking_matrix(g10)
 @test length(em) == 2*ne(g10)
 @test size(B) == (2*ne(g10),2*ne(g10))
 for i=1:10
@@ -87,7 +87,7 @@ pg = CompleteGraph(n, G)
 # ϕ1 = nonbacktrack_embedding(pg, k)'
 
 nbt = Nonbacktracking(pg)
-B, emap = non_backtracking_matrix(pg)
+B, emap = nonbacktracking_matrix(pg)
 Bs = sparse(nbt)
 @test sparse(B) == Bs
 @test_approx_eq_eps(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], 1e-5)
