@@ -11,7 +11,7 @@ TODO remove mincut
 
 # Shortest-Path Algorithms
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = ["shortestpaths/shortestpaths.jl",
             "shortestpaths/astar.jl",
             "shortestpaths/bellman-ford.jl",

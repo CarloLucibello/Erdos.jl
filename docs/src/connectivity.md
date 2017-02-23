@@ -7,7 +7,7 @@ Pages   = ["connectivity.md"]
 ```
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = ["core/connectivity.jl"]
 Private = false
 ```

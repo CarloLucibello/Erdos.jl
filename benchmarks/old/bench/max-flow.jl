@@ -1,4 +1,4 @@
-using FatGraphs
+using Erdos
 function bench_maxflow(n)
     p = 8.0/n
     A = sprand(n,n,p)

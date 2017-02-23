@@ -2,7 +2,7 @@
 if !isdefined(:trivialgraphvisit)
     function trivialgraphvisit(
         g::ASimpleGraph,
-        alg::FatGraphs.SimpleGraphVisitAlgorithm,
+        alg::Erdos.SimpleGraphVisitAlgorithm,
         sources)
 
         visitor = TrivialGraphVisitor()

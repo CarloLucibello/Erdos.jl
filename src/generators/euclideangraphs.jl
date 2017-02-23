@@ -25,7 +25,7 @@ function euclidean_graph end
 
 function euclidean_graph{G<:AGraph}(N::Int, d::Int, ::Type{G} = Graph;
             L=1., seed = -1, kws...)
-    rng = FatGraphs.getRNG(seed)
+    rng = Erdos.getRNG(seed)
     points = scale!(rand(rng, d, N), L)
     return (euclidean_graph(points; L=L, kws...)..., points)
 end

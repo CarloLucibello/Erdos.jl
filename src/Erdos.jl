@@ -1,5 +1,5 @@
 __precompile__(true)
-module FatGraphs
+module Erdos
 
 using GZip
 using StatsFuns # randgraphs
@@ -164,7 +164,7 @@ explicit design decision that any data not required for graph manipulation
 outside of the graph structure itself. Such data lends itself to storage in
 more traditional and better-optimized mechanisms.
 """
-FatGraphs
+Erdos
 
 include("utils.jl")
 include("core/interface.jl")

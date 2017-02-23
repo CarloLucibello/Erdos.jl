@@ -1,4 +1,4 @@
-using FatGraphs
+using Erdos
 using MatrixDepot
 function symmetrize(A)
     println("Symmetrizing ")
@@ -55,13 +55,13 @@ for matname in names
     seed = 1
     println("bfs_tree original")
     # woah bfs_tree allocates a lot of memory
-    @time tdg = FatGraphs.bfs_tree(g, seed)
+    @time tdg = Erdos.bfs_tree(g, seed)
     println(tdg)
     # preallocating the output tree reduces the number of allocations.
     # much faster
     println("bfs_tree!(vector)")
-    visitor = FatGraphs.TreeBFSVisitorVector(zeros(Int, nv(g)))
-    @time tvec = FatGraphs.bfs_tree!(visitor, g, seed)
+    visitor = Erdos.TreeBFSVisitorVector(zeros(Int, nv(g)))
+    @time tvec = Erdos.bfs_tree!(visitor, g, seed)
     println("converting to Sparse")
     @time m = vec2tree(visitor.tree)
     println("converting to DiGraph")

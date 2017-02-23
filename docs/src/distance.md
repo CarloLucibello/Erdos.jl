@@ -1,8 +1,8 @@
 # Distance
-*FatGraphs.jl* includes the following distance measurements:
+*Erdos.jl* includes the following distance measurements:
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "distances/distance.jl",
             "distances/edit_distance.jl"]
 Private = false

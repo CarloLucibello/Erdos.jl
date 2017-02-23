@@ -9,7 +9,7 @@
 Finds all maximal cliques of an undirected graph.
 
 ```
-julia> using FatGraphs
+julia> using Erdos
 julia> g = Graph(3)
 julia> add_edge!(g, 1, 2)
 julia> add_edge!(g, 2, 3)

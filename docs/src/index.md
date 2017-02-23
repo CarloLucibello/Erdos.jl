@@ -1,17 +1,17 @@
-# FatGraphs
-FatGraphs is a graph library written in Julia. Installation is straightforward:
+# Erdos
+Erdos is a graph library written in Julia. Installation is straightforward:
 ```julia
-julia> Pkg.add("FatGraphs")
+julia> Pkg.add("Erdos")
 ```
 
-All (directed/undirected) graphs  in FatGraphs have `1:n` indexed vertices, where `n` is the number of vertices.
+All (directed/undirected) graphs  in Erdos have `1:n` indexed vertices, where `n` is the number of vertices.
 Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced, just defining a few basic methods.
 
 ## Basic examples
 ### Constructors
-Build your first graph using basic constructor.
+Build your first graph using the basic constructors.
 ```julia
-julia> using FatGraphs
+julia> using Erdos
 
 julia> g = CompleteGraph(100)
 Graph{Int64}(100, 4950)
@@ -55,9 +55,7 @@ julia> degree(g,1)
 10
 ```
 
-### Modifiers
-All examples apply equally to `DiGraph` unless otherwise noted:
-
+### Modifiers:
 ```julia
 julia> g=DiGraph(10)
 DiGraph{Int64}(10, 0)
@@ -123,7 +121,7 @@ julia> degree(g, 1) == k
 true
 ```
 ### I/O
-FatGraphs supports many standard graph format. Here is an example with Pajek's .net
+Erdos supports many standard graph formats. Here is an example with Pajek's .net
 format:
 ```julia
 julia> g = DiGraph(10,20)
@@ -139,7 +137,7 @@ julia> g == h
 true
 ```
 ## Ready to explore
-Refer to the documentation to explore all the features of FatGraphs:
+Refer to the documentation to explore all the features of Erdos:
 - **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all/common)
 
 - **distance within graphs:** eccentricity, diameter, periphery, radius, center
@@ -152,7 +150,7 @@ Refer to the documentation to explore all the features of FatGraphs:
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for a list
+- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/datasets/smallgraphs.jl) for a list
 
 - **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
 

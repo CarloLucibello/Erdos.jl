@@ -5,7 +5,7 @@ interfaces.
 
 ## Edge Maps
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "maps/edgemap.jl"]
 Private = false
 ```
@@ -13,7 +13,7 @@ Private = false
 ## Vertex Maps
 Any `AbstractVector{T}` or `Dict{Int,T}` can be used as a vertex map.
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "maps/vertexmap.jl"]
 Private = false
 ```

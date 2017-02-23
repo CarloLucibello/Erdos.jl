@@ -26,7 +26,7 @@ n10 = Nonbacktracking(g10)
 @test eltype(n10) == Float64
 @test !issymmetric(n10)
 
-FatGraphs.contract!(z, n10, v)
+Erdos.contract!(z, n10, v)
 
 zprime = contract(n10, v)
 @test z == zprime

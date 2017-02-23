@@ -2,7 +2,7 @@
 
 [Centrality measures](https://en.wikipedia.org/wiki/Centrality) describe the
 importance of a vertex to the rest of the graph using some set of criteria.
-Centrality measures implemented in *FatGraphs.jl* include the following:
+Centrality measures implemented in *Erdos.jl* include the following:
 
 
 ```@index
@@ -11,7 +11,7 @@ Pages   = ["centrality.md"]
 ```
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [
             "centrality/betweenness.jl",
             "centrality/closeness.jl",

@@ -1,5 +1,5 @@
 # Basic Interface
-*FatGraphs.jl* defines the following basic  functionalities:
+*Erdos.jl* defines the following basic  functionalities:
 
 ```@docs
 nv

@@ -1,4 +1,4 @@
-The FatGraphs.jl package is licensed under the MIT "Expat" License:
+The Erdos.jl package is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2016: Carlo Lucibello and other contributors.
 >
@@ -21,7 +21,7 @@ The FatGraphs.jl package is licensed under the MIT "Expat" License:
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-FatGraphs uses code derived from and/or inspired by the following packages:
+Erdos uses code derived from and/or inspired by the following packages:
 
 LightGraphs.jl:
 > Copyright (c) 2015: Seth Bromberger and other contributors.

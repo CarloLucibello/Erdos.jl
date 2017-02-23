@@ -1,6 +1,6 @@
 # Operators
 
-*FatGraphs.jl* implements the following graph operators:
+*Erdos.jl* implements the following graph operators:
 
 
 ```@index
@@ -9,7 +9,7 @@ Pages   = ["operators.md"]
 
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = ["operators/operators.jl"]
 Private = false
 ```

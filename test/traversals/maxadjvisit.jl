@@ -1,6 +1,6 @@
 # Test of Min-Cut and maximum adjacency visit
 
-using FatGraphs
+using Erdos
 using Base.Test
 
 g = G(8)

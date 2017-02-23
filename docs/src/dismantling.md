@@ -2,7 +2,7 @@
 Algorithms for optimal network problems.
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = ["dismantling/ci.jl"]
 Private = false
 ```

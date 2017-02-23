@@ -1,7 +1,7 @@
 if !isdefined(:test_find_path_types)
     # Test the types of the values returned by fetch_path
     function test_find_path_types(residual_graph, s, t, flow_matrix, capacity_matrix)
-        v, P, S, flag = FatGraphs.fetch_path(residual_graph, s, t, flow_matrix, capacity_matrix)
+        v, P, S, flag = Erdos.fetch_path(residual_graph, s, t, flow_matrix, capacity_matrix)
         @test typeof(P) == Vector{Int}
         @test typeof(S) == Vector{Int}
         @test typeof(flag) == Int
@@ -14,17 +14,17 @@ if !isdefined(:test_find_path_types)
         for dst in collect(neighbors(residual_graph, s))
             rem_edge!(residual_graph, s, dst)
         end
-        v, P, S, flag = FatGraphs.fetch_path(residual_graph, s, t, flow_matrix, capacity_matrix)
+        v, P, S, flag = Erdos.fetch_path(residual_graph, s, t, flow_matrix, capacity_matrix)
         @test flag == 1
         for dst in collect(neighbors(h, t))
             rem_edge!(h, t, dst)
         end
-        v, P, S, flag = FatGraphs.fetch_path(h, s, t, flow_matrix, capacity_matrix)
+        v, P, S, flag = Erdos.fetch_path(h, s, t, flow_matrix, capacity_matrix)
         @test flag == 0
         for i in collect(in_neighbors(h, t))
             rem_edge!(h, i, t)
         end
-        v, P, S, flag = FatGraphs.fetch_path(h, s, t, flow_matrix, capacity_matrix)
+        v, P, S, flag = Erdos.fetch_path(h, s, t, flow_matrix, capacity_matrix)
         @test flag == 2
     end
 end
@@ -50,10 +50,10 @@ end
 residual_graph = complete(flow_graph)
 
 # Test with default distances
-@test FatGraphs.edmonds_karp_impl(residual_graph, 1, 8, FatGraphs.DefaultCapacity(residual_graph))[1] == 3
+@test Erdos.edmonds_karp_impl(residual_graph, 1, 8, Erdos.DefaultCapacity(residual_graph))[1] == 3
 
 # Test with capacity matrix
-@test FatGraphs.edmonds_karp_impl(residual_graph,1,8,capacity_matrix)[1] == 28
+@test Erdos.edmonds_karp_impl(residual_graph,1,8,capacity_matrix)[1] == 28
 
 flow_matrix = zeros(Int, nv(residual_graph), nv(residual_graph))
 test_find_path_types(residual_graph, 1,8, flow_matrix, capacity_matrix)

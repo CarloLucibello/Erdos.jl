@@ -1,5 +1,5 @@
-include("../src/FatGraphs.jl")
-using FatGraphs
+include("../src/Erdos.jl")
+using Erdos
 using Base.Test
 
 tests = [
@@ -64,7 +64,7 @@ GLIST =    [
             (GTGraph, GTDiGraph)
             ]
 
-println("Testing FatGraphs")
+println("Testing Erdos")
 @testset "$t  $(GDG[1])" for GDG in GLIST, t in tests
     global G = GDG[1]
     global DG = GDG[2]
@@ -74,4 +74,4 @@ println("Testing FatGraphs")
     # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end
-println("Finished testing FatGraphs")
+println("Finished testing Erdos")

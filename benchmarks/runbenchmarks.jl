@@ -1,5 +1,5 @@
-include("../src/FatGraphs.jl")
-using FatGraphs
+include("../src/Erdos.jl")
+using Erdos
 using BenchmarkTools
 using Base.Dates
 import JLD: load, save

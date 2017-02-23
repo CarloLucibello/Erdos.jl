@@ -17,7 +17,7 @@ g = readgraph("mygraph.net")
 ```
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "persistence/common.jl"]
 Private = false
 ```

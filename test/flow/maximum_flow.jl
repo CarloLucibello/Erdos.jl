@@ -36,7 +36,7 @@ for (nvertices,flow_edges,s,t,fdefault,fcustom,frestrict,caprestrict) in graphs
     end
 
     # Test DefaultCapacity
-    d = FatGraphs.DefaultCapacity(flow_graph)
+    d = Erdos.DefaultCapacity(flow_graph)
     @test typeof(d) <: AbstractMatrix{typeof(signed(V(0)))}
     @test d[s,t] == 0
     @test size(d) == (nvertices,nvertices)

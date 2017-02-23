@@ -318,10 +318,10 @@ to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v
 egonet(g::ASimpleGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
 
 
-# The following operators allow one to use a FatGraphs.Graph as a matrix in
+# The following operators allow one to use a Erdos.Graph as a matrix in
 # eigensolvers for spectral ranking and partitioning.
 # """Provides multiplication of a graph `g` by a vector `v` such that spectral
-# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize FatGraphs natively.
+# graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize Erdos natively.
 # """
 function *{T<:Number}(g::AGraph, v::Vector{T})
     length(v) == nv(g) || error("Vector size must equal number of vertices")

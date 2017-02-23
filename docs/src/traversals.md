@@ -1,6 +1,6 @@
 # Path and Traversal
 
-*FatGraphs.jl* provides several traversal and shortest-path algorithms, along with
+*Erdos.jl* provides several traversal and shortest-path algorithms, along with
 various utility functions. Where appropriate, edge distances may be passed in as a
 matrix of real number values.
 
@@ -26,7 +26,7 @@ Any graph traversal  will traverse an edge only if it is present in the graph. W
 TODO separate the 3 in different paragraphs?
 -->
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Order = [:type, :function]
 Pages   = [ "traversals/bfs.jl",
             "traversals/dfs.jl",
@@ -38,11 +38,11 @@ Private = false
 ```
 ## Random walks
 
-*FatGraphs* includes uniform random walks and self avoiding walks:
+*Erdos* includes uniform random walks and self avoiding walks:
 
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Order = [:type, :function]
 Pages   = [ "traversals/randomwalks.jl"]
 Private = false
@@ -53,7 +53,7 @@ Private = false
 
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Order = [:type, :function]
 Pages   = [ "traversals/connectivity.jl"]
 Private = false

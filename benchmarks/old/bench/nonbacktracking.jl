@@ -1,4 +1,4 @@
-using FatGraphs 
+using Erdos 
 
 sizesnbm1 = Int64[@allocated nonbacktracking_matrix(CycleGraph(2^i))for i in 4:10]
 sizesnbm2 = Int64[@allocated Nonbacktracking(CycleGraph(2^i)) for i in 4:10]

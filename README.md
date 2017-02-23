@@ -1,22 +1,22 @@
-# FatGraphs
+# Erdos
 
-[![Build Status](https://travis-ci.org/CarloLucibello/FatGraphs.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/FatGraphs.jl)
-[![codecov.io](http://codecov.io/github/CarloLucibello/FatGraphs.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/FatGraphs.jl?branch=master)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/FatGraphs.jl)
+[![Build Status](https://travis-ci.org/CarloLucibello/Erdos.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/Erdos.jl)
+[![codecov.io](http://codecov.io/github/CarloLucibello/Erdos.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/Erdos.jl?branch=master)
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/Erdos.jl)
 
 A graph library entirely written in Julia.
 It is derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), with the addition of an abstract
-graph interface and custom graph types, e.g. FatGraphs has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. It comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling and many more stuff. We welcome contributions and bug reports!
+graph interface and custom graph types, e.g. Erdos has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. It comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling and many more stuff. We welcome contributions and bug reports!
 
 ## Documentation
-Full documentation available at [GitHub Pages](https://carlolucibello.github.io/FatGraphs.jl).
+Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl).
 Documentation for methods is also available via the Julia REPL help system.
-See also the [CHANGELOG](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/CHANGELOG.md) for differences with previous versions.
+See also the [CHANGELOG](https://github.com/CarloLucibello/Erdos.jl/blob/master/CHANGELOG.md) for differences with previous versions.
 
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
+julia> Pkg.clone("https://github.com/CarloLucibello/Erdos.jl")
 ```
 
 ## Features
@@ -32,7 +32,7 @@ julia> Pkg.clone("https://github.com/CarloLucibello/FatGraphs.jl")
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/FatGraphs.jl/blob/master/src/datasets/smallgraphs.jl) for a list
+- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/datasets/smallgraphs.jl) for a list
 
 - **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
 

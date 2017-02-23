@@ -1,6 +1,6 @@
 # Spanning Trees
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "spanningtrees/spanningtrees.jl",
             "spanningtrees/kruskal.jl"]
 Private = false

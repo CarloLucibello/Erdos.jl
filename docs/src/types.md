@@ -1,5 +1,5 @@
 # Types and Constructors
-*FatGraphs.jl* defines the following basic types and functionalities.
+*Erdos.jl* defines the following basic types and functionalities.
 
 ## Abstract Types
 

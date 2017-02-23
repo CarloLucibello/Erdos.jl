@@ -1,9 +1,9 @@
 # Flow and Cut
-*FatGraphs.jl* provides different algorithms for [maximum flow](https://en.wikipedia.org/wiki/Maximum_flow_problem)
+*Erdos.jl* provides different algorithms for [maximum flow](https://en.wikipedia.org/wiki/Maximum_flow_problem)
 and minimum cut computations.
 
 ```@autodocs
-Modules = [FatGraphs]
+Modules = [Erdos]
 Pages   = [ "flow/boykov_kolmogorov.jl",
             "flow/dinic.jl",
             "flow/edmonds_karp.jl",

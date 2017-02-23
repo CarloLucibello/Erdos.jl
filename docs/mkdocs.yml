@@ -1,6 +1,6 @@
-site_name: FatGraphs.jl
+site_name: Erdos.jl
 site_author: Carlo Lucibello
-repo_url: https://github.com/CarloLucibello/FatGraphs.jl/
+repo_url: https://github.com/CarloLucibello/Erdos.jl/
 docs_dir: 'build'
 
 theme: readthedocs

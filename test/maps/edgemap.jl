@@ -8,8 +8,8 @@ type TestEdge <: AEdge
     src::Int
     dst::Int
 end
-FatGraphs.src(e::TestEdge) = e.src
-FatGraphs.dst(e::TestEdge) = e.dst
+Erdos.src(e::TestEdge) = e.src
+Erdos.dst(e::TestEdge) = e.dst
 end
 
 g = G(m)

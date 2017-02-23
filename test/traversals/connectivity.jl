@@ -42,9 +42,9 @@ g6 = graph(:house, G)
 
 cc = connected_components(g)
 label = zeros(Int, nv(g))
-FatGraphs.connected_components!(label, g)
+Erdos.connected_components!(label, g)
 @test label[1:10] == [1,1,1,1,5,5,5,8,8,8]
-import FatGraphs: components, components_dict
+import Erdos: components, components_dict
 cclab = components_dict(label)
 @test cclab[1] == [1,2,3,4]
 @test cclab[5] == [5,6,7]
