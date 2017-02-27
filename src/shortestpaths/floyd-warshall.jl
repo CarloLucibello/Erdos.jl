@@ -2,7 +2,7 @@
 # licensing details.
 
 
-mutable struct FloydWarshallState{T,V}<:AbstractPathState
+type FloydWarshallState{T,V}<:AbstractPathState
     dists::Matrix{T}
     parents::Matrix{V}
 end

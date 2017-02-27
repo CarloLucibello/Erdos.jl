@@ -1,13 +1,13 @@
-abstract type AbstractDijkstraState <: AbstractPathState end
+@compat abstract type AbstractDijkstraState <: AbstractPathState end
 
-struct DijkstraHeapEntry{T}
+immutable DijkstraHeapEntry{T}
     vertex::Int
     dist::T
 end
 
 isless(e1::DijkstraHeapEntry, e2::DijkstraHeapEntry) = e1.dist < e2.dist
 
-mutable struct DijkstraState{T}<: AbstractDijkstraState
+type DijkstraState{T}<: AbstractDijkstraState
     parents::Vector{Int}
     dists::Vector{T}
     predecessors::Vector{Vector{Int}}

@@ -1,37 +1,37 @@
 """
-Abstract type that allows users to pass in their preferred Algorithm
+@compat abstract type that allows users to pass in their preferred Algorithm
 """
-abstract type AbstractFlowAlgorithm end
+@compat abstract type AbstractFlowAlgorithm end
 
 """
 Forces the maximum_flow function to use the Edmonds–Karp algorithm.
 """
-mutable struct EdmondsKarpAlgorithm <: AbstractFlowAlgorithm
+type EdmondsKarpAlgorithm <: AbstractFlowAlgorithm
 end
 
 """
 Forces the maximum_flow function to use Dinic\'s algorithm.
 """
-mutable struct DinicAlgorithm <: AbstractFlowAlgorithm
+type DinicAlgorithm <: AbstractFlowAlgorithm
 end
 
 """
 Forces the maximum_flow function to use the Boykov-Kolmogorov algorithm.
 """
-mutable struct BoykovKolmogorovAlgorithm <: AbstractFlowAlgorithm
+type BoykovKolmogorovAlgorithm <: AbstractFlowAlgorithm
 end
 
 """
 Forces the maximum_flow function to use the Push-Relabel algorithm.
 """
-mutable struct PushRelabelAlgorithm <: AbstractFlowAlgorithm
+type PushRelabelAlgorithm <: AbstractFlowAlgorithm
 end
 
 """
 Type that returns 1 if a forward edge exists, and 0 otherwise
 """
 
-mutable struct DefaultCapacity{G<:ADiGraph, I<:Integer} <: AbstractMatrix{I}
+type DefaultCapacity{G<:ADiGraph, I<:Integer} <: AbstractMatrix{I}
     g::G
     nv::I
 end

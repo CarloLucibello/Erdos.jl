@@ -64,7 +64,7 @@ end
 nth(xs::AbstractArray, n::Integer) = xs[n]
 # Filter out reccuring elements.
 
-struct Distinct{I, J}
+immutable Distinct{I, J}
     xs::I
 
     # Map elements to the index at which it was first seen, so given an iterator
@@ -103,7 +103,7 @@ end
 done(it::Distinct, state) = done(it.xs, state[1])
 
 # Concatenate the output of n iterators
-struct Chain{T<:Tuple}
+immutable Chain{T<:Tuple}
     xss::T
 end
 
@@ -170,8 +170,8 @@ randbinomial(m::Integer,p::AbstractFloat) =
 
 
 #used in flow and dismantling
-struct GreaterThan2 end
-struct LessThan2 end
+immutable GreaterThan2 end
+immutable LessThan2 end
 compare(c::GreaterThan2, x, y) = x[2] > y[2]
 compare(c::LessThan2, x, y) = x[2] < y[2]
 

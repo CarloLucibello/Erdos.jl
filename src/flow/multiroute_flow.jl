@@ -1,18 +1,18 @@
 """
-Abstract type that allows users to pass in their preferred Algorithm
+@compat abstract type that allows users to pass in their preferred Algorithm
 """
-abstract type AbstractMultirouteFlowAlgorithm end
+@compat abstract type AbstractMultirouteFlowAlgorithm end
 
 """
 Forces the multiroute_flow function to use the Kishimoto algorithm.
 """
-mutable struct KishimotoAlgorithm <: AbstractMultirouteFlowAlgorithm
+type KishimotoAlgorithm <: AbstractMultirouteFlowAlgorithm
 end
 
 """
 Forces the multiroute_flow function to use the Extended Multiroute Flow algorithm.
 """
-mutable struct ExtendedMultirouteFlowAlgorithm <: AbstractMultirouteFlowAlgorithm
+type ExtendedMultirouteFlowAlgorithm <: AbstractMultirouteFlowAlgorithm
 end
 
 # Methods when the number of routes is more than the connectivity

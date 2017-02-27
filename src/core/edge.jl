@@ -19,7 +19,7 @@ sort(e::AEdge) = src(e) > dst(e) ? reverse(e) : e
 ==(e1::AEdge, e2::AEdge) = (src(e1) == src(e2) && dst(e1) == dst(e2))
 
 """
-    struct Edge
+    immutable Edge
         src::Int
         dst::Int
     end
@@ -29,7 +29,7 @@ A type representing an edge between two vertices of a graph.
 
 # concrete Edge
 
-struct Edge{T} <: AEdge
+immutable Edge{T} <: AEdge
     src::T
     dst::T
 end

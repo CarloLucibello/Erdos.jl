@@ -1,6 +1,6 @@
 
 """
-    mutable struct Graph{T<:Integer} <: AGraph
+    type Graph{T<:Integer} <: AGraph
         ne::Int
         fadjlist::Vector{Vector{T}}
     end
@@ -17,19 +17,19 @@ Construct a `Graph` with `n` vertices and no edges.
 
 Construct a `Graph{T}` from the adjacency matrix `adjmx`.
 """
-mutable struct Graph{T<:Integer} <: AGraph
+type Graph{T<:Integer} <: AGraph
     ne::Int
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
 end
 
-function Graph{T}(n::Integer = 0) where {T<:Integer}
+function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
     fadjlist = [Vector{T}() for _=1:n]
     return Graph{T}(0, fadjlist)
 end
 
-Graph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} = erdos_renyi(n, m, Graph{T}; seed=seed)
+(::Type{Graph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, Graph{T}; seed=seed)
 
-function Graph{T}(adjmx::AbstractMatrix) where {T<:Integer}
+function (::Type{Graph{T}}){T<:Integer}(adjmx::AbstractMatrix)
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
@@ -41,14 +41,14 @@ function Graph{T}(adjmx::AbstractMatrix) where {T<:Integer}
     return g
 end
 
-Graph(n::T, m::T; kws...) where {T<:Integer} = Graph{T}(n, m; kws...)
-Graph(n::T) where {T<:Integer} = Graph{T}(n)
+Graph{T<:Integer}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
+Graph{T<:Integer}(n::T) = Graph{T}(n)
 Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
 Graph() = Graph{Int}()
 
 
 """
-    mutable struct DiGraph{T<:Integer} <: ADiGraph
+    type DiGraph{T<:Integer} <: ADiGraph
         ne::Int
         fadjlist::Vector{Vector{T}}
         badjlist::Vector{Vector{T}}
@@ -66,21 +66,21 @@ Construct a `DiGraph` with `n` vertices and no edges.
 
 Construct a `DiGraph` from the adjacency matrix `adjmx`.
 """
-mutable struct DiGraph{T<:Integer} <: ADiGraph
+type DiGraph{T<:Integer} <: ADiGraph
     ne
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
 end
 
-function DiGraph{T}(n::Integer = 0) where {T<:Integer}
+function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
     fadjlist = [Vector{T}() for _=1:n]
     badjlist = [Vector{T}() for _=1:n]
     return DiGraph{T}(0, fadjlist, badjlist)
 end
 
-DiGraph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} = erdos_renyi(n, m, DiGraph{T}; seed=seed)
+(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, DiGraph{T}; seed=seed)
 
-function DiGraph{T}(adjmx::AbstractMatrix) where {T<:Integer}
+function (::Type{DiGraph{T}}){T<:Integer}(adjmx::AbstractMatrix)
     dima, dimb = size(adjmx)
     dima == dimb || error("Adjacency / distance matrices must be square")
 
@@ -92,13 +92,13 @@ function DiGraph{T}(adjmx::AbstractMatrix) where {T<:Integer}
     return g
 end
 
-DiGraph(n::T, m::T; kws...) where {T<:Integer} = DiGraph{T}(n, m; kws...)
-DiGraph(n::T) where {T<:Integer} = DiGraph{T}(n)
+DiGraph{T<:Integer}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
+DiGraph{T<:Integer}(n::T) = DiGraph{T}(n)
 DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 DiGraph() = Graph{Int}()
 
 
-const SimpleGraph{T} = Union{Graph{T}, DiGraph{T}}
+@compat const SimpleGraph{T} = Union{Graph{T}, DiGraph{T}}
 
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}

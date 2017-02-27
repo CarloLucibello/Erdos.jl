@@ -39,6 +39,8 @@ zprime = contract(n10, v)
 
 @test_throws ErrorException adjacency_matrix(g3, :purple)
 
+g5 = DG(4)
+add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 #that call signature works
 inmat   = adjacency_matrix(g5, :in, Int)
 outmat  = adjacency_matrix(g5, :out, Int)
@@ -49,6 +51,7 @@ bothmat = adjacency_matrix(g5, :all, Int)
 @test all((bothmat - outmat) .>= 0)
 @test all((bothmat - inmat)  .>= 0)
 
+using Compat
 #check properties of the undirected laplacian carry over.
 for dir in [:in, :out, :all]
     amat = adjacency_matrix(g5, dir, Float64)
@@ -57,7 +60,7 @@ for dir in [:in, :out, :all]
     @test isa(lmat, SparseMatrixCSC{Float64, Int64})
     evals = eigvals(full(lmat))
     @test all(evals .>= -1e-15) # positive semidefinite
-    @test minimum(evals) ≈ 0 atol=1e-13
+    @test isapprox(minimum(evals),0, atol=1e-13)
 end
 
 g4 = PathDiGraph(5, DG)
@@ -89,7 +92,7 @@ nbt = Nonbacktracking(pg)
 B, emap = nonbacktracking_matrix(pg)
 Bs = sparse(nbt)
 @test sparse(B) == Bs
-@test eigs(nbt, nev=1)[1] ≈ eigs(B, nev=1)[1] atol=1e-5
+@test isapprox(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], atol=1e-5)
 
 
 # check that matvec works

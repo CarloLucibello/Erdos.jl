@@ -3,7 +3,7 @@
 
 Type representing an abstract vertex map.
 """
-abstract type AEdgeMap{E,T} end
+@compat abstract type AEdgeMap{E,T} end
 
 valtype{E,T}(m::AEdgeMap{E,T}) = T
 
@@ -17,7 +17,7 @@ valtype{E,T}(m::AEdgeMap{E,T}) = T
 Type implementing an edge map. The underlying container `data` can be a `Dict`
 or an `AbstractMatrix`.
 """
-mutable struct EdgeMap{E,T,D} <: AEdgeMap{E,T}
+type EdgeMap{E,T,D} <: AEdgeMap{E,T}
     data::D
     etype::Type{E}
     vtype::Type{T}
@@ -85,7 +85,7 @@ values{E,T,D<:AbstractSparseMatrix}(m::EdgeMap{E,T,D}) = nonzeros(m.data)
 
 ###
 """
-    struct ConstEdgeMap{T} <: SimpleEdgeMap{T}
+    immutable ConstEdgeMap{T} <: SimpleEdgeMap{T}
         val::T
     end
 
@@ -93,7 +93,7 @@ A type representing a constant vector map.
 Any attempt to change the internal value, e.g. `emap[u,v] = 4`, will
 fail silently.
 """
-struct ConstEdgeMap{E,T} <: AEdgeMap{E,T}
+immutable ConstEdgeMap{E,T} <: AEdgeMap{E,T}
     val::T
     etype::Type{E}
 end

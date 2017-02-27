@@ -126,7 +126,7 @@ See also [`weakly_connected_components`](@ref).
 is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
 
 # Adapated from Graphs.jl
-mutable struct TarjanVisitor <: SimpleGraphVisitor
+type TarjanVisitor <: SimpleGraphVisitor
     stack::Vector{Int}
     onstack::BitVector
     lowlink::Vector{Int}

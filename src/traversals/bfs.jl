@@ -20,7 +20,7 @@ EdgeColorMap :
 - color == 1     => examined
 """
 
-struct BreadthFirst <: SimpleGraphVisitAlgorithm end
+immutable BreadthFirst <: SimpleGraphVisitAlgorithm end
 
 function breadth_first_visit_impl!(
     g::ASimpleGraph,                 # the graph
@@ -84,7 +84,7 @@ end
 # Get the map of the (geodesic) distances from vertices to source by BFS                  #
 ###########################################
 
-struct GDistanceVisitor <: SimpleGraphVisitor end
+immutable GDistanceVisitor <: SimpleGraphVisitor end
 
 """
     gdistances!(g, source, dists) -> dists
@@ -118,7 +118,7 @@ gdistances(g::ASimpleGraph, source) = gdistances!(g, source, fill(0,nv(g)))
 """TreeBFSVisitorVector is a type for representing a BFS traversal
 of the graph as a parents array. This type allows for a more performant implementation.
 """
-mutable struct TreeBFSVisitorVector <: SimpleGraphVisitor
+type TreeBFSVisitorVector <: SimpleGraphVisitor
     tree::Vector{Int}
 end
 
@@ -154,7 +154,7 @@ end
 # and throws an error if it is too small.
 # the source is represented in the output by a fixed point v[root] == root.
 # this function is considered a performant version of bfs_tree for useful when the parent
-# array is more helpful than a DiGraph mutable struct, or when performance is critical.
+# array is more helpful than a DiGraph type, or when performance is critical.
 function bfs_tree!(visitor::TreeBFSVisitorVector,
         g::ASimpleGraph,
         s::Int;
@@ -182,7 +182,7 @@ end
 # Connected Components with BFS            #
 ############################################
 """Performing connected components with BFS starting from seed"""
-mutable struct ComponentVisitorVector <: SimpleGraphVisitor
+type ComponentVisitorVector <: SimpleGraphVisitor
     labels::Vector{Int}
     seed::Int
 end
@@ -198,7 +198,7 @@ end
 ############################################
 # Test graph for bipartiteness             #
 ############################################
-mutable struct BipartiteVisitor <: SimpleGraphVisitor
+type BipartiteVisitor <: SimpleGraphVisitor
     bipartitemap::Vector{UInt8}
     is_bipartite::Bool
 end

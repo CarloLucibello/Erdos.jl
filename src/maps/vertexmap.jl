@@ -1,9 +1,9 @@
 """
-    const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
+    @compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
 Type representing an abstract vertex map.
 """
-const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
+@compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
 """
     hasindex(v, i::Integer)
@@ -25,7 +25,7 @@ function VertexMap{T}(g::ASimpleGraph, ::Type{T})
 end
 
 """
-    struct ConstVertexMap{T} <: AbstractVector{T}
+    immutable ConstVertexMap{T} <: AbstractVector{T}
         val::T
     end
 
@@ -33,7 +33,7 @@ A type representing a constant vector map.
 Any attempt to change the internal value, e.g. `vm[1] = 4`, will
 fail silently.
 """
-struct ConstVertexMap{T} <: AbstractVector{T}
+immutable ConstVertexMap{T} <: AbstractVector{T}
     val::T
 end
 

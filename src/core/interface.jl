@@ -1,23 +1,23 @@
 """
-    abstract type AGraph end
+    @compat abstract type AGraph end
 
 Abstract undirected graph type
 """
-abstract type AGraph end
+@compat abstract type AGraph end
 
 """
     abstract ADiGraph
 
 Abstract directed graph type
 """
-abstract type ADiGraph end
+@compat abstract type ADiGraph end
 
 """
-    const ASimpleGraph = Union{AGraph, ADiGraph}
+    @compat const ASimpleGraph = Union{AGraph, ADiGraph}
 
 Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 """
-const ASimpleGraph = Union{AGraph, ADiGraph}
+@compat const ASimpleGraph = Union{AGraph, ADiGraph}
 
 ####### Required interface for concrete types ########################
 
@@ -141,7 +141,7 @@ digraphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
 
 An abstract edge type.
 """
-abstract type AEdge end
+@compat abstract type AEdge end
 
 """
     src(e)
