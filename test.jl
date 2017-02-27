@@ -2,10 +2,10 @@
 # TODO - weighted, separate unweighted, edge betweenness
 
 """
-    betweenness_centrality(g; normalize=true, endpoints=false, approx=-1)
+    betweenness_centrality(g, vlist=1:nv(g); normalize=true, endpoints=false)
 
 Calculates the [betweenness centrality](https://en.wikipedia.org/wiki/Centrality#Betweenness_centrality) of the vertices
-of graph `g`.
+in graph `g`.
 
 Betweenness centrality for vertex `v` is defined as:
 ```math
@@ -19,31 +19,25 @@ is the number of those paths that pass through `v`.
 If `endpoints=true`, endpoints are included in the shortest path count.
 
 If `normalize=true`, the betweenness values are normalized by the total number
-of possible distinct paths between all pairs in the graph. For an undirected graph,
+of possible distinct paths between all pairs in the graphs. For an undirected graph,
 this number if `((n-1)*(n-2))/2` and for a directed graph, `(n-1)*(n-2)`
 where `n` is the number of vertices in the graph.
-
-If  an integer argument `approx > 0` is given, returns an approximation of
-the betweenness centrality of each vertex of the graph involving `approx`
-randomly chosen vertices.
 
 **References**
 
 [1] Brandes 2001 & Brandes 2008
-"""function betweenness_centrality(
-    g::ASimpleGraph;
-    approx::Int=-1,
-    normalize::Bool=true,
-    endpoints::Bool=false)
+"""
+function betweenness_centrality(
+    g::ASimpleGraph,
+    normalize=true,
+    endpoints=false)
 
     n_v = nv(g)
+    isdir = is_directed(g)
+
     betweenness = zeros(n_v)
-    if approx <= 0
-        nodes = [1:n_v;]
-    else
-        nodes = sample!([1:n_v;], approx)   #112
-    end
-    for s in nodes
+    vlist = 1:nv(g)
+    for s in vlist
         if degree(g,s) > 0  # this might be 1?
             state = dijkstra_shortest_paths(g, s; allpaths=true)
             if endpoints
@@ -54,7 +48,7 @@ randomly chosen vertices.
         end
     end
 
-    _rescale!(betweenness, n_v, normalize, is_directed(g), length(nodes))
+    _rescale!(betweenness, n_v, normalize, isdir, length(vlist))
 
     return betweenness
 end
@@ -136,7 +130,9 @@ function _rescale!(betweenness::Vector{Float64}, n::Integer, normalize::Bool, di
         end
     end
     if do_scale
-        scale = scale * n / k
+        if k > 0
+            scale = scale * n / k
+        end
         betweenness .*= scale
     end
 end
