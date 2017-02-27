@@ -40,7 +40,7 @@ function savepars(suite, groups=GROUPS)
         d = joinpath(par_dir, group)
         !isdir(d) && mkdir(d)
         path = joinpath(d, "$(Date(now())).jld")
-        println("saveing $path")
+        println("saving $path")
         # BenchmarkTools.save(path, group, params(suite[group]))
         save(path, group, params(suite[group]))
     end

@@ -1,63 +1,47 @@
 # Betweenness centrality measures
 # TODO - weighted, separate unweighted, edge betweenness
 
-
 """
-    betweenness_centrality(g, k=0; normalize=true, endpoints=false)
+    betweenness_centrality(g; normalize=true, endpoints=false, approx=-1)
 
+Calculates the [betweenness centrality](https://en.wikipedia.org/wiki/Centrality#Betweenness_centrality) of the vertices
+of graph `g`.
 
-Calculates the [betweenness centrality](https://en.wikipedia.org/wiki/Centrality#Betweenness_centrality) of
-the graph `g`, or, optionally, of a random subset of `k` vertices. Can
-optionally include endpoints in the calculations. Normalization is enabled by
-default.
+Betweenness centrality for vertex `v` is defined as:
+```math
+bc(v) = \\frac{1}{\\mathcal{N}} \\sum_{s \\neq t \\neq v}
+        \\frac{\\sigma_{st}(v)}{\\sigma_{st}},
+```
+where ``\\sigma _{st}} \\sigma_{st}`` is the total number of shortest paths from
+node `s` to node `t` and ``\\sigma_{st}(v)``
+is the number of those paths that pass through `v`.
 
-Betweenness centrality is defined as:
+If `endpoints=true`, endpoints are included in the shortest path count.
 
-``bc(v) = \frac{1}{\mathcal{N}} \sum_{s \neq t \neq v}
-        \frac{\sigma_{st}(v)}{\sigma_{st}}``.
+If `normalize=true`, the betweenness values are normalized by the total number
+of possible distinct paths between all pairs in the graph. For an undirected graph,
+this number if `((n-1)*(n-2))/2` and for a directed graph, `(n-1)*(n-2)`
+where `n` is the number of vertices in the graph.
 
- **Parameters**
-
-g: ASimpleGraph
-    A Graph, directed or undirected.
-
-k: Integer, optional
-    Use `k` nodes sample to estimate the betweenness centrality. If none,
-    betweenness centrality is computed using the `n` nodes in the graph.
-
-normalize: bool, optional
-    If true, the betweenness values are normalized by the total number
-    of possible distinct paths between all pairs in the graphs. For an undirected graph,
-    this number if `((n-1)*(n-2))/2` and for a directed graph, `(n-1)*(n-2)`
-    where `n` is the number of nodes in the graph.
-
-endpoints: bool, optional
-    If true, endpoints are included in the shortest path count.
-
-**Returns**
-
-betweenness: Vector{Float64}
-    Betweenness centrality value per node id.
-
+If  an integer argument `approx > 0` is given, returns an approximation of
+the betweenness centrality of each vertex of the graph involving `approx`
+randomly chosen vertices.
 
 **References**
 
 [1] Brandes 2001 & Brandes 2008
-"""
-function betweenness_centrality(
-    g::ASimpleGraph,
-    k::Integer=0;
-    normalize=true,
-    endpoints=false)
+"""function betweenness_centrality(
+    g::ASimpleGraph;
+    approx::Int=-1,
+    normalize::Bool=true,
+    endpoints::Bool=false)
 
     n_v = nv(g)
-    isdir = is_directed(g)
-
     betweenness = zeros(n_v)
-    if k == 0
-        nodes = 1:n_v
+    if approx <= 0
+        nodes = [1:n_v;]
     else
-        nodes = sample!([1:n_v;], k)   #112
+        nodes = sample!([1:n_v;], approx)   #112
     end
     for s in nodes
         if degree(g,s) > 0  # this might be 1?
@@ -70,21 +54,17 @@ function betweenness_centrality(
         end
     end
 
-    _rescale!(betweenness,
-              n_v,
-              normalize,
-              isdir,
-              k)
+    _rescale!(betweenness, n_v, normalize, is_directed(g), length(nodes))
 
     return betweenness
 end
 
 
 function _accumulate_basic!(
-    betweenness::Vector{Float64},
-    state::DijkstraState,
-    g::ASimpleGraph,
-    si::Integer
+        betweenness::Vector{Float64},
+        state::DijkstraState,
+        g::ASimpleGraph,
+        si::Integer
     )
 
     n_v = length(state.parents) # this is the ttl number of vertices
@@ -112,10 +92,10 @@ end
 
 
 function _accumulate_endpoints!(
-    betweenness::Vector{Float64},
-    state::DijkstraState,
-    g::ASimpleGraph,
-    si::Integer
+        betweenness::Vector{Float64},
+        state::DijkstraState,
+        g::ASimpleGraph,
+        si::Integer
     )
 
     n_v = nv(g) # this is the ttl number of vertices
@@ -156,11 +136,7 @@ function _rescale!(betweenness::Vector{Float64}, n::Integer, normalize::Bool, di
         end
     end
     if do_scale
-        if k > 0
-            scale = scale * n / k
-        end
-        for v = 1:length(betweenness)
-            betweenness[v] *= scale
-        end
+        scale = scale * n / k
+        betweenness .*= scale
     end
 end
