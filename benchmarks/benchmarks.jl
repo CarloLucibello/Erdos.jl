@@ -1,17 +1,17 @@
-include("../src/Erdos.jl")
-using Erdos
+if !isdefined(:Erdos)
+    include("../src/Erdos.jl")
+    using Erdos
+end
 using BenchmarkTools
 using Base.Dates
 import JLD: load, save
-
-TUNE = false
-SAVE_RES = false
-RUN_BENCH = true
-
+BenchmarkTools.DEFAULT_PARAMETERS.seconds = 15.
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
 bench_dir = Base.source_dir()
 res_dir = joinpath(bench_dir, "results", VERS)
-par_dir = joinpath(bench_dir, "parameters", VERS)
+par_dir = joinpath(bench_dir, "parameters")
+res_dir5 = joinpath(bench_dir, "results", "v0.5")
+res_dir6 = joinpath(bench_dir, "results", "v0.6")
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
@@ -30,29 +30,32 @@ GROUPS = [
             "matching"
          ]
 
-# GROUPS = ["core"]
 for group in GROUPS
     include("$group/$group.jl")
 end
 
 ####  LOADING / SAVING PARAMS
-function savepars(suite)
-    for group in GROUPS
+function savepars(suite, groups=GROUPS)
+    for group in groups
         d = joinpath(par_dir, group)
         !isdir(d) && mkdir(d)
         path = joinpath(d, "$(Date(now())).jld")
+        println("saveing $path")
+        # BenchmarkTools.save(path, group, params(suite[group]))
         save(path, group, params(suite[group]))
     end
 end
 
-function loadpars!(suite)
-    for group in GROUPS
+function loadpars!(suite, groups=GROUPS)
+    for group in groups
         d = joinpath(par_dir,group)
         !isdir(d) && mkdir(d)
         files = readdir(d)
         if length(files) > 0
             dates = map(x -> Date(split(x, ['.'])[1]), files)
             f = joinpath(d, "$(maximum(dates)).jld")
+            println("loading $f")
+            # loadparams!(suite[group], BenchmarkTools.load(f, group), :evals, :samples)
             loadparams!(suite[group], load(f, group), :evals, :samples)
         end
     end
@@ -63,27 +66,28 @@ function saveres(res)
         d = joinpath(res_dir, group)
         !isdir(d) && mkdir(d)
         path = joinpath(d, "$(Date(now())).jld")
+        # BenchmarkTools.save(path, group, res[group])
         save(path, group, res[group])
+        println("Benchmarks' result saved in $path")
     end
 end
 
-function loadres()
+loadres(prev::Int=0) = loadres(res_dir, prev)
+function loadres(rdir::String, prev::Int=0)
     res = BenchmarkGroup()
     for group in GROUPS
-        d = joinpath(res_dir, group)
+        d = joinpath(rdir, group)
         !isdir(d) && mkdir(d)
         files = readdir(d)
         if length(files) > 0
-            dates = map(x -> Date(split(x, ['.'])[1]), files)
-            f = joinpath(d, "$(maximum(dates)).jld")
+            dates = sort(map(x -> Date(split(x, ['.'])[1]), files))
+            f = joinpath(d, "$(dates[end-prev]).jld")
+            # res[group] = BenchmarkTools.load(f, group)
             res[group] = load(f, group)
         end
     end
     return res
 end
-
-TUNE && (tune!(suite); savepars(suite))
-loadpars!(suite)
 
 
 """
@@ -99,50 +103,47 @@ function myjudge(names::String...)
     return judge(median(s),median(sold))
 end
 
-if RUN_BENCH
-#####  RUNNING ###################
+function runbench()
     res = run(suite, verbose=true)
+    return res
+end
 
-    #### COMPARISONS ##########
-    resold = loadres()
+comparebench(res,prev::Int=0) = comparebench(loadres(prev), res)
 
+function comparebench56()
+    comparebench(loadres(res_dir5),loadres(res_dir6))
+end
+
+function comparebench(resold, res)
     has_regressions = false
     has_improves = true
     for group in GROUPS
         println("GROUP $group")
         m = median(res[group])
-        println(m)
         !haskey(resold, group) && continue
-
         mold = median(resold[group])
         judgement = judge(m, mold)
-
+        println(m)
         regr = regressions(judgement)
         if length(regr) > 0
             has_regressions = false
             print_with_color(:red, "REGRESSIONS FOUND:\n")
-            println(regr)
+            @show regr
             print_with_color(:red, "******************\n")
         end
         improvs = improvements(judgement)
         if length(improvs) > 0
             has_improves = true
             print_with_color(:green, "IMPROVEMENTS FOUND:\n")
-            println(improvs)
+            @show improvs
             print_with_color(:green, "******************\n")
         end
     end
-
-    ###  SAVING ############
-    # if SAVE_RES && !has_improves && !has_regressions
-    println()
-    if SAVE_RES
-        saveres(res)
-        println("Results saved!")
-    else
-        println("Results not saved. Save them with `saveres(res)`")
-    end
 end
 
+loadpars!(suite)
 
 println("Retune the benchmarks and save the parameters with `tune!(suite); savepars(suite)`")
+println("Run the benchmarks with `res = runbench()`")
+println("Compare to previous results with `comparebench(res)`")
+println("Save the results with `saveres(res)`")
