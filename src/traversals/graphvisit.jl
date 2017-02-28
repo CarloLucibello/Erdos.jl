@@ -3,7 +3,7 @@
 
 # The concept and trivial implementation of graph visitors
 
-abstract SimpleGraphVisitor
+@compat abstract type SimpleGraphVisitor end
 
 # trivial implementation
 
@@ -21,12 +21,11 @@ examine_neighbor!(vis::SimpleGraphVisitor, u, v, ucolor, vcolor, ecolor) = true
 close_vertex!(vis::SimpleGraphVisitor, v) = true
 
 
-type TrivialGraphVisitor <: SimpleGraphVisitor
-end
+immutable TrivialGraphVisitor <: SimpleGraphVisitor end
 
 
 # This is the common base for BreadthFirst and DepthFirst
-abstract SimpleGraphVisitAlgorithm
+@compat abstract type SimpleGraphVisitAlgorithm end
 
 ###########################################################
 #

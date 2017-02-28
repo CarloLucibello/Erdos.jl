@@ -3,7 +3,7 @@
 
 Type representing an abstract vertex map.
 """
-abstract AEdgeMap{E,T}
+@compat abstract type AEdgeMap{E,T} end
 
 valtype{E,T}(m::AEdgeMap{E,T}) = T
 

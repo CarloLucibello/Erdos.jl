@@ -98,7 +98,7 @@ type GTDiGraph <: ADiGraph
                                     # memory use
 end
 
-typealias SimpleGTGraph Union{GTGraph, GTDiGraph}
+@compat const SimpleGTGraph = Union{GTGraph, GTDiGraph}
 
 edgetype{G<:SimpleGTGraph}(::Type{G}) = GTEdge
 graphtype(::Type{GTDiGraph}) = GTGraph

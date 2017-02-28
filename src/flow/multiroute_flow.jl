@@ -1,7 +1,7 @@
 """
-Abstract type that allows users to pass in their preferred Algorithm
+@compat abstract type that allows users to pass in their preferred Algorithm
 """
-abstract AbstractMultirouteFlowAlgorithm
+@compat abstract type AbstractMultirouteFlowAlgorithm end
 
 """
 Forces the multiroute_flow function to use the Kishimoto algorithm.

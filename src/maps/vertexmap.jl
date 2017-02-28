@@ -1,9 +1,9 @@
 """
-    typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
+    @compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
 Type representing an abstract vertex map.
 """
-typealias AVertexMap{V,T} Union{AbstractVector{T}, Dict{V,T}}
+@compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
 """
     hasindex(v, i::Integer)

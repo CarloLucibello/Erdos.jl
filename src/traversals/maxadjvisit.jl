@@ -10,10 +10,9 @@
 #
 #################################################
 
-type MaximumAdjacency <: SimpleGraphVisitAlgorithm
-end
+immutable MaximumAdjacency <: SimpleGraphVisitAlgorithm end
 
-abstract AbstractMASVisitor <: SimpleGraphVisitor
+@compat abstract type AbstractMASVisitor <: SimpleGraphVisitor end
 
 function maximum_adjacency_visit_impl!{T}(
     g::ASimpleGraph,	                      # the graph

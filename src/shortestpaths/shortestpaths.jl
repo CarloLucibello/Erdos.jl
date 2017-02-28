@@ -1,4 +1,4 @@
-abstract AbstractPathState
+@compat abstract type AbstractPathState end
 
 include("astar.jl")
 include("bellman-ford.jl")

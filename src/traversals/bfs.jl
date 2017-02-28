@@ -20,8 +20,7 @@ EdgeColorMap :
 - color == 1     => examined
 """
 
-type BreadthFirst <: SimpleGraphVisitAlgorithm
-end
+immutable BreadthFirst <: SimpleGraphVisitAlgorithm end
 
 function breadth_first_visit_impl!(
     g::ASimpleGraph,                 # the graph
@@ -85,8 +84,7 @@ end
 # Get the map of the (geodesic) distances from vertices to source by BFS                  #
 ###########################################
 
-immutable GDistanceVisitor <: SimpleGraphVisitor
-end
+immutable GDistanceVisitor <: SimpleGraphVisitor end
 
 """
     gdistances!(g, source, dists) -> dists
@@ -156,7 +154,7 @@ end
 # and throws an error if it is too small.
 # the source is represented in the output by a fixed point v[root] == root.
 # this function is considered a performant version of bfs_tree for useful when the parent
-# array is more helpful than a DiGraph struct, or when performance is critical.
+# array is more helpful than a DiGraph type, or when performance is critical.
 function bfs_tree!(visitor::TreeBFSVisitorVector,
         g::ASimpleGraph,
         s::Int;

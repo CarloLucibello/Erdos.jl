@@ -71,7 +71,6 @@ println("Testing Erdos")
     global E = edgetype(G)
     global V = vertextype(G)
 
-    # println("$x")
     include(joinpath(testdir,"$(t).jl"))
 end
 println("Finished testing Erdos")

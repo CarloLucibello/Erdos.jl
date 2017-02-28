@@ -7,7 +7,7 @@ using EzXML # persistence
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching
 import Clustering: kmeans # community detection
-
+using Compat
 # package Iterators.jl methods are now in utils.jl due to name
 # conflict in julia 0.6 with Base.Iterators
 # using Iterators: distinct, chain # all_neighbors

@@ -1,7 +1,7 @@
 """
-Abstract type that allows users to pass in their preferred Algorithm
+@compat abstract type that allows users to pass in their preferred Algorithm
 """
-abstract AbstractFlowAlgorithm
+@compat abstract type AbstractFlowAlgorithm end
 
 """
 Forces the maximum_flow function to use the Edmonds–Karp algorithm.
