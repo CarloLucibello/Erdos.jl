@@ -1,4 +1,7 @@
-## v0.1 (changes from LigtGraphs 0.7.1)
+## v0.2 (in development)
+- fix julia 0.6 deprecations
+
+## v0.1 (changes from LightGraphs 0.7.1)
 ### Highlights
 - add changelog
 - `Edge` is now its own type (not a `Pair{Int,Int}` anymore)
