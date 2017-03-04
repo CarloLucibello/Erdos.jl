@@ -1,4 +1,6 @@
-## v0.1.1 (in development)
+## development
+
+## v0.1.1 (3/4/2017)
 - fix julia 0.6 deprecations
 - update REQUIRE, README and docs
 
