@@ -3,8 +3,10 @@ Erdos is a graph library written in Julia. Installation is straightforward:
 ```julia
 julia> Pkg.add("Erdos")
 ```
+Erdos defines two abstract type, `AGraph` and `ADiGraph`, from which all
+concrete undirected and directed graph types are derived.
 
-All (directed/undirected) graphs  in Erdos have `1:n` indexed vertices, where `n` is the number of vertices.
+All graphs  in Erdos have `1:n` indexed vertices, where `n` is the number of vertices.
 Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced, just defining a few basic methods.
 
 ## Basic examples

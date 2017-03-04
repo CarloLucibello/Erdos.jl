@@ -1,5 +1,6 @@
-## v0.2 (in development)
+## v0.1.1 (in development)
 - fix julia 0.6 deprecations
+- update REQUIRE, README and docs
 
 ## v0.1 (changes from LightGraphs 0.7.1)
 ### Highlights
