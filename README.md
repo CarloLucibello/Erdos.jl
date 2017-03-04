@@ -1,8 +1,25 @@
 # Erdos
+[![][docs-latest-img]][docs-latest-url]
+[![][codecov-img]][codecov-url]
+[![][travis-img]][travis-url]
+[![][pkg-0.5-img]][pkg-0.5-url] 
+[![][pkg-0.6-img]][pkg-0.6-url]
 
-[![Build Status](https://travis-ci.org/CarloLucibello/Erdos.jl.svg?branch=master)](https://travis-ci.org/CarloLucibello/Erdos.jl)
-[![codecov.io](http://codecov.io/github/CarloLucibello/Erdos.jl/coverage.svg?branch=master)](http://codecov.io/github/CarloLucibello/Erdos.jl?branch=master)
-[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://carlolucibello.github.io/Erdos.jl)
+
+[pkg-0.5-img]: http://pkg.julialang.org/badges/Erdos_0.5.svg
+[pkg-0.5-url]: http://pkg.julialang.org/?pkg=Erdos
+[pkg-0.6-img]: http://pkg.julialang.org/badges/Erdos_0.6.svg
+[pkg-0.6-url]: http://pkg.julialang.org/?pkg=Erdos
+
+[docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
+[docs-latest-url]: https://carlolucibello.github.io/Erdos.jl/
+
+[travis-img]: https://travis-ci.org/CarloLucibello/Erdos.jl.svg?branch=master
+[travis-url]: https://travis-ci.org/CarloLucibello/Erdos.jl
+
+[codecov-img]: https://codecov.io/gh/CarloLucibello/Erdos.jl/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/CarloLucibello/Erdos.jl
+
 
 A graph library entirely written in Julia.
 It is derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), with the addition of an abstract
@@ -16,7 +33,7 @@ See also the [CHANGELOG](https://github.com/CarloLucibello/Erdos.jl/blob/master/
 ## Installation
 Installation is straightforward:
 ```julia
-julia> Pkg.clone("https://github.com/CarloLucibello/Erdos.jl")
+julia> Pkg.add("Erdos")
 ```
 
 ## Features
