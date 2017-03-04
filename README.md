@@ -21,20 +21,14 @@
 [codecov-url]: https://codecov.io/gh/CarloLucibello/Erdos.jl
 
 
-A graph library entirely written in Julia.
-It is derived from [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), with the addition of an abstract
-graph interface and custom graph types, e.g. Erdos has `Graph{Int32}` (to save memory when working with very large graphs) and graph types with indexed edges. It comes with other goodies such as edge/vertex maps, improved flows, k-core, graph dismantling and many more stuff. We welcome contributions and bug reports!
-
-## Documentation
-Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl).
-Documentation for methods is also available via the Julia REPL help system.
-See also the [CHANGELOG](https://github.com/CarloLucibello/Erdos.jl/blob/master/CHANGELOG.md) for differences with previous versions.
-
-## Installation
-Installation is straightforward:
+A graph library entirely written in Julia. Install it with 
 ```julia
 julia> Pkg.add("Erdos")
 ```
+## Documentation
+Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl).
+Methods' documentation is also available via the Julia REPL help system.
+See also the [CHANGELOG](https://github.com/CarloLucibello/Erdos.jl/blob/master/CHANGELOG.md) for differences with previous versions.
 
 ## Features
 - **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all/common)
