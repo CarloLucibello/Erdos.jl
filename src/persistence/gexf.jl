@@ -1,4 +1,3 @@
-# TODO: implement readgexf
 function writegexf(f::IO, g::ASimpleGraph)
     xdoc = XMLDocument()
     xroot = setroot!(xdoc, ElementNode("gexf"))

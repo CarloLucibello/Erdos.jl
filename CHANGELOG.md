@@ -1,10 +1,12 @@
-## development
+## Development
+- read/write consistency: make sure that `writegraph("file",g); g == readgraph("file")`
+- fixed some bugs in gml, net and dot formats
 
-## v0.1.1 (3/4/2017)
+## v0.1.1  2017.3.4
 - fix julia 0.6 deprecations
 - update REQUIRE, README and docs
 
-## v0.1 (changes from LightGraphs 0.7.1)
+## v0.1  2017.2.19 (changes from LightGraphs 0.7.1)
 ### Highlights
 - add changelog
 - `Edge` is now its own type (not a `Pair{Int,Int}` anymore)
