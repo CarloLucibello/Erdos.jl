@@ -1,4 +1,6 @@
 ## Development
+
+## v0.1.2  2017.3.5
 - read/write consistency: make sure that `writegraph("file",g); g == readgraph("file")`
 - fixed some bugs in gml, net and dot formats
 
