@@ -25,6 +25,7 @@ A graph library entirely written in Julia. Install it with
 ```julia
 julia> Pkg.add("Erdos")
 ```
+Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived.
 ## Documentation
 Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl).
 Methods' documentation is also available via the Julia REPL help system.
