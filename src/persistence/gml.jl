@@ -1,11 +1,15 @@
 function _readgml{G}(gs, ::Type{G})
     mapping = Dict{Int,Int}()
-    for (i, x) in enumerate(gs[:node])
-        mapping[x[:id]] = i
+    if haskey(gs,:node)
+        for (i, x) in enumerate(gs[:node])
+            mapping[x[:id]] = i
+        end
     end
     g = G(length(mapping))
-    for e in gs[:edge]
-        add_edge!(g, mapping[e[:source]], mapping[e[:target]])
+    if haskey(gs, :edge)
+        for e in gs[:edge]
+            add_edge!(g, mapping[e[:source]], mapping[e[:target]])
+        end
     end
     return g
 end

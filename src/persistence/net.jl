@@ -44,7 +44,7 @@ function readpajek{G}(f::IO, ::Type{G})
 end
 
 function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
-    while ismatch(r"^\*Edges",line) # add edges in both directions
+    while ismatch(r"^\*Edges",line) && !eof(f)
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)

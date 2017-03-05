@@ -10,6 +10,20 @@ graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), G)
 @test nv(graphml_g) == 13
 @test ne(graphml_g) == 15
 
+g = G(10,0)
+@test writegraph(f, g, :graphml) == 1
+ga = readgraph(f, :graphml, G)
+@test g == ga
+
+g = G(10,20)
+@test writegraph(f, g, :graphml) == 1
+ga = readgraph(f, :graphml, G)
+@test g == ga
+
+g = DG(10,20)
+@test writegraph(f, g, :graphml) == 1
+ga = readgraph(f, :graphml, G)
+@test g == ga
 
 # test :gml
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
@@ -30,6 +44,21 @@ gml1 = readgraph(joinpath(testdir,"testdata", "twounnamedgraphs.gml"), G)
 @test writegraph(f, gml1, :gml) == 1
 gml1a = readgraph(f, :gml, G)
 @test gml1a == gml1
+
+g = G(10,0)
+@test writegraph(f, g, :gml) == 1
+ga = readgraph(f, :gml, G)
+@test g == ga
+
+g = G(10,20)
+@test writegraph(f, g, :gml) == 1
+ga = readgraph(f, :gml, G)
+@test g == ga
+
+g = DG(10,20)
+@test writegraph(f, g, :gml) == 1
+ga = readgraph(f, :gml, G)
+@test g == ga
 
 # test :dot
 g = readgraph(joinpath(testdir, "testdata", "twographs.dot"), G)
@@ -74,6 +103,22 @@ g = readgraph(fname, G)
 h = readgraph(f, :gt, G)
 @test g == h
 
+
+g = G(10,0)
+@test writegraph(f, g, :gt) == 1
+ga = readgraph(f, :gt, G)
+@test g == ga
+
+g = G(10,20)
+@test writegraph(f, g, :gt) == 1
+ga = readgraph(f, :gt, G)
+@test g == ga
+
+g = DG(10,20)
+@test writegraph(f, g, :gt) == 1
+ga = readgraph(f, :gt, G)
+@test g == ga
+
 # # TODO celegansneural appears corrupted
 # fname= joinpath(datasets_dir, "celegansneural.gt.gz")
 # g = readgraph(fname, :gt, G, compressed=true)
@@ -89,6 +134,21 @@ h = readgraph(f, :gt, G)
 @test writegraph(f, g, :gexf) == 1
 h = readgraph(f, :gexf, G)
 @test g == h
+
+g = G(10,0)
+@test writegraph(f, g, :gexf) == 1
+ga = readgraph(f, :gexf, G)
+@test g == ga
+
+g = G(10,20)
+@test writegraph(f, g, :gexf) == 1
+ga = readgraph(f, :gexf, G)
+@test g == ga
+
+g = DG(10,20)
+@test writegraph(f, g, :gexf) == 1
+ga = readgraph(f, :gexf, G)
+@test g == ga
 
 #test :net
 g10 = CompleteGraph(10, G)
@@ -124,3 +184,18 @@ rm(fname)
 g10 = readgraph(joinpath(testdir, "testdata", "kinship.net"), G)
 @test nv(g10) == 6
 @test ne(g10) == 8
+
+g = G(10,0)
+@test writegraph(f, g, :net) == 1
+ga = readgraph(f, :net, G)
+@test g == ga
+
+g = G(10,20)
+@test writegraph(f, g, :net) == 1
+ga = readgraph(f, :net, G)
+@test g == ga
+
+g = DG(10,20)
+@test writegraph(f, g, :net) == 1
+ga = readgraph(f, :net, G)
+@test g == ga

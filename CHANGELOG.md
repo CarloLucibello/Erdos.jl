@@ -1,4 +1,6 @@
-## development
+## Development
+- read/write consistency: make sure that `writegraph("file",g); g == readgraph("file")`
+- fixed some bugs in gml, net and dot formats
 
 ## v0.1.1  2017.3.4
 - fix julia 0.6 deprecations
