@@ -1,7 +1,26 @@
+function _dot_nodes_to_dict(pg)
+    nodes = collect(DOT.nodes(pg))
+    n = length(nodes)
+    # try to convert label in index
+    # so that  write("file",g) == read("file")
+    try
+        if all(v->isalpha(first(v)), nodes)
+            d = Dict(v => parse(Int, v[2:end]) for v in nodes)
+        else
+            d = Dict(nodes[i] => parse(Int, nodes[i]) for i=1:n)
+        end
+        @assert minimum(values(d)) == 1
+        @assert maximum(values(d)) == n
+        return d
+    catch
+        return Dict(zip(nodes, 1:n))
+    end
+end
+
 function _readdot{G<:ASimpleGraph}(pg, ::Type{G})
-    nvg = length(DOT.nodes(pg))
-    nodedict = Dict(zip(collect(DOT.nodes(pg)), 1:nvg))
-    g = G(nvg)
+    n = length(DOT.nodes(pg))
+    nodedict = _dot_nodes_to_dict(pg)
+    g = G(n)
     for es in DOT.edges(pg)
         s = nodedict[es[1]]
         d = nodedict[es[2]]
@@ -25,8 +44,14 @@ function writedot(io::IO, g::ASimpleGraph)
         eop = "--"
     end
 
-    for (s,t) in edges(g)
-        println(io,"\tn$s $eop n$t;")
+    for i=1:nv(g)
+        if degree(g, i) == 0
+            println(io, "\tn$i;")
+        end
+    end
+
+    for e in edges(g)
+        println(io, "\tn$(src(e)) $eop n$(dst(e));")
     end
 
     println(io, "}")
