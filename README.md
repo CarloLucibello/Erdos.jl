@@ -2,7 +2,7 @@
 [![][docs-latest-img]][docs-latest-url]
 [![][codecov-img]][codecov-url]
 [![][travis-img]][travis-url]
-[![][pkg-0.5-img]][pkg-0.5-url] 
+[![][pkg-0.5-img]][pkg-0.5-url]
 [![][pkg-0.6-img]][pkg-0.6-url]
 
 
@@ -21,14 +21,14 @@
 [codecov-url]: https://codecov.io/gh/CarloLucibello/Erdos.jl
 
 
-A graph library entirely written in Julia. Install it with 
+A graph library entirely written in Julia. Install it with
 ```julia
 julia> Pkg.add("Erdos")
 ```
 ## Documentation
 Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl).
 Methods' documentation is also available via the Julia REPL help system.
-See also the [CHANGELOG](https://github.com/CarloLucibello/Erdos.jl/blob/master/CHANGELOG.md) for differences with previous versions.
+See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.md) for differences with previous versions.
 
 ## Features
 - **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all/common)
