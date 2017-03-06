@@ -15,8 +15,8 @@ for G in GLIST
 
         s["read","gt","$g"] = @benchmarkable readgraph($(fname*"$n.gt"), $G)
         s["read","net","$g"] = @benchmarkable readgraph($(fname*"$n.net"), $G)
-        s["read","gml","$g"] = @benchmarkable readgraph($(fname*"$n.gml"), $G) #SLOW
-        s["read","dot","$g"] = @benchmarkable readgraph($(fname*"$n.dot"), $G) #SLOW
+        # s["read","gml","$g"] = @benchmarkable readgraph($(fname*"$n.gml"), $G) #SLOW
+        # s["read","dot","$g"] = @benchmarkable readgraph($(fname*"$n.dot"), $G) #SLOW
         s["read","graphml","$g"] = @benchmarkable readgraph($(fname*"$n.graphml"), $G)
         s["read","gexf","$g"] = @benchmarkable readgraph($(fname*"$n.gexf"), $G)
     end

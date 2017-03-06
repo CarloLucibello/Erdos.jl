@@ -2,10 +2,15 @@ if !isdefined(:Erdos)
     include("../src/Erdos.jl")
     using Erdos
 end
+
 using BenchmarkTools
 using Base.Dates
 import JLD: load, save
-BenchmarkTools.DEFAULT_PARAMETERS.seconds = 15.
+
+BenchmarkTools.DEFAULT_PARAMETERS.seconds = 40.
+BenchmarkTools.DEFAULT_PARAMETERS.time_tolerance = 0.01
+BenchmarkTools.DEFAULT_PARAMETERS.samples = 50000
+
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
 bench_dir = Base.source_dir()
 res_dir = joinpath(bench_dir, "results", VERS)
