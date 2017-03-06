@@ -44,7 +44,7 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/datasets/smallgraphs.jl) for a list
+- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl) for a list
 
 - **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
 
