@@ -2,6 +2,8 @@ include("../src/Erdos.jl")
 using Erdos
 using Base.Test
 
+testdir = dirname(@__FILE__)
+
 tests = [
     "factory/graph",
     "factory/gtgraph",
@@ -15,7 +17,8 @@ tests = [
     "distances/distance",
     "distances/edit_distance",
     "linalg/spectral",
-    "persistence/persistence",
+        # "persistence/persistence",
+        # "persistence/datasets",
     "generators/randgraphs",
     "generators/staticgraphs",
     "generators/smallgraphs",
@@ -55,7 +58,6 @@ tests = [
 ]
 
 testdir = dirname(@__FILE__)
-datasets_dir = normpath(joinpath(@__FILE__,"..","..","datasets"))
 
 # E = GTEdge
 GLIST =    [
@@ -73,4 +75,20 @@ println("Testing Erdos")
 
     include(joinpath(testdir,"$(t).jl"))
 end
+
+tests = [
+    "persistence/persistence",
+    "persistence/datasets",
+]
+
+for GDG in GLIST, t in tests
+    global G = GDG[1]
+    global DG = GDG[2]
+    global TEST = t
+    global E = edgetype(G)
+    global V = vertextype(G)
+
+    include(joinpath(testdir,"$(t).jl"))
+end
+
 println("Finished testing Erdos")

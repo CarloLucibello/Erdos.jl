@@ -69,7 +69,7 @@ function readgt{G}(io::IO, ::Type{G})
     isdir = read(io, Bool)
     n = read(io, UInt64)
     T = minutype(n)
-    g = isdir ? digraph(G(n)) : graph(G(n))
+    g = isdir ? digraph(G(Int(n))) : graph(G(Int(n)))
 
     # println("$n $indian $T $isdir")
     readgt_adj!(io, g, T)
@@ -81,10 +81,11 @@ function readgt_adj!{T}(io::IO, g::ADiGraph, ::Type{T})
         k = read(io, UInt64)
         for _=1:k
             j = read(io, T) + 1
-            unsafe_add_edge!(g, i, j)
+            # unsafe_add_edge!(g, i, j)
+            add_edge!(g, i, j)
         end
     end
-    rebuild!(g)
+    # rebuild!(g)
 end
 
 function readgt_adj!{T}(io::IO, g::AGraph, ::Type{T})
@@ -92,10 +93,12 @@ function readgt_adj!{T}(io::IO, g::AGraph, ::Type{T})
         k = read(io, UInt64)
         for _=1:k
             j = read(io, T) + 1
-            unsafe_add_edge!(g, i, j)
+            # @assert j >= i
+            # unsafe_add_edge!(g, i, j)
+            add_edge!(g, i, j)
         end
     end
-    rebuild!(g)
+    # rebuild!(g)
 end
 
 filemap[:gt] = (readgt, writegt)

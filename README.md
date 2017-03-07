@@ -36,11 +36,7 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 **Erdos.jl** is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
 
 ## Features
-- **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all/common)
-
-- **distance within graphs:** eccentricity, diameter, periphery, radius, center
-
-- **distance between graphs:** spectral_distance, edit_distance
+- **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all)
 
 - **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood, k-core
 
@@ -48,9 +44,12 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **shortest paths:** Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*
 
-- **small graph generators:** see [smallgraphs.jl](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl) for a list
+- **graph datasets:** A collection of real world graphs (e.g. Zachary's karate club)
 
-- **random graph generators:** Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model
+- **graph generators:** [notorious graphs](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl),
+euclidean graphs and random graphs (Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model)
+
+- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
 
 - **centrality:** betweenness, closeness, degree, pagerank, Katz
 
@@ -68,4 +67,6 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **community:** modularity, community detection, core-periphery, clustering coefficients
 
-- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
+- **distance within graphs:** eccentricity, diameter, periphery, radius, center
+
+- **distance between graphs:** spectral_distance, edit_distance

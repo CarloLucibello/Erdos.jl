@@ -30,6 +30,8 @@ else # chomped in julia 0.6
     end
 end
 
+cp("../datasets/README.md","src/datasets.md", remove_destination=true)
+
 makedocs(modules=[Erdos], doctest = true)
 
 deploydocs(

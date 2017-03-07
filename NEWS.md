@@ -1,5 +1,8 @@
 ## v0.x.y
 - doc system updates
+- release datasets under GPLv3
+- interface with graph collection (datasets)
+through `readgraph`
 
 ## v0.1.2  2017.3.5
 - read/write consistency: make sure that `writegraph("file",g); g == readgraph("file")`

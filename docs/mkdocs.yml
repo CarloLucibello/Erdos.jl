@@ -21,6 +21,7 @@ pages:
   - 'Shortest Paths': 'shortestpaths.md'
   - 'Linear Algebra': 'linalg.md'
   - 'Reading / Writing Graphs': 'persistence.md'
+  - 'Graph Datasets': 'datasets.md'
   - 'Graph Generators': 'generators.md'
   - 'Centrality Measures': 'centrality.md'
   - 'Community Structures': 'community.md'

@@ -1,11 +1,8 @@
-#####################
-# STATIC SMALL GRAPHS
-#####################
 """
     graph{G<:AGraph}(n, edgelist::Vector{Tuple{Int,Int}},
         G = Graph)
 
-Build a graph with `n` vertices, type `G`, and given `edgelist`.
+Build a graph with `n` vertices, of type `G`, and given `edgelist`.
 """
 function graph{G<:AGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
         ::Type{G} = Graph)
@@ -59,9 +56,9 @@ Creates a notorious graph `s` of type `G`. Admissible values for `s` are:
 | :tetrahedral              |   A [Platonic tetrahedral  graph](https://en.wikipedia.org/wiki/Platonic_graph). |
 | :truncatedcube            |   A skeleton of the [truncated cube graph](https://en.wikipedia.org/wiki/Truncated_cube). |
 | :truncatedtetrahedron     |   A skeleton of the [truncated tetrahedron  graph](https://en.wikipedia.org/wiki/Truncated_tetrahedron). |
-| :truncatedtetrahedron_dir |   A skeleton of the [truncated tetrahedron digraph](https://en.wikipedia.org/wiki/Truncated_tetrahedron). |
 | :tutte                    |   A [Tutte graph](https://en.wikipedia.org/wiki/Tutte_graph). |
 
+A collection of real world graphs is available through the [`readgraph`](@ref) function.
 """
 function graph{G<:AGraph}(s::Symbol, ::Type{G} = Graph)
     graphmap = Dict(
