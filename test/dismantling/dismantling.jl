@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g = WheelGraph(10, G)
 h, vmap, reslist = dismantle_ci(g, 2, 1)
 @test reslist == [1]
@@ -23,3 +25,5 @@ g = CompleteGraph(10, G)
 h, vmap, reslist = dismantle_ci(g, 2, 5)
 @test sort([reslist; vmap]) == [1:10;]
 @test h == CompleteGraph(5, G)
+
+end # testset

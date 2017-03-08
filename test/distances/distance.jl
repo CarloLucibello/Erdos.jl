@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 adjmx1 = [0 1 0; 1 0 1; 0 1 0] # graph
 adjmx2 = [0 1 0; 1 0 1; 1 1 0] # digraph
 a1 = G(adjmx1)
@@ -22,3 +24,5 @@ z = eccentricities(a2, distmx2)
 @test minimum(z) == radius(a2, distmx2) == 4.2
 @test center(z) == center(a2, distmx2) == [2]
 @test z[3] == eccentricity(a2, 3, distmx2)
+
+end # testset

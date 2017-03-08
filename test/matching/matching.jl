@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g =G(2)
 add_edge!(g,1,2)
 w = EdgeMap(g, Int)
@@ -67,3 +69,5 @@ for i=1:nv(g)
     j = match.mate[i]
     @test match.mate[j] == i
 end
+
+end # testset

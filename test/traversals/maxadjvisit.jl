@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 # Test of Min-Cut and maximum adjacency visit
 
 using Erdos
@@ -49,3 +51,5 @@ bestcut, cut, parity = minimum_cut(g)
 v = maximum_adjacency_visit(g)
 
 @test v == Vector{Int64}([1, 2, 5, 6, 3, 7, 4, 8])
+
+end # testset

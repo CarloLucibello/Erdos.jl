@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 # TODO some tests here intermittently fail on travis-ci
 # using @test_skip for the time being
 
@@ -110,3 +112,5 @@ for k=2:5
     # check the partition
     # @test a == c
 end
+
+end # testset

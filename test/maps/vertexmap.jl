@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 vm = ConstVertexMap(0)
 @test typeof(vm) <: AVertexMap
 @test get(vm, 1, 1) == 0
@@ -13,6 +15,7 @@ vm = rand(1:10,10)
 @test hasindex(vm, 1)
 @test !hasindex(vm, -1)
 
+g = G()
 vm = Dict{V, Float64}()
 @test VertexMap(g, Float64) == vm
 @test typeof(vm) <: AVertexMap
@@ -20,3 +23,5 @@ vm = Dict{V, Float64}()
 vm[1] = 2.
 @test hasindex(vm, 1)
 @test !hasindex(vm, 2)
+
+end # testset

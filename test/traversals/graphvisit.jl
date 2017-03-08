@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 # stub tests for coverage; disregards output.
 if !isdefined(:trivialgraphvisit)
     function trivialgraphvisit(
@@ -22,3 +24,5 @@ g = G(10, 20)
 # this just exercises some graph visitors
 @test traverse_graph!(g, BreadthFirst(), 1, TrivialGraphVisitor()) == nothing
 @test traverse_graph!(g, BreadthFirst(), 1, LogGraphVisitor(IOBuffer())) == nothing
+
+end # testset

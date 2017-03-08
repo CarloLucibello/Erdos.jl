@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:test_blocking_flow)
     # Test on disconnected graphs
     function test_blocking_flow(residual_graph, source, target, capacity_matrix, flow_matrix)
@@ -58,3 +60,5 @@ residual_graph = complete(flow_graph)
 
 flow_matrix = zeros(Int, nv(residual_graph), nv(residual_graph))
 test_blocking_flow(residual_graph, 1, 8, capacity_matrix, flow_matrix)
+
+end # testset

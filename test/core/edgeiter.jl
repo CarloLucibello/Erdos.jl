@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 @test length(collect(edges(G()))) == 0
 
 ga = G(10,20; seed=1)
@@ -59,3 +61,5 @@ eit = edges(ga)
 # @test collect(edges(g,1:3)) == collect(edges(g,[1:3;]))
 # @test length(collect(edges(g, 1:3))) == 6
 # @test length(collect(edges(g, 1:0))) == 0
+
+end # testset

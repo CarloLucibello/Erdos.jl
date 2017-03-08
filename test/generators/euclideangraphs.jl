@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 N = 10
 d = 2
 g, weights, points = euclidean_graph(N, d)
@@ -18,3 +20,5 @@ g, weights, points = euclidean_graph(N, d, bc=:periodic)
 
 @test_throws ErrorException euclidean_graph(points, L=0.01,  bc=:periodic)
 @test_throws ErrorException euclidean_graph(points, bc=:ciao)
+
+end # testset

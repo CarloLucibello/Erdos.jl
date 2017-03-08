@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 triangle = random_regular_graph(3,2)
 quadrangle = random_regular_graph(4,2)
 pentagon = random_regular_graph(5,2)
@@ -24,3 +26,5 @@ for i=1:3
   @test cost(i,i) == 0.
   @test bcost(i,i) == 2/3
 end
+
+end # testset

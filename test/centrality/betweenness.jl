@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:readcentrality)
     function readcentrality(f::AbstractString)
         f = open(f,"r")
@@ -41,3 +43,5 @@ z = betweenness_centrality(g; normalize=true)
 g3 = PathGraph(5, G)
 z = betweenness_centrality(g3; normalize=false)
 @test z[1] == z[5] == 0.0
+
+end # testset

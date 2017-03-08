@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 r1 = G(10,20)
 r2 = DG(5,10)
 @test typeof(r1) == G
@@ -191,3 +193,5 @@ g = stochastic_block_model(2., 3., [100,100], G)
 @test  4.5 < mean(degree(g)) < 5.5
 g = stochastic_block_model(3., 4., [100,100,100])
 @test  10.5 < mean(degree(g)) < 11.5
+
+end # testset

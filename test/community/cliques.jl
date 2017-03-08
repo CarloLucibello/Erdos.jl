@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 ##################################################################
 #
 #   Maximal cliques of undirected graph
@@ -46,3 +48,5 @@ add_edge!(h,4,5)
 add_edge!(h,4,7)
 add_edge!(h,5,7)
 @test test_cliques(h, Array[[7,4,5], [2,6], [3,5], [3,6], [3,1]])
+
+end # testset

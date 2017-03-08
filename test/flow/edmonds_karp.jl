@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:test_find_path_types)
     # Test the types of the values returned by fetch_path
     function test_find_path_types(residual_graph, s, t, flow_matrix, capacity_matrix)
@@ -58,3 +60,5 @@ residual_graph = complete(flow_graph)
 flow_matrix = zeros(Int, nv(residual_graph), nv(residual_graph))
 test_find_path_types(residual_graph, 1,8, flow_matrix, capacity_matrix)
 test_find_path_disconnected(residual_graph, 1, 8, flow_matrix, capacity_matrix)
+
+end # testset

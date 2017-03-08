@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 #### Graphs for testing
 graphs = [
   # Graph with 8 vertices
@@ -82,3 +84,5 @@ for (nvertices, flow_edges, s, t, froutes, breakpts, ffloat) in graphs
       end
     end
 end
+
+end # testset

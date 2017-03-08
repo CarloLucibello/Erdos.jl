@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 # construct graph
 g = DG(3)
 add_edge!(g,1,2)
@@ -25,3 +27,5 @@ residual_graph = complete(g)
 path = Erdos.find_path!(residual_graph, source, target, flow_matrix, capacity_matrix, PARENT, TREE, A)
 
 @test path == [1,2,3]
+
+end # testset

@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 s = Erdos.sample!([1:10;], 3)
 @test length(s) == 3
 for  e in s
@@ -12,3 +14,5 @@ end
 
 @test Erdos.nth((i for i in 11:21), 2) == 12
 @test_throws BoundsError Erdos.nth((i for i in 1:10), 11)
+
+end # testset
