@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 #### Graphs for testing
 graphs = [
   # Graph with 8 vertices
@@ -103,3 +105,5 @@ for ALGO in [EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, Pu
     @test f ≈ fcustom
     @test lab == labcustom
 end
+
+end # testset

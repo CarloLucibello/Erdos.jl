@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g = CompleteDiGraph(5, DG)
 @test nv(g) == 5 && ne(g) == 20
 @test typeof(g) == DG
@@ -74,3 +76,5 @@ J = [ 3,4,1,5,2,6,3,7,4,8,9,8,5,10,7,6,11,10,7,8,9,12,9,12,10,11 ]
 V = ones(Int, length(I))
 Adj = sparse(I,J,V)
 @test Adj == sparse(rg3)
+
+end # testset

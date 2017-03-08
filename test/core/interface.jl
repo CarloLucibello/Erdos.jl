@@ -2,6 +2,9 @@ if !isdefined(:TestGraph)
     type TestGraph <: AGraph; end
     type TestDiGraph <: ADiGraph; end
 end
+
+@testset "$TEST $G" begin
+
 g = TestGraph()
 h = TestDiGraph()
 
@@ -23,3 +26,5 @@ h = TestDiGraph()
 @test graphtype(DiGraph) == Graph{Int}
 @test digraphtype(Graph) == DiGraph{Int}
 @test digraphtype(DiGraph) == DiGraph{Int}
+
+end # testset

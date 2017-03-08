@@ -258,6 +258,9 @@ function unsafe_add_edge!(g::Graph, s, d)
     g.ne += 1
 end
 
+#TODO should check for duplicate edges.
+## sort!(union!(x)) ??
+# shold verify i~j  => j~i
 function rebuild!(g::Graph)
     for neigs in g.fadjlist
         sort!(neigs)

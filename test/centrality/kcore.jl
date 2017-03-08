@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g = CompleteGraph(5, G)
 klist = cores(g)
 @test klist == fill(4, 5)
@@ -18,3 +20,5 @@ klist = cores(g)
 h, vmap = kcore(g, 2)
 @test h == CycleGraph(3)
 @test vmap == [1,2,3]
+
+end # testset

@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g = graph(:diamond, G)
 @test nv(g) == 4 && ne(g) == 5
 @test typeof(g) == G
@@ -68,3 +70,5 @@ g = graph(:tutte, G)
 @test nv(g) == 46 && ne(g) == 69
 
 @test_throws ErrorException g = graph(:nonexistent, G)
+
+end # testset

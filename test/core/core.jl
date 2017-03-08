@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:test_rem_edge)
     function test_rem_edge(g, srcv)
         for dstv in collect(neighbors(g, srcv))
@@ -455,3 +457,5 @@ h = copy(g)
 pop_vertex!(g)
 rem_vertex!(h, 10)
 @test g == h
+
+end # testset

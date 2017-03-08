@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 (f,fio) = mktemp()
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
@@ -83,8 +85,7 @@ ga = readgraph(f, :dot, G)
 @test g == ga
 
 # test :gt
-fname= joinpath(datasets_dir, "lesmis.gt.gz")
-g = readgraph(fname, G)
+g = readgraph(:lesmis, G)
 @test typeof(g) == G
 @test nv(g) == 77
 @test ne(g) == 254
@@ -93,8 +94,7 @@ g = readgraph(fname, G)
 h = readgraph(f, :gt, G)
 @test g == h
 
-fname= joinpath(datasets_dir, "serengeti-foodweb.gt.gz")
-g = readgraph(fname, G)
+g = readgraph(:serengetifoodweb, G)
 @test typeof(g) == DG
 @test nv(g) == 161
 @test ne(g) == 592
@@ -199,3 +199,5 @@ g = DG(10,20)
 @test writegraph(f, g, :net) == 1
 ga = readgraph(f, :net, G)
 @test g == ga
+
+ end #testset

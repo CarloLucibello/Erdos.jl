@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 # TODO one commented out test here intermittenlty fails on Travis
 g = G(4)
 add_edge!(g, 1,2)
@@ -118,3 +120,5 @@ for e in mst
     u , v = u < v ? (u,v) : (v,u)
     @test  1 <= u < v <= 10 || 11 <= u < v <= 20
 end
+
+end # testset

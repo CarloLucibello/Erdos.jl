@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 e1 = E(1,2)
 re1 = E(2,1)
 @test e1.src == src(e1) == 1
@@ -8,3 +10,5 @@ e5 = E(3,5)
 
 @test is_ordered(e5)
 @test !is_ordered(reverse(e5))
+
+end # testset

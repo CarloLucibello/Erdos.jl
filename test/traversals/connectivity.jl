@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:scc_ok)
     function scc_ok(g)
       """Check that all SCC really are strongly connected"""
@@ -193,3 +195,5 @@ g10 = StarDiGraph(10, DG)
 @test !is_graphical([1,1,1])
 @test is_graphical([2,2,2])
 @test is_graphical(fill(3,10))
+
+end # testset

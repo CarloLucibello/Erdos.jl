@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g3 = PathDiGraph(3, DG)
 complete!(g3)
 @test ne(g3) == 4
@@ -198,3 +200,5 @@ sg, vm = subgraph(gg5, elist)
 g10 = StarGraph(10, G)
 @test egonet(g10, 1, 0) == G(1, 0)
 @test egonet(g10, 1, 1) == g10
+
+end # testset

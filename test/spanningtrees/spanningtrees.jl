@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 n = 5
 g = CompleteGraph(n, G)
 @test count_spanning_trees(g) == 125
@@ -26,3 +28,5 @@ g = G()
 @test count_spanning_trees(g) == 1
 g = G(1)
 @test count_spanning_trees(g) == 1
+
+end # testset

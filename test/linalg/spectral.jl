@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g3 = PathGraph(5, G)
 @test adjacency_matrix(g3)[3,2] == 1
 @test adjacency_matrix(g3)[2,4] == 0
@@ -130,3 +132,5 @@ for n=3:10
   @test isapprox(spectral_distance(polygon, polygon), 0, atol=1e-8)
   @test isapprox(spectral_distance(polygon, polygon, 1), 0, atol=1e-8)
 end
+
+end # testset

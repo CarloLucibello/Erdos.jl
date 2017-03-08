@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 if !isdefined(:is_nonbacktracking)
     #is_nonbacktracking: a predicate that tests if a walk is nonbacktracking.
     #    That is that for no index i walk[i+2]==walk[i]
@@ -73,3 +75,5 @@ for len = 1:3*n
     @test test_nbw(g,1,len) == true
     @test test_nbw(g,2,len) == true
 end
+
+end # testset

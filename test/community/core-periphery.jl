@@ -1,3 +1,5 @@
+@testset "$TEST $G" begin
+
 g10 = StarGraph(10)
 c = core_periphery_deg(g10)
 @test degree(g10,1) == 9
@@ -18,3 +20,5 @@ end
 for i=12:20
     @test c[i] == 2
 end
+
+end # testset
