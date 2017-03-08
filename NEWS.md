@@ -1,8 +1,9 @@
 ## v0.x.y
+
+## v0.1.3  2017.3.8
 - doc system updates
 - release datasets under GPLv3
-- interface with graph collection (datasets)
-through `readgraph`
+- interface with graph collection (datasets) through `readgraph`
 - move testsets into files
 
 ## v0.1.2  2017.3.5
