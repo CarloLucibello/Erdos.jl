@@ -21,6 +21,8 @@ The Erdos.jl package is licensed under the MIT "Expat" License:
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+Files in the "datasets" directory are licensed under GPLv3 License.
+
 Erdos uses code derived from and/or inspired by the following packages:
 
 LightGraphs.jl:
