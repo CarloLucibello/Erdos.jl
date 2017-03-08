@@ -10,7 +10,7 @@ readgraph(s, G=Graph)
 where `s` is any of the symbols below and `G` is a (di)graph type.
 Here is a complete list of the graphs in the form
 
- s        |      N        |    E         |   Directed |
+ s        |      N        |    E         |   directed |
 ....description....
 
 ---------------------------------------------------
@@ -39,7 +39,7 @@ Condensed matter collaborations 2005: updated network of coauthorships between s
 :dolphins       |      62     |      159    |      false |   
 Dolphin social network: an undirected social network of frequent associations between 62 dolphins in a community living off Doubtful Sound, New Zealand. Please cite D. Lusseau, K. Schneider, O. J. Boisseau, P. Haase, E. Slooten, and S. M. Dawson, Behavioral Ecology and Sociobiology 54, 396-405 (2003). Retrieved from [Mark Newman's website](http://www-personal.umich.edu/~mejn/netdata/).
 
-:emailenron     |     36692   |     367662  |     false  |   
+:emailenron     |     36692   |     183831  |     false  |   
 Enron email communication network covers all the email communication within a dataset of around half million emails. This data was originally made public, and posted to the web, by the Federal Energy Regulatory Commission during its investigation. Nodes of the network are email addresses and if an address i sent at least one email to address j, the graph contains an undirected edge from i to j. Note that non-Enron email addresses act as sinks and sources in the network as we only observe their communication with the Enron email addresses. The Enron email data was [originally released]( http://www.cs.cmu.edu/~enron/) by William Cohen at CMU. This version was retrieved from the SNAP database at http://snap.stanford.edu/data/email-Enron.html. Please cite: J. Leskovec, K. Lang, A. Dasgupta, M. Mahoney. Community Structure in Large Networks: Natural Cluster Sizes and the Absence of Large Well-Defined Clusters. Internet Mathematics 6(1) 29--123, 2009,  B. Klimmt, Y. Yang. Introducing the Enron corpus. CEAS conference, 2004.
 
 :football       |      115    |      615    |      false |    

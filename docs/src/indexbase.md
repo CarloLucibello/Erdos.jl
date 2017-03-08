@@ -95,6 +95,7 @@ true
 julia> rem_vertex!(g,12)
 false
 ```
+
 ### Iterators
 ```julia
 julia> g = Graph(10,20) #erdos renyi random graph with 10 vertices and 20 edges
@@ -122,6 +123,7 @@ julia> for i in neighbors(g,1)
 julia> degree(g, 1) == k
 true
 ```
+
 ### I/O
 Erdos supports many standard graph formats. Here is an example with Pajek's .net
 format:
@@ -138,5 +140,16 @@ DiGraph{Int64}(10, 20)
 julia> g == h
 true
 ```
+
+### Datasets
+A collection of real world graphs is available through `readgraph`:
+```julia
+julia> g = readgraph(:karate)
+Graph{Int64}(34, 78)
+
+julia> g = readgraph(:condmat,Graph{UInt32})
+Graph{UInt32}(16726, 47594)
+```
+
 ## Ready to explore
 Refer to the documentation to explore all the features of Erdos:
