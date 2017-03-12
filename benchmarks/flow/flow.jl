@@ -25,7 +25,7 @@ s["boykov","$flow_graph"] = @benchmarkable maximum_flow($flow_graph, 1, 8
 
 # from LittleScienceTools.RFIM
 srand(17)
-N = 1000
+N = 200
 g = random_regular_graph(N, 3, seed=1)
 h = randn(N)
 J = 1.
@@ -67,9 +67,9 @@ end
 
 dg, c = net_capacity(g, h, J)
 
-s["push_relabel","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+s["push_relabel","$dg"] = @benchmarkable maximum_flow($dg, $(N+1), $(N+2)
                     , $c, algorithm=PushRelabelAlgorithm())
-s["dinic","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+s["dinic","$dg"] = @benchmarkable maximum_flow($dg, $(N+1), $(N+2)
                     , $c, algorithm=DinicAlgorithm())
-s["boykov","$dg"] = @benchmarkable maximum_flow($dg, N+1, N+2
+s["boykov","$dg"] = @benchmarkable maximum_flow($dg, $(N+1),$(N+2)
                     , $c, algorithm=BoykovKolmogorovAlgorithm())

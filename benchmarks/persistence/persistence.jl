@@ -5,7 +5,7 @@ fname = joinpath(bench_dir,"data","benchgraph_")
 srand(17)
 for G in GLIST
     for n in [100]
-        g = G(n, 10n, seed=1)
+        g = G(n, 5n, seed=1)
         s["write","gt","$g"] = @benchmarkable writegraph($(fname*"$n.gt"), $g)
         s["write","net","$g"] = @benchmarkable writegraph($(fname*"$n.net"), $g)
         s["write","gml","$g"] = @benchmarkable writegraph($(fname*"$n.gml"), $g)
