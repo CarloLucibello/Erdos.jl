@@ -8,7 +8,7 @@ using Base.Dates
 import JLD: load, save
 
 BenchmarkTools.DEFAULT_PARAMETERS.seconds = 40.
-BenchmarkTools.DEFAULT_PARAMETERS.time_tolerance = 0.01
+BenchmarkTools.DEFAULT_PARAMETERS.time_tolerance = 0.05
 BenchmarkTools.DEFAULT_PARAMETERS.samples = 50000
 
 VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"

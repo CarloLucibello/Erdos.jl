@@ -1,8 +1,9 @@
 s = BenchmarkGroup()
 suite["generators"] = s
 
+srand(17)
 k=3; seed=17
-for n in [100,1000], G in GLIST
+for n in [100,500], G in GLIST
     g = random_regular_graph(n, k, G, seed=seed)
     s["rrg","$g"] = @benchmarkable random_regular_graph($n, $k, $G, seed=$seed)
 
@@ -10,7 +11,7 @@ for n in [100,1000], G in GLIST
     s["erdos","$g"] = @benchmarkable erdos_renyi($n, $(k*n), $G, seed=$seed)
 end
 
-for n in [20,200], G in GLIST
+for n in [20,100], G in GLIST
     g = CompleteGraph(n, G)
     s["complete","$g"] = @benchmarkable CompleteGraph($n, $G)
 

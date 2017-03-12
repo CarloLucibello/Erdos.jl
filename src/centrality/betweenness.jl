@@ -30,7 +30,8 @@ randomly chosen vertices.
 **References**
 
 [1] Brandes 2001 & Brandes 2008
-"""function betweenness_centrality(
+"""
+function betweenness_centrality(
     g::ASimpleGraph;
     approx::Int=-1,
     normalize::Bool=true,
