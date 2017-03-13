@@ -18,13 +18,13 @@ Type implementing an edge map. The underlying container `data` can be a `Dict`
 or an `AbstractMatrix`.
 """
 type EdgeMap{E,T,D} <: AEdgeMap{E,T}
-    data::D
     etype::Type{E}
     vtype::Type{T}
+    data::D
 end
 show{E,T}(io::IO, m::EdgeMap{E,T}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
-EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(d, edgetype(g), T)
+EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(edgetype(g), T, d)
 
 
 """
@@ -36,7 +36,7 @@ to the vertices of  graph `g`.
 function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
     E = Edge{V}
-    return EdgeMap(Dict{E,T}(), E, T)
+    return EdgeMap(E, T, Dict{E,T}())
 end
 
 length(m::EdgeMap) = length(m.data)
@@ -94,11 +94,11 @@ Any attempt to change the internal value, e.g. `emap[u,v] = 4`, will
 fail silently.
 """
 immutable ConstEdgeMap{E,T} <: AEdgeMap{E,T}
-    val::T
     etype::Type{E}
+    val::T
 end
 
-ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(x, edgetype(g))
+ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(edgetype(g), x)
 
 length(m::ConstEdgeMap) = typemax(Int)
 getindex(m::ConstEdgeMap, e::AEdge) = m.val

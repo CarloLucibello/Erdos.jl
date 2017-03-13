@@ -21,13 +21,15 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims,
             join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!, iteratorsize, values,
+            sort, push!, pop!, iteratorsize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape     #iterators
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
-    graphtype, digraphtype, edgetype, vertextype,
+APropertyGraph, APropertyDiGraph, APropertySimpleGraph,
+graphtype, digraphtype, edgetype, vertextype,
+
 
 # edge
 AEdge, Edge, is_ordered, reverse, #sort
@@ -147,7 +149,10 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
 # maps
 AVertexMap, ConstVertexMap, hasindex, VertexMap,
-AEdgeMap, ConstEdgeMap, EdgeMap
+AEdgeMap, ConstEdgeMap, EdgeMap,
+add_edge_property!, add_vertex_property!,
+get_edge_property, get_vertex_property,
+rem_edge_property!, rem_vertex_property!
 
 """An optimized graphs package.
 
@@ -174,6 +179,7 @@ include("core/interface.jl")
     include("core/misc.jl")
 include("maps/vertexmap.jl")
     include("maps/edgemap.jl")
+    include("maps/properties.jl")
 include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")

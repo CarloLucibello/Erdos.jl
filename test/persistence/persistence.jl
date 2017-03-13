@@ -119,17 +119,6 @@ g = DG(10,20)
 ga = readgraph(f, :gt, G)
 @test g == ga
 
-# # TODO celegansneural appears corrupted
-# fname= joinpath(datasets_dir, "celegansneural.gt.gz")
-# g = readgraph(fname, :gt, G, compressed=true)
-# @test typeof(g) == DG
-# @test nv(g) == 297
-# @test ne(g) == 2359
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
-
 # test :gexf
 @test writegraph(f, g, :gexf) == 1
 h = readgraph(f, :gexf, G)

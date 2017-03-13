@@ -19,10 +19,12 @@ em = EdgeMap(g, m)
 @test length(em) == n*n
 @test em[TestEdge(1,2)] == em[1,2]
 @test values(em) === m
+@test valtype(em) == Float64
 # @test sprint(show, em) == "EdgeMap{Float64}" #TODO
 
 # ConstEdgeMap
 em = ConstEdgeMap(g, 1)
+@test valtype(em) == Int
 @test length(em) == typemax(Int)
 em[1,2] = 18
 @test em[1,2] == 1
