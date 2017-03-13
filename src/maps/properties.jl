@@ -100,3 +100,20 @@ vertex_property(g::ASimpleNetwork, name::String) = g.props.vmaps[name]
 Return a vector listing the names of the properties of vertices in `g`.
 """
 vertex_properties(g::ASimpleNetwork) = collect(keys(g.props.vmaps))
+
+function swap_vertices!(props::PropertyStore, u::Integer, v::Integer)
+    for vmap in values(props.vmaps)
+        hasu, hasv = hasindex(vmap, u), hasindex(vmap, v)
+        if hasu && hasv
+            vmap[u], vmap[v] = vmap[v], vmap[u]
+        else
+            if hasu
+                vmap[v] = vmap[u]
+            end
+            if hasv
+                vmap[u] = vmap[v]
+            end
+        end
+    end
+    #TODO should swap edges for non indexed graphs
+end

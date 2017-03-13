@@ -353,6 +353,8 @@ function swap_vertices!(g::Net, u::Integer, v::Integer)
         end
 
         g.out_edges[u], g.out_edges[v] = g.out_edges[v], g.out_edges[u]
+
+        swap_vertices!(g.props, u, v)
     end
 end
 
@@ -391,6 +393,8 @@ function swap_vertices!(g::DiNet, u::Integer, v::Integer)
 
         g.out_edges[u], g.out_edges[v] = g.out_edges[v], g.out_edges[u]
         g.in_edges[u], g.in_edges[v] = g.in_edges[v], g.in_edges[u]
+
+        swap_vertices!(g.props, u, v)
     end
 end
 

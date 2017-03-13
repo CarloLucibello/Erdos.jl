@@ -28,4 +28,20 @@ m2 = add_edge_property!(g, "bye", m)
 @test m === m2
 @test edge_properties(g) == ["bye","hi"]
 
+g = Net(3)
+add_edge!(g,1,2)
+add_edge!(g,2,3)
+m = add_vertex_property!(g, "label", [1,2,3])
+@test valtype(m) == Int
+@test typeof(m) <: AVertexMap
+@test vertex_property(g, "label") === m
+
+rem_vertex!(g, 1)
+@test m[1] == 3
+@test m[2] == 2
+
+swap_vertices!(g, 1, 2)
+@test m[1] == 2
+@test m[2] == 3
+
 end #testset

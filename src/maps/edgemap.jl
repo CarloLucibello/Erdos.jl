@@ -32,6 +32,7 @@ show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
 EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::ASimpleGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
+# EdgeMap{T}(g::ASimpleGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
 
 function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
@@ -68,6 +69,20 @@ getindex{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
     getindex(m.data, idx)
 setindex!{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
     setindex!(m.data, x, idx)
+
+### Dict{Int,T} DATA
+# Associative interface
+getindex{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge) =
+    getindex(m.data, idx(e))
+setindex!{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, x, e::AIndexedEdge) =
+    setindex!(m.data, x, idx(e))
+get{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge, x) =
+    get(m.data, idx(e), x)
+
+getindex{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, i::Integer, j::Integer) =
+    getindex(m.data, edge(m.g, i, j))
+setindex!{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, x, i::Integer, j::Integer) =
+    setindex!(m.data, x, edge(m.g, i, j))
 
 ### Dict{Edge{V},T} DATA
 # Associative interface
@@ -114,6 +129,9 @@ ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(x)
 
 length(m::ConstEdgeMap) = typemax(Int)
 getindex(m::ConstEdgeMap, e::AEdge) = m.val
+
+setindex!(m::ConstEdgeMap, x, i::Integer) = nothing
+getindex(m::ConstEdgeMap, i::Integer) = m.val
 setindex!(m::ConstEdgeMap, x, i::Integer, j::Integer) = nothing
 getindex(m::ConstEdgeMap, i::Integer, j::Integer) = m.val
 setindex!(m::ConstEdgeMap, x, e::AEdge) = nothing

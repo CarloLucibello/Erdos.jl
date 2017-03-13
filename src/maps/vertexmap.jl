@@ -5,6 +5,10 @@ Type representing an abstract vertex map.
 """
 @compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
+#valtype{V,T}(m::AVertexMap{V,T}) = T #TODO not working for some reason
+valtype{T}(m::AbstractVector{T}) = T
+valtype{V,T}(m::Dict{V,T}) = T
+
 """
     hasindex(v, i::Integer)
 

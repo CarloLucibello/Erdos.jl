@@ -33,6 +33,7 @@ graphtype, digraphtype, edgetype, vertextype,
 
 # edge
 AEdge, Edge, is_ordered, reverse, #sort
+AIndexedEdge, IndexedEdge, idx,
 
 # core
 vertices, edges, src, dst,
@@ -49,7 +50,7 @@ rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,
-DiNet, Net, SimpleNet, IndexedEdge,
+DiNet, Net, SimpleNet,
 
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,
