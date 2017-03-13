@@ -27,8 +27,6 @@ sort(e::AEdge) = src(e) > dst(e) ? reverse(e) : e
 A type representing an edge between two vertices of a graph.
 """
 
-# concrete Edge
-
 immutable Edge{T} <: AEdge
     src::T
     dst::T
@@ -55,3 +53,30 @@ next(e::AEdge, i) = (getfield(e,i), i+1)
 Swap `e.src` and `e.dst`.
 """
 reverse(e::Edge) = Edge(dst(e), src(e))
+
+"""
+    immutable IndexedEdge <: AEdge
+        src::Int
+        dst::Int
+        idx::Int
+    end
+
+An indexed edge type
+
+    IndexedEdge(u, v) = IndexedEdge(u,v,-1)
+
+Creates an edge with unvalid index.
+"""
+immutable IndexedEdge <: AEdge
+    src::Int
+    dst::Int
+    idx::Int
+end
+
+IndexedEdge(u, v) = IndexedEdge(u,v,-1)
+
+src(e::IndexedEdge) = e.src
+dst(e::IndexedEdge) = e.dst
+id(e::IndexedEdge) = e.idx
+show(io::IO, e::IndexedEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
+reverse(e::IndexedEdge) = IndexedEdge(e.dst, e.src, e.idx)

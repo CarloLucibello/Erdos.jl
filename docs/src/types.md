@@ -18,12 +18,12 @@ DiGraph
 Edge
 ```
 
-## GTGraph / GTDiGraph / GTEdge
+## Net / DiNet / IndexedEdge
 
 ```@docs
-GTGraph
-GTDiGraph
-GTEdge
+Net
+DiNet
+IndexedEdge
 ```
 
 ## Defining new types

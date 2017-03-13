@@ -23,7 +23,7 @@
 - introduce abstract types `AGraph`, `ADiGraph`  
 - make all methods accept abstract graph types
 - vertex type for Graph can be any integer, i.e. we have Graph{Int32} along the default Graph{Int}
-- add `GTGraph` and `GTDiGraph`, graph types with indexed edges, inspired by graph-tool library
+- add `Net` and `DiNet`, graph types with indexed edges, inspired by graph-tool library
 - simplified and generic edge iterator (now a Generator)
 - improve maximum_flow performance
 - add Benchmarks through BenchmarkTools

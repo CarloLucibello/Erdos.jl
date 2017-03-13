@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-g = GTGraph(10, 20)
+g = Net(10, 20)
 m = add_edge_property!(g, "label", Int)
 
 @test valtype(m) == Int

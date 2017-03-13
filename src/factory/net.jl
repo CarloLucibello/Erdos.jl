@@ -1,32 +1,5 @@
 """
-    immutable GTEdge <: AEdge
-        src::Int
-        dst::Int
-        idx::Int
-    end
-
-An indexed edge type
-
-    GTEdge(u, v) = GTEdge(u,v,-1)
-
-Creates an edge with unvalid index.
-"""
-immutable GTEdge <: AEdge
-    src::Int
-    dst::Int
-    idx::Int
-end
-
-GTEdge(u, v) = GTEdge(u,v,-1)
-
-src(e::GTEdge) = e.src
-dst(e::GTEdge) = e.dst
-id(e::GTEdge) = e.idx
-show(io::IO, e::GTEdge) = print(io, "($(e.src)=>$(e.dst),$(e.idx))")
-reverse(e::GTEdge) = GTEdge(e.dst, e.src, e.idx)
-
-"""
-    type GTGraph <: APropertyGraph
+    type Net <: ANetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -40,15 +13,15 @@ reverse(e::GTEdge) = GTEdge(e.dst, e.src, e.idx)
 
 A type representing a directed graph with indexed edges.
 
-    GTDiGraph(n=0)
+    DiNet(n=0)
 
-Construct a `GTDiGraph` with `n` vertices and no edges.
+Construct a `DiNet` with `n` vertices and no edges.
 
-    GTDiGraph(adjmx::AbstractMatrix)
+    DiNet(adjmx::AbstractMatrix)
 
-Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
+Construct a `DiNet` from the adjacency matrix `adjmx`.
 """
-type GTGraph <: APropertyGraph
+type Net <: ANetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -62,7 +35,7 @@ type GTGraph <: APropertyGraph
 end
 
 """
-    type GTDiGraph <: ADiGraph
+    type DiNet <: ADiGraph
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -78,15 +51,15 @@ end
 
 A type representing an directed graph with indexed edges.
 
-    GTDiGraph(n=0)
+    DiNet(n=0)
 
-Construct a `GTDiGraph` with `n` vertices and no edges.
+Construct a `DiNet` with `n` vertices and no edges.
 
-    GTDiGraph(adjmx::AbstractMatrix)
+    DiNet(adjmx::AbstractMatrix)
 
-Construct a `GTDiGraph` from the adjacency matrix `adjmx`.
+Construct a `DiNet` from the adjacency matrix `adjmx`.
 """
-type GTDiGraph <: APropertyDiGraph
+type DiNet <: ADiNetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -100,28 +73,28 @@ type GTDiGraph <: APropertyDiGraph
     props::PropertyStore
 end
 
-@compat const SimpleGTGraph = Union{GTGraph, GTDiGraph}
+const SimpleNet = Union{Net, DiNet}
 
-edgetype{G<:SimpleGTGraph}(::Type{G}) = GTEdge
-graphtype(::Type{GTDiGraph}) = GTGraph
-digraphtype(::Type{GTGraph}) = GTDiGraph
-vertextype{G<:SimpleGTGraph}(::Type{G}) = Int
+edgetype{G<:SimpleNet}(::Type{G}) = IndexedEdge
+graphtype(::Type{DiNet}) = Net
+digraphtype(::Type{Net}) = DiNet
+vertextype{G<:SimpleNet}(::Type{G}) = Int
 
 #### GRAPH CONSTRUCTORS
-function GTDiGraph(n::Integer = 0)
+function DiNet(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     in_edges = [Vector{Pair{Int,Int}}() for _=1:n]
 
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
-    return GTDiGraph(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
+    return DiNet(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
 
-function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
+function DiNet{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = GTDiGraph(dima)
+    g = DiNet(dima)
     for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
@@ -130,20 +103,20 @@ function GTDiGraph{T<:Real}(adjmx::AbstractMatrix{T})
 end
 
 
-GTDiGraph(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, GTDiGraph; seed=seed)
+DiNet(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNet; seed=seed)
 
-nv(g::SimpleGTGraph) = length(g.out_edges)
-ne(g::SimpleGTGraph) = g.ne
+nv(g::SimpleNet) = length(g.out_edges)
+ne(g::SimpleNet) = g.ne
 
-function add_vertex!(g::GTDiGraph)
+function add_vertex!(g::DiNet)
     push!(g.in_edges, Vector{Pair{Int,Int}}())
     push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-function add_edge!(g::GTDiGraph, u::Integer, v::Integer)
-    (u in vertices(g) && v in vertices(g)) || return (false, GTEdge(u,v,-1))
-    has_edge(g, u, v) && return (false, GTEdge(u,v,-1)) # could be removed for multigraphs
+function add_edge!(g::DiNet, u::Integer, v::Integer)
+    (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
+    has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1)
     if isempty(g.free_indexes)
         g.edge_index_range += 1
         idx = g.edge_index_range
@@ -159,12 +132,12 @@ function add_edge!(g::GTDiGraph, u::Integer, v::Integer)
     length(g.epos) < idx && resize!(g.epos, idx)
     g.epos[idx] = Pair(length(oes), length(ies))
 
-    return (true, GTEdge(u,v,idx))
+    return (true, IndexedEdge(u,v,idx))
 end
 
-rem_edge!(g::SimpleGTGraph, s::Integer, t::Integer) = rem_edge!(g, edge(g, s, t))
+rem_edge!(g::SimpleNet, s::Integer, t::Integer) = rem_edge!(g, edge(g, s, t))
 
-function rem_edge!(g::GTDiGraph, e::GTEdge)
+function rem_edge!(g::DiNet, e::IndexedEdge)
     s = e.src
     t = e.dst
     idx = e.idx
@@ -198,43 +171,43 @@ function rem_edge!(g::GTDiGraph, e::GTEdge)
 end
 
 # TODO can be improved (see graph/digraph)
-function edge(g::SimpleGTGraph, i::Integer, j::Integer)
-    (i > nv(g) || j > nv(g)) && return GTEdge(i, j, -1)
+function edge(g::SimpleNet, i::Integer, j::Integer)
+    (i > nv(g) || j > nv(g)) && return IndexedEdge(i, j, -1)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
     if pos != 0
-        return GTEdge(i, j, oes[pos].second)
+        return IndexedEdge(i, j, oes[pos].second)
     else
-        return GTEdge(i, j, -1)
+        return IndexedEdge(i, j, -1)
     end
 end
 
-function out_edges(g::SimpleGTGraph, i::Integer)
+function out_edges(g::SimpleNet, i::Integer)
     oes = g.out_edges[i]
-    return (GTEdge(i, j, idx) for (j, idx) in oes)
+    return (IndexedEdge(i, j, idx) for (j, idx) in oes)
 end
 
-function out_neighbors(g::SimpleGTGraph, i::Integer)
+function out_neighbors(g::SimpleNet, i::Integer)
     oes = g.out_edges[i]
     return (j for (j, idx) in oes)
 end
 
-function in_edges(g::GTDiGraph, i::Integer)
+function in_edges(g::DiNet, i::Integer)
     ies = g.in_edges[i]
-    return (GTEdge(j, i, idx) for (j, idx) in ies)
+    return (IndexedEdge(j, i, idx) for (j, idx) in ies)
 end
 
 
-function in_neighbors(g::GTDiGraph, i::Integer)
+function in_neighbors(g::DiNet, i::Integer)
     ies = g.in_edges[i]
     return (j for (j, idx) in ies)
 end
 
-pop_vertex!(g::GTGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
-pop_vertex!(g::GTDiGraph) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
+pop_vertex!(g::Net) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
+pop_vertex!(g::DiNet) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
                           pop!(g.in_edges); nv(g)+1)
 
-function reverse!(g::GTDiGraph)
+function reverse!(g::DiNet)
     g.out_edges, g.in_edges = g.in_edges, g.out_edges
     for i=1:length(g.epos)
         g.epos[i] = reverse(g.epos[i])
@@ -244,18 +217,18 @@ end
 
 ## GRAPH
 
-function GTGraph(n::Integer = 0)
+function Net(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
-    return GTGraph(0, 0, out_edges, epos, free_indexes, PropertyStore())
+    return Net(0, 0, out_edges, epos, free_indexes, PropertyStore())
 end
 
-function GTGraph{T<:Real}(adjmx::AbstractMatrix{T})
+function Net{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = GTGraph(dima)
+    g = Net(dima)
     for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
@@ -263,17 +236,17 @@ function GTGraph{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-GTGraph(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, GTGraph; seed=seed)
+Net(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Net; seed=seed)
 
-function add_vertex!(g::GTGraph)
+function add_vertex!(g::Net)
     push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-function add_edge!(g::GTGraph, u::Integer, v::Integer)
+function add_edge!(g::Net, u::Integer, v::Integer)
     u, v = u <= v ? (u, v) : (v, u)
-    (u in vertices(g) && v in vertices(g)) || return (false, GTEdge(u,v,-1))
-    has_edge(g, u, v) && return (false, GTEdge(u,v,-1)) # could be removed for multigraphs
+    (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
+    has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1)) # could be removed for multigraphs
 
     if u > v
         u,v = v,u
@@ -295,10 +268,10 @@ function add_edge!(g::GTGraph, u::Integer, v::Integer)
     length(g.epos) < idx && resize!(g.epos, idx)
     g.epos[idx] = Pair(length(oes), length(ies))
 
-    return (true, GTEdge(u,v,idx))
+    return (true, IndexedEdge(u,v,idx))
 end
 
-function rem_edge!(g::GTGraph, e::GTEdge)
+function rem_edge!(g::Net, e::IndexedEdge)
     s = e.src
     t = e.dst
     if s > t
@@ -349,12 +322,12 @@ function rem_edge!(g::GTGraph, e::GTEdge)
     return true
 end
 
-function in_edges(g::GTGraph, i::Integer)
+function in_edges(g::Net, i::Integer)
     ies = g.out_edges[i]
-    return (GTEdge(j, i, idx) for (j, idx) in ies)
+    return (IndexedEdge(j, i, idx) for (j, idx) in ies)
 end
 
-function test_consistency(g::GTGraph)
+function test_consistency(g::Net)
     for i=1:nv(g)
         for (k, p) in  enumerate(g.out_edges[i])
             j = p.first
@@ -369,7 +342,7 @@ function test_consistency(g::GTGraph)
     end
 end
 
-function test_consistency(g::GTDiGraph)
+function test_consistency(g::DiNet)
     for i=1:nv(g)
         for (k, p) in  enumerate(g.out_edges[i])
             j = p.first

@@ -1,6 +1,6 @@
-@compat abstract type APropertyGraph <: AGraph end
-@compat abstract type APropertyDiGraph <: ADiGraph end
-const APropertySimpleGraph = Union{APropertyGraph, APropertyDiGraph}
+@compat abstract type ANetwork <: AGraph end
+@compat abstract type ADiNetwork <: ADiGraph end
+const APropertySimpleGraph = Union{ANetwork, ADiNetwork}
 
 type PropertyStore
     emaps::Dict{String,AEdgeMap}

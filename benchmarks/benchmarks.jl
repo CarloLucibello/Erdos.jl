@@ -20,8 +20,8 @@ res_dir6 = joinpath(bench_dir, "results", "v0.6")
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
-GLIST = [Graph{Int64}, GTGraph]
-DGLIST = [DiGraph{Int64}, GTDiGraph]
+GLIST = [Graph{Int64}, Net]
+DGLIST = [DiGraph{Int64}, DiNet]
 GROUPS = [
             "core",
             "generators",

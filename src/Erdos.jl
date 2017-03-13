@@ -27,7 +27,7 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
 
 #interface
 export AGraph, ADiGraph, ASimpleGraph,
-APropertyGraph, APropertyDiGraph, APropertySimpleGraph,
+ANetwork, ADiNetwork, APropertySimpleGraph,
 graphtype, digraphtype, edgetype, vertextype,
 
 
@@ -49,7 +49,7 @@ rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
 reverse!, Graph, DiGraph, SimpleGraph,
-GTDiGraph, GTGraph, SimpleGTGraph, GTEdge,
+DiNet, Net, SimpleNet, IndexedEdge,
 
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,
@@ -219,7 +219,7 @@ include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("dismantling/ci.jl")
 include("factory/graph.jl")
-    include("factory/gtgraph.jl")
+    include("factory/net.jl")
 include("persistence/common.jl")
     include("persistence/dot.jl")
     include("persistence/gexf.jl")

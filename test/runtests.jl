@@ -5,12 +5,12 @@ using Base.Test
 testdir = dirname(@__FILE__)
 
 tests = [
-    # "factory/graph",
-    # "factory/gtgraph",
-    # "core/edge",
-    # "core/interface",
-    # "core/core",
-    # "core/edgeiter",
+    "factory/graph",
+    "factory/net",
+    "core/edge",
+    "core/interface",
+    "core/core",
+    "core/edgeiter",
     "maps/vertexmap",
     "maps/edgemap",
     "maps/properties",
@@ -59,9 +59,9 @@ tests = [
 ]
 
 GLIST =    [
-            # (Graph{Int64}, DiGraph{Int64}),
-            # (Graph{UInt32}, DiGraph{UInt32}),
-            (GTGraph, GTDiGraph)
+            (Graph{Int64}, DiGraph{Int64}),
+            (Graph{UInt32}, DiGraph{UInt32}),
+            (Net, DiNet)
             ]
 
 for GDG in GLIST, t in tests
