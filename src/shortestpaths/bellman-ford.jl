@@ -26,10 +26,10 @@ Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_al
 to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
 vertices `sources`). Returns a `BellmanFordState` with relevant traversal information.
 """
-function bellman_ford_shortest_paths{E,T<:Real}(
+function bellman_ford_shortest_paths{T<:Real}(
         g::ASimpleGraph,
         sources::AbstractVector{Int},
-        distmx::AEdgeMap{E,T},
+        distmx::AEdgeMap{T},
     )
     state = BellmanFordState(zeros(Int,nv(g)), fill(typemax(T), nv(g)))
     V = vertextype(g)

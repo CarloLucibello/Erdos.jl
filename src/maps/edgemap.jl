@@ -1,87 +1,100 @@
 """
-    AEdgeMap{E,T}
+    AEdgeMap{T}
 
 Type representing an abstract vertex map.
 """
-@compat abstract type AEdgeMap{E,T} end
+@compat abstract type AEdgeMap{T} end
 
-valtype{E,T}(m::AEdgeMap{E,T}) = T
+valtype{T}(m::AEdgeMap{T}) = T
 
 """
-    type EdgeMap{E,T,D} <: AEdgeMap{E,T}
-        data::D
-        etype::Type{E}
+    type EdgeMap{G <: ASimpleGraph, T, D} <: AEdgeMap{T}
+        g::G
         vtype::Type{T}
+        data::D
     end
 
-Type implementing an edge map. The underlying container `data` can be a `Dict`
-or an `AbstractMatrix`.
-"""
-type EdgeMap{E,T,D} <: AEdgeMap{E,T}
-    etype::Type{E}
-    vtype::Type{T}
-    data::D
-end
-show{E,T}(io::IO, m::EdgeMap{E,T}) = print(io, "EdgeMap{$T} -> $(m.data)")
+Type implementing an edge map. The underlying container `data` can be a dictionary,
+a matrix or a vector (for graphs with indexed edges).
 
-EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(edgetype(g), T, d)
-
-
-"""
     EdgeMap{T}(g, ::Type{T})
 
 Returns a map that associates values of type `T`
-to the vertices of  graph `g`.
+to the vertices of  graph `g`. The underlying storage structures is chosen
+accordingly.
 """
+type EdgeMap{G<:ASimpleGraph, T, D} <: AEdgeMap{T}
+    g::G
+    vtype::Type{T}
+    data::D
+end
+show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T} -> $(m.data)")
+
+EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
+EdgeMap{T}(g::ASimpleGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
+
 function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)
     E = Edge{V}
-    return EdgeMap(E, T, Dict{E,T}())
+    return EdgeMap(g, T, Dict{E,T}())
 end
 
 length(m::EdgeMap) = length(m.data)
 
 ### MATRIX DATA
 # Associative interface
-getindex{E,T,D<:AbstractMatrix}(m::EdgeMap{E,T,D}, e::AEdge) =
+getindex{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
     getindex(m.data, src(e), dst(e))
-setindex!{E,T,D<:AbstractMatrix}(m::EdgeMap{E,T,D}, x, e::AEdge) =
+setindex!{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge) =
     setindex!(m.data, x, src(e), dst(e))
-get{E,T,D<:AbstractMatrix}(m::EdgeMap{E,T,D}, e::AEdge, x) =
+get{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
     get(m.data, (src(e), dst(e)), x)
 
 # matrix interface
-getindex{E,T,D<:AbstractMatrix}(m::EdgeMap{E,T,D}, i::Integer, j::Integer) =
+getindex{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
     getindex(m.data, i, j)
-setindex!{E,T,D<:AbstractMatrix}(m::EdgeMap{E,T,D}, x, i::Integer, j::Integer) =
+setindex!{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
     setindex!(m.data, x, i, j)
+
+### VECTOR DATA
+# vector interface
+getindex{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, e::AIndexedEdge) =
+    getindex(m, idx(e))
+
+setindex!{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, e::AIndexedEdge) =
+    setindex!(m.data, x, idx(e))
+
+getindex{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
+    getindex(m.data, idx)
+setindex!{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
+    setindex!(m.data, x, idx)
 
 ### Dict{Edge{V},T} DATA
 # Associative interface
-getindex{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, e::Edge{V}) =
+getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::Edge{V}) =
     getindex(m.data, e)
-setindex!{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, x, e::Edge{V}) =
+setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, e::Edge{V}) =
     setindex!(m.data, x, e)
-get{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, e::Edge{V}, x) =
+get{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::Edge{V}, x) =
     get(m.data, e, x)
 
-getindex{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, e::AEdge) =
+getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::AEdge) =
     getindex(m.data, Edge{V}(src(e), dst(e)))
-setindex!{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, x, e::AEdge) =
+setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, e::AEdge) =
     setindex!(m.data, x, Edge{V}(src(e), dst(e)))
-get{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, e::AEdge, x) =
+get{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::AEdge, x) =
     get(m.data, Edge{V}(src(e), dst(e)), x)
 
 # matrix interface
-getindex{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, i::Integer, j::Integer) =
+getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, i::Integer, j::Integer) =
     getindex(m.data, Edge{V}(i, j))
-setindex!{E,T,V}(m::EdgeMap{E,T,Dict{Edge{V},T}}, x, i::Integer, j::Integer) =
+setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, i::Integer, j::Integer) =
     setindex!(m.data, x, Edge{V}(i, j))
 
 ####
-values{E,T,D<:Dict}(m::EdgeMap{E,T,D}) = values(m.data)
-values{E,T,D<:Matrix}(m::EdgeMap{E,T,D}) = m.data
-values{E,T,D<:AbstractSparseMatrix}(m::EdgeMap{E,T,D}) = nonzeros(m.data)
+values{G,T,D<:Dict}(m::EdgeMap{G,T,D}) = values(m.data)
+values{G,T,D<:Matrix}(m::EdgeMap{G,T,D}) = m.data
+values{G,T,D<:AbstractSparseMatrix}(m::EdgeMap{G,T,D}) = nonzeros(m.data)
 
 ###
 """
@@ -93,12 +106,11 @@ A type representing a constant vector map.
 Any attempt to change the internal value, e.g. `emap[u,v] = 4`, will
 fail silently.
 """
-immutable ConstEdgeMap{E,T} <: AEdgeMap{E,T}
-    etype::Type{E}
+immutable ConstEdgeMap{T} <: AEdgeMap{T}
     val::T
 end
 
-ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(edgetype(g), x)
+ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(x)
 
 length(m::ConstEdgeMap) = typemax(Int)
 getindex(m::ConstEdgeMap, e::AEdge) = m.val

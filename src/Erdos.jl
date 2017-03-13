@@ -151,8 +151,9 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 AVertexMap, ConstVertexMap, hasindex, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
 add_edge_property!, add_vertex_property!,
-get_edge_property, get_vertex_property,
-rem_edge_property!, rem_vertex_property!
+edge_property, vertex_property,
+rem_edge_property!, rem_vertex_property!,
+vertex_properties, edge_properties
 
 """An optimized graphs package.
 

@@ -14,9 +14,9 @@ around Kolmogorov's BlossomV algorithm.
 """
 function minimum_weight_perfect_matching end
 
-function minimum_weight_perfect_matching{E, T<:AbstractFloat}(
+function minimum_weight_perfect_matching{T<:AbstractFloat}(
         g::AGraph,
-        w::AEdgeMap{E,T},
+        w::AEdgeMap{T},
         cutoff = typemax(T);
         tmaxscale::Float64 =1000.)
 
@@ -43,9 +43,9 @@ function minimum_weight_perfect_matching{E, T<:AbstractFloat}(
     return MatchingResult(weight, match.mate)
 end
 
-function minimum_weight_perfect_matching{E<:Edge, T<:Integer}(
+function minimum_weight_perfect_matching{T<:Integer}(
         g::AGraph,
-        w::AEdgeMap{E,T},
+        w::AEdgeMap{T},
         cutoff = typemax(T))
 
     m = BlossomV.Matching(nv(g))

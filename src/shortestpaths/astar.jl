@@ -3,12 +3,12 @@
 
 # A* shortest-path algorithm
 
-function a_star_impl!{E,T<:Number}(
+function a_star_impl!{T<:Number}(
         g::ASimpleGraph,# the graph
         s::Integer,
         t::Integer, # the end vertex
         colormap::Vector{Int},  # an (initialized) color-map to indicate status of vertices
-        distmx::AEdgeMap{E,T},
+        distmx::AEdgeMap{T},
         heuristic::Function    # heuristic fn (under)estimating distance to target
     )
     V = vertextype(g)

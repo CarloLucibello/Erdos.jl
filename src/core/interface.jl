@@ -171,3 +171,12 @@ reverse(e::AEdge) = error("Method not defined")
 Remove the last vertex of `g`. Equivalent to rem_vertex!(g, nv(g)).
 """
 pop_vertex!(g::ASimpleGraph) = error("Method not defined")
+
+"""
+    swap_vertices!(g, u, v)
+
+Swap the labels of vertices `u` and `v`.
+In the new graph all old neighbors of vertex `u` will be neighbors of `v` and
+viceversa.
+"""
+swap_vertices!(g::ASimpleGraph, u::Integer, v::Integer) = error("Method not defined")

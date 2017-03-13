@@ -40,7 +40,11 @@ end
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
         in_edges::Vector{Vector{Pair{Int,Int}}}  #unordered in_adjlist
+
         epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
+                                        # the first in the pair is the vertex
+                                        # with lower index
+
         free_indexes::Vector{Int}       # indexes of deleted edges to be used up
                                         # for new edges to avoid very large
                                         # indexes, and unnecessary property map
@@ -325,6 +329,69 @@ end
 function in_edges(g::Net, i::Integer)
     ies = g.out_edges[i]
     return (IndexedEdge(j, i, idx) for (j, idx) in ies)
+end
+
+function swap_vertices!(g::Net, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.out_edges[u])
+        neigv = deepcopy(g.out_edges[v])
+
+        for (k,p) in enumerate(neigu)
+            j, idx = p
+            kj = j <= u ? g.epos[idx].first : g.epos[idx].second
+            g.out_edges[j][kj] = Pair(v, idx)
+            g.epos[idx] = j <= v ? Pair(kj, k) : Pair(k, kj)
+        end
+
+        for (k,p) in enumerate(neigv)
+            j, idx = p
+            kj = j <= v ? g.epos[idx].first : g.epos[idx].second
+            g.out_edges[j][kj] = Pair(u, idx)
+            g.epos[idx] = j <= u ? Pair(kj, k) : Pair(k, kj)
+        end
+
+        g.out_edges[u], g.out_edges[v] = g.out_edges[v], g.out_edges[u]
+    end
+end
+
+function swap_vertices!(g::DiNet, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.out_edges[u])
+        neigv = deepcopy(g.out_edges[v])
+        neiguin = deepcopy(g.in_edges[u])
+        neigvin = deepcopy(g.in_edges[v])
+
+        for (k,p) in enumerate(neigu)
+            j, idx = p
+            kj = g.epos[idx].second
+            g.in_edges[j][kj] = Pair(v, idx)
+        end
+
+        for (k,p) in enumerate(neigv)
+            j, idx = p
+            kj = g.epos[idx].second
+            g.in_edges[j][kj] = Pair(u, idx)
+        end
+
+        for (k,p) in enumerate(neiguin)
+            j, idx = p
+            kj = g.epos[idx].first
+            g.out_edges[j][kj] = Pair(v, idx)
+        end
+
+        for (k,p) in enumerate(neigvin)
+            j, idx = p
+            kj = g.epos[idx].first
+            g.out_edges[j][kj] = Pair(u, idx)
+        end
+
+        g.out_edges[u], g.out_edges[v] = g.out_edges[v], g.out_edges[u]
+        g.in_edges[u], g.in_edges[v] = g.in_edges[v], g.in_edges[u]
+    end
 end
 
 function test_consistency(g::Net)

@@ -392,6 +392,8 @@ swap_vertices!(g, 1, 2)
 @test has_edge(g, 2, 2)
 @test !has_edge(g, 1, 1)
 add_edge!(g, 1, 1)
+@test has_edge(g, 1, 1)
+@test ne(g) == 3
 swap_vertices!(g, 1, 2)
 @test ne(g) == 3
 @test has_edge(g, 1, 2)

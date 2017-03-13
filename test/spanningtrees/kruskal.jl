@@ -113,7 +113,7 @@ g = blkdiag(g, g)
 d = blkdiag(sparse(rand(n, n)), sparse(rand(n, n)))
 d = d + d'
 mst = minimum_spanning_tree(g, d)
-#@test_skip length(mst) == 2n - 2
+#@test_skip length(mst) == 2n - 2 #TODO
 for e in mst
     @test has_edge(g, e)
     u , v  = src(e), dst(e)

@@ -20,6 +20,7 @@ Construct a `Graph{T}` from the adjacency matrix `adjmx`.
 type Graph{T<:Integer} <: AGraph
     ne::Int
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
+                                # fadjlist is sorted
 end
 
 function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
@@ -70,6 +71,7 @@ type DiGraph{T<:Integer} <: ADiGraph
     ne
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
+                                # fadjlist and badjlist are sorted
 end
 
 function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
@@ -284,5 +286,71 @@ function rebuild!(g::DiGraph)
     end
     for neigs in g.badjlist
         sort!(neigs)
+    end
+end
+
+function swap_vertices!(g::Graph, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.fadjlist[u])
+        neigv = deepcopy(g.fadjlist[v])
+
+        for j in neigu
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+        for j in neigv
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        g.fadjlist[u], g.fadjlist[v] = g.fadjlist[v], g.fadjlist[u]
+    end
+end
+
+function swap_vertices!(g::DiGraph, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.fadjlist[u])
+        neigv = deepcopy(g.fadjlist[v])
+        neiguin = deepcopy(g.badjlist[u])
+        neigvin = deepcopy(g.badjlist[v])
+
+        for j in neigu
+            adj = g.badjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+
+        for j in neigv
+            adj = g.badjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        for j in neiguin
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+
+        for j in neigvin
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        g.fadjlist[u], g.fadjlist[v] = g.fadjlist[v], g.fadjlist[u]
+        g.badjlist[u], g.badjlist[v] = g.badjlist[v], g.badjlist[u]
     end
 end
