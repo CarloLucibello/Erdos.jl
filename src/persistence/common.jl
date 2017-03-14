@@ -148,6 +148,43 @@ function writegraph(fn::String, g::ASimpleGraph)
     return writegraph(fn, g, Symbol(ft), compress=compress)
 end
 
+"""
+    writenetwork(file, g)
+    writenetwork(file, g, t; compress=false)
+
+Save a graph `g` to `file` in the format `t`.
+
+Eventually the resulting file can be compressed in the gzip format.
+
+Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
+
+If no format is provided, it will be inferred from `file` along with compression.
+"""
+function writenetwork(io::IO, g::ASimpleNetwork, t::Symbol)
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    return filemap[t][4](io, g)
+end
+
+function writenetwork(fn::String, g::ASimpleNetwork, t::Symbol; compress::Bool=false)
+    if compress
+        io = GZip.open(fn,"w")
+    else
+        io = open(fn,"w")
+    end
+    retval = writenetwork(io, g, t)
+    close(io)
+    return retval
+end
+
+function writenetwork(fn::String, g::ASimpleNetwork)
+    compress = false
+    ft = split(fn,'.')[end]
+    if ft == "gz"
+        compress = true
+        ft = split(fn,'.')[end-1]
+    end
+    return writenetwork(fn, g, Symbol(ft), compress=compress)
+end
 
 function getchild(el::EzXML.Node, s::String)
     childs = elements(el)
