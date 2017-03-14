@@ -61,4 +61,4 @@ function readgexf{G<:ASimpleGraph}(io::IO, ::Type{G})
     return gexf_read_one_graph!(el, H)
 end
 
-filemap[:gexf] = (readgexf, writegexf)
+filemap[:gexf] = (readgexf, writegexf, NI, NI)

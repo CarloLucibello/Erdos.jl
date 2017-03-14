@@ -1,4 +1,15 @@
+"""
+    abstract type ANetwork <: AGraph end
+
+An abstract graph with the additional possibility to attach properties to vertices and edges.
+"""
 @compat abstract type ANetwork <: AGraph end
+
+"""
+    abstract type ADiNetwork <: ADiGraph end
+
+An abstract directed graph with the additional possibility to attach properties to vertices and edges.
+"""
 @compat abstract type ADiNetwork <: ADiGraph end
 
 const ASimpleNetwork = Union{ANetwork, ADiNetwork}

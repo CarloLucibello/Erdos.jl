@@ -32,7 +32,7 @@ show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
 EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::ASimpleGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
-# EdgeMap{T}(g::ASimpleGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
+EdgeMap{T}(g::ASimpleGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
 
 function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
     V = vertextype(g)

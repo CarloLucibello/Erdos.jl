@@ -110,7 +110,7 @@ contract,
 a_star,
 
 # persistence
-readgraph, writegraph,
+readgraph, writegraph, readnetwork, writenetwork,
 
 # flow
 maximum_flow, EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm,

@@ -1,10 +1,9 @@
 NI(x...) = error("This function is not implemented.")
 
 # filemap is filled in the format specific source files
-@compat const filemap = Dict{Symbol, Tuple{Function, Function}}()
-        # :gml        => (readgml, writegml)
-        # :graphml    => (readgraphml, writegraphml)
-        # ....
+@compat const filemap = Dict{Symbol, Tuple{Function, Function, Function, Function}}()
+        # :gml        => (readgml, writegml, readnetgml, writenetgml)
+
 
 """
     readgraph(filename, G=Graph)
@@ -57,6 +56,58 @@ end
 const DATASETS_DIR = joinpath(Base.source_dir(), "..", "..", "datasets")
 function readgraph{G<:ASimpleGraph}(s::Symbol, ::Type{G}=Graph)
     readgraph(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
+end
+
+"""
+    readnetwork(filename, G=Graph)
+    readnetwork(filename, t, G=Graph; compressed=false)
+
+Reads a graph from  `filename` in the format `t`. Returns a graph of type `G`
+or the corresponding digraph/graph type.
+Compressed files can eventually be read.
+
+Supported formats are `:gml, :dot, :graphml, :gexf, :net, :gt`.
+
+If no format is provided, it will be inferred from `filename`.
+
+    readnetwork(s::Symbol, G=Graph)
+
+Read a graph identified by `s` from Erdos datasets collection (e.g. `s=:karate`).
+They are stored in the `gt` binary format in the `datasets` directory of the package.
+For a list of available graph refer to the documentation.
+"""
+function readnetwork{G<:ASimpleNetwork}(fn::String, t::Symbol, ::Type{G}=Net; compressed=false)
+    if compressed
+        io = GZip.open(fn,"r")
+    else
+        io = open(fn,"r")
+    end
+    g = readnetwork(io, t, G)
+    close(io)
+    return g
+end
+
+function readnetwork{G<:ASimpleNetwork}(io::IO, t::Symbol, ::Type{G}=Net)
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    return filemap[t][3](io, G)
+end
+
+function readnetwork{G<:ASimpleNetwork}(fn::String, ::Type{G}=Net)
+    compressed = false
+    ft = split(fn,'.')[end]
+    if ft == "gz"
+        compressed = true
+        ft = split(fn,'.')[end-1]
+    end
+    if Symbol(ft) in keys(filemap)
+        return readnetwork(fn, Symbol(ft), G; compressed=compressed)
+    else
+        error("Could not infer file format.")
+    end
+end
+
+function readnetwork{G<:ASimpleGraph}(s::Symbol, ::Type{G}=Net)
+    readnetwork(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
 end
 
 """

@@ -79,4 +79,4 @@ function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
     rebuild!(g)
 end
 
-filemap[:net] = (readpajek, writepajek)
+filemap[:net] = (readpajek, writepajek, NI, NI)

@@ -49,4 +49,4 @@ function writegml(io::IO, g::ASimpleGraph)
     return 1
 end
 
-filemap[:gml] = (readgml, writegml)
+filemap[:gml] = (readgml, writegml, NI, NI)

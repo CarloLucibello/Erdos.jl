@@ -58,4 +58,4 @@ function writedot(io::IO, g::ASimpleGraph)
     return 1
 end
 
-filemap[:dot] = (readdot, writedot)
+filemap[:dot] = (readdot, writedot, NI, NI)
