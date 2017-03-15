@@ -176,14 +176,15 @@ more traditional and better-optimized mechanisms.
 Erdos
 
 include("utils.jl")
-include("core/interface.jl")
+include("core/interface_graph.jl")
+    include("core/interface_network.jl")
     include("core/core.jl")
     include("core/edge.jl")
     include("core/edgeiter.jl")
     include("core/misc.jl")
 include("maps/vertexmap.jl")
     include("maps/edgemap.jl")
-    include("maps/properties.jl")
+    include("maps/property_store.jl")
 include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")

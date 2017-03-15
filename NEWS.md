@@ -1,4 +1,11 @@
-## v0.x.y
+## v0.2.0
+### Highlights
+- introduce Networks: graphs with properties. Properties can be associated to
+vertices, edges or the graph itself
+- readnetwork and writenetwork for the .gt format con read/write graph properties
+
+### Other Changes
+- more efficient remove_vertex and swap_vertices
 - `add_edge!` now returns `(ok, new_edge)` instead of just `ok`
 
 ## v0.1.3  2017.3.8

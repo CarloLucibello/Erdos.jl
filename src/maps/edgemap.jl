@@ -1,13 +1,4 @@
 """
-    AEdgeMap{T}
-
-Type representing an abstract vertex map.
-"""
-@compat abstract type AEdgeMap{T} end
-
-valtype{T}(m::AEdgeMap{T}) = T
-
-"""
     type EdgeMap{G <: ASimpleGraph, T, D} <: AEdgeMap{T}
         g::G
         vtype::Type{T}
