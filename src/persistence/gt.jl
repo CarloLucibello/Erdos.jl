@@ -68,121 +68,55 @@ function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
     end
 end
 
-#TODO the map has to be a vector
-function writegt_eprop(io::IO, g::ADiNetwork, m::AEdgeMap)
-    pvaln = findfirst(gtpropmap, valtype(m))
-    write(io, UInt8(pvaln-1))
-    if pvaln <= 5  #pvaln==5 -> Float128 not supported
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                write(io, m[e])
-            end
-        end
-    elseif pvaln == 6 #float128
-        error("not implemented")
-    elseif pvaln == 7
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                s = m[e]
-                write(io, UInt64(sizeof(s)))
-                write(io, s)
-            end
-        end
-    elseif pvaln ∈ [8, 9, 10, 11, 12]
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                s = m[e]
-                write(io, UInt64(length(s)))
-                write(io, s)
-            end
-        end
-    else
-        error("not implemented")
-    end
-end
-
-#TODO the map has to be a vector
-function writegt_eprop(io::IO, g::ANetwork, m::AEdgeMap)
-    pvaln = findfirst(gtpropmap, valtype(m))
-    write(io, UInt8(pvaln-1))
-    if pvaln <= 5  #pvaln==5 -> Float128 not supported
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                dst(e) < i && continue
-                write(io, m[e])
-            end
-        end
-    elseif pvaln == 6 #float128
-        error("not implemented")
-    elseif pvaln == 7
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                dst(e) < i && continue
-                s = m[e]
-                write(io, UInt64(sizeof(s)))
-                write(io, s)
-            end
-        end
-    elseif pvaln ∈ [8, 9, 10, 11, 12]
-        for i=1:nv(g)
-            for e in out_edges(g, i)
-                dst(e) < i && continue
-                s = m[e]
-                write(io, UInt64(length(s)))
-                write(io, s)
-            end
-        end
-    else
-        error("not implemented")
-    end
-end
-
-#TODO the map has to be a vector
-function writegt_vprop(io::IO, g::ASimpleNetwork, m::AVertexMap)
-    pvaln = findfirst(gtpropmap, valtype(m))
-    write(io, UInt8(pvaln-1))
-
-    if pvaln <= 5  #pvaln==5 -> Float128 not supported
-        for i=1:nv(g)
-            write(io, m[i])
-        end
-    elseif pvaln == 6 #float128
-        error("not implemented") #TODO
-    elseif pvaln == 7
-        for i=1:nv(g)
-            s = m[i]
-            write(io, UInt64(sizeof(s)))
-            write(io, s)
-        end
-    elseif pvaln ∈ [8, 9, 10, 11, 12]
-        for i=1:nv(g)
-            s = m[i]
-            write(io, UInt64(length(s)))
-            write(io, s)
-        end
-    else
-        error("not implemented") #TODO
-    end
-end
-
 function writegt_props(io::IO, g::ASimpleNetwork)
+    gpnames = graph_properties(g)
     vpnames = vertex_properties(g)
     epnames = edge_properties(g)
-    write(io, length(vpnames)+length(epnames)) # num of property maps
+    nprop = length(gpnames) + length(vpnames) + length(epnames)
+    write(io, nprop) # num of property maps
+    # @show nprop
+    #graph props
+    for name in gpnames
+        write(io, UInt8(0)) #property type (graph/edge/vertex)
+        writegt_prop(io, name)
+        m = graph_property(g, name)
+        pvaln = findfirst(gtpropmap, typeof(m))
+        write(io, UInt8(pvaln-1))
+        writegt_prop(io, m)
+    end
+    #vertex props
     for name in vpnames
         write(io, UInt8(1)) #property type (graph/edge/vertex)
-        write(io, UInt64(sizeof(name)))
-        write(io, name)
+        writegt_prop(io, name)
         m = vertex_property(g, name)
-        writegt_vprop(io, g, m)
-    end
+        pvaln = findfirst(gtpropmap, valtype(m))
+        write(io, UInt8(pvaln-1))
 
+        for i=1:nv(g)
+            writegt_prop(io, m[i])
+        end
+    end
+    #edge props
     for name in epnames
         write(io, UInt8(2)) #property type (graph/edge/vertex)
-        write(io, UInt64(length(name)))
-        write(io, name)
+        writegt_prop(io, name)
         m = edge_property(g, name)
-        writegt_eprop(io, g, m)
+        pvaln = findfirst(gtpropmap, valtype(m))
+        write(io, UInt8(pvaln-1))
+        if is_directed(g)
+            for i=1:nv(g)
+                for e in out_edges(g, i)
+                    writegt_prop(io, m[e])
+                end
+            end
+        else
+            for i=1:nv(g)
+                for e in out_edges(g, i)
+                    dst(e) < i && continue
+                    writegt_prop(io, m[e])
+                end
+            end
+        end
     end
 end
 
@@ -225,34 +159,28 @@ function readgt_props!(io::IO, g::ASimpleNetwork)
         ptype = read(io, UInt8)
         num = ptype == 0 ? 1 :
               ptype == 1 ? nv(g) : ne(g)
-
         namelen = read(io, UInt64)
         pname = String(read(io, namelen))
         pvaln = read(io, UInt8) + 1
+        # @show num namelen pname pvaln
+        pvaln ∈ [6,13,14] && error("not implemented") #TODO
         T = gtpropmap[pvaln]
-        # println("num=$num pvaln=$pvaln $pname $T")
-        if pvaln <= 5  #pvaln==5 -> Float128 not supported
-            m = read(io, T, num)
-        elseif pvaln == 6 #float128
-            error("not implemented") #TODO
-        elseif pvaln == 7
-            m = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
-        elseif pvaln ∈ [8, 9, 10, 11, 12]
-            m = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
-        else
-            error("not implemented") #TODO
-        end
+        m = readgt_prop(io, T, num)
 
-        if ptype == 0 #graph
-            #TODO
+        if ptype == 0
+            set_graph_property!(g, pname, m[1])
         elseif ptype == 1
             add_vertex_property!(g, pname, m)
         elseif ptype == 2
-            add_edge_property!(g, pname, m)
+            add_edge_property!(g, pname, EdgeMap(g, m))
         end
     end
 
 end
+
+
+const Num = Union{Bool,Int16,Int32,Int64,Float64}
+const VecNum = Union{Vector{Bool}, Vector{Int16}, Vector{Int32}, Vector{Int64}, Vector{Float64}}
 
 const gtpropmap = DataType[   Bool,                   #0x00
                               Int16,                  #0x01
@@ -269,6 +197,14 @@ const gtpropmap = DataType[   Bool,                   #0x00
                               Vector{Float64},       #0x0c #TODO => should be float128
                               Vector{String}          #0x0d
                         ]
+
+readgt_prop{T<:Num}(io, ::Type{T}, num) = read(io, T, num)
+readgt_prop{T<:VecNum}(io, ::Type{T}, num) = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
+readgt_prop(io, ::Type{String}, num) = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
+
+writegt_prop{T<:Num}(io, x::T) = write(io, x)
+writegt_prop{T<:VecNum}(io, x::T) = (write(io, length(x)); write(io, x))
+writegt_prop(io, x::String) = (write(io, sizeof(x)); write(io, x))
 
 function readgt_adj!{T}(io::IO, g::ADiGraph, ::Type{T})
     for i=1:nv(g)

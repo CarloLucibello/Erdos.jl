@@ -84,41 +84,6 @@ g = DG(10,20)
 ga = readgraph(f, :dot, G)
 @test g == ga
 
-# test :gt
-g = readgraph(:lesmis, G)
-@test typeof(g) == G
-@test nv(g) == 77
-@test ne(g) == 254
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
-
-g = readgraph(:serengetifoodweb, G)
-@test typeof(g) == DG
-@test nv(g) == 161
-@test ne(g) == 592
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
-
-
-g = G(10,0)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
-g = G(10,20)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
-g = DG(10,20)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
 # test :gexf
 @test writegraph(f, g, :gexf) == 1
 h = readgraph(f, :gexf, G)

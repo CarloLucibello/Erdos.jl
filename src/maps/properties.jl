@@ -14,13 +14,75 @@ An abstract directed graph with the additional possibility to attach properties 
 
 const ASimpleNetwork = Union{ANetwork, ADiNetwork}
 
+
+function show{G<:ASimpleNetwork}(io::IO, g::G)
+    print(io, split("$G",'.')[end], "($(nv(g)), $(ne(g)))")
+    print(io, " with ")
+    _printstrvec(io, graph_properties(g))
+    print(io, " graph, ")
+    _printstrvec(io, vertex_properties(g))
+    print(io," vertex, ")
+    _printstrvec(io, edge_properties(g))
+    print(io, " edge properties.")
+end
+
+function _printstrvec(io::IO, vs::Vector{String})
+    print(io,"[")
+    if length(vs) > 0
+        for s in vs[1:end-1]
+            print(io, "\"" * s * "\", ")
+        end
+        print(io, "\"" * last(vs) * "\"")
+    end
+    print(io,"]")
+end
+
+
 type PropertyStore
+    gmaps::Dict{String, Any}
     emaps::Dict{String,AEdgeMap}
     vmaps::Dict{String,AVertexMap}
 end
 
-PropertyStore() = PropertyStore(Dict{String,AEdgeMap}(), Dict{String,AVertexMap}())
+PropertyStore() = PropertyStore(Dict{String, Any}(), Dict{String,AEdgeMap}(), Dict{String,AVertexMap}())
 
+### GRAPH
+"""
+    set_graph_property!(g, name, x)
+
+Add the property `name` with value `x` to `g`.
+"""
+function set_graph_property!(g::ASimpleNetwork, name::String, x)
+    g.props.gmaps[name] = x
+end
+
+"""
+    rem_graph_property!(g, name)
+
+Remove the property `name` from `g`.
+"""
+function rem_graph_property!(g::ASimpleNetwork, name::String)
+    !haskey(g.props.gmaps, name) && error("Property $name not present.")
+    delete!(g.props.gmaps, name)
+    g.props.gmaps
+end
+
+"""
+    graph_property(g, name)
+
+Return the property `name` of `g`.
+"""
+graph_property(g::ASimpleNetwork, name::String) = g.props.gmaps[name]
+
+"""
+    graph_properties(g)
+
+Return a vector listing the names of the properties of `g`.
+"""
+graph_properties(g::ASimpleNetwork) = collect(keys(g.props.gmaps))
+
+
+### EDGE
 """
     add_edge_property!(g, name, T)
 
@@ -127,4 +189,16 @@ function swap_vertices!(props::PropertyStore, u::Integer, v::Integer)
         end
     end
     #TODO should swap edges for non indexed graphs
+end
+
+function ==(p1::PropertyStore, p2::PropertyStore)
+    oke = true
+    for name in keys(p1.emaps)
+        if !haskey(p2.emaps, name)
+            oke = false
+            break
+        end
+        oke &= p1.emaps[name] == p2.emaps[name]
+    end
+    return (p1.gmaps == p2.gmaps) && (p1.emaps == p2.emaps) && oke
 end
