@@ -55,8 +55,6 @@ Swap `e.src` and `e.dst`.
 reverse(e::Edge) = Edge(dst(e), src(e))
 
 
-@compat abstract type AIndexedEdge <: AEdge end
-
 show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)),$(idx(e)))")
 
 """
@@ -70,7 +68,7 @@ An indexed edge type
 
     IndexedEdge(u, v) = IndexedEdge(u,v,-1)
 
-Creates an edge with unvalid index.
+Creates an edge with invalid index.
 """
 immutable IndexedEdge <: AIndexedEdge
     src::Int

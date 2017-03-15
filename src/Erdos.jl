@@ -152,6 +152,7 @@ AVertexMap, ConstVertexMap, hasindex, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
 
 # properties
+PropertyStore, 
 add_edge_property!, add_vertex_property!, set_graph_property!,
 edge_property, vertex_property, graph_property,
 rem_edge_property!, rem_vertex_property!,

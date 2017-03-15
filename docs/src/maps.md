@@ -17,3 +17,10 @@ Modules = [Erdos]
 Pages   = [ "maps/vertexmap.jl"]
 Private = false
 ```
+
+## PropertyStore
+```@autodocs
+Modules = [Erdos]
+Pages   = [ "maps/property_store.jl"]
+Private = false
+```

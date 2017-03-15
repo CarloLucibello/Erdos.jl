@@ -1,5 +1,19 @@
 """
-    @compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
+    abstract type AIndexedEdge <: AEdge end
+
+Edge types with unique indexes, accessed by [`idx`](@ref)
+"""
+@compat abstract type AIndexedEdge <: AEdge end
+
+"""
+    idx(e::AIndexedEdge)
+
+Returns the index of edge `e`.
+"""
+idx(e::AIndexedEdge) = error("Method not defined")
+
+"""
+    const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
 Type representing an abstract vertex map.
 """
@@ -29,7 +43,6 @@ An abstract directed graph with the additional possibility to attach properties 
 @compat abstract type ADiNetwork <: ADiGraph end
 
 const ANetOrDiNet = Union{ANetwork, ADiNetwork}
-
 
 function show{G<:ANetOrDiNet}(io::IO, g::G)
     print(io, split("$G",'.')[end], "($(nv(g)), $(ne(g)))")

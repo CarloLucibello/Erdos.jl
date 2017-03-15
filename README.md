@@ -25,6 +25,10 @@ A graph library entirely written in Julia. Install it with
 ```julia
 julia> Pkg.add("Erdos")
 ```
+*Erdos* defines some types associated to graph mathematical structures and implements a huge number of algorithms to work with them.
+Moreover edge and vertex properties can be internally stored in some of the graph types (we call them networks) and read/written in most common graph formats.
+Custom graphs and networks can be defined inheriting from *Erdos*' abstract types.
+
 Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
 
 ## Documentation
@@ -33,10 +37,14 @@ Methods' documentation is also available via the Julia REPL help system.
 See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.md) for differences with previous versions.
 
 ## License
-**Erdos.jl** is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
+*Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
 
 ## Features
-- **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all)
+- **core functions:** vertices and edges addition and removal, degree (in/out/all), neighbors (in/out/all)
+
+- **maps** dictionary like types to store properties associated to vertices and edges
+
+- **networks** store vertex/edge/graph properties (maps) inside the graph itself
 
 - **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood, k-core
 
@@ -48,7 +56,7 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **graph generators:** [notorious graphs](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl), euclidean graphs and random graphs (Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model)
 
-- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
+- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html). For some of these formats vertex/edge/graph properties can be read and written.
 
 - **centrality:** betweenness, closeness, degree, pagerank, Katz
 

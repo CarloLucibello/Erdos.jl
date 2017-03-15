@@ -1,5 +1,6 @@
 @testset "$TEST $G" begin
 
+## EDGE
 g = Net(10, 20)
 m = add_edge_property!(g, "label", Int)
 
@@ -28,6 +29,7 @@ m2 = add_edge_property!(g, "bye", m)
 @test m === m2
 @test edge_properties(g) == ["bye","hi"]
 
+## VERTEX
 g = Net(3)
 add_edge!(g,1,2)
 add_edge!(g,2,3)
@@ -43,5 +45,12 @@ rem_vertex!(g, 1)
 swap_vertices!(g, 1, 2)
 @test m[1] == 2
 @test m[2] == 3
+
+## GRAPH
+g = DiNet(3, 5)
+set_graph_property!(g, "lab", "mygraph")
+@test graph_property(g, "lab") == "mygraph"
+@test graph_properties(g) == ["lab"]
+@test rem_graph_property(g, "lab") == []
 
 end #testset

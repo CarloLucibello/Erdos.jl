@@ -1,5 +1,11 @@
-# Types and Constructors
-*Erdos.jl* defines the following basic types and functionalities.
+# Graph Types and Constructors
+*Erdos.jl* defines a type hierarchy and associated methods for expressing a
+graph topology and implementing related algorithms.
+The ready to go graph types are the `Graph` type for undirected graphs and
+the `DiGraph` type for directed graphs. Custom
+types con be defined inheriting from the abstract types `AGraph` and `ADiGraph`.
+Graph types supporting the internal storages of edge/vertex properties are
+called **networks** in Erdos and are documeted [here](@ref network_types)
 
 ## Abstract Types
 
@@ -18,16 +24,8 @@ DiGraph
 Edge
 ```
 
-## Net / DiNet / IndexedEdge
-
-```@docs
-Net
-DiNet
-IndexedEdge
-```
-
 ## Defining new types
-In order to define a custom graph type, e.g. `MyGraph <: AGraph`, some guarantee have to be respected and some method have to be exposed. Take a look to the files in `src/factory/` for some examples. Custom edges, e.g. `MyEdge <: AEdge`,  have to expose `src(e)` and `dst(e)` methods.
+In order to define a custom graph type, e.g. `MyGraph <: AGraph`, some guarantee have to be respected and some methods have to be exposed. Take a look to the files in `src/factory/` for some examples. Custom edges, e.g. `MyEdge <: AEdge`,  have to expose `src(e)` and `dst(e)` methods.
 
 **Guarantees**:
 - vertices are integers in 1:nv(g)
@@ -47,6 +45,7 @@ In order to define a custom graph type, e.g. `MyGraph <: AGraph`, some guarantee
 - digraphtype(g)
 - edgetype(g)
 - vertextype(g)
+- swap_vertices!(g, u, v)
 
 Some methods have general fallbacks relying on the more foundamental API described above, but could probably made more efficient knowing the internal
 implementation of the graph.

@@ -13,13 +13,13 @@
 
 A type representing a directed graph with indexed edges.
 
-    DiNet(n=0)
+    Net(n=0)
 
-Construct a `DiNet` with `n` vertices and no edges.
+Construct a `Net` with `n` vertices and no edges.
 
-    DiNet(adjmx::AbstractMatrix)
+    Net(adjmx::AbstractMatrix)
 
-Construct a `DiNet` from the adjacency matrix `adjmx`.
+Construct a `Net` from the adjacency matrix `adjmx`.
 """
 type Net <: ANetwork
     ne::Int
@@ -35,7 +35,7 @@ type Net <: ANetwork
 end
 
 """
-    type DiNet <: ADiGraph
+    type DiNet <: ADiNetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist

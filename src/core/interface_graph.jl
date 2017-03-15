@@ -1,5 +1,33 @@
 """
-    @compat abstract type AGraph end
+    abstract type AEdge end
+
+An abstract edge type.
+"""
+@compat abstract type AEdge end
+
+"""
+    src(e)
+
+Returns the source of an edge.
+"""
+src(e::AEdge) = error("Method not defined")
+
+"""
+    dst(e)
+
+Returns the destination of an edge.
+"""
+dst(e::AEdge) = error("Method not defined")
+
+"""
+    reverse(e)
+
+Returns an edge with swapped `src(e)` and `dst(e)`.
+"""
+reverse(e::AEdge) = error("Method not defined")
+
+"""
+    abstract type AGraph end
 
 Abstract undirected graph type
 """
@@ -13,7 +41,7 @@ Abstract directed graph type
 @compat abstract type ADiGraph end
 
 """
-    @compat const AGraphOrDiGraph = Union{AGraph, ADiGraph}
+    const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 
 Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 """
@@ -136,34 +164,6 @@ The digraph type corresponding to `G`. If `G<:ADiGraph` returns `G`,
 if `G<:AGraph` returns a type `H<:ADiGraph`.
 """
 digraphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
-
-"""
-    abstract AEdge
-
-An abstract edge type.
-"""
-@compat abstract type AEdge end
-
-"""
-    src(e)
-
-Returns the source of an edge.
-"""
-src(e::AEdge) = error("Method not defined")
-
-"""
-    dst(e)
-
-Returns the destination of an edge.
-"""
-dst(e::AEdge) = error("Method not defined")
-
-"""
-    reverse(e)
-
-Returns an edge with swapped `src(e)` and `dst(e)`.
-"""
-reverse(e::AEdge) = error("Method not defined")
 
 """
     pop_vertex!(g)
