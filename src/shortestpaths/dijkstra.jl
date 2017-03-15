@@ -27,7 +27,7 @@ With `allpaths=true`, returns a `DijkstraState` that keeps track of all
 predecessors of a given vertex.
 """
 function dijkstra_shortest_paths(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         srcs::Vector{Int},
         distmx::AEdgeMap=ConstEdgeMap(g,1);
         allpaths=false
@@ -93,5 +93,5 @@ function dijkstra_shortest_paths(
     return DijkstraState{T}(parents, dists, preds, pathcounts)
 end
 
-dijkstra_shortest_paths(g::ASimpleGraph, src::Int, distmx::AEdgeMap=ConstEdgeMap(g,1); allpaths=false) =
+dijkstra_shortest_paths(g::AGraphOrDiGraph, src::Int, distmx::AEdgeMap=ConstEdgeMap(g,1); allpaths=false) =
   dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)

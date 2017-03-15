@@ -23,7 +23,7 @@ EdgeColorMap :
 immutable BreadthFirst <: SimpleGraphVisitAlgorithm end
 
 function breadth_first_visit_impl!(
-    g::ASimpleGraph,                 # the graph
+    g::AGraphOrDiGraph,                 # the graph
     queue::Vector{Int},                 # an (initialized) queue that stores the active vertices
     vcolormap::AVertexMap,   # an (initialized) color-map to indicate status of vertices (-1=unseen, otherwise distance from root)
     ecolormap::AEdgeMap,        # an (initialized) color-map to indicate status of edges
@@ -53,7 +53,7 @@ function breadth_first_visit_impl!(
 end
 
 function traverse_graph!(
-    g::ASimpleGraph,
+    g::AGraphOrDiGraph,
     alg::BreadthFirst,
     source,
     visitor::SimpleGraphVisitor;
@@ -92,7 +92,7 @@ immutable GDistanceVisitor <: SimpleGraphVisitor end
 Fills `dists` with the geodesic distances of vertices in  `g` from vertex/vertices `source`.
 `dists` can be either a vector or a dictionary.
 """
-function gdistances!(g::ASimpleGraph, source, dists)
+function gdistances!(g::AGraphOrDiGraph, source, dists)
     visitor = GDistanceVisitor()
     traverse_graph!(g, BreadthFirst(), source, visitor, vcolormap=dists)
     for i in eachindex(dists)
@@ -108,7 +108,7 @@ end
 Returns a vector filled with the geodesic distances of vertices in  `g` from vertex/vertices `source`.
 For vertices in disconnected components the default distance is -1.
 """
-gdistances(g::ASimpleGraph, source) = gdistances!(g, source, fill(0,nv(g)))
+gdistances(g::AGraphOrDiGraph, source) = gdistances!(g, source, fill(0,nv(g)))
 
 
 ###########################################
@@ -156,7 +156,7 @@ end
 # this function is considered a performant version of bfs_tree for useful when the parent
 # array is more helpful than a DiGraph type, or when performance is critical.
 function bfs_tree!(visitor::TreeBFSVisitorVector,
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         s::Int;
         vcolormap = Dict{Int,Int}(),
         queue = Vector{Int}())
@@ -172,7 +172,7 @@ end
 Provides a breadth-first traversal of the graph `g` starting with source vertex `s`,
 and returns a directed acyclic graph of vertices in the order they were discovered.
 """
-function bfs_tree{G<:ASimpleGraph}(g::G, s)
+function bfs_tree{G<:AGraphOrDiGraph}(g::G, s)
     visitor = TreeBFSVisitorVector(nv(g))
     bfs_tree!(visitor, g, s)
     return tree(visitor.tree, G)

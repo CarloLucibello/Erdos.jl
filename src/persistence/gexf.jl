@@ -1,4 +1,4 @@
-function writegexf(f::IO, g::ASimpleGraph)
+function writegexf(f::IO, g::AGraphOrDiGraph)
     xdoc = XMLDocument()
     xroot = setroot!(xdoc, ElementNode("gexf"))
     xroot["xmlns"] = "http://www.gexf.net/1.2draft"
@@ -48,7 +48,7 @@ function gexf_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
     return g
 end
 
-function readgexf{G<:ASimpleGraph}(io::IO, ::Type{G})
+function readgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "gexf" || error("Not a Gexf file")

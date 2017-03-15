@@ -26,8 +26,8 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             HasLength, HasShape     #iterators
 
 #interface
-export AGraph, ADiGraph, ASimpleGraph,
-ANetwork, ADiNetwork, APropertySimpleGraph,
+export AGraph, ADiGraph, AGraphOrDiGraph,
+ANetwork, ADiNetwork,
 graphtype, digraphtype, edgetype, vertextype,
 
 
@@ -49,8 +49,7 @@ unsafe_add_edge!, rebuild!,
 rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
-reverse!, Graph, DiGraph, SimpleGraph,
-DiNet, Net, SimpleNet,
+reverse!, Graph, DiGraph, DiNet, Net,
 
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,

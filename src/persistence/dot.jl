@@ -17,7 +17,7 @@ function _dot_nodes_to_dict(pg)
     end
 end
 
-function _readdot{G<:ASimpleGraph}(pg, ::Type{G})
+function _readdot{G<:AGraphOrDiGraph}(pg, ::Type{G})
     n = length(DOT.nodes(pg))
     nodedict = _dot_nodes_to_dict(pg)
     g = G(n)
@@ -29,13 +29,13 @@ function _readdot{G<:ASimpleGraph}(pg, ::Type{G})
     return g
 end
 
-function readdot{G<:ASimpleGraph}(io::IO, ::Type{G})
+function readdot{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     pg = first(DOT.parse_dot(readstring(io)))
     H = pg.directed ? digraphtype(G) : graphtype(G)
     return _readdot(pg, H)
 end
 
-function writedot(io::IO, g::ASimpleGraph)
+function writedot(io::IO, g::AGraphOrDiGraph)
     if is_directed(g)
         println(io, "strict digraph {")
         eop = "->"

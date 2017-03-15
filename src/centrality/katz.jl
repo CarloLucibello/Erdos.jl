@@ -13,7 +13,7 @@
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "ASimpleGraph IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# THE SOFTWARE IS PROVIDED "AGraphOrDiGraph IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 # OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.#
 # IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
@@ -24,7 +24,7 @@
 """Calculates the [Katz centrality](https://en.wikipedia.org/wiki/Katz_centrality)
 of the graph `g`.
 """
-function katz_centrality(g::ASimpleGraph, α::Real = 0.3)
+function katz_centrality(g::AGraphOrDiGraph, α::Real = 0.3)
     nvg = nv(g)
     v = ones(Float64, nvg)
     spI = speye(Float64, nvg)

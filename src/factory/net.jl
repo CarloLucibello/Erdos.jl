@@ -77,12 +77,12 @@ type DiNet <: ADiNetwork
     props::PropertyStore
 end
 
-const SimpleNet = Union{Net, DiNet}
+const NetOrDiNet = Union{Net, DiNet}
 
-edgetype{G<:SimpleNet}(::Type{G}) = IndexedEdge
+edgetype{G<:NetOrDiNet}(::Type{G}) = IndexedEdge
 graphtype(::Type{DiNet}) = Net
 digraphtype(::Type{Net}) = DiNet
-vertextype{G<:SimpleNet}(::Type{G}) = Int
+vertextype{G<:NetOrDiNet}(::Type{G}) = Int
 
 #### GRAPH CONSTRUCTORS
 function DiNet(n::Integer = 0)
@@ -109,8 +109,8 @@ end
 
 DiNet(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNet; seed=seed)
 
-nv(g::SimpleNet) = length(g.out_edges)
-ne(g::SimpleNet) = g.ne
+nv(g::NetOrDiNet) = length(g.out_edges)
+ne(g::NetOrDiNet) = g.ne
 
 function add_vertex!(g::DiNet)
     push!(g.in_edges, Vector{Pair{Int,Int}}())
@@ -139,7 +139,7 @@ function add_edge!(g::DiNet, u::Integer, v::Integer)
     return (true, IndexedEdge(u,v,idx))
 end
 
-rem_edge!(g::SimpleNet, s::Integer, t::Integer) = rem_edge!(g, edge(g, s, t))
+rem_edge!(g::NetOrDiNet, s::Integer, t::Integer) = rem_edge!(g, edge(g, s, t))
 
 function rem_edge!(g::DiNet, e::IndexedEdge)
     s = e.src
@@ -175,7 +175,7 @@ function rem_edge!(g::DiNet, e::IndexedEdge)
 end
 
 # TODO can be improved (see graph/digraph)
-function edge(g::SimpleNet, i::Integer, j::Integer)
+function edge(g::NetOrDiNet, i::Integer, j::Integer)
     (i > nv(g) || j > nv(g)) && return IndexedEdge(i, j, -1)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
@@ -186,12 +186,12 @@ function edge(g::SimpleNet, i::Integer, j::Integer)
     end
 end
 
-function out_edges(g::SimpleNet, i::Integer)
+function out_edges(g::NetOrDiNet, i::Integer)
     oes = g.out_edges[i]
     return (IndexedEdge(i, j, idx) for (j, idx) in oes)
 end
 
-function out_neighbors(g::SimpleNet, i::Integer)
+function out_neighbors(g::NetOrDiNet, i::Integer)
     oes = g.out_edges[i]
     return (j for (j, idx) in oes)
 end

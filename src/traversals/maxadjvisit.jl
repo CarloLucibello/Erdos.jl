@@ -15,7 +15,7 @@ immutable MaximumAdjacency <: SimpleGraphVisitAlgorithm end
 @compat abstract type AbstractMASVisitor <: SimpleGraphVisitor end
 
 function maximum_adjacency_visit_impl!{T}(
-    g::ASimpleGraph,	                      # the graph
+    g::AGraphOrDiGraph,	                      # the graph
     pq::PriorityQueue{Int, T},               # priority queue
     visitor::AbstractMASVisitor,                      # the visitor
     colormap::Vector{Int})                            # traversal status
@@ -37,7 +37,7 @@ function maximum_adjacency_visit_impl!{T}(
 end
 
 function traverse_graph!(
-    g::ASimpleGraph,
+    g::AGraphOrDiGraph,
     T::DataType,
     alg::MaximumAdjacency,
     s,
@@ -87,7 +87,7 @@ type MinCutVisitor{G,T,EM} <: AbstractMASVisitor
     vertices::Vector{Int}
 end
 
-function MinCutVisitor(g::ASimpleGraph, distmx::AEdgeMap)
+function MinCutVisitor(g::AGraphOrDiGraph, distmx::AEdgeMap)
     n = nv(g)
     parities = falses(n)
     T = valtype(distmx)
@@ -185,7 +185,7 @@ of the vertices in two sets, according to the cut.
 An optional `dist_matrix` edge map maybe specified; if omitted, edge distances are assumed to be 1.
 """
 function minimum_cut(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         distmx::AEdgeMap
     )
     T = valtype(distmx)
@@ -203,7 +203,7 @@ function minimum_cut(
     return visitor.bestweight, cut, labels
 end
 
-minimum_cut(g::ASimpleGraph) = minimum_cut(g, ConstEdgeMap(g,1))
+minimum_cut(g::AGraphOrDiGraph) = minimum_cut(g, ConstEdgeMap(g,1))
 
 """
     maximum_adjacency_visit(
@@ -220,7 +220,7 @@ be 1. If `log` (default `false`) is `true`, visitor events will be printed to
 displayed.
 """
 function maximum_adjacency_visit(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         distmx::AEdgeMap=ConstEdgeMap(g,1);
         log::Bool=false,
         io::IO=STDOUT

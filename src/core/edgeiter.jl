@@ -1,4 +1,4 @@
-immutable EdgeIter{G<:ASimpleGraph}
+immutable EdgeIter{G<:AGraphOrDiGraph}
     g::G
 end
 
@@ -72,7 +72,7 @@ iteratorsize(::Type{EdgeIter}) = HasLength()
 Returns an iterator to the edges of a graph `g`.
 The returned iterator is invalidated by changes to `g`.
 """
-edges(g::ASimpleGraph) = EdgeIter(g)
+edges(g::AGraphOrDiGraph) = EdgeIter(g)
 
 
 ## Simpler but slower with julia 0.5. Try again with future versions

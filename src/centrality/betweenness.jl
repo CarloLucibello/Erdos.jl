@@ -32,7 +32,7 @@ randomly chosen vertices.
 [1] Brandes 2001 & Brandes 2008
 """
 function betweenness_centrality(
-    g::ASimpleGraph;
+    g::AGraphOrDiGraph;
     approx::Int=-1,
     normalize::Bool=true,
     endpoints::Bool=false)
@@ -64,7 +64,7 @@ end
 function _accumulate_basic!(
         betweenness::Vector{Float64},
         state::DijkstraState,
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         si::Integer
     )
 
@@ -95,7 +95,7 @@ end
 function _accumulate_endpoints!(
         betweenness::Vector{Float64},
         state::DijkstraState,
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         si::Integer
     )
 

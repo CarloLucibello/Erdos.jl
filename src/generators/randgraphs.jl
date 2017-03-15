@@ -14,7 +14,7 @@ Note also that Erdős–Rényi graphs may be generated quickly using `erdos_reny
 or the  `Graph(nv, ne)` constructor, which randomly select `ne` edges among all the potential
 edges.
 """
-function erdos_renyi{G<:ASimpleGraph}(n::Int, p::Real, ::Type{G} = Graph;
+function erdos_renyi{G<:AGraphOrDiGraph}(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1)
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     if seed >= 0
@@ -25,7 +25,7 @@ function erdos_renyi{G<:ASimpleGraph}(n::Int, p::Real, ::Type{G} = Graph;
     return erdos_renyi(n, m, G; seed=seed)
 end
 
-function erdos_renyi{G<:ASimpleGraph}(n::Int, m::Int, ::Type{G} = Graph;
+function erdos_renyi{G<:AGraphOrDiGraph}(n::Int, m::Int, ::Type{G} = Graph;
         seed::Int = -1)
     maxe = is_directed(G) ? n * (n-1) : div(n * (n-1), 2)
     @assert(m <= maxe, "Maximum number of edges for this generator is $maxe")
@@ -51,7 +51,7 @@ randomized per the model based on probability `β`.
 Undirected graphs are created by default. Directed graphs can be created
 passing a directed graph type as last argument (e.g. `DiGraph`).
 """
-function watts_strogatz{G<:ASimpleGraph}(n::Int, k::Int, β::Real, ::Type{G} = Graph;
+function watts_strogatz{G<:AGraphOrDiGraph}(n::Int, k::Int, β::Real, ::Type{G} = Graph;
         seed::Int = -1)
     @assert k < n/2
     g = G(n)
@@ -148,10 +148,10 @@ passing a directed graph type as last argument (e.g. `DiGraph`).
 
 See also [`barabasi_albert!`](@ref) for growing a given graph.
 """
-barabasi_albert{G<:ASimpleGraph}(n::Int, k::Int, ::Type{G}=Graph; keyargs...) =
+barabasi_albert{G<:AGraphOrDiGraph}(n::Int, k::Int, ::Type{G}=Graph; keyargs...) =
     barabasi_albert(n, k, k, G; keyargs...)
 
-function barabasi_albert{G<:ASimpleGraph}(n::Int, n0::Int, k::Int, ::Type{G}=Graph;
+function barabasi_albert{G<:AGraphOrDiGraph}(n::Int, n0::Int, k::Int, ::Type{G}=Graph;
         seed::Int = -1)
     g = G(n0)
     barabasi_albert!(g, n, k; seed = seed)
@@ -168,7 +168,7 @@ preferential attachment to `k` different vertices already present in the graph.
 
 See also [`barabasi_albert`](@ref).
 """
-function barabasi_albert!(g::ASimpleGraph, n::Int, k::Int; seed::Int=-1)
+function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     n0 = nv(g)
     1 <= k <= n0 <= n ||
         throw(ArgumentError("Barabási-Albert model requires 1 <= k <= nv(g) <= n"))
@@ -294,7 +294,7 @@ function static_fitness_model{T<:Real,S<:Real, G<:ADiGraph}(m::Int, fitness_out:
     return g
 end
 
-function _create_static_fitness_graph!{T<:Real,S<:Real}(g::ASimpleGraph, m::Int, cum_fitness_out::Vector{T}, cum_fitness_in::Vector{S}, seed::Int)
+function _create_static_fitness_graph!{T<:Real,S<:Real}(g::AGraphOrDiGraph, m::Int, cum_fitness_out::Vector{T}, cum_fitness_in::Vector{S}, seed::Int)
     rng = getRNG(seed)
     max_out = cum_fitness_out[end]
     max_in = cum_fitness_in[end]

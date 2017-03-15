@@ -37,7 +37,7 @@ function Edge{T,S}(u::T, v::S)
     return Edge{V}(promote(u, v)...)
 end
 
-Edge(g::ASimpleGraph, u, v) = Edge(u, v)
+Edge(g::AGraphOrDiGraph, u, v) = Edge(u, v)
 
 src(e::Edge) = e.src
 dst(e::Edge) = e.dst

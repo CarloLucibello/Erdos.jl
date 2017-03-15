@@ -13,11 +13,11 @@ Abstract directed graph type
 @compat abstract type ADiGraph end
 
 """
-    @compat const ASimpleGraph = Union{AGraph, ADiGraph}
+    @compat const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 
 Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 """
-@compat const ASimpleGraph = Union{AGraph, ADiGraph}
+@compat const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 
 ####### Required interface for concrete types ########################
 
@@ -26,7 +26,7 @@ Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 
 The number of vertices in `g`.
 """
-nv(g::ASimpleGraph) = error("Method not defined")
+nv(g::AGraphOrDiGraph) = error("Method not defined")
 
 """
     ne(g)
@@ -35,7 +35,7 @@ The number of edges in `g`.
 
 Time Complexity: O(1)
 """
-ne(g::ASimpleGraph) = error("Method not defined")
+ne(g::AGraphOrDiGraph) = error("Method not defined")
 
 """
     add_edge!(g, e) -> (ok, new_edge)
@@ -50,7 +50,7 @@ Add to `g` an edge from `u` to `v`.
 is already present) and `true` otherwise.
 `new_edge` is the descriptor of the new edge.
 """
-add_edge!(g::ASimpleGraph, u, v) = error("Method not defined")
+add_edge!(g::AGraphOrDiGraph, u, v) = error("Method not defined")
 
 
 """
@@ -64,7 +64,7 @@ Remove the edge from `u` to `v`.
 
 Returns false if edge removal fails (e.g., if the edge does not exist) and true otherwise.
 """
-rem_edge!(g::ASimpleGraph, u, v) = error("Method not defined")
+rem_edge!(g::AGraphOrDiGraph, u, v) = error("Method not defined")
 
 
 """
@@ -72,7 +72,7 @@ rem_edge!(g::ASimpleGraph, u, v) = error("Method not defined")
 
 Add a new vertex to the graph `g`.
 """
-add_vertex!(g::ASimpleGraph) = error("Method not defined")
+add_vertex!(g::AGraphOrDiGraph) = error("Method not defined")
 
 # length() has to be appliable to the result
 """
@@ -86,13 +86,13 @@ in_neighbors(g::ADiGraph, v) = error("Method not defined")
 
 # length() has to be appliable to the result
 """
-    out_neighbors(g::ASimpleGraph, v)
+    out_neighbors(g::AGraphOrDiGraph, v)
 
 Returns an iterable to all neighbors connected to vertex `v` by an outgoing edge.
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-out_neighbors(g::ASimpleGraph, v) = error("Method not defined")
+out_neighbors(g::AGraphOrDiGraph, v) = error("Method not defined")
 
 """
     edge(g, u, v)
@@ -100,7 +100,7 @@ out_neighbors(g::ASimpleGraph, v) = error("Method not defined")
 Returns an edge from 'u' to 'v'. The edge doesn't necessarily exists
 in `g`.
 """
-edge(g::ASimpleGraph, u, v) = Edge{Int}(u, v)
+edge(g::AGraphOrDiGraph, u, v) = Edge{Int}(u, v)
 
 #TODO check consistency
 """
@@ -110,7 +110,7 @@ edge(g::ASimpleGraph, u, v) = Edge{Int}(u, v)
 Returns the type of edges of graph `g` (or graph type `G`), i. e.
 the element type returned of the iterator `edges(g)`.
 """
-edgetype{G<:ASimpleGraph}(::Type{G}) = Edge{Int}
+edgetype{G<:AGraphOrDiGraph}(::Type{G}) = Edge{Int}
 
 
 """
@@ -119,23 +119,23 @@ edgetype{G<:ASimpleGraph}(::Type{G}) = Edge{Int}
 
 Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
-vertextype{G<:ASimpleGraph}(::Type{G}) = Int
+vertextype{G<:AGraphOrDiGraph}(::Type{G}) = Int
 
 """
-    graphtype{G<:ASimpleGraph}(::Type{G})
+    graphtype{G<:AGraphOrDiGraph}(::Type{G})
 
 The graph type corresponding to `G`. If `G<:AGraph` returns `G`,
 if `G<:ADiGraph` returns a type `H<:AGraph`.
 """
-graphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
+graphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
 
 """
-    digraphtype{G<:ASimpleGraph}(::Type{G})
+    digraphtype{G<:AGraphOrDiGraph}(::Type{G})
 
 The digraph type corresponding to `G`. If `G<:ADiGraph` returns `G`,
 if `G<:AGraph` returns a type `H<:ADiGraph`.
 """
-digraphtype{G<:ASimpleGraph}(::Type{G}) = error("Method not defined")
+digraphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
 
 """
     abstract AEdge
@@ -170,7 +170,7 @@ reverse(e::AEdge) = error("Method not defined")
 
 Remove the last vertex of `g`. Equivalent to rem_vertex!(g, nv(g)).
 """
-pop_vertex!(g::ASimpleGraph) = error("Method not defined")
+pop_vertex!(g::AGraphOrDiGraph) = error("Method not defined")
 
 """
     swap_vertices!(g, u, v)
@@ -179,4 +179,4 @@ Swap the labels of vertices `u` and `v`.
 In the new graph all old neighbors of vertex `u` will be neighbors of `v` and
 viceversa.
 """
-swap_vertices!(g::ASimpleGraph, u::Integer, v::Integer) = error("Method not defined")
+swap_vertices!(g::AGraphOrDiGraph, u::Integer, v::Integer) = error("Method not defined")

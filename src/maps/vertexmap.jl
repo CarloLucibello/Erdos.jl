@@ -16,7 +16,7 @@ hasindex(v::Dict, i::Integer) = haskey(v, i)
 Returns a map that associates values of type `T`
 to the vertices of  graph `g`.
 """
-function VertexMap{T}(g::ASimpleGraph, ::Type{T})
+function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
     V = vertextype(g)
     return Dict{V,T}()
 end

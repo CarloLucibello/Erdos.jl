@@ -63,7 +63,7 @@ end
 
 Merges graphs `g` and `h` by taking the set union of all vertices and edges.
 """
-function union{T<:ASimpleGraph}(g::T, h::T)
+function union{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -84,7 +84,7 @@ edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
 """
-function blkdiag{T<:ASimpleGraph}(g::T, h::T)
+function blkdiag{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     r = T(gnv + nv(h))
     for e in edges(g)
@@ -103,7 +103,7 @@ Produces a graph with edges that are only in both graph `g` and graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function intersect{T<:ASimpleGraph}(g::T, h::T)
+function intersect{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -121,7 +121,7 @@ Produces a graph with edges in graph `g` that are not in graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function difference{T<:ASimpleGraph}(g::T, h::T)
+function difference{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -140,7 +140,7 @@ and vice versa.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function symmetric_difference{T<:ASimpleGraph}(g::T, h::T)
+function symmetric_difference{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -184,7 +184,7 @@ crosspath{G<:AGraph}(len::Integer, g::G) =
 
 Returns the (cartesian product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
 """
-function cartesian_product{G<:ASimpleGraph}(g::G, h::G)
+function cartesian_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
     id(i, j) = (i-1)*nv(h) + j
     for (i1, i2) in edges(g)
@@ -206,7 +206,7 @@ end
 
 Returns the (tensor product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
 """
-function tensor_product{G<:ASimpleGraph}(g::G, h::G)
+function tensor_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
     id(i, j) = (i-1)*nv(h) + j
     for (i1, i2) in edges(g)
@@ -256,7 +256,7 @@ sg, vmap = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
-function subgraph{G<:ASimpleGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
+function subgraph{G<:AGraphOrDiGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()
@@ -278,7 +278,7 @@ function subgraph{G<:ASimpleGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
 end
 
 
-function subgraph{G<:ASimpleGraph}(g::G, elist)
+function subgraph{G<:AGraphOrDiGraph}(g::G, elist)
     h = G()
     V = vertextype(h)
     newvid = Dict{V, V}()
@@ -304,7 +304,7 @@ end
 
 Returns the subgraph induced by `iter`. Equivalent to [`subgraph`](@ref)`(g, iter)[1]`.
 """
-getindex(g::ASimpleGraph, iter) = subgraph(g, iter)[1]
+getindex(g::AGraphOrDiGraph, iter) = subgraph(g, iter)[1]
 
 
 """
@@ -315,7 +315,7 @@ Returns the subgraph of `g` induced by the neighbors of `v` up to distance
 the edge direction the edge direction with respect to `v` (i.e. `:in` or `:out`)
 to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
 """
-egonet(g::ASimpleGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
+egonet(g::AGraphOrDiGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
 
 
 # The following operators allow one to use a Erdos.Graph as a matrix in
@@ -347,25 +347,25 @@ function *{T<:Number}(g::ADiGraph, v::Vector{T})
 end
 
 """sum(g,i) provides 1:in_degree or 2:out_degree vectors"""
-function sum(g::ASimpleGraph, dim::Int)
+function sum(g::AGraphOrDiGraph, dim::Int)
     dim == 1 && return in_degree(g, vertices(g))
     dim == 2 && return out_degree(g, vertices(g))
     error("Graphs are only two dimensional")
 end
 
 
-size(g::ASimpleGraph) = (nv(g), nv(g))
+size(g::AGraphOrDiGraph) = (nv(g), nv(g))
 """size(g,i) provides 1:nv or 2:nv else 1 """
 size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
 
 """sum(g) provides the number of edges in the graph"""
-sum(g::ASimpleGraph) = ne(g)
+sum(g::AGraphOrDiGraph) = ne(g)
 
 """sparse(g) is the adjacency_matrix of g"""
-sparse(g::ASimpleGraph) = adjacency_matrix(g)
+sparse(g::AGraphOrDiGraph) = adjacency_matrix(g)
 
 #arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
-eltype(g::ASimpleGraph) = Float64
-length(g::ASimpleGraph) = nv(g)*nv(g)
-ndims(g::ASimpleGraph) = 2
-issymmetric(g::ASimpleGraph) = !is_directed(g)
+eltype(g::AGraphOrDiGraph) = Float64
+length(g::AGraphOrDiGraph) = nv(g)*nv(g)
+ndims(g::AGraphOrDiGraph) = 2
+issymmetric(g::AGraphOrDiGraph) = !is_directed(g)

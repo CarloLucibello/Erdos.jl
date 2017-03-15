@@ -1,5 +1,5 @@
 """
-    type EdgeMap{G <: ASimpleGraph, T, D} <: AEdgeMap{T}
+    type EdgeMap{G <: AGraphOrDiGraph, T, D} <: AEdgeMap{T}
         g::G
         vtype::Type{T}
         data::D
@@ -14,18 +14,18 @@ Returns a map that associates values of type `T`
 to the vertices of  graph `g`. The underlying storage structures is chosen
 accordingly.
 """
-type EdgeMap{G<:ASimpleGraph, T, D} <: AEdgeMap{T}
+type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     g::G
     vtype::Type{T}
     data::D
 end
 show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T} -> $(m.data)")
 
-EdgeMap{T}(g::ASimpleGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
-EdgeMap{T}(g::ASimpleGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
-EdgeMap{T}(g::ASimpleGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
+EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
+EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
+EdgeMap{T}(g::AGraphOrDiGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
 
-function EdgeMap{T}(g::ASimpleGraph, ::Type{T})
+function EdgeMap{T}(g::AGraphOrDiGraph, ::Type{T})
     E = edgetype(g)
     if E <: AIndexedEdge
         return EdgeMap(g, T, Dict{Int,T}())
@@ -120,7 +120,7 @@ immutable ConstEdgeMap{T} <: AEdgeMap{T}
     val::T
 end
 
-ConstEdgeMap(g::ASimpleGraph, x) = ConstEdgeMap(x)
+ConstEdgeMap(g::AGraphOrDiGraph, x) = ConstEdgeMap(x)
 
 length(m::ConstEdgeMap) = typemax(Int)
 getindex(m::ConstEdgeMap, e::AEdge) = m.val

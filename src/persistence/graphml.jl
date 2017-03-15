@@ -23,7 +23,7 @@ function graphml_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
     return g
 end
 
-function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
+function readgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     name(xroot) == "graphml" || error("Not a GraphML file")
@@ -37,7 +37,7 @@ function readgraphml{G<:ASimpleGraph}(io::IO, ::Type{G})
 end
 
 
-function writegraphml(io::IO, g::ASimpleGraph)
+function writegraphml(io::IO, g::AGraphOrDiGraph)
     xdoc = XMLDocument()
     xroot = setroot!(xdoc, ElementNode("graphml"))
     xroot["xmlns"] = "http://graphml.graphdrawing.org/xmlns"

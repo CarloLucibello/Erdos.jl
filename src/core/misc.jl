@@ -21,11 +21,11 @@ end
 
 Returns true if `g` has any self loops.
 """
-has_self_loops(g::ASimpleGraph) = any(v->has_edge(g, v, v), vertices(g))
+has_self_loops(g::AGraphOrDiGraph) = any(v->has_edge(g, v, v), vertices(g))
 
 """
     num_self_loops(g)
 
 Returns the number of self loops in `g`.
 """
-num_self_loops(g::ASimpleGraph) = count(v->has_edge(g, v, v), vertices(g))
+num_self_loops(g::AGraphOrDiGraph) = count(v->has_edge(g, v, v), vertices(g))

@@ -6,7 +6,7 @@ B[i->j, k->l] = δ(j,k)* (1 - δ(i,l))
 
 returns a matrix B, and an edgemap storing the oriented edges' positions in B
 """
-function nonbacktracking_matrix(g::ASimpleGraph)
+function nonbacktracking_matrix(g::AGraphOrDiGraph)
     E = Edge{vertextype(g)}
     edgeidmap = Dict{E, Int}()
     m = 0
@@ -63,7 +63,7 @@ type Nonbacktracking{G, E}
     m::Int
 end
 
-function Nonbacktracking(g::ASimpleGraph)
+function Nonbacktracking(g::AGraphOrDiGraph)
     E = Edge{vertextype(g)}
     edgeidmap = Dict{E, Int}()
     m = 0

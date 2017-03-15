@@ -4,7 +4,7 @@
 # A* shortest-path algorithm
 
 function a_star_impl!{T<:Number}(
-        g::ASimpleGraph,# the graph
+        g::AGraphOrDiGraph,# the graph
         s::Integer,
         t::Integer, # the end vertex
         colormap::Vector{Int},  # an (initialized) color-map to indicate status of vertices
@@ -51,7 +51,7 @@ optional heuristic function and edge distance matrix may be supplied.
 Returns an empty path if there are no such paths.
 """
 function a_star(
-        g::ASimpleGraph,  # the graph
+        g::AGraphOrDiGraph,  # the graph
         s::Integer,                       # the start vertex
         t::Integer,                       # the end vertex
         distmx::AEdgeMap=ConstEdgeMap(g,1),

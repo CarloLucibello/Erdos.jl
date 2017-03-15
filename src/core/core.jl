@@ -3,7 +3,7 @@
 
 Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
 """
-vertices(g::ASimpleGraph) = 1:nv(g)
+vertices(g::AGraphOrDiGraph) = 1:nv(g)
 
 """
     adjacency_list(g::AGraph)
@@ -32,7 +32,7 @@ adjacency_list(g::ADiGraph, dir=:out) = dir == :out ? out_adjlist(g) :
 Add `n` new vertices to the graph `g`. Returns the final number
 of vertices.
 """
-function add_vertices!(g::ASimpleGraph, n)
+function add_vertices!(g::AGraphOrDiGraph, n)
     added = true
     for i = 1:n
         add_vertex!(g)
@@ -45,9 +45,9 @@ end
 
 Return true if `v` is a vertex of `g`.
 """
-has_vertex(g::ASimpleGraph, v) = v in vertices(g)
+has_vertex(g::AGraphOrDiGraph, v) = v in vertices(g)
 
-function show{G<:ASimpleGraph}(io::IO, g::G)
+function show{G<:AGraphOrDiGraph}(io::IO, g::G)
     print(io, split("$G",'.')[end],
         "($(nv(g)), $(ne(g)))")
         # is_directed(g) ? " undirected graph" : " directed graph")
@@ -69,25 +69,25 @@ is_directed{G<:ADiGraph}(::Type{G}) = true
 
 Returns the number of edges which start at vertex `v`.
 """
-in_degree(g::ASimpleGraph, v) = length(in_neighbors(g,v))
+in_degree(g::AGraphOrDiGraph, v) = length(in_neighbors(g,v))
 
 """
     out_degree(g, v)
 
 Returns the number of edges which end at vertex `v`.
 """
-out_degree(g::ASimpleGraph, v) = length(out_neighbors(g,v))
+out_degree(g::AGraphOrDiGraph, v) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
 
 Return the number of edges  from the vertex `v`.
 """
-degree(g::ASimpleGraph, v) = out_degree(g, v)
+degree(g::AGraphOrDiGraph, v) = out_degree(g, v)
 
-in_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [in_degree(g,x) for x in v]
-out_degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [out_degree(g,x) for x in v]
-degree(g::ASimpleGraph, v::AbstractVector{Int} = vertices(g)) = [degree(g,x) for x in v]
+in_degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [in_degree(g,x) for x in v]
+out_degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [out_degree(g,x) for x in v]
+degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [degree(g,x) for x in v]
 
 """
     neighbors(g, v)
@@ -98,7 +98,7 @@ For directed graph, this is equivalent to [`out_neighbors`](@ref)(g, v).
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-neighbors(g::ASimpleGraph, v) = out_neighbors(g, v)
+neighbors(g::AGraphOrDiGraph, v) = out_neighbors(g, v)
 in_neighbors(g::AGraph, v) = out_neighbors(g, v)
 
 """
@@ -126,22 +126,22 @@ density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
 
 Remove all incident edges on vertex `v` in `g`.
 """
-function clean_vertex!(g::ASimpleGraph, v)
+function clean_vertex!(g::AGraphOrDiGraph, v)
     edgs = collect(all_edges(g, v))
     for e in edgs
         rem_edge!(g, e)
     end
 end
 
-copy(g::ASimpleGraph) = deepcopy(g)
+copy(g::AGraphOrDiGraph) = deepcopy(g)
 
 graphtype{G<:AGraph}(::Type{G}) = G
 digraphtype{G<:ADiGraph}(::Type{G}) = G
 
-edgetype{G<:ASimpleGraph}(g::G) = edgetype(G)
-graphtype{G<:ASimpleGraph}(g::G) = graphtype(G)
-digraphtype{G<:ASimpleGraph}(g::G) = digraphtype(G)
-vertextype{G<:ASimpleGraph}(g::G) = vertextype(G)
+edgetype{G<:AGraphOrDiGraph}(g::G) = edgetype(G)
+graphtype{G<:AGraphOrDiGraph}(g::G) = graphtype(G)
+digraphtype{G<:AGraphOrDiGraph}(g::G) = digraphtype(G)
+vertextype{G<:AGraphOrDiGraph}(g::G) = vertextype(G)
 
 
 graph(g::AGraph) = g
@@ -169,7 +169,7 @@ function graph(g::ADiGraph)
     return h
 end
 
-function =={G<:ASimpleGraph}(g::G, h::G)
+function =={G<:AGraphOrDiGraph}(g::G, h::G)
     nv(g) != nv(h) && return false
     ne(g) != ne(h) && return false
     for i=1:nv(g)
@@ -214,7 +214,7 @@ undirected graphs and the same as [`adjlist`](@ref) for directed ones.
 NOTE: It may return a reference, not a copy. Do not modify result.
 
 """
-out_adjlist(g::ASimpleGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:nv(g)]
+out_adjlist(g::AGraphOrDiGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i=1:nv(g)]
 
 
 """
@@ -246,7 +246,7 @@ end
 Returns an iterator to the edges in `g` going to vertex `v`.
 `v == dst(e)` for each returned edge `e`.
 """
-in_edges(g::ASimpleGraph, v) = (edge(g, x, v) for x in in_neighbors(g, v))
+in_edges(g::AGraphOrDiGraph, v) = (edge(g, x, v) for x in in_neighbors(g, v))
 
 """
     out_edges(g, v)
@@ -254,7 +254,7 @@ in_edges(g::ASimpleGraph, v) = (edge(g, x, v) for x in in_neighbors(g, v))
 Returns an iterator to the edges in `g` coming from vertex `v`.
 `v == src(e)` for each returned edge `e`.
 """
-out_edges(g::ASimpleGraph, v) = (edge(g, v, x) for x in out_neighbors(g, v))
+out_edges(g::AGraphOrDiGraph, v) = (edge(g, v, x) for x in out_neighbors(g, v))
 
 """
     edges(g, v)
@@ -267,7 +267,7 @@ It is equivalent to [`out_edges`](@ref).
 For digraphs, use [`all_edges`](@ref) to iterate over
 both in and out edges.
 """
-edges(g::ASimpleGraph, v) = out_edges(g, v)
+edges(g::AGraphOrDiGraph, v) = out_edges(g, v)
 
 """
     all_edges(g, v)
@@ -299,9 +299,9 @@ In-place reverse (modifies the original graph).
 """
 reverse!(g::ADiGraph) = nothing
 
-add_edge!(g::ASimpleGraph, e::AEdge) = add_edge!(g, src(e), dst(e))
-rem_edge!(g::ASimpleGraph, e::AEdge) = rem_edge!(g, src(e), dst(e))
-has_edge(g::ASimpleGraph, e::AEdge) = has_edge(g, src(e), dst(e))
+add_edge!(g::AGraphOrDiGraph, e::AEdge) = add_edge!(g, src(e), dst(e))
+rem_edge!(g::AGraphOrDiGraph, e::AEdge) = rem_edge!(g, src(e), dst(e))
+has_edge(g::AGraphOrDiGraph, e::AEdge) = has_edge(g, src(e), dst(e))
 
 """
     unsafe_add_edge!(g, u, v)
@@ -317,8 +317,8 @@ faster construction of the graph. As a consequence though, some functions such
 To restore the correct behaviour, call [`rebuild!`](@ref)(g) after the last
 call to `unsafe_add_edge!`.
 """
-unsafe_add_edge!(g::ASimpleGraph, u, v) = add_edge!(g, u, v)
-unsafe_add_edge!(g::ASimpleGraph, e::AEdge) = unsafe_add_edge!(g, src(e), dst(e))
+unsafe_add_edge!(g::AGraphOrDiGraph, u, v) = add_edge!(g, u, v)
+unsafe_add_edge!(g::AGraphOrDiGraph, e::AEdge) = unsafe_add_edge!(g, src(e), dst(e))
 
 """
     rebuild!(g)
@@ -326,7 +326,7 @@ unsafe_add_edge!(g::ASimpleGraph, e::AEdge) = unsafe_add_edge!(g, src(e), dst(e)
 Check and restore the structure of `g`, which could be corrupted by the
 use of unsafe functions (e. g. [`unsafe_add_edge!`](@ref))
 """
-rebuild!(g::ASimpleGraph) = nothing
+rebuild!(g::AGraphOrDiGraph) = nothing
 
 """
     rem_vertex!(g, v)
@@ -336,7 +336,7 @@ It will change the label of the last vertex of the old graph to `v`.
 
 See also [`rem_vertices!`](@ref)
 """
-function rem_vertex!(g::ASimpleGraph, v)
+function rem_vertex!(g::AGraphOrDiGraph, v)
     v in vertices(g) || return false
     clean_vertex!(g, v)
     swap_vertices!(g, v, nv(g))
@@ -352,7 +352,7 @@ Remove the vertices in `vs` from graph `g`.
 Returns a vector mapping the vertices in the new graph to the
 old ones.
 """
-function rem_vertices!(g::ASimpleGraph, vs)
+function rem_vertices!(g::AGraphOrDiGraph, vs)
     vlist = sort(union(vs))
     n = nv(g)
     nrem = length(vlist)

@@ -25,7 +25,7 @@ type DepthFirst <: SimpleGraphVisitAlgorithm
 end
 
 function depth_first_visit_impl!(
-    g::ASimpleGraph,      # the graph
+    g::AGraphOrDiGraph,      # the graph
     stack,                          # an (initialized) stack of vertex
     vcolormap::AVertexMap,    # an (initialized) color-map to indicate status of vertices
     ecolormap::AEdgeMap,      # an (initialized) color-map to indicate status of edges
@@ -66,7 +66,7 @@ function depth_first_visit_impl!(
 end
 
 function traverse_graph!(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         alg::DepthFirst,
         s,
         visitor::SimpleGraphVisitor;
@@ -119,7 +119,7 @@ discover_vertex!(vis::DFSCyclicTestVisitor, v) = !vis.found_cycle
 Tests whether a graph contains a cycle through depth-first search. It
 returns `true` when it finds a cycle, otherwise `false`.
 """
-function is_cyclic(g::ASimpleGraph)
+function is_cyclic(g::AGraphOrDiGraph)
     cmap = zeros(Int, nv(g))
     visitor = DFSCyclicTestVisitor()
 
@@ -153,7 +153,7 @@ function close_vertex!(visitor::TopologicalSortVisitor, v)
     push!(visitor.vertices, v)
 end
 
-function topological_sort_by_dfs(g::ASimpleGraph)
+function topological_sort_by_dfs(g::AGraphOrDiGraph)
     nvg = nv(g)
     cmap = zeros(Int, nvg)
     visitor = TopologicalSortVisitor(nvg)

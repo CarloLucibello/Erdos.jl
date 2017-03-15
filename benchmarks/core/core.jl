@@ -1,7 +1,7 @@
 s = BenchmarkGroup()
 suite["core"] = s
 
-function b_edgeiter(g::ASimpleGraph)
+function b_edgeiter(g::AGraphOrDiGraph)
     i = 0
     for e in edges(g)
         i += 1
@@ -38,7 +38,7 @@ for G in DGLIST
     end
 end
 
-function b_rem_vert(g::ASimpleGraph, vs)
+function b_rem_vert(g::AGraphOrDiGraph, vs)
     for v in vs
         rem_vertex!(g, v)
     end

@@ -16,7 +16,7 @@ function minutype(n::Integer)
     error("No type big enough")
 end
 
-function writegt(io::IO, g::ASimpleGraph)
+function writegt(io::IO, g::AGraphOrDiGraph)
     write(io, _magic)
     write(io, UInt8(_version))
     write(io, false) # endiannes, false=little endian
@@ -31,7 +31,7 @@ function writegt(io::IO, g::ASimpleGraph)
     return 1
 end
 
-function writenetgt(io::IO, g::ASimpleNetwork)
+function writenetgt(io::IO, g::ANetOrDiNet)
     write(io, _magic)
     write(io, UInt8(_version))
     write(io, false) # endiannes, false=little endian
@@ -68,7 +68,7 @@ function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
     end
 end
 
-function writegt_props(io::IO, g::ASimpleNetwork)
+function writegt_props(io::IO, g::ANetOrDiNet)
     gpnames = graph_properties(g)
     vpnames = vertex_properties(g)
     epnames = edge_properties(g)
@@ -120,7 +120,7 @@ function writegt_props(io::IO, g::ASimpleNetwork)
     end
 end
 
-function readgt{G<:ASimpleGraph}(io::IO, ::Type{G})
+function readgt{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     @assert String(read(io, 6)) == _magic "gt file not correctly formatted"
     ver = read(io, UInt8)  ## version
     indian = read(io, Bool)
@@ -136,7 +136,7 @@ function readgt{G<:ASimpleGraph}(io::IO, ::Type{G})
     return g
 end
 
-function readnetgt{G<:ASimpleNetwork}(io::IO, ::Type{G})
+function readnetgt{G<:ANetOrDiNet}(io::IO, ::Type{G})
     @assert String(read(io, 6)) == _magic "gt file not correctly formatted"
     ver = read(io, UInt8)  ## version
     indian = read(io, Bool)
@@ -153,7 +153,7 @@ function readnetgt{G<:ASimpleNetwork}(io::IO, ::Type{G})
     return g
 end
 
-function readgt_props!(io::IO, g::ASimpleNetwork)
+function readgt_props!(io::IO, g::ANetOrDiNet)
     nprops = read(io, UInt64)
     for i=1:nprops
         ptype = read(io, UInt8)

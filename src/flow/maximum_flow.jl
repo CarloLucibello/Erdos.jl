@@ -62,7 +62,7 @@ end
 in the adjlist of its neighbour `j=fadj[i][k]`,
 i.e. `i == adj[j][pl[i][k]]`.
 """
-function poslist(g::ASimpleGraph)
+function poslist(g::AGraphOrDiGraph)
     pl = Vector{Vector{Int}}()
     for i=1:nv(g)
         push!(pl, zeros(Int, degree(g, i)))

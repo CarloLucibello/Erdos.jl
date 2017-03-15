@@ -100,7 +100,7 @@ DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 DiGraph() = Graph{Int}()
 
 
-@compat const SimpleGraph{T} = Union{Graph{T}, DiGraph{T}}
+@compat const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}
@@ -113,8 +113,8 @@ digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
 vertextype{T}(::Type{Graph{T}}) = T
 vertextype{T}(::Type{DiGraph{T}}) = T
 
-nv{T}(g::SimpleGraph{T}) = T(length(g.fadjlist))
-ne(g::SimpleGraph) = g.ne
+nv{T}(g::GraphOrDiGraph{T}) = T(length(g.fadjlist))
+ne(g::GraphOrDiGraph) = g.ne
 
 pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
 pop_vertex!(g::DiGraph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); pop!(g.badjlist); nv(g)+1)
@@ -223,7 +223,7 @@ function reverse!(g::DiGraph)
 end
 
 
-out_neighbors(g::SimpleGraph,v) = g.fadjlist[v]
+out_neighbors(g::GraphOrDiGraph,v) = g.fadjlist[v]
 in_neighbors(g::DiGraph,v) = g.badjlist[v]
 
 edge{T}(g::DiGraph{T}, u, v) = Edge{T}(u, v)
@@ -234,10 +234,10 @@ edge{T}(g::Graph{T}, u, v) = Edge{T}(u, v)
 
 digraph{T}(g::Graph{T}) = DiGraph{T}(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
 
-out_adjlist(g::SimpleGraph) = g.fadjlist
+out_adjlist(g::GraphOrDiGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
 
-=={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
+=={G<:GraphOrDiGraph}(g::G, h::G) = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 function has_edge(g::Graph, u, v)
