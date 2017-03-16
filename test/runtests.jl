@@ -22,6 +22,7 @@ tests = [
     "persistence/persistence",
     "persistence/datasets",
     "persistence/gt",
+    "persistence/graphml",
     "generators/randgraphs",
     "generators/staticgraphs",
     "generators/smallgraphs",
@@ -59,6 +60,8 @@ tests = [
     "dismantling/dismantling",
     "utils"
 ]
+
+include("common.jl")
 
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),

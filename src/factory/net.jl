@@ -120,7 +120,7 @@ end
 
 function add_edge!(g::DiNet, u::Integer, v::Integer)
     (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
-    has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1)
+    has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1))
     if isempty(g.free_indexes)
         g.edge_index_range += 1
         idx = g.edge_index_range

@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-(f,fio) = mktemp()
+f,_ = mktemp()
 
 g = readgraph(:lesmis, G)
 @test typeof(g) == G

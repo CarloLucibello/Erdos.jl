@@ -19,7 +19,7 @@ type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     vtype::Type{T}
     data::D
 end
-show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T} -> $(m.data)")
+show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T}:$(m.data)")
 
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
@@ -36,69 +36,53 @@ end
 
 length(m::EdgeMap) = length(m.data)
 
+### ALL DATA
+# matrix interface
+getindex(m::EdgeMap, i::Integer, j::Integer) = getindex(m, edge(m.g, i, j))
+setindex!(m::EdgeMap, x, i::Integer, j::Integer) = setindex!(m, x, edge(m.g, i, j))
+
 ### MATRIX DATA
 # Associative interface
-getindex{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
+getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
     getindex(m.data, src(e), dst(e))
-setindex!{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge) =
+setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge) =
     setindex!(m.data, x, src(e), dst(e))
-get{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
+get{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
     get(m.data, (src(e), dst(e)), x)
 
 # matrix interface
-getindex{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
+getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
     getindex(m.data, i, j)
-setindex!{G,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
+setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
     setindex!(m.data, x, i, j)
 
-### VECTOR DATA
-# vector interface
-getindex{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, e::AIndexedEdge) =
+### VECTOR DATA (only indexed edges)
+# Associative interface
+getindex{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, e::AIndexedEdge) =
     getindex(m.data, idx(e))
 
-setindex!{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, e::AIndexedEdge) =
+setindex!{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, e::AIndexedEdge) =
     setindex!(m.data, x, idx(e))
 
-getindex{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
+# TODO allow one dimensional indexing?
+# it can be bugprone
+getindex{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
     getindex(m.data, idx)
-setindex!{G,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
+setindex!{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
     setindex!(m.data, x, idx)
 
 ### Dict{Int,T} DATA
 # Associative interface
-getindex{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge) =
-    getindex(m.data, idx(e))
-setindex!{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, x, e::AIndexedEdge) =
-    setindex!(m.data, x, idx(e))
-get{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge, x) =
-    get(m.data, idx(e), x)
+getindex{G<:AGraphOrDiGraph,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge) = getindex(m.data, idx(e))
+setindex!{G<:AGraphOrDiGraph,T}(m::EdgeMap{G,T,Dict{Int,T}}, x, e::AIndexedEdge) = setindex!(m.data, x, idx(e))
+get{G<:AGraphOrDiGraph,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge, x) = get(m.data, idx(e), x)
 
-getindex{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, i::Integer, j::Integer) =
-    getindex(m, edge(m.g, i, j))
-setindex!{G,T}(m::EdgeMap{G,T,Dict{Int,T}}, x, i::Integer, j::Integer) =
-    setindex!(m, x, edge(m.g, i, j))
-
-### Dict{Edge{V},T} DATA
+### Dict{E,T} DATA
 # Associative interface
-getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::Edge{V}) =
-    getindex(m.data, e)
-setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, e::Edge{V}) =
-    setindex!(m.data, x, e)
-get{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::Edge{V}, x) =
-    get(m.data, e, x)
+getindex{G<:AGraphOrDiGraph,T,E}(m::EdgeMap{G,T,Dict{E,T}}, e::E) = getindex(m.data, e)
+setindex!{G<:AGraphOrDiGraph,T,E}(m::EdgeMap{G,T,Dict{E,T}}, x, e::E) = setindex!(m.data, x, e)
+get{G,T,E}(m::EdgeMap{G,T,Dict{E,T}}, e::E, x) = get(m.data, e, x)
 
-getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::AEdge) =
-    getindex(m.data, Edge{V}(src(e), dst(e)))
-setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, e::AEdge) =
-    setindex!(m.data, x, Edge{V}(src(e), dst(e)))
-get{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, e::AEdge, x) =
-    get(m.data, Edge{V}(src(e), dst(e)), x)
-
-# matrix interface
-getindex{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, i::Integer, j::Integer) =
-    getindex(m.data, Edge{V}(i, j))
-setindex!{G,T,V}(m::EdgeMap{G,T,Dict{Edge{V},T}}, x, i::Integer, j::Integer) =
-    setindex!(m.data, x, Edge{V}(i, j))
 
 ####
 values{G,T,D<:Dict}(m::EdgeMap{G,T,D}) = values(m.data)

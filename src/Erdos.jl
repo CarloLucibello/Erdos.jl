@@ -27,7 +27,7 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
 
 #interface
 export AGraph, ADiGraph, AGraphOrDiGraph,
-ANetwork, ADiNetwork,
+ANetwork, ADiNetwork, ANetOrDiNet,
 graphtype, digraphtype, edgetype, vertextype,
 
 
