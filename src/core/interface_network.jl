@@ -47,11 +47,11 @@ const ANetOrDiNet = Union{ANetwork, ADiNetwork}
 function show{G<:ANetOrDiNet}(io::IO, g::G)
     print(io, split("$G",'.')[end], "($(nv(g)), $(ne(g)))")
     print(io, " with ")
-    _printstrvec(io, graph_properties(g))
+    _printstrvec(io, gprop_names(g))
     print(io, " graph, ")
-    _printstrvec(io, vertex_properties(g))
+    _printstrvec(io, vprop_names(g))
     print(io," vertex, ")
-    _printstrvec(io, edge_properties(g))
+    _printstrvec(io, eprop_names(g))
     print(io, " edge properties.")
 end
 
@@ -74,6 +74,7 @@ end
 Set the property `name` to value `x` to `g`. Creates the property if it doesn't exist.
 """
 set_graph_property!(g::ANetOrDiNet, name::String, x) = set_graph_property!(g.props, name, x)
+gprop! = set_graph_property!
 
 """
     rem_graph_property!(g, name)
@@ -81,13 +82,14 @@ set_graph_property!(g::ANetOrDiNet, name::String, x) = set_graph_property!(g.pro
 Remove the property `name` from `g`.
 """
 rem_graph_property!(g::ANetOrDiNet, name::String) = rem_graph_property!(g.props, name)
-
+rem_gprop! = rem_graph_property!
 """
     graph_property(g, name)
 
 Return the property `name` of `g`.
 """
 graph_property(g::ANetOrDiNet, name::String) = graph_property(g.props, name)
+gprop = graph_property
 
 """
     graph_properties(g)
@@ -95,7 +97,7 @@ graph_property(g::ANetOrDiNet, name::String) = graph_property(g.props, name)
 Return a vector listing the names of the properties of `g`.
 """
 graph_properties(g::ANetOrDiNet) = graph_properties(g.props)
-
+gprops = graph_properties
 
 ### EDGE
 """
@@ -104,6 +106,7 @@ graph_properties(g::ANetOrDiNet) = graph_properties(g.props)
 Add the edge property  `name` with value type `T` to `g`.
 """
 add_edge_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_edge_property!(g.props, name, EdgeMap(g, T))
+eprop! = add_edge_property!
 
 """
     add_edge_property!(g, name, emap::AEdgeMap)
@@ -118,6 +121,7 @@ add_edge_property!(g::ANetOrDiNet, name::String, emap::AEdgeMap) = add_edge_prop
 Remove the edge property  `name` from `g`.
 """
 rem_edge_property!(g::ANetOrDiNet, name::String) = rem_edge_property!(g.props, name)
+rem_eprop! = rem_edge_property!
 
 """
     edge_property(g, name)
@@ -125,6 +129,7 @@ rem_edge_property!(g::ANetOrDiNet, name::String) = rem_edge_property!(g.props, n
 Return an edge map corresponding to property `name` of edges in `g`.
 """
 edge_property(g::ANetOrDiNet, name::String) = edge_property(g.props, name)
+eprop = edge_property
 
 """
     edge_properties(g)
@@ -132,7 +137,7 @@ edge_property(g::ANetOrDiNet, name::String) = edge_property(g.props, name)
 Return a vector listing the names of the properties of edges in `g`.
 """
 edge_properties(g::ANetOrDiNet) = edge_properties(g.props)
-
+eprops = edge_properties
 
 """
     add_vertex_property!(g, name, T)
@@ -140,7 +145,7 @@ edge_properties(g::ANetOrDiNet) = edge_properties(g.props)
 Add the vertex property  `name` with value type `T` to `g`.
 """
 add_vertex_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_vertex_property!(g.props, name, VertexMap(g, T))
-
+vprop! = add_vertex_property!
 """
     add_vertex_property!(g, name, vmap::AVertexMap)
 
@@ -154,6 +159,7 @@ add_vertex_property!(g::ANetOrDiNet, name::String, vmap::AVertexMap) = add_verte
 Remove the vertex property  `name` from `g`.
 """
 rem_vertex_property!(g::ANetOrDiNet, name::String) = rem_vertex_property!(g.props, name)
+rem_vprop! = rem_vertex_property!
 
 """
     vertex_property(g, name)
@@ -161,6 +167,7 @@ rem_vertex_property!(g::ANetOrDiNet, name::String) = rem_vertex_property!(g.prop
 Return an vertex map corresponding to property `name` of vertices in `g`.
 """
 vertex_property(g::ANetOrDiNet, name::String) = vertex_property(g.props, name)
+vprop = vertex_property
 
 """
     vertex_properties(g)
@@ -168,3 +175,10 @@ vertex_property(g::ANetOrDiNet, name::String) = vertex_property(g.props, name)
 Return a vector listing the names of the properties of vertices in `g`.
 """
 vertex_properties(g::ANetOrDiNet) = vertex_properties(g.props)
+vprops = vertex_properties
+
+gprop_names(g::ANetOrDiNet) = collect(keys(gprops(g)))
+vprop_names(g::ANetOrDiNet) = collect(keys(vprops(g)))
+eprop_names(g::ANetOrDiNet) = collect(keys(eprops(g)))
+
+# TODO document short forms

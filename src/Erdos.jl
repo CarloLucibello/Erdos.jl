@@ -1,9 +1,9 @@
 __precompile__(true)
 module Erdos
 
-using GZip
-using StatsFuns # randgraphs
-using EzXML # persistence
+import GZip # I/O
+import StatsFuns # randgraphs
+using EzXML # I/O  graphml, gexf  #TODO import
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching
 import Clustering: kmeans # community detection
@@ -152,11 +152,15 @@ AVertexMap, ConstVertexMap, hasindex, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
 
 # properties
-PropertyStore, 
+PropertyStore,
 add_edge_property!, add_vertex_property!, set_graph_property!,
 edge_property, vertex_property, graph_property,
 rem_edge_property!, rem_vertex_property!,
-vertex_properties, edge_properties, graph_properties
+vertex_properties, edge_properties, graph_properties,
+#short forms
+gprop, gprop!, rem_gprop!, gprops, gprop_names,
+vprop, vprop!, rem_vprop!, vprops, vprop_names,
+eprop, eprop!, rem_eprop!, eprops, eprop_names
 
 """An optimized graphs package.
 

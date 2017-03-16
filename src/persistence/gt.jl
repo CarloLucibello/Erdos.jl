@@ -69,51 +69,45 @@ function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
 end
 
 function writegt_props(io::IO, g::ANetOrDiNet)
-    gpnames = graph_properties(g)
-    vpnames = vertex_properties(g)
-    epnames = edge_properties(g)
-    nprop = length(gpnames) + length(vpnames) + length(epnames)
+    nprop = length(gprops(g)) + length(vprops(g)) + length(eprops(g))
     write(io, nprop) # num of property maps
     # @show nprop
     #graph props
-    for name in gpnames
+    for (pname, p) in gprops(g)
         write(io, UInt8(0)) #property type (graph/edge/vertex)
-        writegt_prop(io, name)
-        m = graph_property(g, name)
-        pvaln = findfirst(gtpropmap, typeof(m))
+        writegt_prop(io, pname)
+        pvaln = findfirst(gtpropmap, typeof(p))
         write(io, UInt8(pvaln-1))
-        writegt_prop(io, m)
+        writegt_prop(io, p)
     end
     #vertex props
-    for name in vpnames
+    for (pname, p) in vprops(g)
         write(io, UInt8(1)) #property type (graph/edge/vertex)
-        writegt_prop(io, name)
-        m = vertex_property(g, name)
-        pvaln = findfirst(gtpropmap, valtype(m))
+        writegt_prop(io, pname)
+        pvaln = findfirst(gtpropmap, valtype(p))
         write(io, UInt8(pvaln-1))
 
         for i=1:nv(g)
-            writegt_prop(io, m[i])
+            writegt_prop(io, p[i])
         end
     end
     #edge props
-    for name in epnames
+    for (pname, p) in eprops(g)
         write(io, UInt8(2)) #property type (graph/edge/vertex)
-        writegt_prop(io, name)
-        m = edge_property(g, name)
-        pvaln = findfirst(gtpropmap, valtype(m))
+        writegt_prop(io, pname)
+        pvaln = findfirst(gtpropmap, valtype(p))
         write(io, UInt8(pvaln-1))
         if is_directed(g)
             for i=1:nv(g)
                 for e in out_edges(g, i)
-                    writegt_prop(io, m[e])
+                    writegt_prop(io, p[e])
                 end
             end
         else
             for i=1:nv(g)
                 for e in out_edges(g, i)
                     dst(e) < i && continue
-                    writegt_prop(io, m[e])
+                    writegt_prop(io, p[e])
                 end
             end
         end

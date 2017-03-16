@@ -257,6 +257,7 @@ sg, vmap = subgraph(g, elist)
 ```
 """
 function subgraph{G<:AGraphOrDiGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
+    #TODO NET preserve properties for networks
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()

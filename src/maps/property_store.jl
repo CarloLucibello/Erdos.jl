@@ -27,7 +27,7 @@ function rem_graph_property!(p::PropertyStore, name::String)
 end
 
 graph_property(p::PropertyStore, name::String) = p.gmaps[name]
-graph_properties(p::PropertyStore) = collect(keys(p.gmaps))
+graph_properties(p::PropertyStore) = p.gmaps
 
 
 ### EDGE
@@ -44,7 +44,7 @@ end
 
 edge_property(p::PropertyStore, name::String) = p.emaps[name]
 
-edge_properties(p::PropertyStore) = collect(keys(p.emaps))
+edge_properties(p::PropertyStore) = p.emaps
 
 ## VERTEX
 function add_vertex_property!(p::PropertyStore, name::String, vmap::AVertexMap)
@@ -58,7 +58,7 @@ function rem_vertex_property!(p::PropertyStore, name::String)
 end
 
 vertex_property(p::PropertyStore, name::String) = p.vmaps[name]
-vertex_properties(p::PropertyStore) = collect(keys(p.vmaps))
+vertex_properties(p::PropertyStore) = p.vmaps
 
 ###
 

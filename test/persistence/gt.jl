@@ -39,9 +39,9 @@ ga = readgraph(f, :gt, G)
 if G <: ANetwork
 
 g = readnetwork(:karate, G)
-@test sort(graph_properties(g)) == ["description","readme"]
-@test sort(vertex_properties(g)) == ["pos"]
-@test sort(edge_properties(g)) == []
+@test sort(gprop_names(g)) == ["description","readme"]
+@test sort(vprop_names(g)) == ["pos"]
+@test sort(eprop_names(g)) == []
 
 writenetwork(f, g, :gt)
 h = readnetwork(f, :gt, G)
@@ -49,9 +49,9 @@ h = readnetwork(f, :gt, G)
 @test h.props == g.props
 
 g = readnetwork(:lesmis)
-@test sort(graph_properties(g)) == ["description","readme"]
-@test sort(vertex_properties(g)) == ["label","pos"]
-@test sort(edge_properties(g)) == ["value"]
+@test sort(gprop_names(g)) == ["description","readme"]
+@test sort(vprop_names(g)) == ["label","pos"]
+@test sort(eprop_names(g)) == ["value"]
 
 writenetwork(f, g, :gt)
 h = readnetwork(f, :gt, G)
