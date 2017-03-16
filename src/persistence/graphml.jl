@@ -59,4 +59,82 @@ function writegraphml(io::IO, g::AGraphOrDiGraph)
     return 1
 end
 
-filemap[:graphml] = (readgraphml, writegraphml, NI, NI)
+const graphml_types = Dict( Float64 => "float",
+                            String => "string",
+                            Vector{Float64} => "vector_float"
+                        )
+
+function writenetgraphml(io::IO, g::ANetOrDiNet)
+    xdoc = XMLDocument()
+    xroot = setroot!(xdoc, ElementNode("graphml"))
+    xroot["xmlns"] = "http://graphml.graphdrawing.org/xmlns"
+    xroot["xmlns:xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
+    xroot["xsi:schemaLocation"] = "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"
+
+    nprop=0
+    gpropkey = Dict{String,String}()
+    for pname in graph_properties(g)
+        xp = addelement!(xroot, "key")
+        xp["id"] = "key$nprop"
+        gpropkey[pname] = "key$nprop"
+        xp["for"] = "graph"
+        xp["attr.name"] = pname
+        xp["attr.type"] = graphml_types[typeof(graph_property(g, pname))]
+        nprop+=1
+    end
+    vpropkey = Dict{String,String}()
+    for pname in vertex_properties(g)
+        xp = addelement!(xroot, "key")
+        xp["id"] = "key$nprop"
+        vpropkey[pname] = "key$nprop"
+        xp["for"] = "node"
+        xp["attr.name"] = pname
+        xp["attr.type"] = graphml_types[valtype(vertex_property(g, pname))]
+        nprop+=1
+    end
+    epropkey = Dict{String,String}()
+    for pname in edge_properties(g)
+        xp = addelement!(xroot, "key")
+        xp["id"] = "key$nprop"
+        epropkey[pname] = "key$nprop"
+        xp["for"] = "edge"
+        xp["attr.name"] = pname
+        xp["attr.type"] = graphml_types[valtype(edge_property(g, pname))]
+        nprop+=1
+    end
+
+    xg = addelement!(xroot, "graph")
+    xg["edgedefault"] = is_directed(g) ? "directed" : "undirected"
+
+    for pname in graph_properties(g)
+        xp = addelement!(xg, "data")
+        xp["key"] = gpropkey[pname]
+        setcontent!(xp, graph_property(g, pname))
+    end
+
+    for i in 1:nv(g)
+        xv = addelement!(xg, "node")
+        xv["id"] = "n$(i-1)"
+        # for pname in vertex_properties(g)
+        #     xp = addelement!(xg, "data")
+        #     xp["key"] = vpropkey[pname]
+        #     pname == "pos" && continue
+        #     setcontent!(xp, vertex_property(g, pname)[i]) #TODO check has key
+        # end
+    end
+    for e in edges(g)
+        xe = addelement!(xg, "edge")
+        xe["source"] = "n$(src(e)-1)"
+        xe["target"] = "n$(dst(e)-1)"
+
+        # for pname in edge_properties(g)
+        #     xp = addelement!(xg, "data")
+        #     xp["key"] = vpropkey[pname]
+        #     setcontent!(xp, edge_property(g, pname)[e]) #TODO check has key
+        # end
+    end
+    prettyprint(io, xdoc)
+    return 1
+end
+
+filemap[:graphml] = (readgraphml, writegraphml, NI, writenetgraphml)
