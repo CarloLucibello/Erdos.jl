@@ -38,16 +38,17 @@ Time Complexity: O(1)
 ne(g::ASimpleGraph) = error("Method not defined")
 
 """
-    add_edge!(g, e)
+    add_edge!(g, e) -> (ok, new_edge)
 
 Add to `g` the edge `e`.
 
-    add_edge!(g, u, v)
+    add_edge!(g, u, v) -> (ok, new_edge)
 
 Add to `g` an edge from `u` to `v`.
 
-Will return false if add fails (e.g., if vertices are not in the graph or the edge
-is already present) and true otherwise.
+`ok=false` if add fails (e.g. if vertices are not in the graph or the edge
+is already present) and `true` otherwise.
+`new_edge` is the descriptor of the new edge.
 """
 add_edge!(g::ASimpleGraph, u, v) = error("Method not defined")
 

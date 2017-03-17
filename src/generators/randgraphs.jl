@@ -71,7 +71,7 @@ function watts_strogatz{G<:ASimpleGraph}(n::Int, k::Int, β::Real, ::Type{G} = G
                         end
                     end
                     if s != d
-                        add_edge!(g, s, d) && break
+                        add_edge!(g, s, d)[1] && break
                     end
                 end
             end
@@ -305,7 +305,7 @@ function _create_static_fitness_graph!{T<:Real,S<:Real}(g::ASimpleGraph, m::Int,
         (source == target) && continue
         edge = Edge(source, target)
         # is there already an edge? If so, try again
-        add_edge!(g, edge) || continue
+        add_edge!(g, edge)[1] || continue
         m -= 1
     end
 end
@@ -530,7 +530,7 @@ function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int}
                 source = rand(rng, ra)
                 dest = rand(rng, rb)
                 if source != dest
-                    if add_edge!(g, source, dest)
+                    if add_edge!(g, source, dest)[1]
                         i += 1
                     end
                 end
