@@ -4,6 +4,9 @@
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
+@test_throws ErrorException writegraph("file.ciao", G())
+@test_throws ErrorException writenetwork("file.ciao", G())
+
 # test :gml
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 g = graph(:tutte, G)

@@ -22,6 +22,11 @@ h = TestDiGraph()
 @test edgetype(g) == Edge{Int}
 @test_throws ErrorException  pop_vertex!(g)
 @test vertextype(g) == Int
+@test_throws ErrorException add_edge!(g, 1, 2)
+@test_throws ErrorException ne(g)
+@test_throws ErrorException rem_edge!(g, 1, 2)
+@test_throws ErrorException add_vertex!(g)
+@test_throws ErrorException swap_vertices!(g, 1, 2)
 
 @test graphtype(Graph) == Graph{Int}
 @test graphtype(DiGraph) == Graph{Int}

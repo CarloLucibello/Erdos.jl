@@ -252,9 +252,6 @@ function add_edge!(g::Net, u::Integer, v::Integer)
     (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
     has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1)) # could be removed for multigraphs
 
-    if u > v
-        u,v = v,u
-    end
     if isempty(g.free_indexes)
         g.edge_index_range += 1
         idx = g.edge_index_range
@@ -398,30 +395,30 @@ function swap_vertices!(g::DiNet, u::Integer, v::Integer)
     end
 end
 
-function test_consistency(g::Net)
-    for i=1:nv(g)
-        for (k, p) in  enumerate(g.out_edges[i])
-            j = p.first
-            id = p.second
-            if i < j
-                @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
-            else
-                @assert g.epos[id].second == k
-            end
-            @assert findfirst(e->e.first==i, g.out_edges[j]) > 0
-        end
-    end
-end
-
-function test_consistency(g::DiNet)
-    for i=1:nv(g)
-        for (k, p) in  enumerate(g.out_edges[i])
-            j = p.first
-            id = p.second
-            @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
-            posin = findfirst(e->e.first==i, g.in_edges[j])
-            @assert posin > 0
-            @assert g.in_edges[j][posin].second == id
-        end
-    end
-end
+# function test_consistency(g::Net)
+#     for i=1:nv(g)
+#         for (k, p) in  enumerate(g.out_edges[i])
+#             j = p.first
+#             id = p.second
+#             if i < j
+#                 @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
+#             else
+#                 @assert g.epos[id].second == k
+#             end
+#             @assert findfirst(e->e.first==i, g.out_edges[j]) > 0
+#         end
+#     end
+# end
+#
+# function test_consistency(g::DiNet)
+#     for i=1:nv(g)
+#         for (k, p) in  enumerate(g.out_edges[i])
+#             j = p.first
+#             id = p.second
+#             @assert g.epos[id].first == k "$id $i $j $(g.epos[id]) $(g.out_edges[i])"
+#             posin = findfirst(e->e.first==i, g.in_edges[j])
+#             @assert posin > 0
+#             @assert g.in_edges[j][posin].second == id
+#         end
+#     end
+# end
