@@ -1,4 +1,5 @@
 ## v0.x.y
+- `add_edge!` now returns `(ok, new_edge)` instead of just `ok`
 
 ## v0.1.3  2017.3.8
 - doc system updates

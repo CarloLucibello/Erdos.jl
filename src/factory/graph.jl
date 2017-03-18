@@ -117,8 +117,10 @@ ne(g::SimpleGraph) = g.ne
 pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
 pop_vertex!(g::DiGraph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); pop!(g.badjlist); nv(g)+1)
 
-function add_edge!(g::Graph, s, d)
-    (s in vertices(g) && d in vertices(g)) || return false
+function add_edge!(g::Graph, s::Integer, d::Integer)
+    E = edgetype(g)
+    e = s <= d ? E(s, d) : E(d, s)
+    (s in vertices(g) && d in vertices(g)) || return (false, e)
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     if inserted
         g.ne += 1
@@ -126,7 +128,7 @@ function add_edge!(g::Graph, s, d)
     if s != d
         inserted = _insert_and_dedup!(g.fadjlist[d], s)
     end
-    return inserted
+    return (inserted, e)
 end
 
 function rem_edge!(g::Graph, u, v)
@@ -176,11 +178,14 @@ function copy{T}(g::DiGraph{T})
     return DiGraph{T}(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
-function add_edge!(g::DiGraph, s, d)
-    (s in vertices(g) && d in vertices(g)) || return false
+function add_edge!(g::DiGraph, s::Integer, d::Integer)
+    E = edgetype(g)
+    e = E(s, d)
+    (s in vertices(g) && d in vertices(g)) || return (false, e)
     inserted = _insert_and_dedup!(g.fadjlist[s], d)
     g.ne = ifelse(inserted, g.ne+1, g.ne)
-    return inserted && _insert_and_dedup!(g.badjlist[d], s)
+    inserted && !_insert_and_dedup!(g.badjlist[d], s)
+    return (inserted, e)
 end
 
 function rem_edge!(g::DiGraph, u, v)

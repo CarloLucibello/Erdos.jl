@@ -141,8 +141,8 @@ function add_vertex!(g::GTDiGraph)
 end
 
 function add_edge!(g::GTDiGraph, u::Integer, v::Integer)
-    (u in vertices(g) && v in vertices(g)) || return false
-    has_edge(g, u, v) && return false # could be removed for multigraphs
+    (u in vertices(g) && v in vertices(g)) || return (false, GTEdge(u,v,-1))
+    has_edge(g, u, v) && return (false, GTEdge(u,v,-1)) # could be removed for multigraphs
     if isempty(g.free_indexes)
         g.edge_index_range += 1
         idx = g.edge_index_range
@@ -160,7 +160,7 @@ function add_edge!(g::GTDiGraph, u::Integer, v::Integer)
         g.epos[idx] = Pair(length(oes), length(ies))
     end
 
-    return true
+    return (true, GTEdge(u,v,idx))
 end
 
 function rem_edge!(g::GTDiGraph, s::Integer, t::Integer)
@@ -302,8 +302,9 @@ function add_vertex!(g::GTGraph)
 end
 
 function add_edge!(g::GTGraph, u::Integer, v::Integer)
-    (u in vertices(g) && v in vertices(g)) || return false
-    has_edge(g, u, v) && return false # could be removed for multigraphs
+    u, v = u <= v ? (u, v) : (v, u)
+    (u in vertices(g) && v in vertices(g)) || return (false, GTEdge(u,v,-1))
+    has_edge(g, u, v) && return (false, GTEdge(u,v,-1)) # could be removed for multigraphs
 
     if u > v
         u,v = v,u
@@ -327,7 +328,7 @@ function add_edge!(g::GTGraph, u::Integer, v::Integer)
         g.epos[idx] = Pair(length(oes), length(ies))
     end
 
-    return true
+    return (true, GTEdge(u,v,idx))
 end
 
 function rem_edge!(g::GTGraph, s::Integer, t::Integer)

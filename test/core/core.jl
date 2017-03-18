@@ -33,11 +33,10 @@ e4 = E(2,5)
 e5 = E(3,5)
 
 g = G(5)
-@test add_edge!(g, 1, 2)
-@test add_edge!(g, e2)
-@test add_edge!(g, e3)
-@test add_edge!(g, e4)
-@test add_edge!(g, e5)
+@test add_edge!(g, 1, 2) == (true, edge(g, 1, 2))
+for e in [e2,e3,e4,e5]
+    @test add_edge!(g, e) == (true, edge(g, src(e), dst(e)))
+end
 
 g6 = G(5)
 unsafe_add_edge!(g6, 1, 2)
@@ -50,11 +49,10 @@ rebuild!(g6)
 @test g6 == g
 
 h = DG(5)
-@test add_edge!(h, 1, 2)
-@test add_edge!(h, e2)
-@test add_edge!(h, e3)
-@test add_edge!(h, e4)
-@test add_edge!(h, e5)
+@test add_edge!(h, 1, 2) == (true, edge(h, 1, 2))
+for e in [e2,e3,e4,e5]
+    @test add_edge!(h, e) == (true, edge(h, src(e), dst(e)))
+end
 
 @test vertices(g) == 1:5
 i = 0
@@ -100,10 +98,10 @@ end
 
 @test collect(neighbors(g, 1)) == [2, 3, 4]
 
-@test add_edge!(g, 1, 1)
+@test add_edge!(g, 1, 1) == (true, edge(g, 1, 1))
 @test has_self_loops(g)
 @test num_self_loops(g) == 1
-@test !add_edge!(g, 1, 1)
+@test add_edge!(g, 1, 1) == (false, edge(g, 1, 1))
 @test rem_edge!(g, 1, 1)
 @test !rem_edge!(g, 1, 1)
 
@@ -119,7 +117,7 @@ add_edge!(g, 1, 2)
 @test has_edge(g,2,1)
 @test has_edge(g,1,2)
 @test rem_edge!(g, 2, 1)
-@test add_edge!(h, 1, 1)
+@test add_edge!(h, 1, 1) == (true, edge(g, 1, 1))
 @test rem_edge!(h, 1, 1)
 @test rem_edge!(h, 1, 2)
 @test !rem_edge!(h, 1, 2)
@@ -227,7 +225,7 @@ g10 = PathGraph(3, G)
 g10 = PathGraph(4, G)
 @test rem_vertex!(g10, 3)
 h10 =G(3)
-@test add_edge!(h10,1,2)
+@test add_edge!(h10,1,2) == (true, edge(h10, 1, 2))
 @test g10 == h10
 
 g10 = CompleteGraph(5, G)
@@ -246,17 +244,16 @@ g3 = PathGraph(5, G)
 @test density(g3) == 0.4
 
 g = G(5)
-@test add_edge!(g, 1, 2)
+@test add_edge!(g, 1, 2) == (true, edge(g, 1, 2))
 
 e2 = E(1,3)
 e3 = E(1,4)
 e4 = E(2,5)
 e5 = E(3,5)
 
-@test add_edge!(g, e2)
-@test add_edge!(g, e3)
-@test add_edge!(g, e4)
-@test add_edge!(g, e5)
+for e in [e2,e3,e4,e5]
+    @test add_edge!(g, e) == (true, edge(g, src(e), dst(e)))
+end
 
 for i in out_neighbors(g, 1)
     @test typeof(i) == V
@@ -272,11 +269,10 @@ for i in out_neighbors(h, 1)
 end
 
 h = DG(5)
-@test add_edge!(h, 1, 2)
-@test add_edge!(h, e2)
-@test add_edge!(h, e3)
-@test add_edge!(h, e4)
-@test add_edge!(h, e5)
+@test add_edge!(h, 1, 2) == (true, edge(h, 1, 2))
+for e in [e2,e3,e4,e5]
+    @test add_edge!(h, e) == (true, edge(h, src(e), dst(e)))
+end
 
 @test collect(out_edges(h, 3)) == collect(edges(h, 3))
 @test length(collect(out_edges(h, 3))) == 1
@@ -323,9 +319,8 @@ badadjmx = [ 0 1 0; 1 0 1]
 @test_throws ErrorException DG(badadjmx)
 @test_throws ErrorException DG(sparse(badadjmx))
 
-
-@test !add_edge!(g, 100, 100)
-@test !add_edge!(h, 100, 100)
+@test add_edge!(g, 100, 100) == (false, edge(g, 100, 100))
+@test add_edge!(h, 100, 100) == (false, edge(h, 100, 100))
 
 g = G(sparse(adjmx1))
 h = DG(sparse(adjmx1))
