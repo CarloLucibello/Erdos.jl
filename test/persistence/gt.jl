@@ -36,7 +36,7 @@ g = DG(10,20)
 ga = readgraph(f, :gt, G)
 @test g == ga
 
-if G <: ANetwork
+if G <: ANetwork ##############################
 
 g = readnetwork(:karate, G)
 @test sort(gprop_names(g)) == ["description","readme"]
@@ -62,6 +62,6 @@ h2 = readnetwork(f, :gt, G)
 @test h == h2
 @test h.props == h2.props
 
-end #if network
+end #if network ####################
 
  end #testset

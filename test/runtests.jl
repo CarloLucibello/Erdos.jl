@@ -23,6 +23,7 @@ tests = [
     "persistence/datasets",
     "persistence/gt",
     "persistence/graphml",
+    "persistence/gml",
     "generators/randgraphs",
     "generators/staticgraphs",
     "generators/smallgraphs",

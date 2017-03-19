@@ -24,18 +24,14 @@ They are stored in the `gt` binary format in the `datasets` directory of the pac
 For a list of available graph refer to the documentation.
 """
 function readgraph{G<:AGraphOrDiGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
-    if compressed
-        io = GZip.open(fn,"r")
-    else
-        io = open(fn,"r")
-    end
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    io = compressed ? GZip.open(fn,"r") : open(fn,"r")
     g = readgraph(io, t, G)
     close(io)
     return g
 end
 
 function readgraph{G<:AGraphOrDiGraph}(io::IO, t::Symbol, ::Type{G}=Graph)
-    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][1](io, G)
 end
 
@@ -46,11 +42,8 @@ function readgraph{G<:AGraphOrDiGraph}(fn::String, ::Type{G}=Graph)
         compressed = true
         ft = split(fn,'.')[end-1]
     end
-    if Symbol(ft) in keys(filemap)
-        return readgraph(fn, Symbol(ft), G; compressed=compressed)
-    else
-        error("Could not infer file format.")
-    end
+    Symbol(ft) in keys(filemap) || error("Could not infer file format.")
+    return readgraph(fn, Symbol(ft), G; compressed=compressed)
 end
 
 const DATASETS_DIR = joinpath(Base.source_dir(), "..", "..", "datasets")
@@ -77,18 +70,14 @@ They are stored in the `gt` binary format in the `datasets` directory of the pac
 For a list of available graph refer to the documentation.
 """
 function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Net; compressed=false)
-    if compressed
-        io = GZip.open(fn,"r")
-    else
-        io = open(fn,"r")
-    end
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    io = compressed ? GZip.open(fn,"r") : open(fn,"r")
     g = readnetwork(io, t, G)
     close(io)
     return g
 end
 
 function readnetwork{G<:ANetOrDiNet}(io::IO, t::Symbol, ::Type{G}=Net)
-    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][3](io, G)
 end
 
@@ -99,11 +88,8 @@ function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Net)
         compressed = true
         ft = split(fn,'.')[end-1]
     end
-    if Symbol(ft) in keys(filemap)
-        return readnetwork(fn, Symbol(ft), G; compressed=compressed)
-    else
-        error("Could not infer file format.")
-    end
+    Symbol(ft) in keys(filemap) || error("Could not infer file format.")
+    return readnetwork(fn, Symbol(ft), G; compressed=compressed)
 end
 
 function readnetwork{G<:AGraphOrDiGraph}(s::Symbol, ::Type{G}=Net)
@@ -123,16 +109,12 @@ Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
 If no format is provided, it will be inferred from `file` along with compression.
 """
 function writegraph(io::IO, g::AGraphOrDiGraph, t::Symbol)
-    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][2](io, g)
 end
 
 function writegraph(fn::String, g::AGraphOrDiGraph, t::Symbol; compress::Bool=false)
-    if compress
-        io = GZip.open(fn,"w")
-    else
-        io = open(fn,"w")
-    end
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    io = compress ? GZip.open(fn,"w") : open(fn,"w")
     retval = writegraph(io, g, t)
     close(io)
     return retval
@@ -145,6 +127,7 @@ function writegraph(fn::String, g::AGraphOrDiGraph)
         compress = true
         ft = split(fn,'.')[end-1]
     end
+    Symbol(ft) in keys(filemap) || error("Could not infer file format.")
     return writegraph(fn, g, Symbol(ft), compress=compress)
 end
 
@@ -161,16 +144,12 @@ Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
 If no format is provided, it will be inferred from `file` along with compression.
 """
 function writenetwork(io::IO, g::ANetOrDiNet, t::Symbol)
-    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     return filemap[t][4](io, g)
 end
 
 function writenetwork(fn::String, g::ANetOrDiNet, t::Symbol; compress::Bool=false)
-    if compress
-        io = GZip.open(fn,"w")
-    else
-        io = open(fn,"w")
-    end
+    t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
+    io = compress ? GZip.open(fn,"w") : open(fn,"w")
     retval = writenetwork(io, g, t)
     close(io)
     return retval
@@ -183,6 +162,7 @@ function writenetwork(fn::String, g::ANetOrDiNet)
         compress = true
         ft = split(fn,'.')[end-1]
     end
+    Symbol(ft) in keys(filemap) || error("Could not infer file format.")
     return writenetwork(fn, g, Symbol(ft), compress=compress)
 end
 

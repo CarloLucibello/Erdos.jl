@@ -4,8 +4,12 @@
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
-@test_throws ErrorException writegraph("file.ciao", G())
-@test_throws ErrorException writenetwork("file.ciao", G())
+@test_throws ErrorException writegraph("file1.ciao", G())
+@test_throws ErrorException readgraph("file.ciao", G)
+if G <: ANetwork
+    @test_throws ErrorException writenetwork("file2.ciao", G())
+    @test_throws ErrorException readnetwork("file.ciao", G)
+end
 
 # test :gml
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)

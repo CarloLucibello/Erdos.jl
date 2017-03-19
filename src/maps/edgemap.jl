@@ -40,6 +40,7 @@ length(m::EdgeMap) = length(m.data)
 # matrix interface
 getindex(m::EdgeMap, i::Integer, j::Integer) = getindex(m, edge(m.g, i, j))
 setindex!(m::EdgeMap, x, i::Integer, j::Integer) = setindex!(m, x, edge(m.g, i, j))
+haskey(m::EdgeMap, i::Integer, j::Integer) = haskey(m, edge(m.g, i, j))
 
 ### MATRIX DATA
 # Associative interface
@@ -49,8 +50,11 @@ setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge
     setindex!(m.data, x, src(e), dst(e))
 get{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
     get(m.data, (src(e), dst(e)), x)
+#TODO for sparse check if nonzero
 haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
-     (1 <= src(e) <= size(m.data, 1)) && (1 <= dst(e) <= size(m.data, 1))
+     haskey(m, src(e), dst(e))
+haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
+  (1 <= i <= size(m.data, 1)) && (1 <= j <= size(m.data, 1))
 
 # matrix interface
 getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =

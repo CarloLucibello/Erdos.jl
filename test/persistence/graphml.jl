@@ -29,7 +29,7 @@ ga = readgraph(f, :graphml, G)
 if G <: ANetwork ##################
 
 g = readnetwork(:lesmis, G)
-h = readnetwork(joinpath(testdir, "testdata", "lesmis.graphml.gz"))
+h = readnetwork(joinpath(testdir, "testdata", "lesmis.graphml.gz"), G)
 test_networks_eq(g, h)
 
 for gname in [:lesmis, :karate]
