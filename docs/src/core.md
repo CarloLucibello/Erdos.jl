@@ -35,7 +35,6 @@ has_vertex
 is_directed
 reverse
 reverse!
-is_ordered
 adjacency_list
 clean_vertex!
 ```

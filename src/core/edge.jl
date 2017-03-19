@@ -1,21 +1,6 @@
 
 show(io::IO, e::AEdge) = print(io, "$(src(e))=>$(dst(e))")
 
-"""
-    is_ordered(e)
-
-Returns  `src(e) <= dst(e)`.
-"""
-is_ordered(e::AEdge) = src(e) <= dst(e)
-
-
-"""
-    sort(e::Edge)
-
-Swap `src` and `dst` if `src > dst`.
-"""
-sort(e::AEdge) = src(e) > dst(e) ? reverse(e) : e
-
 ==(e1::AEdge, e2::AEdge) = (src(e1) == src(e2) && dst(e1) == dst(e2))
 
 """

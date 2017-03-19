@@ -19,11 +19,12 @@ type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     vtype::Type{T}
     data::D
 end
-show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap{$T}:$(m.data)")
+show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap: $(m.data)")
 
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::AGraphOrDiGraph, d::Dict{Int, T}) = EdgeMap(g, T, d)
+EdgeMap{T,E<:AEdge}(g::AGraphOrDiGraph, d::Dict{E, T}) = EdgeMap(g, T, d)
 
 function EdgeMap{T}(g::AGraphOrDiGraph, ::Type{T})
     E = edgetype(g)
@@ -49,8 +50,7 @@ getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
 setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge) =
     setindex!(m.data, x, src(e), dst(e))
 get{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
-    get(m.data, (src(e), dst(e)), x)
-#TODO for sparse check if nonzero
+    get(m.data, (Int(src(e)), Int(dst(e))), x)
 haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
      haskey(m, src(e), dst(e))
 haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
@@ -70,13 +70,15 @@ setindex!{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, e::AInde
     setindex!(m.data, x, idx(e))
 haskey{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, e::AIndexedEdge) =
     1 <= idx(e) <= length(m.data)
+get{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, e::AEdge, x) =
+    get(m.data, idx(e), x)
 
 # TODO allow one dimensional indexing?
 # it can be bugprone
-getindex{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
-    getindex(m.data, idx)
-setindex!{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
-    setindex!(m.data, x, idx)
+# getindex{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, idx::Integer) =
+#     getindex(m.data, idx)
+# setindex!{G<:AGraphOrDiGraph,T,D<:AbstractVector}(m::EdgeMap{G,T,D}, x, idx::Integer) =
+#     setindex!(m.data, x, idx)
 
 ### Dict{Int,T} DATA
 # Associative interface
@@ -90,8 +92,12 @@ haskey{G<:AGraphOrDiGraph,T}(m::EdgeMap{G,T,Dict{Int,T}}, e::AIndexedEdge) = has
 getindex{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::E) = getindex(m.data, e)
 setindex!{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, x, e::E) = setindex!(m.data, x, e)
 get{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::E, x) = get(m.data, e, x)
-haskey{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::E) = haske(m.data, e)
+haskey{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::E) = haskey(m.data, e)
 
+getindex{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::AEdge) = getindex(m.data, E(src(e),dst(e)))
+setindex!{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, x, e::AEdge) = setindex!(m.data, x, E(src(e),dst(e)))
+get{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::AEdge, x) = get(m.data, E(src(e),dst(e)), x)
+haskey{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::AEdge) = haskey(m.data, E(src(e),dst(e)))
 ####
 values{G,T,D<:Dict}(m::EdgeMap{G,T,D}) = values(m.data)
 values{G,T,D<:Matrix}(m::EdgeMap{G,T,D}) = m.data
@@ -117,11 +123,12 @@ ConstEdgeMap(g::AGraphOrDiGraph, x) = ConstEdgeMap(x)
 length(m::ConstEdgeMap) = typemax(Int)
 getindex(m::ConstEdgeMap, e::AEdge) = m.val
 
-setindex!(m::ConstEdgeMap, x, i::Integer) = nothing
-getindex(m::ConstEdgeMap, i::Integer) = m.val
-setindex!(m::ConstEdgeMap, x, i::Integer, j::Integer) = nothing
+setindex!(m::ConstEdgeMap, x, i::Integer, j::Integer) = nothing #TODO not throwin since it is used as
+                                                                # a dummy map
+# setindex!(m::ConstEdgeMap, x, i::Integer, j::Integer) = error("Cannot assign to ConstEdgeMap")
 getindex(m::ConstEdgeMap, i::Integer, j::Integer) = m.val
 setindex!(m::ConstEdgeMap, x, e::AEdge) = nothing
+# setindex!(m::ConstEdgeMap, x, e::AEdge) = error("Cannot assign to ConstEdgeMap")
 get(m::ConstEdgeMap, e::AEdge, x) = m.val
 size(m::ConstEdgeMap) = (typemax(Int),)
 

@@ -33,7 +33,7 @@ graphtype, digraphtype, edgetype, vertextype,
 
 
 # edge
-AEdge, Edge, is_ordered, reverse, #sort
+AEdge, Edge, reverse, 
 AIndexedEdge, IndexedEdge, idx,
 
 # core
