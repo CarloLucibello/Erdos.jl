@@ -79,6 +79,10 @@ function swap_vertices!(props::PropertyStore, u::Integer, v::Integer)
     #TODO should swap edges for non indexed graphs
 end
 
+has_gprop(props::PropertyStore, name::String) = haskey(props.gmaps, name)
+has_vprop(props::PropertyStore, name::String) = haskey(props.vmaps, name)
+has_eprop(props::PropertyStore, name::String) = haskey(props.emaps, name)
+
 function ==(p1::PropertyStore, p2::PropertyStore)
     oke = true
     for name in keys(p1.emaps)

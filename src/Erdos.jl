@@ -23,7 +23,8 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             join, start, next, done, eltype, get, issymmetric, A_mul_B!,
             sort, push!, pop!, iteratorsize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
-            HasLength, HasShape     #iterators
+            HasLength, HasShape,     #iterators
+            haskey #edgemap
 
 #interface
 export AGraph, ADiGraph, AGraphOrDiGraph,
@@ -158,9 +159,9 @@ edge_property, vertex_property, graph_property,
 rem_edge_property!, rem_vertex_property!,
 vertex_properties, edge_properties, graph_properties,
 #short forms
-gprop, gprop!, rem_gprop!, gprops, gprop_names,
-vprop, vprop!, rem_vprop!, vprops, vprop_names,
-eprop, eprop!, rem_eprop!, eprops, eprop_names
+gprop, gprop!, rem_gprop!, gprops, gprop_names, has_gprop,
+vprop, vprop!, rem_vprop!, vprops, vprop_names, has_vprop,
+eprop, eprop!, rem_eprop!, eprops, eprop_names, has_eprop
 
 """An optimized graphs package.
 

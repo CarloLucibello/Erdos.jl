@@ -2,6 +2,9 @@
 valtype{T}(m::AbstractVector{T}) = T
 valtype{V,T}(m::Dict{V,T}) = T
 
+
+#TODO make VertexMap is own type
+#end after hasindex -> haskey 
 """
     hasindex(v, i::Integer)
 

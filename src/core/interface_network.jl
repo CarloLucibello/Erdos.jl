@@ -181,4 +181,8 @@ gprop_names(g::ANetOrDiNet) = collect(keys(gprops(g)))
 vprop_names(g::ANetOrDiNet) = collect(keys(vprops(g)))
 eprop_names(g::ANetOrDiNet) = collect(keys(eprops(g)))
 
+has_gprop(g::ANetOrDiNet, name::String) = has_gprop(g.props, name)
+has_vprop(g::ANetOrDiNet, name::String) = has_vprop(g.props, name)
+has_eprop(g::ANetOrDiNet, name::String) = has_eprop(g.props, name)
+
 # TODO document short forms
