@@ -1,5 +1,5 @@
 """
-    type Net <: ANetwork
+    type Network <: ANetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -13,15 +13,15 @@
 
 A type representing a directed graph with indexed edges.
 
-    Net(n=0)
+    Network(n=0)
 
-Construct a `Net` with `n` vertices and no edges.
+Construct a `Network` with `n` vertices and no edges.
 
-    Net(adjmx::AbstractMatrix)
+    Network(adjmx::AbstractMatrix)
 
-Construct a `Net` from the adjacency matrix `adjmx`.
+Construct a `Network` from the adjacency matrix `adjmx`.
 """
-type Net <: ANetwork
+type Network <: ANetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -35,7 +35,7 @@ type Net <: ANetwork
 end
 
 """
-    type DiNet <: ADiNetwork
+    type DiNetwork <: ADiNetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -55,15 +55,15 @@ end
 
 A type representing an directed graph with indexed edges.
 
-    DiNet(n=0)
+    DiNetwork(n=0)
 
-Construct a `DiNet` with `n` vertices and no edges.
+Construct a `DiNetwork` with `n` vertices and no edges.
 
-    DiNet(adjmx::AbstractMatrix)
+    DiNetwork(adjmx::AbstractMatrix)
 
-Construct a `DiNet` from the adjacency matrix `adjmx`.
+Construct a `DiNetwork` from the adjacency matrix `adjmx`.
 """
-type DiNet <: ADiNetwork
+type DiNetwork <: ADiNetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -77,28 +77,28 @@ type DiNet <: ADiNetwork
     props::PropertyStore
 end
 
-const NetOrDiNet = Union{Net, DiNet}
+const NetOrDiNet = Union{Network, DiNetwork}
 
 edgetype{G<:NetOrDiNet}(::Type{G}) = IndexedEdge
-graphtype(::Type{DiNet}) = Net
-digraphtype(::Type{Net}) = DiNet
+graphtype(::Type{DiNetwork}) = Network
+digraphtype(::Type{Network}) = DiNetwork
 vertextype{G<:NetOrDiNet}(::Type{G}) = Int
 
 #### GRAPH CONSTRUCTORS
-function DiNet(n::Integer = 0)
+function DiNetwork(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     in_edges = [Vector{Pair{Int,Int}}() for _=1:n]
 
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
-    return DiNet(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
+    return DiNetwork(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
 
-function DiNet{T<:Real}(adjmx::AbstractMatrix{T})
+function DiNetwork{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = DiNet(dima)
+    g = DiNetwork(dima)
     for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
@@ -107,18 +107,18 @@ function DiNet{T<:Real}(adjmx::AbstractMatrix{T})
 end
 
 
-DiNet(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNet; seed=seed)
+DiNetwork(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNetwork; seed=seed)
 
 nv(g::NetOrDiNet) = length(g.out_edges)
 ne(g::NetOrDiNet) = g.ne
 
-function add_vertex!(g::DiNet)
+function add_vertex!(g::DiNetwork)
     push!(g.in_edges, Vector{Pair{Int,Int}}())
     push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-function add_edge!(g::DiNet, u::Integer, v::Integer)
+function add_edge!(g::DiNetwork, u::Integer, v::Integer)
     (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
     has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1))
     if isempty(g.free_indexes)
@@ -141,7 +141,7 @@ end
 
 rem_edge!(g::NetOrDiNet, s::Integer, t::Integer) = rem_edge!(g, edge(g, s, t))
 
-function rem_edge!(g::DiNet, e::IndexedEdge)
+function rem_edge!(g::DiNetwork, e::IndexedEdge)
     s = e.src
     t = e.dst
     idx = e.idx
@@ -196,22 +196,22 @@ function out_neighbors(g::NetOrDiNet, i::Integer)
     return (j for (j, idx) in oes)
 end
 
-function in_edges(g::DiNet, i::Integer)
+function in_edges(g::DiNetwork, i::Integer)
     ies = g.in_edges[i]
     return (IndexedEdge(j, i, idx) for (j, idx) in ies)
 end
 
 
-function in_neighbors(g::DiNet, i::Integer)
+function in_neighbors(g::DiNetwork, i::Integer)
     ies = g.in_edges[i]
     return (j for (j, idx) in ies)
 end
 
-pop_vertex!(g::Net) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
-pop_vertex!(g::DiNet) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
+pop_vertex!(g::Network) = (clean_vertex!(g, nv(g)); pop!(g.out_edges); nv(g)+1)
+pop_vertex!(g::DiNetwork) = (clean_vertex!(g, nv(g)); pop!(g.out_edges);
                           pop!(g.in_edges); nv(g)+1)
 
-function reverse!(g::DiNet)
+function reverse!(g::DiNetwork)
     g.out_edges, g.in_edges = g.in_edges, g.out_edges
     for i=1:length(g.epos)
         g.epos[i] = reverse(g.epos[i])
@@ -221,18 +221,18 @@ end
 
 ## GRAPH
 
-function Net(n::Integer = 0)
+function Network(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
-    return Net(0, 0, out_edges, epos, free_indexes, PropertyStore())
+    return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
 end
 
-function Net{T<:Real}(adjmx::AbstractMatrix{T})
+function Network{T<:Real}(adjmx::AbstractMatrix{T})
     dima,dimb = size(adjmx)
     isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
 
-    g = Net(dima)
+    g = Network(dima)
     for i in find(adjmx)
         ind = ind2sub((dima,dimb),i)
         add_edge!(g,ind...)
@@ -240,14 +240,14 @@ function Net{T<:Real}(adjmx::AbstractMatrix{T})
     return g
 end
 
-Net(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Net; seed=seed)
+Network(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Network; seed=seed)
 
-function add_vertex!(g::Net)
+function add_vertex!(g::Network)
     push!(g.out_edges, Vector{Pair{Int,Int}}())
     return nv(g)
 end
 
-function add_edge!(g::Net, u::Integer, v::Integer)
+function add_edge!(g::Network, u::Integer, v::Integer)
     u, v = u <= v ? (u, v) : (v, u)
     (u in vertices(g) && v in vertices(g)) || return (false, IndexedEdge(u,v,-1))
     has_edge(g, u, v) && return (false, IndexedEdge(u,v,-1)) # could be removed for multigraphs
@@ -272,7 +272,7 @@ function add_edge!(g::Net, u::Integer, v::Integer)
     return (true, IndexedEdge(u,v,idx))
 end
 
-function rem_edge!(g::Net, e::IndexedEdge)
+function rem_edge!(g::Network, e::IndexedEdge)
     s = e.src
     t = e.dst
     if s > t
@@ -323,12 +323,12 @@ function rem_edge!(g::Net, e::IndexedEdge)
     return true
 end
 
-function in_edges(g::Net, i::Integer)
+function in_edges(g::Network, i::Integer)
     ies = g.out_edges[i]
     return (IndexedEdge(j, i, idx) for (j, idx) in ies)
 end
 
-function swap_vertices!(g::Net, u::Integer, v::Integer)
+function swap_vertices!(g::Network, u::Integer, v::Integer)
     if u != v
         #TODO copying to avoid problems with self edges
         # maybe can copy only one of the two
@@ -355,7 +355,7 @@ function swap_vertices!(g::Net, u::Integer, v::Integer)
     end
 end
 
-function swap_vertices!(g::DiNet, u::Integer, v::Integer)
+function swap_vertices!(g::DiNetwork, u::Integer, v::Integer)
     if u != v
         #TODO copying to avoid problems with self edges
         # maybe can copy only one of the two
@@ -395,7 +395,7 @@ function swap_vertices!(g::DiNet, u::Integer, v::Integer)
     end
 end
 
-# function test_consistency(g::Net)
+# function test_consistency(g::Network)
 #     for i=1:nv(g)
 #         for (k, p) in  enumerate(g.out_edges[i])
 #             j = p.first
@@ -410,7 +410,7 @@ end
 #     end
 # end
 #
-# function test_consistency(g::DiNet)
+# function test_consistency(g::DiNetwork)
 #     for i=1:nv(g)
 #         for (k, p) in  enumerate(g.out_edges[i])
 #             j = p.first

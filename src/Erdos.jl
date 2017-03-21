@@ -33,7 +33,7 @@ graphtype, digraphtype, edgetype, vertextype,
 
 
 # edge
-AEdge, Edge, reverse, 
+AEdge, Edge, reverse,
 AIndexedEdge, IndexedEdge, idx,
 
 # core
@@ -50,7 +50,7 @@ unsafe_add_edge!, rebuild!,
 rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
-reverse!, Graph, DiGraph, DiNet, Net,
+reverse!, Graph, DiGraph, DiNetwork, Network,
 
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,

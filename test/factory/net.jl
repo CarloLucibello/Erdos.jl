@@ -1,14 +1,14 @@
 @testset "$TEST $G" begin
 
-g = Net(10)
-@test graphtype(g) == Net
-@test digraphtype(g) == DiNet
+g = Network(10)
+@test graphtype(g) == Network
+@test digraphtype(g) == DiNetwork
 @test edgetype(g) == IndexedEdge
 @test vertextype(g) == Int
 
-g = DiNet(10)
-@test graphtype(g) == Net
-@test digraphtype(g) == DiNet
+g = DiNetwork(10)
+@test graphtype(g) == Network
+@test digraphtype(g) == DiNetwork
 @test edgetype(g) == IndexedEdge
 @test vertextype(g) == Int
 

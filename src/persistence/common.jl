@@ -69,7 +69,7 @@ Read a graph identified by `s` from Erdos datasets collection (e.g. `s=:karate`)
 They are stored in the `gt` binary format in the `datasets` directory of the package.
 For a list of available graph refer to the documentation.
 """
-function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Net; compressed=false)
+function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Network; compressed=false)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     io = compressed ? GZip.open(fn,"r") : open(fn,"r")
     g = readnetwork(io, t, G)
@@ -77,11 +77,11 @@ function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Net; compr
     return g
 end
 
-function readnetwork{G<:ANetOrDiNet}(io::IO, t::Symbol, ::Type{G}=Net)
+function readnetwork{G<:ANetOrDiNet}(io::IO, t::Symbol, ::Type{G}=Network)
     return filemap[t][3](io, G)
 end
 
-function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Net)
+function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Network)
     compressed = false
     ft = split(fn,'.')[end]
     if ft == "gz"
@@ -92,7 +92,7 @@ function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Net)
     return readnetwork(fn, Symbol(ft), G; compressed=compressed)
 end
 
-function readnetwork{G<:AGraphOrDiGraph}(s::Symbol, ::Type{G}=Net)
+function readnetwork{G<:AGraphOrDiGraph}(s::Symbol, ::Type{G}=Network)
     readnetwork(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
 end
 

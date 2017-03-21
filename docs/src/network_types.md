@@ -1,7 +1,7 @@
 # [Network Types and Interface] (@id network_types)
 Networks in *Erdos.jl* are graphs with additional ability to store properties
 associated to vertices, edges and the graph itself.
-The ready to go network types are the `Net` and `DiNet` types. Custom
+The ready to go network types are the `Network` and `DiNetwork` types. Custom
 types con be defined inheriting from `ANetwork` and `ADiNetwork` abstract types.
 
 ## Abstract Types
@@ -14,11 +14,11 @@ AEdgeMap
 AVertexMap
 ```
 
-## Net / DiNet / IndexedEdge
+## Network / DiNetwork / IndexedEdge
 
 ```@docs
-Net
-DiNet
+Network
+DiNetwork
 IndexedEdge
 ```
 ## Property Interface

@@ -1,7 +1,7 @@
 @testset "$TEST $G" begin
 
 ## EDGE
-g = Net(10, 20)
+g = Network(10, 20)
 m = eprop!(g, "label", Int)
 
 @test valtype(m) == Int
@@ -30,7 +30,7 @@ m2 = eprop!(g, "bye", m)
 @test eprop_names(g) == ["bye","hi"]
 
 ## VERTEX
-g = Net(3)
+g = Network(3)
 add_edge!(g,1,2)
 add_edge!(g,2,3)
 m = vprop!(g, "label", [1,2,3])
@@ -47,7 +47,7 @@ swap_vertices!(g, 1, 2)
 @test m[2] == 3
 
 ## GRAPH
-g = DiNet(3, 5)
+g = DiNetwork(3, 5)
 gprop!(g, "lab", "mygraph")
 @test gprop(g, "lab") == "mygraph"
 @test gprop_names(g) == ["lab"]
