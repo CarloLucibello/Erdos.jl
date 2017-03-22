@@ -66,6 +66,7 @@ complement, blkdiag, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,
+subnetwork,
 
 # graph visit
 SimpleGraphVisitor, TrivialGraphVisitor, LogGraphVisitor,

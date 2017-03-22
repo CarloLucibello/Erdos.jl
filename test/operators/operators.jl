@@ -171,7 +171,7 @@ h = g[5:26]
 r = 5:26
 h2, vm = subgraph(g, r)
 @test h2 == h
-@test vm == collect(r)
+@test vm == r
 @test h2 == g[r]
 
 sg, vm = subgraph(CompleteGraph(10, G), 5:8)
@@ -185,6 +185,8 @@ sg, vm = subgraph(gg, edg)
 @test nv(sg) == 4
 @test ne(sg) == 6
 
+
+@test_throws ErrorException subgraph(CompleteGraph(10, G), [5,5,5])
 
 sg2, vm = subgraph(CompleteGraph(10, G), [5,6,7,8])
 @test sg2 == sg
@@ -200,5 +202,20 @@ sg, vm = subgraph(gg5, elist)
 g10 = StarGraph(10, G)
 @test egonet(g10, 1, 0) == G(1, 0)
 @test egonet(g10, 1, 1) == g10
+
+if G <: ANetwork
+    g = readnetwork(:lesmis, G)
+
+    h, vm = subgraph(g, 1:2)
+    @test length(vprops(h)) == 0
+
+    h, vm = subnetwork(g,1:2)
+    length(vprops(h)) == 2
+    @test  vprop(g, "label")[1] == "Myriel"
+    @test  vprop(g, "label")[2] == "Napoleon"
+    @test length(eprops(h)) == 1
+    @test eprop(h, "value")[1,2] == 1
+end
+
 
 end # testset

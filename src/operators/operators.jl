@@ -221,69 +221,67 @@ end
 ## subgraphs ###
 
 """
-    subgraph(g, vlist)
+    subgraph(g, vlist) -> sg, vlist
+    subgraph(g, elist) -> sg, vlist
 
-Returns the subgraph of `g` induced by the vertices in  `vlist`.
+
+Returns the subgraph of `g` induced by the vertices in  `vlist` or by the edges
+in `elist`, along with `vlist` itself (a newly created vector for the second method).
 
 The returned graph has `length(vlist)` vertices, with the new vertex `i`
 corresponding to the vertex of the original graph in the `i`-th position
 of `vlist`.
 
-Returns  also a vector `vmap` mapping the new vertices to the
-old ones: the  vertex `i` in the subgraph corresponds to
-the vertex `vmap[i]` in `g`.
+For easy subgraph creation also `g[vlist]` or `g[elist]` can be used.
 
-    subgraph(g, elist)
-
-Returns the subgraph of `g` induced by the edges in `elist`, along with
-the associated vector `vmap` mapping new vertices to the old ones.
-
+If `g` is a network, vector and edge associated properties are conserved in
+`sg`.
 
 ### Usage Examples:
 ```julia
 g = CompleteGraph(10)
-sg, vmap = subgraph(g, 5:8)
+sg, vlist = subgraph(g, 5:8)
 @assert g[5:8] == sg
 @assert nv(sg) == 4
 @assert ne(sg) == 6
 @assert vm[4] == 8
 
-sg, vmap = subgraph(g, [2,8,3,4])
+sg, vlist = subgraph(g, [2,8,3,4])
 @asssert sg == g[[2,8,3,4]]
 
 elist = [Edge(1,2), Edge(3,4), Edge(4,8)]
-sg, vmap = subgraph(g, elist)
+sg, vlist = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
 function subgraph{G<:AGraphOrDiGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
-    #TODO NET preserve properties for networks
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()
-    vmap =Vector{V}(length(vlist))
     for (i,v) in enumerate(vlist)
         newvid[v] = i
-        vmap[i] = v
     end
 
     vset = Set(vlist)
-    for s in vlist
-        for d in out_neighbors(g, s)
-            if d in vset && has_edge(g, s, d)
-                add_edge!(h, newvid[s], newvid[d])
-            end
-        end
-    end
-    return h, vmap
+    _build_subraph!(h, g, vset, newvid)
+
+    return h, vlist
 end
 
+
+function _build_subraph!(h::AGraphOrDiGraph, g, vset, newvid)
+    for s in vset
+        for d in out_neighbors(g, s)
+            d in vset && add_edge!(h, newvid[s], newvid[d])
+        end
+    end
+end
 
 function subgraph{G<:AGraphOrDiGraph}(g::G, elist)
     h = G()
     V = vertextype(h)
     newvid = Dict{V, V}()
-    vmap = Vector{V}()
+    vlist = Vector{V}()
 
     for e in elist
         u, v = src(e), dst(e)
@@ -291,22 +289,125 @@ function subgraph{G<:AGraphOrDiGraph}(g::G, elist)
             if !haskey(newvid, i)
                 add_vertex!(h)
                 newvid[i] = nv(h)
-                push!(vmap, i)
+                push!(vlist, i)
             end
         end
         add_edge!(h, newvid[u], newvid[v])
     end
-    return h, vmap
+    return h, vlist
 end
 
 
 """
-    g[iter]
+    subnetwork(g, vlist) -> sg, vlist
+    subnetwork(g, elist) -> sg, vlist
 
-Returns the subgraph induced by `iter`. Equivalent to [`subgraph`](@ref)`(g, iter)[1]`.
+Equivalent to [`subgraph`](@ref) but preserves vertex and edge properties
+when `g` is a network.
 """
-getindex(g::AGraphOrDiGraph, iter) = subgraph(g, iter)[1]
 
+function subnetwork{G<:ANetOrDiNet,V<:Integer}(g::G, vlist::AbstractVector{V})
+    allunique(vlist) || error("Vertices in subgraph list must be unique")
+    h = G(length(vlist))
+    newvid = Dict{V, V}()
+    for (i,v) in enumerate(vlist)
+        newvid[v] = i
+    end
+
+    vset = Set(vlist)
+    _build_subnetwork!(h, g, vset, newvid)
+
+    return h, vlist
+end
+
+function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
+    #sound right not to copy graph properties of g
+    for (name, prop) in vprops(g)
+        vprop!(h, name, valtype(prop))
+    end
+    for (name, prop) in eprops(g)
+        eprop!(h, name, valtype(prop))
+    end
+
+    for s in vset
+        i = newvid[s]
+        for (name, prop) in vprops(g)
+            vprop(h, name)[i] = prop[s]
+        end
+        for e in out_edges(g, s)
+            d = dst(e)
+            if d in vset
+                j = newvid[d]
+                ok, enew = add_edge!(h, i, j)
+                !ok && continue
+                for (name, prop) in eprops(g)
+                    eprop(h, name)[enew] = prop[e]
+                end
+            end
+        end
+    end
+end
+
+if VERSION > v"0.6dev"
+    # in julia 0.5 always gets dispatched to this (julia bug)
+    subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
+end
+
+function subnetwork{G<:ANetOrDiNet}(g::G, elist)
+    h = G()
+    V = vertextype(h)
+    newvid = Dict{V, V}()
+    vlist = Vector{V}()
+
+    for (name, prop) in vprops(g)
+        vprop!(h, name, valtype(prop))
+    end
+    for (name, prop) in eprops(g)
+        eprop!(h, name,  valtype(prop))
+    end
+
+    for e in elist
+        u, v = src(e), dst(e)
+        for s in (u,v)
+            if !haskey(newvid, s)
+                add_vertex!(h)
+                newvid[s] = nv(h)
+                push!(vlist, s)
+                for (name, prop) in vprops(g)
+                    vprop(h, name)[nv(h)] = prop[s]
+                end
+            end
+        end
+        ok, enew = add_edge!(h, newvid[u], newvid[v])
+        !ok && continue
+        for (name, prop) in eprops(g)
+            eprop(h, name)[enew] = prop[e]
+        end
+    end
+    return h, vlist
+end
+
+
+if VERSION >= v"0.6dev"
+    """
+        g[iter]
+
+    Returns the subgraph induced by the vertex or edge iterable `iter`.
+    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+    for networks.
+    """
+    getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
+else
+    """
+        g[iter]
+
+    Returns the subgraph induced by the vertex or edge iterable `iter`.
+    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+    for networks.
+    """
+    getindex(g::AGraphOrDiGraph, iter) = subgraph(g, iter)[1]
+    getindex(g::ANetOrDiNet, iter) = subnetwork(g, iter)[1]
+end
 
 """
     egonet(g, v::Int, d::Int; dir=:out)
