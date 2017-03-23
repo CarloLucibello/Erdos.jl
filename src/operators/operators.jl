@@ -234,8 +234,8 @@ of `vlist`.
 
 For easy subgraph creation also `g[vlist]` or `g[elist]` can be used.
 
-If `g` is a network, vector and edge associated properties are conserved in
-`sg`.
+If `g` is a network, vector and edge properties won't be converved
+`sg`. You can preserve properties using the [`subnetwork`](@ref) method.
 
 ### Usage Examples:
 ```julia
@@ -322,16 +322,16 @@ end
 
 function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
     #sound right not to copy graph properties of g
-    for (name, prop) in vprops(g)
+    for (name, prop) in vprop(g)
         vprop!(h, name, valtype(prop))
     end
-    for (name, prop) in eprops(g)
+    for (name, prop) in eprop(g)
         eprop!(h, name, valtype(prop))
     end
 
     for s in vset
         i = newvid[s]
-        for (name, prop) in vprops(g)
+        for (name, prop) in vprop(g)
             vprop(h, name)[i] = prop[s]
         end
         for e in out_edges(g, s)
@@ -340,7 +340,7 @@ function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
                 j = newvid[d]
                 ok, enew = add_edge!(h, i, j)
                 !ok && continue
-                for (name, prop) in eprops(g)
+                for (name, prop) in eprop(g)
                     eprop(h, name)[enew] = prop[e]
                 end
             end
@@ -359,10 +359,10 @@ function subnetwork{G<:ANetOrDiNet}(g::G, elist)
     newvid = Dict{V, V}()
     vlist = Vector{V}()
 
-    for (name, prop) in vprops(g)
+    for (name, prop) in vprop(g)
         vprop!(h, name, valtype(prop))
     end
-    for (name, prop) in eprops(g)
+    for (name, prop) in eprop(g)
         eprop!(h, name,  valtype(prop))
     end
 
@@ -373,14 +373,14 @@ function subnetwork{G<:ANetOrDiNet}(g::G, elist)
                 add_vertex!(h)
                 newvid[s] = nv(h)
                 push!(vlist, s)
-                for (name, prop) in vprops(g)
+                for (name, prop) in vprop(g)
                     vprop(h, name)[nv(h)] = prop[s]
                 end
             end
         end
         ok, enew = add_edge!(h, newvid[u], newvid[v])
         !ok && continue
-        for (name, prop) in eprops(g)
+        for (name, prop) in eprop(g)
             eprop(h, name)[enew] = prop[e]
         end
     end

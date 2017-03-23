@@ -1,27 +1,15 @@
 # Shortest-Path Algorithms
+*Erdos* implements several classical algorithms for finding the shortest paths between
+one or more vertex and any other vertex in the graphs. For all algorithms the following
+holds:
 
-## General properties of shortest path algorithms
+* the distance from a vertex to itself is always `0`;
+* the distance between two vertices with no connecting paths is always `Inf`.
 
-* The distance from a vertex to itself is always `0`.
-* The distance between two vertices with no connecting edge is always `Inf`.
+The `shortest_paths` method provides easy access to the default algorithm.
 
-<!---
-TODO separate in paragraphs?
-TODO remove mincut
-
-# Shortest-Path Algorithms
-```@autodocs
-Modules = [Erdos]
-Pages   = ["shortestpaths/shortestpaths.jl",
-            "shortestpaths/astar.jl",
-            "shortestpaths/bellman-ford.jl",
-            "shortestpaths/dijkstra.jl",
-            "shortestpaths/floyd-warshall.jl"
-]
-Private = false
-```
---->
 ```@docs
+shortest_paths
 a_star
 dijkstra_shortest_paths
 bellman_ford_shortest_paths

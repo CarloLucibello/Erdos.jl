@@ -153,7 +153,11 @@ Graph{UInt32}(16726, 47594)
 
 ## Ready to explore
 Refer to the documentation to explore all the features of Erdos:
-- **core functions:** vertices and edges addition and removal, degree (in/out/histogram), neighbors (in/out/all)
+- **core functions:** vertices and edges addition and removal, degree (in/out/all), neighbors (in/out/all)
+
+- **maps** dictionary like types to store properties associated to vertices and edges
+
+- **networks** store vertex/edge/graph properties (maps) inside the graph itself
 
 - **connectivity:** strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood, k-core
 
@@ -165,7 +169,7 @@ Refer to the documentation to explore all the features of Erdos:
 
 - **graph generators:** [notorious graphs](https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl), euclidean graphs and random graphs (Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model)
 
-- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html)
+- **I/O formats:** [graphml](http://en.wikipedia.org/wiki/GraphML), [gml](https://en.wikipedia.org/wiki/Graph_Modelling_Language), [gexf](http://gexf.net/format), [dot](https://en.wikipedia.org/wiki/DOT_(graph_description_language)), [net](http://gephi.org/users/supported-graph-formats/pajek-net-format/), [gt](https://graph-tool.skewed.de/static/doc/gt_format.html). For some of these formats vertex/edge/graph properties can be read and written.
 
 - **centrality:** betweenness, closeness, degree, pagerank, Katz
 

@@ -9,7 +9,7 @@ function test_networks_eq(g::ANetOrDiNet, h::ANetOrDiNet)
     @test sort(vprop_names(h)) == sort(vprop_names(g))
     @test sort(eprop_names(h)) == sort(eprop_names(g))
 
-    for (pname, ph) in gprops(h)
+    for (pname, ph) in gprop(h)
         @test has_gprop(g, pname)
         # @test typeof(ph) == typeof(gprop(g, pname))
         if  typeof(ph) <: NumTypes
@@ -19,7 +19,7 @@ function test_networks_eq(g::ANetOrDiNet, h::ANetOrDiNet)
         end
     end
 
-    for (pname, ph) in vprops(h)
+    for (pname, ph) in vprop(h)
         @test has_vprop(g, pname)
         pg = vprop(g, pname)
         # @test valtype(pg) == valtype(ph)
@@ -34,7 +34,7 @@ function test_networks_eq(g::ANetOrDiNet, h::ANetOrDiNet)
         end
     end
 
-    for (pname, ph) in eprops(h)
+    for (pname, ph) in eprop(h)
         @test has_eprop(g, pname)
         pg = eprop(g, pname)
         # @test valtype(pg) == valtype(ph)

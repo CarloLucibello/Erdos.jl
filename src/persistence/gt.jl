@@ -69,11 +69,11 @@ function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
 end
 
 function writegt_props(io::IO, g::ANetOrDiNet)
-    nprop = length(gprops(g)) + length(vprops(g)) + length(eprops(g))
+    nprop = length(gprop(g)) + length(vprop(g)) + length(eprop(g))
     write(io, nprop) # num of property maps
     # @show nprop
     #graph props
-    for (pname, p) in gprops(g)
+    for (pname, p) in gprop(g)
         write(io, UInt8(0)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
         pvaln = findfirst(gtpropmap, typeof(p))
@@ -81,7 +81,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
         writegt_prop(io, p)
     end
     #vertex props
-    for (pname, p) in vprops(g)
+    for (pname, p) in vprop(g)
         write(io, UInt8(1)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
         pvaln = findfirst(gtpropmap, valtype(p))
@@ -92,7 +92,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
         end
     end
     #edge props
-    for (pname, p) in eprops(g)
+    for (pname, p) in eprop(g)
         write(io, UInt8(2)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
         pvaln = findfirst(gtpropmap, valtype(p))

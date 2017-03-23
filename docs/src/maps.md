@@ -1,7 +1,9 @@
-# Maps
+# Edge and Vertex Maps
 Arbitrary values can be associated to a graph's vertices and edges, and handed
 over to method's that necessitate them, thanks to the edge maps and vertex maps
-interfaces.
+interfaces. Also, edge and vector maps can be internally stored in
+[network types](@ref network_types) and accessed through the
+[property interface](@ref network_interface).
 
 ## Edge Maps
 ```@autodocs

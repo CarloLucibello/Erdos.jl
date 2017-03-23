@@ -207,13 +207,13 @@ if G <: ANetwork
     g = readnetwork(:lesmis, G)
 
     h, vm = subgraph(g, 1:2)
-    @test length(vprops(h)) == 0
+    @test length(vprop(h)) == 0
 
     h, vm = subnetwork(g,1:2)
-    length(vprops(h)) == 2
+    length(vprop(h)) == 2
     @test  vprop(g, "label")[1] == "Myriel"
     @test  vprop(g, "label")[2] == "Napoleon"
-    @test length(eprops(h)) == 1
+    @test length(eprop(h)) == 1
     @test eprop(h, "value")[1,2] == 1
 
     elist = collect(edges(g))[1:10]

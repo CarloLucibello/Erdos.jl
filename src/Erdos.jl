@@ -1,4 +1,8 @@
 __precompile__(true)
+
+"""
+A graph and network analysis package for julia.
+"""
 module Erdos
 
 import GZip # I/O
@@ -155,31 +159,15 @@ AEdgeMap, ConstEdgeMap, EdgeMap,
 
 # properties
 PropertyStore,
-add_edge_property!, add_vertex_property!, set_graph_property!,
-edge_property, vertex_property, graph_property,
-rem_edge_property!, rem_vertex_property!,
-vertex_properties, edge_properties, graph_properties,
+
+graph_property, set_graph_property!, rem_graph_property!, has_graph_property,
+vertex_property, add_vertex_property!, rem_vertex_property!, has_vertex_property,
+edge_property, add_edge_property!, rem_edge_property!, has_edge_property,
+
 #short forms
-gprop, gprop!, rem_gprop!, gprops, gprop_names, has_gprop,
-vprop, vprop!, rem_vprop!, vprops, vprop_names, has_vprop,
-eprop, eprop!, rem_eprop!, eprops, eprop_names, has_eprop
-
-"""An optimized graphs package.
-
-Simple graphs (not multi- or hypergraphs) are represented in a memory- and
-time-efficient manner with adjacency lists and edge sets. Both directed and
-undirected graphs are supported via separate types, and conversion is available
-from directed to undirected.
-
-The project goal is to mirror the functionality of robust network and graph
-analysis libraries such as NetworkX while being simpler to use and more
-efficient than existing Julian graph libraries such as Graphs.jl. It is an
-explicit design decision that any data not required for graph manipulation
-(attributes and other information, for example) is expected to be stored
-outside of the graph structure itself. Such data lends itself to storage in
-more traditional and better-optimized mechanisms.
-"""
-Erdos
+gprop, gprop!, rem_gprop!, has_gprop, gprop_names,
+vprop, vprop!, rem_vprop!, has_vprop, vprop_names,
+eprop, eprop!, rem_eprop!, has_eprop, eprop_names
 
 include("utils.jl")
 include("core/interface_graph.jl")

@@ -173,7 +173,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
 
     nprop = 0
     gpropkey = Dict{String,String}()
-    for (pname, p) in gprops(g)
+    for (pname, p) in gprop(g)
         xp = addelement!(xroot, "key")
         xp["id"] = "key$nprop"
         gpropkey[pname] = "key$nprop"
@@ -183,7 +183,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         nprop+=1
     end
     vpropkey = Dict{String,String}()
-    for (pname, p) in vprops(g)
+    for (pname, p) in vprop(g)
         xp = addelement!(xroot, "key")
         xp["id"] = "key$nprop"
         vpropkey[pname] = "key$nprop"
@@ -193,7 +193,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         nprop+=1
     end
     epropkey = Dict{String,String}()
-    for (pname, p) in eprops(g)
+    for (pname, p) in eprop(g)
         xp = addelement!(xroot, "key")
         xp["id"] = "key$nprop"
         epropkey[pname] = "key$nprop"
@@ -205,7 +205,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
 
     xg = addelement!(xroot, "graph")
     xg["edgedefault"] = is_directed(g) ? "directed" : "undirected"
-    for (pname, p) in gprops(g)
+    for (pname, p) in gprop(g)
         xp = addelement!(xg, "data")
         xp["key"] = gpropkey[pname]
         setcontent!(xp, graphmlstring(p))
@@ -214,7 +214,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
     for i in 1:nv(g)
         xv = addelement!(xg, "node")
         xv["id"] = "n$(i-1)"
-        for (pname,p) in vprops(g)
+        for (pname,p) in vprop(g)
             xp = addelement!(xv, "data")
             xp["key"] = vpropkey[pname]
             setcontent!(xp, graphmlstring(p[i])) #TODO check has key
@@ -225,7 +225,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         xe = addelement!(xg, "edge")
         xe["source"] = "n$(src(e)-1)"
         xe["target"] = "n$(dst(e)-1)"
-        for (pname, p) in edge_properties(g)
+        for (pname, p) in eprop(g)
             xp = addelement!(xe, "data")
             xp["key"] = epropkey[pname]
             setcontent!(xp, graphmlstring(p[e])) #TODO check has key
