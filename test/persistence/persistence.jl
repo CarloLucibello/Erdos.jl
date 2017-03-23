@@ -10,6 +10,7 @@ if G <: ANetwork
     @test_throws ErrorException writenetwork("file2.ciao", G())
     @test_throws ErrorException readnetwork("file.ciao", G)
 end
+@test_throws ErrorException Erdos.NI() # not implemented fallback
 
 # test :gml
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
@@ -137,5 +138,6 @@ g = DG(10,20)
 @test writegraph(f, g, :net) == 1
 ga = readgraph(f, :net, G)
 @test g == ga
+
 
  end #testset

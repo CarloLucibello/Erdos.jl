@@ -215,6 +215,13 @@ if G <: ANetwork
     @test  vprop(g, "label")[2] == "Napoleon"
     @test length(eprops(h)) == 1
     @test eprop(h, "value")[1,2] == 1
+
+    elist = collect(edges(g))[1:10]
+    h, vm = subnetwork(g, elist)
+    @test ne(h) == 10
+    for e in elist
+        @test src(e) ∈ vm && dst(e) ∈ vm
+    end
 end
 
 

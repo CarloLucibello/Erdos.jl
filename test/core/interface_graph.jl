@@ -1,12 +1,18 @@
-if !isdefined(:TestGraph)
-    type TestGraph <: AGraph; end
-    type TestDiGraph <: ADiGraph; end
+if !isdefined(:TestIGraph)
+    type TestIGraph <: AGraph; end
+    type TestIDiGraph <: ADiGraph; end
+    type TestIEdge <: AEdge; end
 end
 
 @testset "$TEST $G" begin
 
-g = TestGraph()
-h = TestDiGraph()
+g = TestIGraph()
+h = TestIDiGraph()
+e = TestIEdge()
+
+@test_throws ErrorException src(e)
+@test_throws ErrorException dst(e)
+@test_throws ErrorException reverse(e)
 
 @test_throws ErrorException nv(g)
 @test_throws ErrorException nv(h)

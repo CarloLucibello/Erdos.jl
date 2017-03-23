@@ -47,10 +47,37 @@ Return true if `v` is a vertex of `g`.
 """
 has_vertex(g::AGraphOrDiGraph, v) = v in vertices(g)
 
-function show{G<:AGraphOrDiGraph}(io::IO, g::G)
+
+show(io::IO, g::AGraphOrDiGraph) = shortshow(io, g)
+show(io::IO, g::ANetOrDiNet) = longshow(io, g)
+
+function shortshow{G<:AGraphOrDiGraph}(io::IO, g::G)
     print(io, split("$G",'.')[end],
         "($(nv(g)), $(ne(g)))")
         # is_directed(g) ? " undirected graph" : " directed graph")
+end
+
+
+function longshow{G<:ANetOrDiNet}(io::IO, g::G)
+    print(io, split("$G",'.')[end], "($(nv(g)), $(ne(g)))")
+    print(io, " with ")
+    _printstrvec(io, gprop_names(g))
+    print(io, " graph, ")
+    _printstrvec(io, vprop_names(g))
+    print(io," vertex, ")
+    _printstrvec(io, eprop_names(g))
+    print(io, " edge properties")
+end
+
+function _printstrvec(io::IO, vs::Vector{String})
+    print(io,"[")
+    if length(vs) > 0
+        for s in vs[1:end-1]
+            print(io, "\"" * s * "\", ")
+        end
+        print(io, "\"" * last(vs) * "\"")
+    end
+    print(io,"]")
 end
 
 

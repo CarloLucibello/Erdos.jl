@@ -232,10 +232,13 @@ g10 = CompleteGraph(5, G)
 @test rem_vertex!(g10, 3)
 @test g10 == CompleteGraph(4, G)
 
+
 s = split("$G",'.')[end]
-# TODO
-# @test sprint(show, h1) == s*"(5, 0)"
-# @test sprint(show, h3) == s*"(0, 0)"
+if G <: ANetwork
+    @test sprint(show, h1) == s*"(5, 0) with [] graph, [] vertex, [] edge properties"
+else
+    @test sprint(show, h1) == s*"(5, 0)"
+end
 
 g3 = PathGraph(5, G)
 @test graph(digraph(g3)) == g3

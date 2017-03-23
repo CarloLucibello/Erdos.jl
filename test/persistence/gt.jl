@@ -2,6 +2,41 @@
 
 f,_ = mktemp()
 
+
+g = G(10,20)
+gpath = joinpath(testdir,"testdata","gtest.gt.gz")
+writegraph(gpath, g)
+h = readgraph(gpath, :gt, G, compressed=true)
+@test h == g
+h = readgraph(gpath, G)
+@test h == g
+if G <: ANetwork
+    vprop!(g, "w", rand(nv(g)))
+    writenetwork(gpath, g)
+    h = readnetwork(gpath, :gt, G, compressed=true)
+    test_networks_eq(h, g)
+    h = readnetwork(gpath, G)
+    test_networks_eq(h, g)
+end
+
+g = DG(10,20)
+gpath = joinpath(testdir,"testdata","gtest.gt.gz")
+writegraph(gpath, g)
+h = readgraph(gpath, :gt, G, compressed=true)
+@test h == g
+h = readgraph(gpath, G)
+@test h == g
+if G <: ANetwork
+    vprop!(g, "w", rand(nv(g)))
+    eprop!(g, "w", EdgeMap(g, rand(ne(g)))) #TODO
+
+    writenetwork(gpath, g)
+    h = readnetwork(gpath, :gt, G, compressed=true)
+    test_networks_eq(h, g)
+    h = readnetwork(gpath, G)
+    test_networks_eq(h, g)
+end
+
 g = readgraph(:lesmis, G)
 @test typeof(g) == G
 @test nv(g) == 77
