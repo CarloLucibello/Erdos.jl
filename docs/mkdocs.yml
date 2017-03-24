@@ -12,9 +12,11 @@ extra:
 
 pages:
   - 'Getting Started': 'index.md'
-  - 'Types and Constructors': 'types.md'
+  - 'Graph Types': 'graph_types.md'
   - 'Basic Interface': 'core.md'
-  - 'Maps' : 'maps.md'
+  - 'Edge And Vertex Maps': 'maps.md'
+  - 'Network Types': 'network_types.md'
+  - 'Property Interface for Networks': 'network_interface.md'
   - 'Operators': 'operators.md'
   - 'Traversals': 'traversals.md'
   - 'Distance': 'distance.md'

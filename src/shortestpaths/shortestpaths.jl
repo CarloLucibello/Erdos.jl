@@ -11,7 +11,7 @@ include("floyd-warshall.jl")
 Computes shortest paths using Dijkstra's algorithm.
 See [`dijkstra_shortest_paths`](ref).
 """
-shortest_paths(g::ASimpleGraph, x...; kws...) = dijkstra_shortest_paths(g, x...; kws...)
+shortest_paths(g::AGraphOrDiGraph, x...; kws...) = dijkstra_shortest_paths(g, x...; kws...)
 
 """
     enumerate_paths(state::AbstractPathState)

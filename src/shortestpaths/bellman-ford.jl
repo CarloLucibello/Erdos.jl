@@ -26,10 +26,10 @@ Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_al
 to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
 vertices `sources`). Returns a `BellmanFordState` with relevant traversal information.
 """
-function bellman_ford_shortest_paths{E,T<:Real}(
-        g::ASimpleGraph,
+function bellman_ford_shortest_paths{T<:Real}(
+        g::AGraphOrDiGraph,
         sources::AbstractVector{Int},
-        distmx::AEdgeMap{E,T},
+        distmx::AEdgeMap{T},
     )
     state = BellmanFordState(zeros(Int,nv(g)), fill(typemax(T), nv(g)))
     V = vertextype(g)
@@ -65,19 +65,19 @@ function bellman_ford_shortest_paths{E,T<:Real}(
 end
 
 function bellman_ford_shortest_paths(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         sources::AbstractVector{Int})
 
     bellman_ford_shortest_paths(g, sources, ConstEdgeMap(g,1))
 end
 
 bellman_ford_shortest_paths(
-    g::ASimpleGraph,
+    g::AGraphOrDiGraph,
     v::Int,
     distmx::AEdgeMap=ConstEdgeMap(g,1)
 ) = bellman_ford_shortest_paths(g, [v], distmx)
 
-function has_negative_edge_cycle(g::ASimpleGraph)
+function has_negative_edge_cycle(g::AGraphOrDiGraph)
     try
         bellman_ford_shortest_paths(g, vertices(g))
     catch e

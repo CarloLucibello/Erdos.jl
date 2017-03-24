@@ -20,7 +20,7 @@ Note that this algorithm may return a large amount of data (it will allocate
 on the order of ``O(nv^2)``).
 """
 function floyd_warshall_shortest_paths(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         distmx::AEdgeMap = ConstEdgeMap(g,1)
     )
     T = valtype(distmx)

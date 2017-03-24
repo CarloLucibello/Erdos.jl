@@ -40,7 +40,7 @@ Distance: Approximation Algorithms and Applications. (Chapter 2)
 
 Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)
 """
-function edit_distance(G₁::ASimpleGraph, G₂::ASimpleGraph;
+function edit_distance(G₁::AGraphOrDiGraph, G₂::AGraphOrDiGraph;
                        insert_cost::Function=v->1.0,
                        delete_cost::Function=u->1.0,
                        subst_cost::Function=(u,v)->0.5,
@@ -96,7 +96,7 @@ function is_complete_path(λ, G₁, G₂)
   return length(us) == nv(G₁) && length(vs) == nv(G₂)
 end
 
-function DefaultEditHeuristic(λ, G₁::ASimpleGraph, G₂::ASimpleGraph)
+function DefaultEditHeuristic(λ, G₁::AGraphOrDiGraph, G₂::AGraphOrDiGraph)
   vs = Set()
   for (u,v) in λ
     push!(vs, v)

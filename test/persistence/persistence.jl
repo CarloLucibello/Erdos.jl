@@ -4,28 +4,13 @@
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
-# test :graphml
-@test writegraph(f, p1, :graphml) == 1
-g = readgraph(f, :graphml, G)
-@test g == p1
-graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), G)
-@test nv(graphml_g) == 13
-@test ne(graphml_g) == 15
-
-g = G(10,0)
-@test writegraph(f, g, :graphml) == 1
-ga = readgraph(f, :graphml, G)
-@test g == ga
-
-g = G(10,20)
-@test writegraph(f, g, :graphml) == 1
-ga = readgraph(f, :graphml, G)
-@test g == ga
-
-g = DG(10,20)
-@test writegraph(f, g, :graphml) == 1
-ga = readgraph(f, :graphml, G)
-@test g == ga
+@test_throws ErrorException writegraph("file1.ciao", G())
+@test_throws ErrorException readgraph("file.ciao", G)
+if G <: ANetwork
+    @test_throws ErrorException writenetwork("file2.ciao", G())
+    @test_throws ErrorException readnetwork("file.ciao", G)
+end
+@test_throws ErrorException Erdos.NI() # not implemented fallback
 
 # test :gml
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
@@ -83,52 +68,6 @@ g = DG(10,20)
 @test writegraph(f, g, :dot) == 1
 ga = readgraph(f, :dot, G)
 @test g == ga
-
-# test :gt
-g = readgraph(:lesmis, G)
-@test typeof(g) == G
-@test nv(g) == 77
-@test ne(g) == 254
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
-
-g = readgraph(:serengetifoodweb, G)
-@test typeof(g) == DG
-@test nv(g) == 161
-@test ne(g) == 592
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
-
-
-g = G(10,0)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
-g = G(10,20)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
-g = DG(10,20)
-@test writegraph(f, g, :gt) == 1
-ga = readgraph(f, :gt, G)
-@test g == ga
-
-# # TODO celegansneural appears corrupted
-# fname= joinpath(datasets_dir, "celegansneural.gt.gz")
-# g = readgraph(fname, :gt, G, compressed=true)
-# @test typeof(g) == DG
-# @test nv(g) == 297
-# @test ne(g) == 2359
-
-@test writegraph(f, g, :gt) == 1
-h = readgraph(f, :gt, G)
-@test g == h
 
 # test :gexf
 @test writegraph(f, g, :gexf) == 1
@@ -199,5 +138,6 @@ g = DG(10,20)
 @test writegraph(f, g, :net) == 1
 ga = readgraph(f, :net, G)
 @test g == ga
+
 
  end #testset

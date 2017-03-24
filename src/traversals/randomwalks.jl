@@ -4,7 +4,7 @@
 Performs a random walk on graph `g` starting at vertex `s` and continuing for
 a maximum of `niter` steps. Returns a vector of vertices visited in order.
 """
-function randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
+function randomwalk(g::AGraphOrDiGraph, s::Integer, niter::Integer)
   s in vertices(g) || throw(BoundsError())
   visited = Vector{Int}()
   sizehint!(visited, niter)
@@ -92,7 +92,7 @@ Performs a [self-avoiding walk](https://en.wikipedia.org/wiki/Self-avoiding_walk
 on graph `g` starting at vertex `s` and continuing for a maximum of `niter` steps.
 Returns a vector of vertices visited in order.
 """
-function self_avoiding_randomwalk(g::ASimpleGraph, s::Integer, niter::Integer)
+function self_avoiding_randomwalk(g::AGraphOrDiGraph, s::Integer, niter::Integer)
   s in vertices(g) || throw(BoundsError())
   visited = Vector{Int}()
   svisited = Set{Int}()

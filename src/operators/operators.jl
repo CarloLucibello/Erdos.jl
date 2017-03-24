@@ -63,7 +63,7 @@ end
 
 Merges graphs `g` and `h` by taking the set union of all vertices and edges.
 """
-function union{T<:ASimpleGraph}(g::T, h::T)
+function union{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -84,7 +84,7 @@ edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
 """
-function blkdiag{T<:ASimpleGraph}(g::T, h::T)
+function blkdiag{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     r = T(gnv + nv(h))
     for e in edges(g)
@@ -103,7 +103,7 @@ Produces a graph with edges that are only in both graph `g` and graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function intersect{T<:ASimpleGraph}(g::T, h::T)
+function intersect{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -121,7 +121,7 @@ Produces a graph with edges in graph `g` that are not in graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function difference{T<:ASimpleGraph}(g::T, h::T)
+function difference{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -140,7 +140,7 @@ and vice versa.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function symmetric_difference{T<:ASimpleGraph}(g::T, h::T)
+function symmetric_difference{T<:AGraphOrDiGraph}(g::T, h::T)
     gnv = nv(g)
     hnv = nv(h)
 
@@ -184,7 +184,7 @@ crosspath{G<:AGraph}(len::Integer, g::G) =
 
 Returns the (cartesian product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
 """
-function cartesian_product{G<:ASimpleGraph}(g::G, h::G)
+function cartesian_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
     id(i, j) = (i-1)*nv(h) + j
     for (i1, i2) in edges(g)
@@ -206,7 +206,7 @@ end
 
 Returns the (tensor product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
 """
-function tensor_product{G<:ASimpleGraph}(g::G, h::G)
+function tensor_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
     id(i, j) = (i-1)*nv(h) + j
     for (i1, i2) in edges(g)
@@ -221,68 +221,67 @@ end
 ## subgraphs ###
 
 """
-    subgraph(g, vlist)
+    subgraph(g, vlist) -> sg, vlist
+    subgraph(g, elist) -> sg, vlist
 
-Returns the subgraph of `g` induced by the vertices in  `vlist`.
+
+Returns the subgraph of `g` induced by the vertices in  `vlist` or by the edges
+in `elist`, along with `vlist` itself (a newly created vector for the second method).
 
 The returned graph has `length(vlist)` vertices, with the new vertex `i`
 corresponding to the vertex of the original graph in the `i`-th position
 of `vlist`.
 
-Returns  also a vector `vmap` mapping the new vertices to the
-old ones: the  vertex `i` in the subgraph corresponds to
-the vertex `vmap[i]` in `g`.
+For easy subgraph creation also `g[vlist]` or `g[elist]` can be used.
 
-    subgraph(g, elist)
-
-Returns the subgraph of `g` induced by the edges in `elist`, along with
-the associated vector `vmap` mapping new vertices to the old ones.
-
+If `g` is a network, vector and edge properties won't be converved
+`sg`. You can preserve properties using the [`subnetwork`](@ref) method.
 
 ### Usage Examples:
 ```julia
 g = CompleteGraph(10)
-sg, vmap = subgraph(g, 5:8)
+sg, vlist = subgraph(g, 5:8)
 @assert g[5:8] == sg
 @assert nv(sg) == 4
 @assert ne(sg) == 6
 @assert vm[4] == 8
 
-sg, vmap = subgraph(g, [2,8,3,4])
+sg, vlist = subgraph(g, [2,8,3,4])
 @asssert sg == g[[2,8,3,4]]
 
 elist = [Edge(1,2), Edge(3,4), Edge(4,8)]
-sg, vmap = subgraph(g, elist)
+sg, vlist = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
-function subgraph{G<:ASimpleGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
+function subgraph{G<:AGraphOrDiGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()
-    vmap =Vector{V}(length(vlist))
     for (i,v) in enumerate(vlist)
         newvid[v] = i
-        vmap[i] = v
     end
 
     vset = Set(vlist)
-    for s in vlist
-        for d in out_neighbors(g, s)
-            if d in vset && has_edge(g, s, d)
-                add_edge!(h, newvid[s], newvid[d])
-            end
-        end
-    end
-    return h, vmap
+    _build_subraph!(h, g, vset, newvid)
+
+    return h, vlist
 end
 
 
-function subgraph{G<:ASimpleGraph}(g::G, elist)
+function _build_subraph!(h::AGraphOrDiGraph, g, vset, newvid)
+    for s in vset
+        for d in out_neighbors(g, s)
+            d in vset && add_edge!(h, newvid[s], newvid[d])
+        end
+    end
+end
+
+function subgraph{G<:AGraphOrDiGraph}(g::G, elist)
     h = G()
     V = vertextype(h)
     newvid = Dict{V, V}()
-    vmap = Vector{V}()
+    vlist = Vector{V}()
 
     for e in elist
         u, v = src(e), dst(e)
@@ -290,22 +289,125 @@ function subgraph{G<:ASimpleGraph}(g::G, elist)
             if !haskey(newvid, i)
                 add_vertex!(h)
                 newvid[i] = nv(h)
-                push!(vmap, i)
+                push!(vlist, i)
             end
         end
         add_edge!(h, newvid[u], newvid[v])
     end
-    return h, vmap
+    return h, vlist
 end
 
 
 """
-    g[iter]
+    subnetwork(g, vlist) -> sg, vlist
+    subnetwork(g, elist) -> sg, vlist
 
-Returns the subgraph induced by `iter`. Equivalent to [`subgraph`](@ref)`(g, iter)[1]`.
+Equivalent to [`subgraph`](@ref) but preserves vertex and edge properties
+when `g` is a network.
 """
-getindex(g::ASimpleGraph, iter) = subgraph(g, iter)[1]
 
+function subnetwork{G<:ANetOrDiNet,V<:Integer}(g::G, vlist::AbstractVector{V})
+    allunique(vlist) || error("Vertices in subgraph list must be unique")
+    h = G(length(vlist))
+    newvid = Dict{V, V}()
+    for (i,v) in enumerate(vlist)
+        newvid[v] = i
+    end
+
+    vset = Set(vlist)
+    _build_subnetwork!(h, g, vset, newvid)
+
+    return h, vlist
+end
+
+function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
+    #sound right not to copy graph properties of g
+    for (name, prop) in vprop(g)
+        vprop!(h, name, valtype(prop))
+    end
+    for (name, prop) in eprop(g)
+        eprop!(h, name, valtype(prop))
+    end
+
+    for s in vset
+        i = newvid[s]
+        for (name, prop) in vprop(g)
+            vprop(h, name)[i] = prop[s]
+        end
+        for e in out_edges(g, s)
+            d = dst(e)
+            if d in vset
+                j = newvid[d]
+                ok, enew = add_edge!(h, i, j)
+                !ok && continue
+                for (name, prop) in eprop(g)
+                    eprop(h, name)[enew] = prop[e]
+                end
+            end
+        end
+    end
+end
+
+if VERSION > v"0.6dev"
+    # in julia 0.5 always gets dispatched to this (julia bug)
+    subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
+end
+
+function subnetwork{G<:ANetOrDiNet}(g::G, elist)
+    h = G()
+    V = vertextype(h)
+    newvid = Dict{V, V}()
+    vlist = Vector{V}()
+
+    for (name, prop) in vprop(g)
+        vprop!(h, name, valtype(prop))
+    end
+    for (name, prop) in eprop(g)
+        eprop!(h, name,  valtype(prop))
+    end
+
+    for e in elist
+        u, v = src(e), dst(e)
+        for s in (u,v)
+            if !haskey(newvid, s)
+                add_vertex!(h)
+                newvid[s] = nv(h)
+                push!(vlist, s)
+                for (name, prop) in vprop(g)
+                    vprop(h, name)[nv(h)] = prop[s]
+                end
+            end
+        end
+        ok, enew = add_edge!(h, newvid[u], newvid[v])
+        !ok && continue
+        for (name, prop) in eprop(g)
+            eprop(h, name)[enew] = prop[e]
+        end
+    end
+    return h, vlist
+end
+
+
+if VERSION >= v"0.6dev"
+    """
+        g[iter]
+
+    Returns the subgraph induced by the vertex or edge iterable `iter`.
+    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+    for networks.
+    """
+    getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
+else
+    """
+        g[iter]
+
+    Returns the subgraph induced by the vertex or edge iterable `iter`.
+    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+    for networks.
+    """
+    getindex(g::AGraphOrDiGraph, iter) = subgraph(g, iter)[1]
+    getindex(g::ANetOrDiNet, iter) = subnetwork(g, iter)[1]
+end
 
 """
     egonet(g, v::Int, d::Int; dir=:out)
@@ -315,7 +417,7 @@ Returns the subgraph of `g` induced by the neighbors of `v` up to distance
 the edge direction the edge direction with respect to `v` (i.e. `:in` or `:out`)
 to be considered. This is equivalent to [`subgraph`](@ref)`(g, neighborhood(g, v, d, dir=dir))[1].`
 """
-egonet(g::ASimpleGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
+egonet(g::AGraphOrDiGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g, v, d, dir=dir)]
 
 
 # The following operators allow one to use a Erdos.Graph as a matrix in
@@ -347,25 +449,25 @@ function *{T<:Number}(g::ADiGraph, v::Vector{T})
 end
 
 """sum(g,i) provides 1:in_degree or 2:out_degree vectors"""
-function sum(g::ASimpleGraph, dim::Int)
+function sum(g::AGraphOrDiGraph, dim::Int)
     dim == 1 && return in_degree(g, vertices(g))
     dim == 2 && return out_degree(g, vertices(g))
     error("Graphs are only two dimensional")
 end
 
 
-size(g::ASimpleGraph) = (nv(g), nv(g))
+size(g::AGraphOrDiGraph) = (nv(g), nv(g))
 """size(g,i) provides 1:nv or 2:nv else 1 """
 size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
 
 """sum(g) provides the number of edges in the graph"""
-sum(g::ASimpleGraph) = ne(g)
+sum(g::AGraphOrDiGraph) = ne(g)
 
 """sparse(g) is the adjacency_matrix of g"""
-sparse(g::ASimpleGraph) = adjacency_matrix(g)
+sparse(g::AGraphOrDiGraph) = adjacency_matrix(g)
 
 #arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
-eltype(g::ASimpleGraph) = Float64
-length(g::ASimpleGraph) = nv(g)*nv(g)
-ndims(g::ASimpleGraph) = 2
-issymmetric(g::ASimpleGraph) = !is_directed(g)
+eltype(g::AGraphOrDiGraph) = Float64
+length(g::AGraphOrDiGraph) = nv(g)*nv(g)
+ndims(g::AGraphOrDiGraph) = 2
+issymmetric(g::AGraphOrDiGraph) = !is_directed(g)

@@ -284,7 +284,7 @@ type NeighborhoodVisitor{V} <: SimpleGraphVisitor
     neigs::Vector{V}
 end
 
-NeighborhoodVisitor(g::ASimpleGraph, d::Integer) =
+NeighborhoodVisitor(g::AGraphOrDiGraph, d::Integer) =
     (V=vertextype(g); NeighborhoodVisitor{V}(d, Vector{V}()))
 
 function examine_neighbor!(visitor::NeighborhoodVisitor, u, v, ucolor, vcolor, ecolor)
@@ -303,7 +303,7 @@ Returns a vector of the vertices in `g` at distance less or equal to `d`
 from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
 the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
 """
-function neighborhood(g::ASimpleGraph, v::Integer, d::Integer; dir=:out)
+function neighborhood(g::AGraphOrDiGraph, v::Integer, d::Integer; dir=:out)
     @assert d >= 0 "Distance has to be greater then zero."
     visitor = NeighborhoodVisitor(g, d)
     push!(visitor.neigs, v)

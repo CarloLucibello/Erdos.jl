@@ -3,7 +3,7 @@
 # stub tests for coverage; disregards output.
 if !isdefined(:trivialgraphvisit)
     function trivialgraphvisit(
-        g::ASimpleGraph,
+        g::AGraphOrDiGraph,
         alg::Erdos.SimpleGraphVisitAlgorithm,
         sources)
 

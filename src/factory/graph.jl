@@ -20,6 +20,7 @@ Construct a `Graph{T}` from the adjacency matrix `adjmx`.
 type Graph{T<:Integer} <: AGraph
     ne::Int
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
+                                # fadjlist is sorted
 end
 
 function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
@@ -70,6 +71,7 @@ type DiGraph{T<:Integer} <: ADiGraph
     ne
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
+                                # fadjlist and badjlist are sorted
 end
 
 function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
@@ -98,7 +100,7 @@ DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
 DiGraph() = Graph{Int}()
 
 
-@compat const SimpleGraph{T} = Union{Graph{T}, DiGraph{T}}
+@compat const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}
@@ -111,8 +113,8 @@ digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
 vertextype{T}(::Type{Graph{T}}) = T
 vertextype{T}(::Type{DiGraph{T}}) = T
 
-nv{T}(g::SimpleGraph{T}) = T(length(g.fadjlist))
-ne(g::SimpleGraph) = g.ne
+nv{T}(g::GraphOrDiGraph{T}) = T(length(g.fadjlist))
+ne(g::GraphOrDiGraph) = g.ne
 
 pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
 pop_vertex!(g::DiGraph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); pop!(g.badjlist); nv(g)+1)
@@ -221,7 +223,7 @@ function reverse!(g::DiGraph)
 end
 
 
-out_neighbors(g::SimpleGraph,v) = g.fadjlist[v]
+out_neighbors(g::GraphOrDiGraph,v) = g.fadjlist[v]
 in_neighbors(g::DiGraph,v) = g.badjlist[v]
 
 edge{T}(g::DiGraph{T}, u, v) = Edge{T}(u, v)
@@ -232,10 +234,10 @@ edge{T}(g::Graph{T}, u, v) = Edge{T}(u, v)
 
 digraph{T}(g::Graph{T}) = DiGraph{T}(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
 
-out_adjlist(g::SimpleGraph) = g.fadjlist
+out_adjlist(g::GraphOrDiGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
 
-=={G<:SimpleGraph}(g::G, h::G) = nv(g) == nv(h) &&
+=={G<:GraphOrDiGraph}(g::G, h::G) = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 function has_edge(g::Graph, u, v)
@@ -284,5 +286,71 @@ function rebuild!(g::DiGraph)
     end
     for neigs in g.badjlist
         sort!(neigs)
+    end
+end
+
+function swap_vertices!(g::Graph, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.fadjlist[u])
+        neigv = deepcopy(g.fadjlist[v])
+
+        for j in neigu
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+        for j in neigv
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        g.fadjlist[u], g.fadjlist[v] = g.fadjlist[v], g.fadjlist[u]
+    end
+end
+
+function swap_vertices!(g::DiGraph, u::Integer, v::Integer)
+    if u != v
+        #TODO copying to avoid problems with self edges
+        # maybe can copy only one of the two
+        neigu = deepcopy(g.fadjlist[u])
+        neigv = deepcopy(g.fadjlist[v])
+        neiguin = deepcopy(g.badjlist[u])
+        neigvin = deepcopy(g.badjlist[v])
+
+        for j in neigu
+            adj = g.badjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+
+        for j in neigv
+            adj = g.badjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        for j in neiguin
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, u)
+            adj[kj] = v
+            sort!(adj)
+        end
+
+        for j in neigvin
+            adj = g.fadjlist[j]
+            kj = searchsortedfirst(adj, v)
+            adj[kj] = u
+            sort!(adj)
+        end
+
+        g.fadjlist[u], g.fadjlist[v] = g.fadjlist[v], g.fadjlist[u]
+        g.badjlist[u], g.badjlist[v] = g.badjlist[v], g.badjlist[u]
     end
 end

@@ -1,10 +1,10 @@
-"""
-    @compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
+#valtype{V,T}(m::AVertexMap{V,T}) = T #TODO not working for some reason
+valtype{T}(m::AbstractVector{T}) = T
+valtype{V,T}(m::Dict{V,T}) = T
 
-Type representing an abstract vertex map.
-"""
-@compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
 
+#TODO make VertexMap is own type
+#end after hasindex -> haskey 
 """
     hasindex(v, i::Integer)
 
@@ -19,7 +19,7 @@ hasindex(v::Dict, i::Integer) = haskey(v, i)
 Returns a map that associates values of type `T`
 to the vertices of  graph `g`.
 """
-function VertexMap{T}(g::ASimpleGraph, ::Type{T})
+function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
     V = vertextype(g)
     return Dict{V,T}()
 end

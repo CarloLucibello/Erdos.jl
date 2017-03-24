@@ -15,7 +15,7 @@ specify a direction (`:in`, `:out`, or `:all` are currently supported; `:out`
 is default for both directed and undirected graphs) and a data type for the
 matrix (defaults to `Int`).
 """
-function adjacency_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
+function adjacency_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
     n_v = nv(g)
     nz = ne(g) * (is_directed(g)? 1 : 2)
     colpt = ones(Int, n_v + 1)
@@ -69,14 +69,14 @@ adjacency_matrix(g::AGraph, T::DataType=Int) = adjacency_matrix(g, :out, T)
 Returns a sparse [Laplacian matrix](https://en.wikipedia.org/wiki/Laplacian_matrix)
 for a graph `g`, indexed by `[u, v]` vertices. `dir` has to be `:in, :out` or `:all`.
 """
-function laplacian_matrix(g::ASimpleGraph, dir::Symbol=:out, T::DataType=Int)
+function laplacian_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
     A = adjacency_matrix(g, dir, T)
     D = spdiagm(sum(A,2)[:])
     return D - A
 end
 
 """
-    incidence_matrix(g::ASimpleGraph, T::DataType=Int; oriented=false)
+    incidence_matrix(g::AGraphOrDiGraph, T::DataType=Int; oriented=false)
 
 Returns a sparse node-arc incidence matrix for a graph, indexed by
 `[v, i]`, where `i` is in `1:ne(g)`, indexing an edge `e`. For
@@ -87,7 +87,7 @@ value of `1` indicates that `dst(e) == v`. Otherwise, the value is
 For undirected graphs, both entries are `1` if `oriented=false`,
 otherwise `[v, i] -> -1` and `[u, i] -> 1` if `v < u`.
 """
-function incidence_matrix(g::ASimpleGraph, T::DataType=Int; oriented::Bool = false)
+function incidence_matrix(g::AGraphOrDiGraph, T::DataType=Int; oriented::Bool = false)
     isdir = is_directed(g)
     n_v = nv(g)
     n_e = ne(g)

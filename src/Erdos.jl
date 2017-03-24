@@ -1,9 +1,13 @@
 __precompile__(true)
+
+"""
+A graph and network analysis package for julia.
+"""
 module Erdos
 
-using GZip
-using StatsFuns # randgraphs
-using EzXML # persistence
+import GZip # I/O
+import StatsFuns # randgraphs
+using EzXML # I/O  graphml, gexf  #TODO import
 import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
 import BlossomV # matching
 import Clustering: kmeans # community detection
@@ -21,16 +25,20 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims,
             join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!, iteratorsize, values,
+            sort, push!, pop!, iteratorsize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
-            HasLength, HasShape     #iterators
+            HasLength, HasShape,     #iterators
+            haskey #edgemap
 
 #interface
-export AGraph, ADiGraph, ASimpleGraph,
-    graphtype, digraphtype, edgetype, vertextype,
+export AGraph, ADiGraph, AGraphOrDiGraph,
+ANetwork, ADiNetwork, ANetOrDiNet,
+graphtype, digraphtype, edgetype, vertextype,
+
 
 # edge
-AEdge, Edge, is_ordered, reverse, #sort
+AEdge, Edge, reverse,
+AIndexedEdge, IndexedEdge, idx,
 
 # core
 vertices, edges, src, dst,
@@ -46,8 +54,7 @@ unsafe_add_edge!, rebuild!,
 rem_vertices!, swap_vertices!, pop_vertex!,
 
 # graph types (factory)
-reverse!, Graph, DiGraph, SimpleGraph,
-GTDiGraph, GTGraph, SimpleGTGraph, GTEdge,
+reverse!, Graph, DiGraph, DiNetwork, Network,
 
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,
@@ -63,6 +70,7 @@ complement, blkdiag, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,
+subnetwork,
 
 # graph visit
 SimpleGraphVisitor, TrivialGraphVisitor, LogGraphVisitor,
@@ -107,7 +115,7 @@ contract,
 a_star,
 
 # persistence
-readgraph, writegraph,
+readgraph, writegraph, readnetwork, writenetwork,
 
 # flow
 maximum_flow, EdmondsKarpAlgorithm, DinicAlgorithm, BoykovKolmogorovAlgorithm, PushRelabelAlgorithm,
@@ -147,33 +155,30 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
 # maps
 AVertexMap, ConstVertexMap, hasindex, VertexMap,
-AEdgeMap, ConstEdgeMap, EdgeMap
+AEdgeMap, ConstEdgeMap, EdgeMap,
 
-"""An optimized graphs package.
+# properties
+PropertyStore,
 
-Simple graphs (not multi- or hypergraphs) are represented in a memory- and
-time-efficient manner with adjacency lists and edge sets. Both directed and
-undirected graphs are supported via separate types, and conversion is available
-from directed to undirected.
+graph_property, set_graph_property!, rem_graph_property!, has_graph_property,
+vertex_property, add_vertex_property!, rem_vertex_property!, has_vertex_property,
+edge_property, add_edge_property!, rem_edge_property!, has_edge_property,
 
-The project goal is to mirror the functionality of robust network and graph
-analysis libraries such as NetworkX while being simpler to use and more
-efficient than existing Julian graph libraries such as Graphs.jl. It is an
-explicit design decision that any data not required for graph manipulation
-(attributes and other information, for example) is expected to be stored
-outside of the graph structure itself. Such data lends itself to storage in
-more traditional and better-optimized mechanisms.
-"""
-Erdos
+#short forms
+gprop, gprop!, rem_gprop!, has_gprop, gprop_names,
+vprop, vprop!, rem_vprop!, has_vprop, vprop_names,
+eprop, eprop!, rem_eprop!, has_eprop, eprop_names
 
 include("utils.jl")
-include("core/interface.jl")
+include("core/interface_graph.jl")
+    include("core/interface_network.jl")
     include("core/core.jl")
     include("core/edge.jl")
     include("core/edgeiter.jl")
     include("core/misc.jl")
 include("maps/vertexmap.jl")
     include("maps/edgemap.jl")
+    include("maps/property_store.jl")
 include("operators/operators.jl")
 include("traversals/graphvisit.jl")
     include("traversals/bfs.jl")
@@ -213,7 +218,7 @@ include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("dismantling/ci.jl")
 include("factory/graph.jl")
-    include("factory/gtgraph.jl")
+    include("factory/net.jl")
 include("persistence/common.jl")
     include("persistence/dot.jl")
     include("persistence/gexf.jl")

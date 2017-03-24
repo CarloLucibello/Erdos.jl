@@ -6,19 +6,24 @@ testdir = dirname(@__FILE__)
 
 tests = [
     "factory/graph",
-    "factory/gtgraph",
+    "factory/net",
     "core/edge",
-    "core/interface",
+    "core/interface_graph",
+    "core/interface_network",
     "core/core",
     "core/edgeiter",
     "maps/vertexmap",
     "maps/edgemap",
+    "maps/property_store",
     "operators/operators",
     "distances/distance",
     "distances/edit_distance",
     "linalg/spectral",
     "persistence/persistence",
     "persistence/datasets",
+    "persistence/gt",
+    "persistence/graphml",
+    "persistence/gml",
     "generators/randgraphs",
     "generators/staticgraphs",
     "generators/smallgraphs",
@@ -57,10 +62,12 @@ tests = [
     "utils"
 ]
 
+include("common.jl")
+
 GLIST =    [
             (Graph{Int64}, DiGraph{Int64}),
             (Graph{UInt32}, DiGraph{UInt32}),
-            (GTGraph, GTDiGraph)
+            (Network, DiNetwork)
             ]
 
 for GDG in GLIST, t in tests
@@ -72,20 +79,5 @@ for GDG in GLIST, t in tests
 
     include(joinpath(testdir,"$(t).jl"))
 end
-
-#
-# for t in tests
-#     fname = joinpath(testdir,"$(t).jl")
-#     ls = readlines(fname)
-#     open(fname, "w") do f
-#         println(f, "@testset \"\$TEST \$G\" begin")
-#         println(f)
-#         for l in ls
-#             println(f, l)
-#         end
-#         println(f)
-#         println(f, "end # testset")
-#     end
-# end
 
 println("Finished testing Erdos")
