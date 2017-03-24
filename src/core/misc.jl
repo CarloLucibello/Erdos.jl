@@ -9,8 +9,9 @@ Time complexity: O(length(degs)^2)
 function is_graphical(degs::Vector{Int})
     iseven(sum(degs)) || return false
     n = length(degs)
+    cumdeg = cumsum(degs)
     for r=1:n-1
-        cond = sum(i->degs[i], 1:r) <= r*(r-1) + sum(i->min(r,degs[i]), r+1:n)
+        cond = cumdeg[r] <= r*(r-1) + sum(i->min(r,degs[i]), r+1:n)
         cond || return false
     end
     return true
