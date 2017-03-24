@@ -91,7 +91,7 @@ Returns a dictionary with elements `property_name => property_value`
 graph_property(g::ANetOrDiNet, name::String) = graph_property(g.props, name)
 graph_property(g::ANetOrDiNet) = graph_properties(g.props)
 
-"""See [`graph_property!`](@ref)"""
+"""See [`graph_property`](@ref)"""
 gprop = graph_property
 
 """

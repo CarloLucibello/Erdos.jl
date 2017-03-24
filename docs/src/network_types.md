@@ -10,8 +10,6 @@ types con be defined inheriting from `ANetwork` and `ADiNetwork` abstract types.
 ANetwork
 ADiNetwork
 AIndexedEdge
-AEdgeMap
-AVertexMap
 ```
 
 ## Network / DiNetwork / IndexedEdge
@@ -20,14 +18,6 @@ AVertexMap
 Network
 DiNetwork
 IndexedEdge
-```
-## Property Interface
-
-```@autodocs
-Modules = [Erdos]
-Pages   = ["core/interface_network.jl"]
-Order   = [:function]
-Private = false
 ```
 
 ## Defining new network types

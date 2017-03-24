@@ -18,6 +18,7 @@ if G <: ANetwork
     h = readnetwork(gpath, G)
     test_networks_eq(h, g)
 end
+rm(gpath)
 
 g = DG(10,20)
 gpath = joinpath(testdir,"testdata","gtest.gt.gz")
@@ -36,6 +37,7 @@ if G <: ANetwork
     h = readnetwork(gpath, G)
     test_networks_eq(h, g)
 end
+rm(gpath)
 
 g = readgraph(:lesmis, G)
 @test typeof(g) == G
