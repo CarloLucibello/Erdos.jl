@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-f,_ = mktemp()
+f, fio = mktemp()
 
 
 g = G(10,20)
@@ -101,4 +101,6 @@ h2 = readnetwork(f, :gt, G)
 
 end #if network ####################
 
+
+isfile(f) && rm(f)
  end #testset
