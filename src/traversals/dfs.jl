@@ -70,8 +70,8 @@ function traverse_graph!(
         alg::DepthFirst,
         s,
         visitor::SimpleGraphVisitor;
-        vcolormap = VertexMap(g, Int),
-        ecolormap = ConstEdgeMap(g, 0)
+        vcolormap::AVertexMap = VertexMap(g, Int),
+        ecolormap::AEdgeMap = ConstEdgeMap(g, 0)
     )
 
     vcolormap[s] = -1
@@ -120,7 +120,7 @@ Tests whether a graph contains a cycle through depth-first search. It
 returns `true` when it finds a cycle, otherwise `false`.
 """
 function is_cyclic(g::AGraphOrDiGraph)
-    cmap = zeros(Int, nv(g))
+    cmap = VertexMap(g, zeros(Int, nv(g)))
     visitor = DFSCyclicTestVisitor()
 
     for s in vertices(g)
@@ -155,7 +155,7 @@ end
 
 function topological_sort_by_dfs(g::AGraphOrDiGraph)
     nvg = nv(g)
-    cmap = zeros(Int, nvg)
+    cmap = VertexMap(g, zeros(Int, nvg))
     visitor = TopologicalSortVisitor(nvg)
 
     for s in vertices(g)

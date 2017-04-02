@@ -92,9 +92,9 @@ immutable GDistanceVisitor <: SimpleGraphVisitor end
 Fills `dists` with the geodesic distances of vertices in  `g` from vertex/vertices `source`.
 `dists` can be either a vector or a dictionary.
 """
-function gdistances!(g::AGraphOrDiGraph, source, dists)
+function gdistances!(g::AGraphOrDiGraph, source, dists::Union{AbstractVector, Dict})
     visitor = GDistanceVisitor()
-    traverse_graph!(g, BreadthFirst(), source, visitor, vcolormap=dists)
+    traverse_graph!(g, BreadthFirst(), source, visitor, vcolormap=VertexMap(g, dists))
     for i in eachindex(dists)
         dists[i] -= 1
     end
@@ -158,7 +158,7 @@ end
 function bfs_tree!(visitor::TreeBFSVisitorVector,
         g::AGraphOrDiGraph,
         s::Int;
-        vcolormap = Dict{Int,Int}(),
+        vcolormap::AVertexMap = VertexMap(g, Int),
         queue = Vector{Int}())
 
     length(visitor.tree) >= nv(g) || error("visitor.tree too small for graph")
@@ -243,7 +243,7 @@ function _bipartite_visitor(g::AGraph, s; vmap=Dict{Int,Int}())
     for v in keys(vmap) #have to reset vmap, otherway problems with digraphs
         vmap[v] = 0
     end
-    traverse_graph!(g, BreadthFirst(), s, visitor, vcolormap=vmap)
+    traverse_graph!(g, BreadthFirst(), s, visitor, vcolormap=VertexMap(g, vmap))
     return visitor
 end
 

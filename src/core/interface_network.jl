@@ -1,3 +1,19 @@
+# AEdgeMap and AVertexMap defined her for include precedence
+
+"""
+    abstract type AEdgeMap{T} end
+
+Type representing an abstract edge map with value type `T`.
+"""
+@compat abstract type AEdgeMap{T} end
+
+"""
+    abstract type AVertexMap{T} end
+
+Type representing an abstract vertex map with value type `T`.
+"""
+@compat abstract type AVertexMap{T} end
+
 """
     abstract type AIndexedEdge <: AEdge end
 
@@ -11,22 +27,6 @@ Edge types with unique indexes, accessed by [`idx`](@ref)
 Returns the index of edge `e`.
 """
 idx(e::AIndexedEdge) = error("Method not defined")
-
-"""
-    const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
-
-Type representing an abstract vertex map.
-"""
-@compat const AVertexMap{V,T} = Union{AbstractVector{T}, Dict{V,T}}
-
-"""
-    AEdgeMap{T}
-
-Type representing an abstract edge map.
-"""
-@compat abstract type AEdgeMap{T} end
-
-valtype{T}(m::AEdgeMap{T}) = T
 
 """
     abstract type ANetwork <: AGraph end
@@ -132,6 +132,7 @@ eprop!(g, "weight", Float64)
 """
 add_edge_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_edge_property!(g.props, name, EdgeMap(g, T))
 add_edge_property!(g::ANetOrDiNet, name::String, emap::AEdgeMap) = add_edge_property!(g.props, name, emap)
+add_edge_property!(g::ANetOrDiNet, name::String, data) = add_edge_property!(g, name, EdgeMap(g, data))
 
 
 """See [`add_edge_property!`](@ref)"""
@@ -196,6 +197,7 @@ As an alternative, an existing vertex map `vmap` can be stored into `g`.
 """
 add_vertex_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_vertex_property!(g.props, name, VertexMap(g, T))
 add_vertex_property!(g::ANetOrDiNet, name::String, vmap::AVertexMap) = add_vertex_property!(g.props, name, vmap)
+add_vertex_property!(g::ANetOrDiNet, name::String, data) = add_vertex_property!(g, name, VertexMap(g, data))
 
 """See [`add_vertex_property!`](@ref)"""
 vprop! = add_vertex_property!

@@ -154,7 +154,7 @@ MatchingResult, minimum_weight_perfect_matching,
 dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
 # maps
-AVertexMap, ConstVertexMap, hasindex, VertexMap,
+AVertexMap, ConstVertexMap, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
 
 # properties

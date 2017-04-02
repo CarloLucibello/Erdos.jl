@@ -1,14 +1,15 @@
 ## v0.2.0
-- Defined Abstract Network types and interfaces. Netoworks are graphs with properties. Properties can be associated to vertices, edges or the graph itself
+- Defined Abstract Network types and interfaces. Networks are graphs with properties. Properties can be associated to vertices, edges or the graph itself
 - Implemented two default network types: `Network` and `DiNetwork`.
 Internally they are the `GTGraph` and `GTDiGraph` of previous versions,
-with the addition of a memeber of the newly defined type `PropertyStore`.
+with the addition of a member of the newly defined type `PropertyStore`.
 - `readnetwork` and `writenetwork` can read/write graph and graph/vertex/edge/properties to and from some graph file formats:
 .gt, .graphml, .gml
 - `subnetwork` is the analogue of `subgraph` method and preserves vertex/edge properties
 - improvements to the `EdgeMap` type and interface
 - more efficient `remove_vertex` and `swap_vertices`
 - `add_edge!` now returns `(ok, new_edge)` instead of just `ok`
+- `VertexMap` is now its own type
 
 ## v0.1.3  2017.3.8
 - doc system updates
