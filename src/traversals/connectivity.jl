@@ -24,7 +24,7 @@ function connected_components!(label::Vector{Int}, g::AGraph)
     # passed to components(a)
     nvg = nv(g)
     visitor = Erdos.ComponentVisitorVector(label, 0)
-    colormap = fill(0, nvg)
+    colormap = VertexMap(g, fill(0, nvg))
     queue = Vector{Int}()
     sizehint!(queue, nvg)
     for v in 1:nvg
@@ -176,7 +176,7 @@ Computes the strongly connected components of a directed graph.
 """
 function strongly_connected_components(g::ADiGraph)
     nvg = nv(g)
-    cmap = zeros(Int, nvg)
+    cmap = VertexMap(g, zeros(Int, nvg))
     nv(g) == 0 && return Vector{Int}[Int[]]
     components = Vector{Vector{Int}}()
 

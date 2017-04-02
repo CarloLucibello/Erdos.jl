@@ -1,3 +1,7 @@
+# AEdgeMap{T} defined in newtwork_sinterface.jl
+
+valtype{T}(m::AEdgeMap{T}) = T
+
 """
     type EdgeMap{G <: AGraphOrDiGraph, T, D} <: AEdgeMap{T}
         g::G
@@ -13,6 +17,10 @@ a matrix or a vector (for graphs with indexed edges).
 Returns a map that associates values of type `T`
 to the vertices of  graph `g`. The underlying storage structures is chosen
 accordingly.
+
+    EdgeMap{T}(g, data)
+
+Construct a EdgeMap with `data` as underlying storage.
 """
 type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     g::G
@@ -100,7 +108,7 @@ get{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::AEdge, x) = get
 haskey{G<:AGraphOrDiGraph,T,E<:AEdge}(m::EdgeMap{G,T,Dict{E,T}}, e::AEdge) = haskey(m.data, E(src(e),dst(e)))
 ####
 values{G,T,D<:Dict}(m::EdgeMap{G,T,D}) = values(m.data)
-values{G,T,D<:Matrix}(m::EdgeMap{G,T,D}) = m.data
+values{G,T,D<:Array}(m::EdgeMap{G,T,D}) = m.data
 values{G,T,D<:AbstractSparseMatrix}(m::EdgeMap{G,T,D}) = nonzeros(m.data)
 
 ==(m1::EdgeMap, m2::EdgeMap) = m1.data == m2.data
