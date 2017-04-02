@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-(f,fio) = mktemp()
+f,fio = mktemp()
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
@@ -93,29 +93,23 @@ ga = readgraph(f, :gexf, G)
 g10 = CompleteGraph(10, G)
 @test typeof(g10) == G
 
-fname,fio = mktemp()
-close(fio)
-@test writegraph(fname, g10, :net) == 1
-@test readgraph(fname,:net, G) == g10
-@test_throws ErrorException readgraph(fname, G)
-rm(fname)
+@test writegraph(f, g10, :net) == 1
+@test readgraph(f,:net, G) == g10
+@test_throws ErrorException readgraph(f, G)
 
 g10 = PathDiGraph(10, DG)
 @test typeof(g10) == DG
-@test writegraph(fname, g10, :net) == 1
-@test readgraph(fname,:net, G) == g10
-rm(fname)
+@test writegraph(f, g10, :net) == 1
+@test readgraph(f,:net, G) == g10
 
 g10 = PathDiGraph(10, DG)
-@test writegraph(fname, g10, :net) == 1
-@test readgraph(fname,:net, G) == g10
-rm(fname)
+@test writegraph(f, g10, :net) == 1
+@test readgraph(f,:net, G) == g10
 
-@test writegraph(fname, g10, :net, compress=true) == 1
-@test readgraph(fname,:net, G, compressed=true) == g10
-rm(fname)
+@test writegraph(f, g10, :net, compress=true) == 1
+@test readgraph(f,:net, G, compressed=true) == g10
 
-fname = joinpath(fname * ".net.gz")
+fname = joinpath(f * ".net.gz")
 @test writegraph(fname, g10) == 1
 @test readgraph(fname, G) == g10
 rm(fname)
@@ -139,5 +133,5 @@ g = DG(10,20)
 ga = readgraph(f, :net, G)
 @test g == ga
 
-
+isfile(f) && rm(f)
  end #testset

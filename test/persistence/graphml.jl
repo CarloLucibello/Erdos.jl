@@ -41,4 +41,5 @@ end
 
 end #if network ############################
 
+isfile(f) && rm(f)
 end #testset
