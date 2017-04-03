@@ -25,7 +25,7 @@ end
 
 graphmlparse(T, x::String) = parse(T, x)
 graphmlparse(::Type{String}, x::String) = x
-if VERSION < v"0.6dev"
+if VERSION < v"0.6.0-dev.693" # julia PR #16986
 graphmlparse{T}(::Type{Vector{T}}, x::String) =
     map(v->parse(T,v),  split(x, ','))
 else
