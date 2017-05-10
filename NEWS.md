@@ -1,3 +1,7 @@
+## v0.2.1
+- `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.
+- add `is_tree(g)`
+
 ## v0.2.0
 - Defined Abstract Network types and interfaces. Networks are graphs with properties. Properties can be associated to vertices, edges or the graph itself
 - Implemented two default network types: `Network` and `DiNetwork`.

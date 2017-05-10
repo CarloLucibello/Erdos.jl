@@ -24,8 +24,8 @@ EdgeColorMap :
 type DepthFirst <: SimpleGraphVisitAlgorithm
 end
 
-function depth_first_visit_impl!(
-    g::AGraphOrDiGraph,      # the graph
+function depth_first_visit_impl!{G<:AGraphOrDiGraph}(
+    g::G,      # the graph
     stack,                          # an (initialized) stack of vertex
     vcolormap::AVertexMap,    # an (initialized) color-map to indicate status of vertices
     ecolormap::AEdgeMap,      # an (initialized) color-map to indicate status of edges
@@ -40,12 +40,11 @@ function depth_first_visit_impl!(
             v, tstate = next(udsts, tstate)
             ucolor = get(vcolormap, u, 0)
             vcolor = get(vcolormap, v, 0)
-            v_edge = Edge(u,v)
+            v_edge = Edge(G,u,v) # ordering u,v for undirected graphs
             ecolor = get(ecolormap, v_edge, 0)
             examine_neighbor!(visitor, u, v, ucolor, vcolor, ecolor) #no return here
 
             ecolormap[v_edge] = 1
-
             if vcolor == 0
                 found_new_vertex = true
                 vcolormap[v] = vcolormap[u] - 1 #negative numbers
@@ -60,7 +59,7 @@ function depth_first_visit_impl!(
 
         if !found_new_vertex
             close_vertex!(visitor, u)
-            vcolormap[u] *= -1
+            vcolormap[u] *= -1 #revert to positive
         end
     end
 end
@@ -106,7 +105,7 @@ function examine_neighbor!(
     vcolor,
     ecolor)
 
-    if vcolor < 0 && ecolor == 0
+    if vcolor < 0 && vcolor != ucolor+1 # seen and not parent
         vis.found_cycle = true
     end
 end
@@ -114,15 +113,14 @@ end
 discover_vertex!(vis::DFSCyclicTestVisitor, v) = !vis.found_cycle
 
 """
-    is_cyclic(g)
+    has_cycles(g)
 
-Tests whether a graph contains a cycle through depth-first search. It
-returns `true` when it finds a cycle, otherwise `false`.
+Tests whether a graph contains a simple cycle through depth-first search.
+See also [`is_tree`](@ref).
 """
-function is_cyclic(g::AGraphOrDiGraph)
-    cmap = VertexMap(g, zeros(Int, nv(g)))
+function has_cycles(g::AGraphOrDiGraph)
+    cmap = zeros(Int, nv(g))
     visitor = DFSCyclicTestVisitor()
-
     for s in vertices(g)
         if cmap[s] == 0
             traverse_graph!(g, DepthFirst(), s, visitor, vcolormap=cmap)
@@ -131,6 +129,41 @@ function is_cyclic(g::AGraphOrDiGraph)
     end
     return false
 end
+"""
+    is_tree(g)
+
+Check whether `g` is a tree.
+Return `false` whenever [`has_cycles`](@ref) returns `true` and viceversa.
+"""
+is_tree(g::AGraphOrDiGraph) = !has_cycles(g)
+
+## This is a faster implementation found on
+## http://www.geeksforgeeks.org/detect-cycle-in-a-graph/
+##  TODO benchmark carefully and eventually use this
+# function _has_cycles(g, v, visited, parent)
+#     visited[v] = 1
+#     for i in neighbors(g, v)
+#         if visited[i] == 0
+#             _has_cycles(g, i, visited, v) && return true
+#         elseif i != parent
+#             return true
+#         end
+#     end
+#     return false
+# end
+#
+#
+# function has_cycles(g::AGraph)
+#     visited = zeros(Int, nv(g))
+#     for i=1:nv(g)
+#         if visited[i] == 0
+#             _has_cycles(g, i, visited, -1) && return true
+#         end
+#     end
+#
+#     return false
+# end
+#
 
 # Topological sort using DFS
 
