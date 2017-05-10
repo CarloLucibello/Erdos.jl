@@ -12,3 +12,5 @@
 
 @deprecate adjacency_spectrum(g)  eigvals(full(adjacency_matrix(g)))
 @deprecate laplacian_spectrum(g)  eigvals(full(laplacian_matrix(g)))
+
+@deprecate is_cyclic(g) has_cycles(g)
