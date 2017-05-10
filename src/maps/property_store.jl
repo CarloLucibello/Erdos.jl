@@ -64,7 +64,7 @@ vertex_properties(p::PropertyStore) = p.vmaps
 
 function swap_vertices!(props::PropertyStore, u::Integer, v::Integer)
     for vmap in values(props.vmaps)
-        hasu, hasv = hasindex(vmap, u), hasindex(vmap, v)
+        hasu, hasv = haskey(vmap, u), haskey(vmap, v)
         if hasu && hasv
             vmap[u], vmap[v] = vmap[v], vmap[u]
         else

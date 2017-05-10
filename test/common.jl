@@ -24,8 +24,8 @@ function test_networks_eq(g::ANetOrDiNet, h::ANetOrDiNet)
         pg = vprop(g, pname)
         # @test valtype(pg) == valtype(ph)
         for i=1:nv(g)
-            @test  hasindex(ph, i) == hasindex(pg, i)
-            hasindex(ph, i) || continue
+            @test  haskey(ph, i) == haskey(pg, i)
+            haskey(ph, i) || continue
             if valtype(ph) <: NumTypes
                 @test ph[i] ≈ pg[i]
             else
