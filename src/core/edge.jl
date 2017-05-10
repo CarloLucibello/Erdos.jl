@@ -17,6 +17,9 @@ immutable Edge{T} <: AEdge
     dst::T
 end
 
+Edge{G<:ADiGraph}(::Type{G},u,v) = Edge(u,v)
+Edge{G<:AGraph}(::Type{G},u,v) =  v > u ? Edge(u,v) : Edge(v,u)
+
 function Edge{T,S}(u::T, v::S)
     V = promote_type(T,S)
     return Edge{V}(promote(u, v)...)

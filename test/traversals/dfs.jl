@@ -9,10 +9,21 @@ z = dfs_tree(g5, 1)
 @test !has_edge(z, 1, 3)
 
 @test topological_sort_by_dfs(g5) == [1, 2, 3, 4]
-@test !is_cyclic(g5)
+@test !has_cycles(g5)
+@test is_tree(g5)
+
 g = DG(3)
 add_edge!(g,1,2); add_edge!(g,2,3); add_edge!(g,3,1)
+@test has_cycles(g)
+@test !is_tree(g)
 
-@test is_cyclic(g)
+g = G(4)
+add_edge!(g,1,2); add_edge!(g,2,3); add_edge!(g,2,4);
+@test !has_cycles(g)
+@test is_tree(g)
+
+add_edge!(g,1,3);
+@test has_cycles(g)
+@test !is_tree(g)
 
 end # testset

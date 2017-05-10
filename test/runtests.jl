@@ -1,4 +1,3 @@
-include("../src/Erdos.jl")
 using Erdos
 using Base.Test
 

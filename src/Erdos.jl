@@ -81,7 +81,7 @@ examine_neighbor!, visited_vertices, traverse_graph!, traverse_graph_withlog,
 BreadthFirst, gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
 
 # dfs
-DepthFirst, is_cyclic, topological_sort_by_dfs, dfs_tree,
+DepthFirst, has_cycles, topological_sort_by_dfs, dfs_tree, is_tree,
 
 # random
 randomwalk, self_avoiding_randomwalk, nonbacktracking_randomwalk,
