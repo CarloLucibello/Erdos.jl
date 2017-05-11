@@ -106,7 +106,7 @@ function writenetgml(io::IO, g::ANetOrDiNet)
         println(io,"\tnode [")
         println(io,"\t\tid $i")
         for (pname, p) in vprop(g)
-            hasindex(p, i) && println(io,"\t\t$pname $(gmlprintval(p[i]))")
+            haskey(p, i) && println(io,"\t\t$pname $(gmlprintval(p[i]))")
         end
         println(io,"\t]")
     end

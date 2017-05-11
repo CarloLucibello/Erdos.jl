@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-(f,fio) = mktemp()
+f, fio = mktemp()
 
 p = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 g = graph(:tutte, G)
@@ -54,4 +54,5 @@ end
 
 end #if network ####################
 
+isfile(f) && rm(f)
  end #testset
