@@ -89,7 +89,7 @@ Returns a dictionary with elements `property_name => property_value`
 [`gprop`](@ref) is the short form of this function.
 """
 graph_property(g::ANetOrDiNet, name::String) = graph_property(g.props, name)
-graph_property(g::ANetOrDiNet) = graph_properties(g.props)
+graph_property(g::ANetOrDiNet) = graph_property(g.props)
 
 """See [`graph_property`](@ref)"""
 gprop = graph_property
@@ -159,10 +159,17 @@ Return an edge map corresponding to property `name` of edges in `g`.
 
 Returns a dictionary with elements `property_name => edge_map`.
 
+    edge_property(g, e)
+
+Returns a dictionary of the form `name => val` containing all the properties
+associated to edge `e`.
+
 [`eprop`](@ref) is the short form of this function.
 """
 edge_property(g::ANetOrDiNet, name::String) = edge_property(g.props, name)
-edge_property(g::ANetOrDiNet) = edge_properties(g.props)
+edge_property(g::ANetOrDiNet) = edge_property(g.props)
+edge_property(g::ANetOrDiNet, e::AEdge) = edge_property(g.props, e)
+
 
 """See [`edge_property`](@ref)"""
 eprop = edge_property
@@ -223,9 +230,15 @@ Return an vertex map corresponding to property `name` of vertices in `g`.
     vertex_property(g)
 
 Returns a dictionary with elements `property_name => vertex_map`.
+
+    vertex_property(g, v)
+
+Returns a dictionary of the form `name => val` containing all the properties
+associated to vertex `v`.
 """
 vertex_property(g::ANetOrDiNet, name::String) = vertex_property(g.props, name)
-vertex_property(g::ANetOrDiNet) = vertex_properties(g.props)
+vertex_property(g::ANetOrDiNet) = vertex_property(g.props)
+vertex_property(g::ANetOrDiNet, v::Integer) = vertex_property(g.props, v)
 
 """See [`vertex_property`](@ref)"""
 vprop = vertex_property

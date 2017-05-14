@@ -29,6 +29,14 @@ m2 = eprop!(g, "bye", m)
 @test m === m2
 @test eprop_names(g) == ["bye","hi"]
 
+edg = collect(edges(g))
+@test eprop(g, edg[1]) == Dict("hi"=>"ciao")
+@test eprop(g, edg[2]) == Dict()
+eprop(g, "bye")[edg[1]] = "e1"
+eprop(g, "bye")[edg[2]] = "e2"
+@test eprop(g, edg[1]) == Dict("hi"=>"ciao", "bye"=>"e1")
+@test eprop(g, edg[2]) == Dict("bye"=>"e2")
+
 ## VERTEX
 g = Network(3)
 add_edge!(g,1,2)
@@ -45,6 +53,11 @@ rem_vertex!(g, 1)
 swap_vertices!(g, 1, 2)
 @test m[1] == 2
 @test m[2] == 3
+
+m = vprop!(g, "size", Int)
+m[1] =  4
+@test vprop(g, 1) == Dict("size"=>4, "label"=>2)
+@test vprop(g, 2) == Dict("label"=>3)
 
 ## GRAPH
 g = DiNetwork(3, 5)
