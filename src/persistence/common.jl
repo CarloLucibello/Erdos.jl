@@ -172,3 +172,7 @@ function getchild(el::EzXML.Node, s::String)
     i == 0 && error("no child $s")
     return childs[i]
 end
+
+function haschild(el::EzXML.Node, s::String)
+    return any(x->name(x)==s, eachelement(el))
+end
