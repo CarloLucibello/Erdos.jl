@@ -214,7 +214,9 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     xdoc = XMLDocument()
     xroot = setroot!(xdoc, ElementNode("gexf"))
     xroot["version"]="1.3"
-    xroot["xsi:schemaLocation"]="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd"
+    xroot["xmlns"] = "http://www.gexf.net/1.3"
+    xroot["xmlns:xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
+    xroot["xsi:schemaLocation"]="http://www.gexf.net/1.3/gexf.xsd"
 
     xmeta = addelement!(xroot, "meta")
     xmeta["lastmodifieddate"] = string(Base.Dates.today())
@@ -222,9 +224,8 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     xg["defaultedgetype"] = is_directed(g) ? "directed" : "undirected"
     xg["mode"] = "static"
 
-    haslabel = has_vprop(g, "label")
-    hasweight = has_eprop(g, "weight")
 
+    vattrnames = String[]
     if length(vprop(g)) > 0
         xa = addelement!(xg, "attributes")
         xa["class"] = "node"
@@ -234,6 +235,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
             T = valtype(m)
             if T ∈ keys(gexf_types)
                 xaa = addelement!(xa, "attribute")
+                push!(vattrnames, pname)
                 xaa["id"] = pname
                 xaa["title"] = pname
                 xaa["type"] = gexf_types[T]
@@ -241,6 +243,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
         end
     end
 
+    eattrnames = String[]
     if length(eprop(g)) > 0
         xa = addelement!(xg, "attributes")
         xa["class"] = "node"
@@ -249,6 +252,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
             pname == "weight" && continue
             T = valtype(m)
             xaa = addelement!(xa, "attribute")
+            push!(eattrnames, pname)
             xaa["id"] = pname
             xaa["title"] = pname
             xaa["type"] = gexf_types[T]
@@ -269,7 +273,6 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     xedges = addelement!(xg, "edges")
     xedges["count"] = ne(g)
     m = 0
-    @show eprop(g,"weight")
     for e in edges(g)
         xe = addelement!(xedges, "edge")
         xe["id"] = "$m"

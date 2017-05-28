@@ -101,7 +101,13 @@ end
 
 has_graph_property(props::PropertyStore, name::String) = haskey(props.gmaps, name)
 has_vertex_property(props::PropertyStore, name::String) = haskey(props.vmaps, name)
+has_vertex_property(props::PropertyStore, name::String, v::Integer) =
+            haskey(props.vmaps, name) && haskey(props.vmaps[name], v)
+
 has_edge_property(props::PropertyStore, name::String) = haskey(props.emaps, name)
+has_edge_property(props::PropertyStore, name::String, e::AEdge) =
+            haskey(props.emaps, name) && haskey(props.emaps[name], e)
+
 
 function ==(p1::PropertyStore, p2::PropertyStore)
     oke = true

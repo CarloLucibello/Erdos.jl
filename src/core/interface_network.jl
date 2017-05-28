@@ -177,12 +177,19 @@ eprop = edge_property
 
 """
     has_edge_property(g, name)
+    has_edge_property(g, name, e)
 
 Check if network  `g` has an edge property named `name`.
+The second method checks also if edge `e` has an assigned value for
+that property.
+
+
 
 [`has_eprop`](@ref) is the short form of this function.
 """
 has_edge_property(g::ANetOrDiNet, name::String) = has_edge_property(g.props, name)
+has_edge_property(g::ANetOrDiNet, name::String, e::AEdge) = has_edge_property(g.props, name, e)
+
 
 """See [`has_edge_property`](@ref)"""
 has_eprop = has_edge_property
@@ -244,13 +251,17 @@ vertex_property(g::ANetOrDiNet, v::Integer) = vertex_property(g.props, v)
 vprop = vertex_property
 
 """
-    has_vertex_property(g, name)
+    has_vertex_property(g, name, v)
 
 Check if network  `g` has a vertex property named `name`.
+The second method checks also if vertex `v` has an assigned value for
+that property.
 
 [`has_vprop`](@ref) is the short form of this function.
 """
 has_vertex_property(g::ANetOrDiNet, name::String) = has_vertex_property(g.props, name)
+has_vertex_property(g::ANetOrDiNet, name::String, v::Integer) =
+                                    has_vertex_property(g.props, name, v)
 
 """See [`has_vertex_property`](@ref)"""
 has_vprop = has_vertex_property

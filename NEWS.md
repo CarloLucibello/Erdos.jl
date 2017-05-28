@@ -5,6 +5,7 @@
 of vertex `v` and edge `e` respectively.
 - Improved support for `gexf` format. Now vertex/edge properties can be
 exported and inported with `writenetwork` and `readnetwork`.
+- add methods `has_eprop(g, name, e)` and `has_vprop(g, name, v)`
 
 ## v0.2.0  2017.4.2
 - Defined Abstract Network types and interfaces. Networks are graphs with properties. Properties can be associated to vertices, edges or the graph itself

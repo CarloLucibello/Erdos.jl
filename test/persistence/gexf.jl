@@ -1,4 +1,4 @@
-# @testset "$TEST $G" begin
+@testset "$TEST $G" begin
 f,fio = mktemp()
 
 g = DG(10,0)
@@ -34,12 +34,11 @@ if G <: ANetwork
 
     @test has_eprop(g, "weight")
     @test valtype(eprop(g, "weight")) <: Float64
-    @test length(eprop(g, "weight")) == ne(g)
+    # @test length(eprop(g, "weight")) == ne(g)
 
     @test has_vprop(g, "size")
     @test has_vprop(g, "position")
     @test has_vprop(g, "color")
-
 
     @test writenetwork(f, g, :gexf) == 1
     h = readnetwork(f, :gexf, G)
@@ -47,7 +46,8 @@ if G <: ANetwork
     vals = [vprop(h,"label")[i] for i=1:nv(g)]
     @test "Valjean" ∈ vals
     @test has_eprop(h, "weight")
+    @test valtype(eprop(g, "weight")) <: Float64
 
 end
 
-# end #testset
+end #testset
