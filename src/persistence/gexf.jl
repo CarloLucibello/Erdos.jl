@@ -175,12 +175,13 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
         @assert name(f) == "edge"
         u = nodes[f["source"]]
         v = nodes[f["target"]]
-        ok, e = add_edge!(g, u, v) #TODO
+        ok, e = add_edge!(g, u, v)
         for xattr in eachattribute(f)
             nattr = name(xattr)
             nattr ∈ ["id","source","target"] && continue
-            !has_eprop(g, nattr) && eprop!(g, nattr, String)
-            eprop(g, nattr)[e] = f[nattr]
+            Tattr = nattr == "weight" ? Float64 : String
+            !has_eprop(g, nattr) && eprop!(g, nattr, Tattr)
+            eprop(g, nattr)[e] = Tattr == String ? f[nattr] : parse(Tattr, f[nattr])
         end
         for el in eachelement(f)
             if name(el) == "attvalues"
@@ -195,7 +196,6 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
                     !has_eprop(g, pname) && eprop!(g, pname, String)
                     eprop(g, pname)[e] = el["value"]
                 else
-                    #TODO parse to vector of floats properties under viz namespace
                     !has_eprop(g, pname) && eprop!(g, pname, Dict{String,String})
                     eprop(g, pname)[e] = Dict{String,String}(a=>el[a] for a in attr)
                 end
@@ -210,4 +210,79 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     return g
 end
 
-filemap[:gexf] = (readgexf, writegexf, readnetgexf, NI)
+function writenetgexf(f::IO, g::ANetOrDiNet)
+    xdoc = XMLDocument()
+    xroot = setroot!(xdoc, ElementNode("gexf"))
+    xroot["version"]="1.3"
+    xroot["xsi:schemaLocation"]="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd"
+
+    xmeta = addelement!(xroot, "meta")
+    xmeta["lastmodifieddate"] = string(Base.Dates.today())
+    xg = addelement!(xroot, "graph")
+    xg["defaultedgetype"] = is_directed(g) ? "directed" : "undirected"
+    xg["mode"] = "static"
+
+    haslabel = has_vprop(g, "label")
+    hasweight = has_eprop(g, "weight")
+
+    if length(vprop(g)) > 0
+        xa = addelement!(xg, "attributes")
+        xa["class"] = "node"
+        xa["mode"] = "static"
+        for (pname, m) in vprop(g)
+            pname == "label" && continue
+            T = valtype(m)
+            if T ∈ keys(gexf_types)
+                xaa = addelement!(xa, "attribute")
+                xaa["id"] = pname
+                xaa["title"] = pname
+                xaa["type"] = gexf_types[T]
+            end
+        end
+    end
+
+    if length(eprop(g)) > 0
+        xa = addelement!(xg, "attributes")
+        xa["class"] = "node"
+        xa["mode"] = "static"
+        for (pname, m) in eprop(g)
+            pname == "weight" && continue
+            T = valtype(m)
+            xaa = addelement!(xa, "attribute")
+            xaa["id"] = pname
+            xaa["title"] = pname
+            xaa["type"] = gexf_types[T]
+        end
+    end
+
+    xnodes = addelement!(xg, "nodes")
+    xnodes["count"] = nv(g)
+    for i in 1:nv(g)
+        xv = addelement!(xnodes, "node")
+        xv["id"] = "$(i-1)"
+        if has_vprop(g, "label", i)
+            xv["label"] = vprop(g,"label")[i]
+        end
+    end
+
+
+    xedges = addelement!(xg, "edges")
+    xedges["count"] = ne(g)
+    m = 0
+    @show eprop(g,"weight")
+    for e in edges(g)
+        xe = addelement!(xedges, "edge")
+        xe["id"] = "$m"
+        xe["source"] = "$(src(e)-1)"
+        xe["target"] = "$(dst(e)-1)"
+        if has_eprop(g, "weight", e)
+            xe["weight"] = eprop(g,"weight")[e]
+        end
+        m += 1
+    end
+
+    prettyprint(f, xdoc)
+    return 1
+end
+
+filemap[:gexf] = (readgexf, writegexf, readnetgexf, writenetgexf)
