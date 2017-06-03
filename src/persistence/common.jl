@@ -173,6 +173,13 @@ function getchild(el::EzXML.Node, s::String)
     return childs[i]
 end
 
+"adds a child `s` to `el` if it doesn't exist"
+function getchild!(el::EzXML.Node, s::String)
+    childs = elements(el)
+    i = findfirst(x->name(x)==s, childs)
+    return i > 0 ? childs[i] : addelement!(el, s)
+end
+
 function haschild(el::EzXML.Node, s::String)
     return any(x->name(x)==s, eachelement(el))
 end

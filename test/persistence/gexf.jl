@@ -1,10 +1,6 @@
 @testset "$TEST $G" begin
-f,fio = mktemp()
 
-g = DG(10,0)
-@test writegraph(f, g, :gexf) == 1
-h = readgraph(f, :gexf, G)
-@test g == h
+f, fio = mktemp()
 
 g = G(10,0)
 @test writegraph(f, g, :gexf) == 1
@@ -21,33 +17,24 @@ g = DG(10,20)
 ga = readgraph(f, :gexf, G)
 @test g == ga
 
-g = readgraph(:lesmis, G)
-h = readgraph(joinpath(testdir, "testdata", "lesmis.gexf"), G)
-@test nv(g) == nv(h)
-@test ne(g) == ne(h)
+if G <: ANetwork ##################
 
-if G <: ANetwork
-    g = readnetwork(joinpath(testdir, "testdata", "lesmis.gexf"), G)
-    @test has_vprop(g, "label")
-    vals = [vprop(g,"label")[i] for i=1:nv(g)]
-    @test "Valjean" ∈ vals
+g = readnetwork(joinpath(testdir, "testdata", "lesmis.gexf"), G)
+writenetwork(f, g, :gexf)
+h = readnetwork(f, :gexf, G)
+test_networks_eq(g, h)
 
-    @test has_eprop(g, "weight")
-    @test valtype(eprop(g, "weight")) <: Float64
-    # @test length(eprop(g, "weight")) == ne(g)
-
-    @test has_vprop(g, "size")
-    @test has_vprop(g, "position")
-    @test has_vprop(g, "color")
-
-    @test writenetwork(f, g, :gexf) == 1
+for gname in [:lesmis, :karate]
+    g = readnetwork(gname, G)
+    rem_gprop!(g, "readme") # TODO should strip characters " " in the readme string
+    rem_gprop!(g, "description")
+    rem_vprop!(g, "pos") # TODO vector attributes not supported
+    writenetwork(f, g, :gexf)
     h = readnetwork(f, :gexf, G)
-    @test has_vprop(h, "label")
-    vals = [vprop(h,"label")[i] for i=1:nv(g)]
-    @test "Valjean" ∈ vals
-    @test has_eprop(h, "weight")
-    @test valtype(eprop(g, "weight")) <: Float64
-
+    test_networks_eq(g, h)
 end
 
-end #testset
+end #if network ####################
+
+isfile(f) && rm(f)
+ end #testset

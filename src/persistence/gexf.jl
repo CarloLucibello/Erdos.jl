@@ -85,8 +85,6 @@ function readnetgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
 
         for el in elements(xattr)
             pk[el["id"]] = (el["title"],  gexf_types_rev[el["type"]])
-            #TODO eventually read default value
-            #TODO grab namespace : namespace(el) (e.g. viz:)
         end
     end
 
@@ -158,12 +156,14 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
                 end
             else
                 pname = name(el)
+                if endswith(namespace(el), "viz")
+                    pname = "viz:"*pname
+                end
                 attr = name.(attributes(el))
                 if "value" in attr && length(attr) == 1
                     !has_vprop(g, pname) && vprop!(g, pname, String)
                     vprop(g, pname)[v] = el["value"]
                 else
-                    #TODO parse to vector of floats properties under viz namespace
                     !has_vprop(g, pname) && vprop!(g, pname, Dict{String,String})
                     vprop(g, pname)[v] = Dict{String,String}(a=>el[a] for a in attr)
                 end
@@ -215,6 +215,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     xroot = setroot!(xdoc, ElementNode("gexf"))
     xroot["version"]="1.3"
     xroot["xmlns"] = "http://www.gexf.net/1.3"
+    xroot["xmlns:viz"]= "http://www.gexf.net/1.3/viz"
     xroot["xmlns:xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
     xroot["xsi:schemaLocation"]="http://www.gexf.net/1.3/gexf.xsd"
 
@@ -232,6 +233,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
         xa["mode"] = "static"
         for (pname, m) in vprop(g)
             pname == "label" && continue
+            startswith(pname, "viz:") && continue
             T = valtype(m)
             if T ∈ keys(gexf_types)
                 xaa = addelement!(xa, "attribute")
@@ -246,10 +248,11 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     eattrnames = String[]
     if length(eprop(g)) > 0
         xa = addelement!(xg, "attributes")
-        xa["class"] = "node"
+        xa["class"] = "edge"
         xa["mode"] = "static"
         for (pname, m) in eprop(g)
             pname == "weight" && continue
+            startswith(pname, "viz:") && continue
             T = valtype(m)
             xaa = addelement!(xa, "attribute")
             push!(eattrnames, pname)
@@ -264,8 +267,24 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     for i in 1:nv(g)
         xv = addelement!(xnodes, "node")
         xv["id"] = "$(i-1)"
-        if has_vprop(g, "label", i)
-            xv["label"] = vprop(g,"label")[i]
+
+        for (name, val) in vprop(g, i)
+            if name == "label"
+                xv["label"] = val
+            elseif name ∈ vattrnames
+                xvals = getchild!(xv, "attvalues")
+                x = addelement!(xvals, "attvalue")
+                x["for"] = name
+                x["value"] = gexfstring(val)
+            elseif typeof(val) <: Dict
+                xval = addelement!(xv, name)
+                for (k, v) in val
+                    xval[k] = v
+                end
+            else
+                xval = addelement!(xv, name)
+                xval["value"] = gexfstring(val)
+            end
         end
     end
 
@@ -280,6 +299,24 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
         xe["target"] = "$(dst(e)-1)"
         if has_eprop(g, "weight", e)
             xe["weight"] = eprop(g,"weight")[e]
+        end
+        for (name, val) in eprop(g, e)
+            if name == "weight"
+                xe["weight"] = val
+            elseif name ∈ eattrnames
+                xvals = getchild!(xe, "attvalues")
+                x = addelement!(xvals, "attvalue")
+                x["for"] = name
+                x["value"] = gexfstring(val)
+            elseif typeof(val) <: Dict
+                xval = addelement!(xe, name)
+                for (k, v) in val
+                    xval[k] = v
+                end
+            else
+                xval = addelement!(xe, name)
+                xval["value"] = gexfstring(val)
+            end
         end
         m += 1
     end
