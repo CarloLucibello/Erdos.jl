@@ -7,8 +7,7 @@ module Erdos
 
 import GZip # I/O
 import StatsFuns # randgraphs
-using EzXML # I/O  graphml, gexf  #TODO import
-import ParserCombinator: Parsers.DOT, Parsers.GML # persistence
+using EzXML # I/O  graphml, gexf  #TODO import instead of using 
 import BlossomV # matching
 import Clustering: kmeans # community detection
 using Compat
