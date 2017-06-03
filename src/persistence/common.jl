@@ -179,7 +179,3 @@ function getchild!(el::EzXML.Node, s::String)
     i = findfirst(x->name(x)==s, childs)
     return i > 0 ? childs[i] : addelement!(el, s)
 end
-
-function haschild(el::EzXML.Node, s::String)
-    return any(x->name(x)==s, eachelement(el))
-end

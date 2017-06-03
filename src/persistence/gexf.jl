@@ -111,17 +111,8 @@ const gexf_types_rev = Dict("integer"  =>  Int,
 gexfstring(x) = string(x)
 gexfstring(v::Vector) = join((@sprintf("%.10g",x) for x in v), ", ")
 
-
 gexfparse(T, x::String) = parse(T, x)
 gexfparse(::Type{String}, x::String) = x
-
-#TODO implement Vector support
-if VERSION < v"0.6.0-dev.693" # julia PR #16986
-gexfparse{T}(::Type{Vector{T}}, x::String) =
-    map(v->parse(T,v),  split(x, ','))
-else
-gexfparse{T}(::Type{Vector{T}}, x::String) = parse.(T, split(x, ','))
-end
 
 
 function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
