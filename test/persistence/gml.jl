@@ -45,7 +45,7 @@ test_networks_eq(g, h)
 
 for gname in [:lesmis, :karate]
     g = readnetwork(gname, G)
-    rem_gprop!(g, "readme") # TODO should strip characters " " in the readme string
+    rem_gprop!(g, "readme")
     rem_vprop!(g, "pos") # TODO vector attributes not supported
     writenetwork(f, g, :gml)
     h = readnetwork(f, :gml, G)
