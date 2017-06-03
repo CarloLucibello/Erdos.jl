@@ -16,33 +16,33 @@ end
 PropertyStore() = PropertyStore(Dict{String, Any}(), Dict{String,AEdgeMap}(), Dict{String,AVertexMap}())
 
 ### GRAPH
-function set_graph_property!(p::PropertyStore, name::String, x)
+function set_graph_property!(p::PropertyStore, name::AbstractString, x)
     p.gmaps[name] = x
 end
 
-function rem_graph_property!(p::PropertyStore, name::String)
+function rem_graph_property!(p::PropertyStore, name::AbstractString)
     !haskey(p.gmaps, name) && error("Property $name not present.")
     delete!(p.gmaps, name)
     p.gmaps
 end
 
-graph_property(p::PropertyStore, name::String) = p.gmaps[name]
+graph_property(p::PropertyStore, name::AbstractString) = p.gmaps[name]
 graph_property(p::PropertyStore) = p.gmaps
 
 
 ### EDGE
-function add_edge_property!(p::PropertyStore, name::String, emap::AEdgeMap)
+function add_edge_property!(p::PropertyStore, name::AbstractString, emap::AEdgeMap)
     haskey(p.emaps, name) && error("Property $name already present.")
     p.emaps[name] = emap
 end
 
-function rem_edge_property!(p::PropertyStore, name::String)
+function rem_edge_property!(p::PropertyStore, name::AbstractString)
     !haskey(p.emaps, name) && error("Property $name not present.")
     delete!(p.emaps, name)
     p.emaps
 end
 
-edge_property(p::PropertyStore, name::String) = p.emaps[name]
+edge_property(p::PropertyStore, name::AbstractString) = p.emaps[name]
 
 edge_property(p::PropertyStore) = p.emaps
 
@@ -57,17 +57,17 @@ function edge_property(p::PropertyStore, e::AEdge)
 end
 
 ## VERTEX
-function add_vertex_property!(p::PropertyStore, name::String, vmap::AVertexMap)
+function add_vertex_property!(p::PropertyStore, name::AbstractString, vmap::AVertexMap)
     haskey(p.vmaps, name) && error("Property $name already present.")
     p.vmaps[name] = vmap
 end
-function rem_vertex_property!(p::PropertyStore, name::String)
+function rem_vertex_property!(p::PropertyStore, name::AbstractString)
     !haskey(p.vmaps, name) && error("Property $name not present.")
     delete!(p.vmaps, name)
     p.vmaps
 end
 
-vertex_property(p::PropertyStore, name::String) = p.vmaps[name]
+vertex_property(p::PropertyStore, name::AbstractString) = p.vmaps[name]
 vertex_property(p::PropertyStore) = p.vmaps
 
 function vertex_property(p::PropertyStore, i::Integer)
@@ -99,13 +99,13 @@ function swap_vertices!(props::PropertyStore, u::Integer, v::Integer)
     #TODO should swap edges for non indexed graphs
 end
 
-has_graph_property(props::PropertyStore, name::String) = haskey(props.gmaps, name)
-has_vertex_property(props::PropertyStore, name::String) = haskey(props.vmaps, name)
-has_vertex_property(props::PropertyStore, name::String, v::Integer) =
+has_graph_property(props::PropertyStore, name::AbstractString) = haskey(props.gmaps, name)
+has_vertex_property(props::PropertyStore, name::AbstractString) = haskey(props.vmaps, name)
+has_vertex_property(props::PropertyStore, name::AbstractString, v::Integer) =
             haskey(props.vmaps, name) && haskey(props.vmaps[name], v)
 
-has_edge_property(props::PropertyStore, name::String) = haskey(props.emaps, name)
-has_edge_property(props::PropertyStore, name::String, e::AEdge) =
+has_edge_property(props::PropertyStore, name::AbstractString) = haskey(props.emaps, name)
+has_edge_property(props::PropertyStore, name::AbstractString, e::AEdge) =
             haskey(props.emaps, name) && haskey(props.emaps[name], e)
 
 

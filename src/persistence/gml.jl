@@ -6,7 +6,7 @@ function _readgml{G}(io::IO, line, ::Type{G})
         line = readline(io) |> strip
         line == "[" && (line = readline(io) |> strip)
         while !startswith(line, "]")
-            name, valstr = split(line)
+            name, valstr = splitgml(line)
             if name == "id"
                 mapping[parse(Int, valstr)] = i
             end
@@ -21,7 +21,7 @@ function _readgml{G}(io::IO, line, ::Type{G})
         u = -1
         v = -1
         while !startswith(line, "]")
-            name, valstr = split(line)
+            name, valstr = splitgml(line)
             if name == "source"
                 id = parse(Int, valstr)
                 u = mapping[id]
@@ -53,53 +53,99 @@ function readgml{G}(io::IO, ::Type{G})
     return _readgml(io, line, H)
 end
 
-gmltypeof(x) = typeof(x)
-gmltypeof(x::SubString) = String
-gmlval(x) = x
-gmlval(x::SubString) = String(x)
+function gmltypeof(valstr)
+    str = strip(valstr, '\"')
+    if length(str) < length(valstr)
+        return String
+    else
+        return Float64
+    end
+end
+
+gmlval{T}(::Type{T}, x) = parse(T, x)
+gmlval(::Type{String}, x) = strip(x, '\"')
+function splitgml(s::AbstractString)
+    i = findfirst(s, ' ')
+    return SubString(s, 1, i-1), SubString(s, i+1, length(s))
+end
+
 gmlprintval(x) = x
 gmlprintval(x::String) = "\"" * x * "\""
 
-function _readnetgml{G}(xg, ::Type{G})
+
+function _readnetgml(io::IO, line, g)
     mapping = Dict{Int,Int}()
-    g = haskey(xg,:node) ? G(length(xg[:node])) : G()
-    for (k, v) in xg
-        k ∈ (:node, :edge, :directed) && continue
-        pname = string(k)
-        gprop!(g, pname, gmlval(v))
+    i = 0
+    while startswith(line, "node")
+        i += 1
+        line = readline(io) |> strip
+        line == "[" && (line = readline(io) |> strip)
+        @assert startswith(line, "id")
+        name, valstr = splitgml(line)
+        mapping[parse(Int, valstr)] = i
+        add_vertex!(g)
+        line = readline(io) |> strip
+        while !startswith(line, "]")
+            name, valstr = splitgml(line)
+            !has_vprop(g, name) && vprop!(g, name, String)
+            T = valtype(vprop(g, name))
+            vprop(g, name)[i] = gmlval(T, valstr)
+            line = readline(io) |> strip
+        end
+
+        line = readline(io) |> strip #skip ]
     end
 
-    if haskey(xg,:node)
-        for (i, xv) in enumerate(xg[:node])
-            mapping[xv[:id]] = i
-            for (k, v) in xv
-                k == :id && continue
-                pname = string(k)
-                !has_vprop(g, pname) && vprop!(g, pname, gmltypeof(v))
-                vprop(g, pname)[i] = gmlval(v)
-            end
+    while startswith(line, "edge")
+        line = readline(io) |> strip
+        line == "[" && (line = readline(io) |> strip)
+        startswith(line, "id") && (line = readline(io) |> strip)
+
+        @assert startswith(line, "source")
+        name, valstr = splitgml(line)
+        u = mapping[parse(Int, valstr)]
+        line = readline(io) |> strip
+        @assert startswith(line, "target")
+        name, valstr = splitgml(line)
+        v = mapping[parse(Int, valstr)]
+        line = readline(io) |> strip
+        ok, e = add_edge!(g, u, v)
+
+        while !startswith(line, "]")
+            name, valstr = splitgml(line)
+            !has_eprop(g, name) && eprop!(g, name, gmltypeof(valstr))
+            T = valtype(eprop(g, name))
+            eprop(g, name)[e] = gmlval(T, valstr)
+            line = readline(io) |> strip
         end
-    end
-    if haskey(xg, :edge)
-        for xe in xg[:edge]
-            ok, e = add_edge!(g, mapping[xe[:source]], mapping[xe[:target]])
-            !ok && warn("found edge duplicate")
-            for (k, v) in xe
-                (k == :source || k == :target) && continue
-                pname = string(k)
-                !has_eprop(g, pname) && eprop!(g, pname, gmltypeof(v))
-                eprop(g, pname)[e] = gmlval(v)
-            end
-        end
+
+        line = readline(io) |> strip #skip ]
     end
     return g
 end
 
+
 function readnetgml{G<:ANetOrDiNet}(io::IO, ::Type{G})
-    xg = first(GML.parse_dict(readstring(io))[:graph])
-    dir = Bool(get(xg, :directed, 0))
-    H = dir ? digraphtype(G) : graphtype(G)
-    return _readnetgml(xg, H)
+    H = G
+    line = readline(io) |> strip
+    @assert startswith(line, "graph")
+    line = readline(io) |> strip
+    line == "[" && (line = readline(io) |> strip)
+    gdict = Dict{String, String}()
+    while !startswith(line, "node") && !isempty(line)
+        if startswith(line, "directed")
+            H = parse(Int, line[10:end]) == 1 ? digraphtype(G) : graphtype(G)
+        else
+            name, valstr = splitgml(line)
+            gdict[name] = gmlval(String, valstr)
+        end
+        line = readline(io) |> strip
+    end
+    g = H()
+    for (name, val) in gdict
+        gprop!(g, name, val)
+    end
+    return _readnetgml(io, line, g)
 end
 
 """
@@ -129,7 +175,6 @@ end
 
 function writenetgml(io::IO, g::ANetOrDiNet)
     println(io, "graph [")
-    # length(gname) > 0 && println(io, "label \"$gname\"")
     is_directed(g) && println(io, "\tdirected 1")
     for (pname, p) in gprop(g)
         println(io,"\t$pname $(gmlprintval(p))")

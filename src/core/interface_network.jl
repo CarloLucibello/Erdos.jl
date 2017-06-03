@@ -60,7 +60,7 @@ set_graph_property!(g, "label", "My Network")
 gprop!(g, "label", "My Network")
 ```
 """
-set_graph_property!(g::ANetOrDiNet, name::String, x) = set_graph_property!(g.props, name, x)
+set_graph_property!(g::ANetOrDiNet, name::AbstractString, x) = set_graph_property!(g.props, name, x)
 
 """See [`set_graph_property!`](@ref)"""
 gprop! = set_graph_property!
@@ -72,7 +72,7 @@ Remove the property `name` from `g`.
 
 [`rem_gprop!`](@ref) is the short form of this function.
 """
-rem_graph_property!(g::ANetOrDiNet, name::String) = rem_graph_property!(g.props, name)
+rem_graph_property!(g::ANetOrDiNet, name::AbstractString) = rem_graph_property!(g.props, name)
 
 """See [`rem_graph_property!`](@ref)"""
 rem_gprop! = rem_graph_property!
@@ -88,7 +88,7 @@ Returns a dictionary with elements `property_name => property_value`
 
 [`gprop`](@ref) is the short form of this function.
 """
-graph_property(g::ANetOrDiNet, name::String) = graph_property(g.props, name)
+graph_property(g::ANetOrDiNet, name::AbstractString) = graph_property(g.props, name)
 graph_property(g::ANetOrDiNet) = graph_property(g.props)
 
 """See [`graph_property`](@ref)"""
@@ -101,7 +101,7 @@ Check if network  `g` has a graph property named `name`.
 
 [`has_gprop`](@ref) is the short form of this function.
 """
-has_graph_property(g::ANetOrDiNet, name::String) = has_graph_property(g.props, name)
+has_graph_property(g::ANetOrDiNet, name::AbstractString) = has_graph_property(g.props, name)
 
 """See [`has_graph_property`](@ref)"""
 has_gprop = has_graph_property
@@ -130,9 +130,9 @@ add_edge_property!(g, "weight", Float64)
 eprop!(g, "weight", Float64)
 ```
 """
-add_edge_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_edge_property!(g.props, name, EdgeMap(g, T))
-add_edge_property!(g::ANetOrDiNet, name::String, emap::AEdgeMap) = add_edge_property!(g.props, name, emap)
-add_edge_property!(g::ANetOrDiNet, name::String, data) = add_edge_property!(g, name, EdgeMap(g, data))
+add_edge_property!{T}(g::ANetOrDiNet, name::AbstractString, ::Type{T}) = add_edge_property!(g.props, name, EdgeMap(g, T))
+add_edge_property!(g::ANetOrDiNet, name::AbstractString, emap::AEdgeMap) = add_edge_property!(g.props, name, emap)
+add_edge_property!(g::ANetOrDiNet, name::AbstractString, data) = add_edge_property!(g, name, EdgeMap(g, data))
 
 
 """See [`add_edge_property!`](@ref)"""
@@ -145,7 +145,7 @@ Remove the edge property  `name` from `g`.
 
 [`rem_eprop!`](@ref) is the short form of this function.
 """
-rem_edge_property!(g::ANetOrDiNet, name::String) = rem_edge_property!(g.props, name)
+rem_edge_property!(g::ANetOrDiNet, name::AbstractString) = rem_edge_property!(g.props, name)
 
 """See [`rem_edge_property!`](@ref)"""
 rem_eprop! = rem_edge_property!
@@ -166,7 +166,7 @@ associated to edge `e`.
 
 [`eprop`](@ref) is the short form of this function.
 """
-edge_property(g::ANetOrDiNet, name::String) = edge_property(g.props, name)
+edge_property(g::ANetOrDiNet, name::AbstractString) = edge_property(g.props, name)
 edge_property(g::ANetOrDiNet) = edge_property(g.props)
 edge_property(g::ANetOrDiNet, e::AEdge) = edge_property(g.props, e)
 
@@ -187,8 +187,8 @@ that property.
 
 [`has_eprop`](@ref) is the short form of this function.
 """
-has_edge_property(g::ANetOrDiNet, name::String) = has_edge_property(g.props, name)
-has_edge_property(g::ANetOrDiNet, name::String, e::AEdge) = has_edge_property(g.props, name, e)
+has_edge_property(g::ANetOrDiNet, name::AbstractString) = has_edge_property(g.props, name)
+has_edge_property(g::ANetOrDiNet, name::AbstractString, e::AEdge) = has_edge_property(g.props, name, e)
 
 
 """See [`has_edge_property`](@ref)"""
@@ -209,9 +209,9 @@ As an alternative, an existing vertex map `vmap` can be stored into `g`.
 
 [`vprop!`](@ref) is the short form of this function.
 """
-add_vertex_property!{T}(g::ANetOrDiNet, name::String, ::Type{T}) = add_vertex_property!(g.props, name, VertexMap(g, T))
-add_vertex_property!(g::ANetOrDiNet, name::String, vmap::AVertexMap) = add_vertex_property!(g.props, name, vmap)
-add_vertex_property!(g::ANetOrDiNet, name::String, data) = add_vertex_property!(g, name, VertexMap(g, data))
+add_vertex_property!{T}(g::ANetOrDiNet, name::AbstractString, ::Type{T}) = add_vertex_property!(g.props, name, VertexMap(g, T))
+add_vertex_property!(g::ANetOrDiNet, name::AbstractString, vmap::AVertexMap) = add_vertex_property!(g.props, name, vmap)
+add_vertex_property!(g::ANetOrDiNet, name::AbstractString, data) = add_vertex_property!(g, name, VertexMap(g, data))
 
 """See [`add_vertex_property!`](@ref)"""
 vprop! = add_vertex_property!
@@ -224,7 +224,7 @@ Remove the vertex property  `name` from `g`.
 
 [`rem_vprop!`](@ref) is the short form of this function.
 """
-rem_vertex_property!(g::ANetOrDiNet, name::String) = rem_vertex_property!(g.props, name)
+rem_vertex_property!(g::ANetOrDiNet, name::AbstractString) = rem_vertex_property!(g.props, name)
 
 """See [`rem_vertex_property!`](@ref)"""
 rem_vprop! = rem_vertex_property!
@@ -243,7 +243,7 @@ Returns a dictionary with elements `property_name => vertex_map`.
 Returns a dictionary of the form `name => val` containing all the properties
 associated to vertex `v`.
 """
-vertex_property(g::ANetOrDiNet, name::String) = vertex_property(g.props, name)
+vertex_property(g::ANetOrDiNet, name::AbstractString) = vertex_property(g.props, name)
 vertex_property(g::ANetOrDiNet) = vertex_property(g.props)
 vertex_property(g::ANetOrDiNet, v::Integer) = vertex_property(g.props, v)
 
@@ -259,8 +259,8 @@ that property.
 
 [`has_vprop`](@ref) is the short form of this function.
 """
-has_vertex_property(g::ANetOrDiNet, name::String) = has_vertex_property(g.props, name)
-has_vertex_property(g::ANetOrDiNet, name::String, v::Integer) =
+has_vertex_property(g::ANetOrDiNet, name::AbstractString) = has_vertex_property(g.props, name)
+has_vertex_property(g::ANetOrDiNet, name::AbstractString, v::Integer) =
                                     has_vertex_property(g.props, name, v)
 
 """See [`has_vertex_property`](@ref)"""
