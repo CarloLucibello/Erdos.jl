@@ -1,24 +1,56 @@
-function _readgml{G}(xg, ::Type{G})
+function _readgml{G}(io::IO, line, ::Type{G})
     mapping = Dict{Int,Int}()
-    if haskey(xg,:node)
-        for (i, x) in enumerate(xg[:node])
-            mapping[x[:id]] = i
+    i = 0
+    while startswith(line, "node")
+        i += 1
+        line = readline(io) |> strip
+        line == "[" && (line = readline(io) |> strip)
+        while !startswith(line, "]")
+            name, valstr = split(line)
+            if name == "id"
+                mapping[parse(Int, valstr)] = i
+            end
+            line = readline(io) |> strip
         end
+        line = readline(io) |> strip #skip ]
     end
-    g = G(length(mapping))
-    if haskey(xg, :edge)
-        for e in xg[:edge]
-            add_edge!(g, mapping[e[:source]], mapping[e[:target]])
+    g = G(i)
+    while startswith(line, "edge")
+        line = readline(io) |> strip
+        line == "[" && (line = readline(io) |> strip)
+        u = -1
+        v = -1
+        while !startswith(line, "]")
+            name, valstr = split(line)
+            if name == "source"
+                id = parse(Int, valstr)
+                u = mapping[id]
+            elseif name == "target"
+                id = parse(Int, valstr)
+                v = mapping[id]
+            end
+            line = readline(io) |> strip
         end
+        @assert u > 0 && v > 0
+        add_edge!(g, u, v)
+        line = readline(io) |> strip #skip ]
     end
     return g
 end
 
 function readgml{G}(io::IO, ::Type{G})
-    xg = first(GML.parse_dict(readstring(io))[:graph])
-    dir = Bool(get(xg, :directed, 0))
-    H = dir ? digraphtype(G) : graphtype(G)
-    return _readgml(xg, H)
+    H = G
+    line = readline(io) |> strip
+    @assert startswith(line, "graph")
+    line = readline(io) |> strip
+    line == "[" && (line = readline(io) |> strip)
+    while !startswith(line, "node") && !isempty(line)
+        if startswith(line, "directed")
+            H = parse(Int, line[10:end]) == 1 ? digraphtype(G) : graphtype(G)
+        end
+        line = readline(io) |> strip
+    end
+    return _readgml(io, line, H)
 end
 
 gmltypeof(x) = typeof(x)
@@ -105,8 +137,8 @@ function writenetgml(io::IO, g::ANetOrDiNet)
     for i=1:nv(g)
         println(io,"\tnode [")
         println(io,"\t\tid $i")
-        for (pname, p) in vprop(g)
-            haskey(p, i) && println(io,"\t\t$pname $(gmlprintval(p[i]))")
+        for (name, val) in vprop(g, i)
+            println(io,"\t\t$name $(gmlprintval(val))")
         end
         println(io,"\t]")
     end
@@ -114,8 +146,8 @@ function writenetgml(io::IO, g::ANetOrDiNet)
         println(io,"\tedge [")
         println(io,"\t\tsource $(src(e))")
         println(io,"\t\ttarget $(dst(e))")
-        for (pname, p) in eprop(g)
-            haskey(p, e) && println(io,"\t\t$pname $(gmlprintval(p[e]))")
+        for (name, val) in eprop(g, e)
+            println(io,"\t\t$name $(gmlprintval(val))")
         end
         println(io,"\t]")
     end
