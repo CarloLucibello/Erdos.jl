@@ -21,6 +21,7 @@ tests = [
     "persistence/persistence",
     "persistence/datasets",
     "persistence/gt",
+    "persistence/gexf",
     "persistence/graphml",
     "persistence/gml",
     "generators/randgraphs",

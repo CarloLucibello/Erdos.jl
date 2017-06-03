@@ -69,26 +69,6 @@ g = DG(10,20)
 ga = readgraph(f, :dot, G)
 @test g == ga
 
-# test :gexf
-@test writegraph(f, g, :gexf) == 1
-h = readgraph(f, :gexf, G)
-@test g == h
-
-g = G(10,0)
-@test writegraph(f, g, :gexf) == 1
-ga = readgraph(f, :gexf, G)
-@test g == ga
-
-g = G(10,20)
-@test writegraph(f, g, :gexf) == 1
-ga = readgraph(f, :gexf, G)
-@test g == ga
-
-g = DG(10,20)
-@test writegraph(f, g, :gexf) == 1
-ga = readgraph(f, :gexf, G)
-@test g == ga
-
 #test :net
 g10 = CompleteGraph(10, G)
 @test typeof(g10) == G

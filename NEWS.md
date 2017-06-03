@@ -1,8 +1,11 @@
-## v0.2.1
+## v0.3
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.
 - add `is_tree(g)`
 - `vprop(g, v)` and `eprop(g, e)` return a dictionary containing the properties
 of vertex `v` and edge `e` respectively.
+- Improved support for `gexf` format. Now vertex/edge properties can be
+exported and inported with `writenetwork` and `readnetwork`.
+- add methods `has_eprop(g, name, e)` and `has_vprop(g, name, v)`
 
 ## v0.2.0  2017.4.2
 - Defined Abstract Network types and interfaces. Networks are graphs with properties. Properties can be associated to vertices, edges or the graph itself

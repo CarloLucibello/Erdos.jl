@@ -37,6 +37,11 @@ eprop(g, "bye")[edg[2]] = "e2"
 @test eprop(g, edg[1]) == Dict("hi"=>"ciao", "bye"=>"e1")
 @test eprop(g, edg[2]) == Dict("bye"=>"e2")
 
+@test has_eprop(g, "bye", edg[1])
+@test has_eprop(g, "hi", edg[1])
+@test has_eprop(g, "bye", edg[2])
+@test !has_eprop(g, "hi", edg[2])
+
 ## VERTEX
 g = Network(3)
 add_edge!(g,1,2)
@@ -58,6 +63,12 @@ m = vprop!(g, "size", Int)
 m[1] =  4
 @test vprop(g, 1) == Dict("size"=>4, "label"=>2)
 @test vprop(g, 2) == Dict("label"=>3)
+
+@test has_vprop(g, "size", 1)
+@test has_vprop(g, "label", 1)
+@test !has_vprop(g, "size", 2)
+@test has_vprop(g, "label", 2)
+
 
 ## GRAPH
 g = DiNetwork(3, 5)
