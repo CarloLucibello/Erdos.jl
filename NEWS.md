@@ -1,4 +1,4 @@
-## v0.3
+## v0.3  2017.6.x
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.
 - add `is_tree(g)`
 - `vprop(g, v)` and `eprop(g, e)` return a dictionary containing the properties
@@ -9,6 +9,8 @@ exported and inported with `writenetwork` and `readnetwork`.
 - internal implementation of `.gml`  parser. Dropped dependence on unmaintained ParserCombinator.jl package.
 - Dropping `.dot` support until implementation of an internal parser.
 - fixed all julia 0.6 deprecations
+- Remove hack in matching with floating point: now using floating point compiled version
+  of BlossomV.
 
 ## v0.2.0  2017.4.2
 - Defined Abstract Network types and interfaces. Networks are graphs with properties. Properties can be associated to vertices, edges or the graph itself
