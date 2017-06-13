@@ -12,10 +12,12 @@ A simple graph type based on an adjacency list.
 
 Construct a `Graph` with `n` vertices and no edges.
 
-    Graph{T}(adjmx::AbstractMatrix)
-    Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
+    Graph{T}(adjmx::AbstractMatrix; upper=false, selfedges=true)
 
-Construct a `Graph{T}` from the adjacency matrix `adjmx`.
+Construct a `Graph{T}` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
+If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
 type Graph{T<:Integer} <: AGraph
     ne::Int
@@ -28,23 +30,10 @@ function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
     return Graph{T}(0, fadjlist)
 end
 
-(::Type{Graph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, Graph{T}; seed=seed)
-
-function (::Type{Graph{T}}){T<:Integer}(adjmx::AbstractMatrix)
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = Graph{T}(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb), i)
-        add_edge!(g, ind...)
-    end
-    return g
-end
-
+(::Type{Graph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+    erdos_renyi(n, m, Graph{T}; seed=seed)
 Graph{T<:Integer}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
 Graph{T<:Integer}(n::T) = Graph{T}(n)
-Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
 Graph() = Graph{Int}()
 
 
@@ -62,10 +51,11 @@ A simple digraph type based on two adjacency lists (forward and backward).
 
 Construct a `DiGraph` with `n` vertices and no edges.
 
-    DiGraph{T}(adjmx::AbstractMatrix)
-    DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
+    DiGraph{T}(adjmx::AbstractMatrix; selfedges=true)
 
-Construct a `DiGraph` from the adjacency matrix `adjmx`.
+Construct a `DiGraph{T}` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
 type DiGraph{T<:Integer} <: ADiGraph
     ne
@@ -80,24 +70,11 @@ function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
     return DiGraph{T}(0, fadjlist, badjlist)
 end
 
-(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, DiGraph{T}; seed=seed)
-
-function (::Type{DiGraph{T}}){T<:Integer}(adjmx::AbstractMatrix)
-    dima, dimb = size(adjmx)
-    dima == dimb || error("Adjacency / distance matrices must be square")
-
-    g = DiGraph{T}(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb), i)
-        add_edge!(g, ind...)
-    end
-    return g
-end
-
+(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+    erdos_renyi(n, m, DiGraph{T}; seed=seed)
 DiGraph{T<:Integer}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
 DiGraph{T<:Integer}(n::T) = DiGraph{T}(n)
-DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
-DiGraph() = Graph{Int}()
+DiGraph() = DiGraph{Int}()
 
 
 @compat const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
@@ -149,32 +126,6 @@ function add_vertex!{T}(g::Graph{T})
     push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
-
-##### DIGRAPH CONSTRUCTORS  #############
-
-
-function DiGraph{T<:Real}(adjmx::SparseMatrixCSC{T})
-    dima, dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = DiGraph(dima)
-    maxc = length(adjmx.colptr)
-    for c = 1:(maxc-1)
-        for rind = adjmx.colptr[c]:adjmx.colptr[c+1]-1
-            isnz = (adjmx.nzval[rind] != zero(T))
-            if isnz
-                r = adjmx.rowval[rind]
-                add_edge!(g,r,c)
-            end
-        end
-    end
-    return g
-end
-
-
-#########
-
-
 
 function copy{T}(g::DiGraph{T})
     return DiGraph{T}(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))

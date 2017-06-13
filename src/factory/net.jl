@@ -17,9 +17,12 @@ A type representing a directed graph with indexed edges.
 
 Construct a `Network` with `n` vertices and no edges.
 
-    Network(adjmx::AbstractMatrix)
+    Network(adjmx::AbstractMatrix; selfedges=true, upper=false)
 
-Construct a `Network` from the adjacency matrix `adjmx`.
+Construct a `Network` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
+If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
 type Network <: ANetwork
     ne::Int
@@ -59,9 +62,10 @@ A type representing an directed graph with indexed edges.
 
 Construct a `DiNetwork` with `n` vertices and no edges.
 
-    DiNetwork(adjmx::AbstractMatrix)
+    DiNetwork(adjmx::AbstractMatrix; selfedges=true)
 
 Construct a `DiNetwork` from the adjacency matrix `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
 type DiNetwork <: ADiNetwork
     ne::Int
@@ -93,21 +97,6 @@ function DiNetwork(n::Integer = 0)
     free_indexes = Vector{Int}()
     return DiNetwork(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
-
-function DiNetwork{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = DiNetwork(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-
-DiNetwork(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNetwork; seed=seed)
 
 nv(g::NetOrDiNet) = length(g.out_edges)
 ne(g::NetOrDiNet) = g.ne
@@ -227,20 +216,6 @@ function Network(n::Integer = 0)
     free_indexes = Vector{Int}()
     return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
 end
-
-function Network{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = Network(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-Network(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Network; seed=seed)
 
 function add_vertex!(g::Network)
     push!(g.out_edges, Vector{Pair{Int,Int}}())

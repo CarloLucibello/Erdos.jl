@@ -31,7 +31,7 @@ In order to define a custom graph type, e.g. `MyGraph <: AGraph`, some guarantee
 - vertices are integers in 1:nv(g)
 
 **Mandatory methods**:
-- basic constructors (e.g. MyGraph(n), MyGraph())
+- basic constructors: MyGraph(n), MyGraph())
 - nv(g)
 - ne(g)
 - out_neighbors(g, v)

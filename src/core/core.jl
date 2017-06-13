@@ -176,6 +176,51 @@ digraph(g::ADiGraph) = g
 
 #### FALLBACKS #################
 
+function (::Type{G}){G<:ADiGraph, T<:Number}(adjmx::AbstractMatrix{T}
+        ; selfedges=true)
+    op =  selfedges ? ((x,y) -> true)  : (!=)
+    return _graph_from_matr!(G, op, adjmx)
+end
+
+function (::Type{G}){G<:AGraph, T<:Number}(adjmx::AbstractMatrix{T}
+        ; upper=false, selfedges=true)
+
+  op =  upper && !selfedges  ? (<) :
+        upper && selfedges   ? (<=)  :
+        !upper && !selfedges ? (!=) : ((x,y) -> true)
+
+  return _graph_from_matr!(G, op, adjmx)
+end
+
+function _graph_from_matr!(G, op, adjmx::AbstractMatrix)
+    n, m = size(adjmx)
+    n == m || error("Adjacency / distance matrices must be square")
+    g = G(n)
+    for i in eachindex(adjmx)
+        adjmx[i] == 0 && continue
+        u, v = ind2sub(adjmx, i)
+        op(u,v) || continue
+        add_edge!(g, u, v)
+    end
+    return g
+end
+
+function _graph_from_matr!(G, op, adjmx::SparseMatrixCSC)
+    n, m = size(adjmx)
+    n == m || error("Adjacency / distance matrices must be square")
+    g = G(n)
+    rows = rowvals(adjmx)
+    for v=1:n
+        for j in nzrange(adjmx, v)
+           u = rows[j]
+           op(u,v) || continue
+           add_edge!(g, u, v)
+        end
+    end
+    return g
+end
+
+(::Type{G}){G<:AGraphOrDiGraph}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, G; seed=seed)
 
 function digraph(g::AGraph)
     G = digraphtype(g)
