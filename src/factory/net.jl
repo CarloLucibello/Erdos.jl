@@ -17,9 +17,12 @@ A type representing a directed graph with indexed edges.
 
 Construct a `Network` with `n` vertices and no edges.
 
-    Network(adjmx::AbstractMatrix)
+    Network(adjmx::AbstractMatrix; selfedges=true, upper=false)
 
-Construct a `Network` from the adjacency matrix `adjmx`.
+Construct a `Network` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
+If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
 type Network <: ANetwork
     ne::Int
@@ -59,9 +62,10 @@ A type representing an directed graph with indexed edges.
 
 Construct a `DiNetwork` with `n` vertices and no edges.
 
-    DiNetwork(adjmx::AbstractMatrix)
+    DiNetwork(adjmx::AbstractMatrix; selfedges=true)
 
 Construct a `DiNetwork` from the adjacency matrix `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
 type DiNetwork <: ADiNetwork
     ne::Int

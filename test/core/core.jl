@@ -459,4 +459,40 @@ pop_vertex!(g)
 rem_vertex!(h, 10)
 @test g == h
 
-end # testset
+A = [1 2 0;
+    -1 0 1;
+     3  1 2]
+g = G(A)
+@test nv(g) == 3
+@test ne(g) == 5
+g = G(A, upper=true)
+@test ne(g) == 4
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 2)
+@test has_edge(g, 1, 1)
+g = G(A, upper=true, selfedges=false)
+@test ne(g) == 2
+@test !has_edge(g, 1, 3)
+@test !has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+@test !has_edge(g, 3, 3)
+g = G(A, upper=false, selfedges=false)
+@test ne(g) == 3
+@test has_edge(g, 1, 3)
+@test !has_edge(g, 2, 2)
+@test !has_edge(g, 1, 1)
+@test !has_edge(g, 3, 3)
+
+g = DG(A)
+@test nv(g) == 3
+@test ne(g) == 7
+@test has_edge(g, 1, 1)
+@test !has_edge(g, 2, 2)
+@test has_edge(g, 3, 3)
+g = DG(A, selfedges=false)
+@test ne(g) == 5
+@test !has_edge(g, 1, 1)
+@test !has_edge(g, 2, 2)
+@test !has_edge(g, 3, 3)
+
+end #testset

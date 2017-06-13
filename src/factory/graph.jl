@@ -12,10 +12,12 @@ A simple graph type based on an adjacency list.
 
 Construct a `Graph` with `n` vertices and no edges.
 
-    Graph{T}(adjmx::AbstractMatrix)
-    Graph(adjmx::AbstractMatrix) = Graph{Int}(adjmx)
+    Graph{T}(adjmx::AbstractMatrix; upper=false, selfedges=true)
 
-Construct a `Graph{T}` from the adjacency matrix `adjmx`.
+Construct a `Graph{T}` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
+If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
 type Graph{T<:Integer} <: AGraph
     ne::Int
@@ -49,10 +51,11 @@ A simple digraph type based on two adjacency lists (forward and backward).
 
 Construct a `DiGraph` with `n` vertices and no edges.
 
-    DiGraph{T}(adjmx::AbstractMatrix)
-    DiGraph(adjmx::AbstractMatrix) = DiGraph{Int}(adjmx)
+    DiGraph{T}(adjmx::AbstractMatrix; selfedges=true)
 
-Construct a `DiGraph` from the adjacency matrix `adjmx`.
+Construct a `DiGraph{T}` from the adjacency matrix `adjmx`, placing an edge in
+correspondence to each nonzero element of `adjmx`.
+If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
 type DiGraph{T<:Integer} <: ADiGraph
     ne

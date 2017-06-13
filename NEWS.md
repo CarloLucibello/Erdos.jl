@@ -1,4 +1,8 @@
-## v0.3  2017.6.x
+## v0.3.1  2017.6.x
+- faster constructor from matrix. Also add the possibility to select only the upper triangular and/or the non-diagonal part.
+- fix a bug with `DiGraph()` constructor returning a `Graph(0,0)`.
+
+## v0.3  2017.6.11
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.
 - add `is_tree(g)`
 - `vprop(g, v)` and `eprop(g, e)` return a dictionary containing the properties
