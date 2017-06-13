@@ -21,6 +21,8 @@ accordingly.
     EdgeMap{T}(g, data)
 
 Construct a EdgeMap with `data` as underlying storage.
+The storage type can be a matrix or an associative `edg => val` type or
+a vector for graph with indexed edges.
 """
 type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     g::G
@@ -52,12 +54,15 @@ setindex!(m::EdgeMap, x, i::Integer, j::Integer) = setindex!(m, x, edge(m.g, i, 
 haskey(m::EdgeMap, i::Integer, j::Integer) = haskey(m, edge(m.g, i, j))
 
 ### MATRIX DATA
+_sort(i, j) = i <= j ? (i, j) : (j , i)
 # Associative interface
 getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
-    getindex(m.data, src(e), dst(e))
+    getindex(m, src(e), dst(e))
 setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, e::AEdge) =
-    setindex!(m.data, x, src(e), dst(e))
-get{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
+    setindex!(m, x, src(e), dst(e))
+get{G<:AGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
+    get(m.data, _sort(Int(src(e)), Int(dst(e))), x)
+get{G<:ADiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge, x) =
     get(m.data, (Int(src(e)), Int(dst(e))), x)
 haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, e::AEdge) =
      haskey(m, src(e), dst(e))
@@ -65,9 +70,13 @@ haskey{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j:
   (1 <= i <= size(m.data, 1)) && (1 <= j <= size(m.data, 1))
 
 # matrix interface
-getindex{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
+getindex{G<:AGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
+    getindex(m.data, _sort(i, j)...)
+getindex{G<:ADiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, i::Integer, j::Integer) =
     getindex(m.data, i, j)
-setindex!{G<:AGraphOrDiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
+setindex!{G<:AGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
+    setindex!(m.data, x, _sort(i, j)...)
+setindex!{G<:ADiGraph,T,D<:AbstractMatrix}(m::EdgeMap{G,T,D}, x, i::Integer, j::Integer) =
     setindex!(m.data, x, i, j)
 
 ### VECTOR DATA (only indexed edges)

@@ -1,6 +1,8 @@
-## v0.3.1  2017.6.x
+## v0.4  2017.6.x
 - faster constructor from matrix. Also add the possibility to select only the upper triangular and/or the non-diagonal part.
 - fix a bug with `DiGraph()` constructor returning a `Graph(0,0)`.
+- `EdgeMap(g, m)` for matrix argument `m` now uses only the upper triangular part
+of `m` if `g` is an undirected graph.
 
 ## v0.3  2017.6.11
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.

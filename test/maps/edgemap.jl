@@ -22,6 +22,41 @@ em = EdgeMap(g, m)
 @test valtype(em) == Float64
 # @test sprint(show, em) == "EdgeMap{Float64}" #TODO
 
+d = [1 0 1;
+     1 0 2;
+     3 0 0]
+g = G(d, upper=true)
+m = EdgeMap(g, d)
+@test m[1,2] == m[2,1] == 0
+@test m[1,3] == m[3,1] == 1
+@test m[1,1] == 1
+@test m[2,2] == 0
+m[3, 1] = -1
+@test m[1,3] == m[3,1] == -1
+@test d[1,3] == -1
+@test d[3,1] == 3
+
+d = [1 0 1;
+     1 0 2;
+     3 0 0]
+g = DG(d)
+m = EdgeMap(g, d)
+@test m[1,2] != m[2,1]
+@test m[1,3] != m[3,1]
+@test m[1,1] == 1
+@test m[2,2] == 0
+m[3, 1] = -1
+@test m[1,3]  == 1
+@test m[3,1]  == -1
+@test d[1,3] == 1
+@test d[3,1] == -1
+
+@test get(m, edge(g, 1, 2), -100) == 0
+
+m = EdgeMap(g, sparse(d))
+@test values(m) == nonzeros(sparse(d))
+@test get(m, edge(g, 1, 2), -100) == 0
+
 # ConstEdgeMap
 em = ConstEdgeMap(g, 1)
 @test valtype(em) == Int
