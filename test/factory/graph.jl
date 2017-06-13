@@ -18,4 +18,7 @@ w = sprand(10,10, 0.1)
 @test Graph(w) == Graph{Int}(w)
 @test DiGraph(w) == DiGraph{Int}(w)
 
+@test Graph(0) == Graph() ==Graph{Int}() == Graph{Int}(0)
+@test DiGraph(0) == DiGraph() == DiGraph{Int}() == DiGraph{Int}(0)
+
 end # testset

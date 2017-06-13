@@ -94,19 +94,6 @@ function DiNetwork(n::Integer = 0)
     return DiNetwork(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
 
-function DiNetwork{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = DiNetwork(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
-end
-
-
 DiNetwork(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNetwork; seed=seed)
 
 nv(g::NetOrDiNet) = length(g.out_edges)
@@ -226,18 +213,6 @@ function Network(n::Integer = 0)
     epos = Vector{Pair{Int,Int}}()
     free_indexes = Vector{Int}()
     return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
-end
-
-function Network{T<:Real}(adjmx::AbstractMatrix{T})
-    dima,dimb = size(adjmx)
-    isequal(dima,dimb) || error("Adjacency / distance matrices must be square")
-
-    g = Network(dima)
-    for i in find(adjmx)
-        ind = ind2sub((dima,dimb),i)
-        add_edge!(g,ind...)
-    end
-    return g
 end
 
 Network(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Network; seed=seed)
