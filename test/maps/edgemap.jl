@@ -51,6 +51,12 @@ m[3, 1] = -1
 @test d[1,3] == 1
 @test d[3,1] == -1
 
+@test get(m, edge(g, 1, 2), -100) == 0
+
+m = EdgeMap(g, sparse(d))
+@test values(m) == nonzeros(sparse(d))
+@test get(m, edge(g, 1, 2), -100) == 0
+
 # ConstEdgeMap
 em = ConstEdgeMap(g, 1)
 @test valtype(em) == Int
