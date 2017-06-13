@@ -220,6 +220,8 @@ function _graph_from_matr!(G, op, adjmx::SparseMatrixCSC)
     return g
 end
 
+(::Type{G}){G<:AGraphOrDiGraph}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, G; seed=seed)
+
 function digraph(g::AGraph)
     G = digraphtype(g)
     h = G(nv(g))

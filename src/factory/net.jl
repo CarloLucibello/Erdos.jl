@@ -94,8 +94,6 @@ function DiNetwork(n::Integer = 0)
     return DiNetwork(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
 
-DiNetwork(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, DiNetwork; seed=seed)
-
 nv(g::NetOrDiNet) = length(g.out_edges)
 ne(g::NetOrDiNet) = g.ne
 
@@ -214,8 +212,6 @@ function Network(n::Integer = 0)
     free_indexes = Vector{Int}()
     return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
 end
-
-Network(n::Integer, m::Integer; seed::Integer=-1) = erdos_renyi(n, m, Network; seed=seed)
 
 function add_vertex!(g::Network)
     push!(g.out_edges, Vector{Pair{Int,Int}}())

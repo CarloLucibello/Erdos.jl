@@ -28,6 +28,8 @@ function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
     return Graph{T}(0, fadjlist)
 end
 
+(::Type{Graph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+    erdos_renyi(n, m, Graph{T}; seed=seed)
 Graph{T<:Integer}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
 Graph{T<:Integer}(n::T) = Graph{T}(n)
 Graph() = Graph{Int}()
@@ -65,8 +67,8 @@ function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
     return DiGraph{T}(0, fadjlist, badjlist)
 end
 
-(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, DiGraph{T}; seed=seed)
-
+(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+    erdos_renyi(n, m, DiGraph{T}; seed=seed)
 DiGraph{T<:Integer}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
 DiGraph{T<:Integer}(n::T) = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
