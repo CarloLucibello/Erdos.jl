@@ -103,4 +103,17 @@ for m in MAPS_LIST
     @test !haskey(m, 100,100)
 end
 
+g = G(10,10)
+m = EdgeMap(g, rand(10,10))
+adj = adjacency_list(g)
+madj = edgemap2adjlist(m)
+@test length(madj) == length(adj)
+for i=1:nv(g)
+    @test length(madj[i]) == length(adj[i])
+    for (k, j) in enumerate(adj[i])
+        @test madj[i][k] == m[i, j]
+    end
+end
+
+
 end # testset

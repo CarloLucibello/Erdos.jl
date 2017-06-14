@@ -7,7 +7,7 @@ module Erdos
 
 import GZip # I/O
 import StatsFuns # randgraphs
-using EzXML # I/O  graphml, gexf  #TODO import instead of using 
+using EzXML # I/O  graphml, gexf  #TODO import instead of using
 import BlossomV # matching
 import Clustering: kmeans # community detection
 using Compat
@@ -155,6 +155,7 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 # maps
 AVertexMap, ConstVertexMap, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
+edgemap2adjlist,
 
 # properties
 PropertyStore,

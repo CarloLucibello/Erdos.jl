@@ -150,3 +150,11 @@ get(m::ConstEdgeMap, e::AEdge, x) = m.val
 size(m::ConstEdgeMap) = (typemax(Int),)
 
 values(m::ConstEdgeMap) = [m.val]
+
+"""
+    edgemap2adjlist(emap)
+
+Returns a vector of vectors containing the values of the edge map `emap` on graph `g`
+following the same ordering of [`adjacency_list`](@ref)`(g)`.
+"""
+edgemap2adjlist(m::AEdgeMap) = [[m[e] for e in out_edges(m.g, i)] for i=1:nv(m.g)]
