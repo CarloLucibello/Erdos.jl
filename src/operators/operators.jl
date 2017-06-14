@@ -187,6 +187,9 @@ Returns the (cartesian product)[https://en.wikipedia.org/wiki/Tensor_product_of_
 function cartesian_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
     id(i, j) = (i-1)*nv(h) + j
+    # j = id % nv(h)
+    # j == 0 && (j+=1)
+    # i = (id - 1) ÷ nv(h)
     for (i1, i2) in edges(g)
         for j=1:nv(h)
             add_edge!(z, id(i1,j), id(i2,j))
