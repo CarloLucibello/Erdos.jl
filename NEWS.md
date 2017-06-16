@@ -3,6 +3,7 @@
 - fix a bug with `DiGraph()` constructor returning a `Graph(0,0)`.
 - `EdgeMap(g, m)` for matrix argument `m` now uses only the upper triangular part
 of `m` if `g` is an undirected graph.
+- add `edgemap2adjlist`
 
 ## v0.3  2017.6.11
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.
