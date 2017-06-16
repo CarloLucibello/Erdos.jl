@@ -172,26 +172,23 @@ end
 
 
 """
-    crosspath(len::Integer, g::AGraph)
+    crosspath(g::AGraph, n::Integer)
 
-Replicate `len` times `h` and connect each vertex with its copies in a path
+Replicate `n` times `g` and connect each vertex with its copies in a path.
 """
-crosspath{G<:AGraph}(len::Integer, g::G) =
-                cartesian_product(PathGraph(len, G), g)
+crosspath{G<:AGraph}(g::G, n) = cartesian_product(g, PathGraph(n, G))
 
 """
     cartesian_product(g, h)
 
-Returns the (cartesian product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
+Returns the (cartesian product)[https://en.wikipedia.org/wiki/Cartesian_product_of_graphs] of `g` and `h`
 """
 function cartesian_product{G<:AGraphOrDiGraph}(g::G, h::G)
-    z = G(nv(g)*nv(h))
-    id(i, j) = (i-1)*nv(h) + j
-    # j = id % nv(h)
-    # j == 0 && (j+=1)
-    # i = (id - 1) ÷ nv(h)
-    for (i1, i2) in edges(g)
-        for j=1:nv(h)
+    z = G(nv(g) * nv(h))
+    id(i, j) = i + (j-1) * nv(g)
+
+    for j=1:nv(h)
+        for (i1, i2) in edges(g)
             add_edge!(z, id(i1,j), id(i2,j))
         end
     end
@@ -211,9 +208,9 @@ Returns the (tensor product)[https://en.wikipedia.org/wiki/Tensor_product_of_gra
 """
 function tensor_product{G<:AGraphOrDiGraph}(g::G, h::G)
     z = G(nv(g)*nv(h))
-    id(i, j) = (i-1)*nv(h) + j
-    for (i1, i2) in edges(g)
-        for (j1, j2) in edges(h)
+    id(i, j) = i + (j-1)*nv(g)
+    for (j1, j2) in edges(h)
+        for (i1, i2) in edges(g)
             add_edge!(z, id(i1, j1), id(i2, j2))
         end
     end
