@@ -115,5 +115,34 @@ for i=1:nv(g)
     end
 end
 
+g = G(10,20)
+emap = EdgeMap(g, rand(10,20))
+m = Matrix(emap)
+@test typeof(m) == Matrix{Float64}
+sp = sparse(emap)
+@test typeof(sp) <: SparseMatrixCSC{Float64}
+
+@test size(m) == size(sp) == (nv(g), nv(g))
+@test countnz(m) == countnz(sp) == 2ne(g)
+
+for e in edges(g)
+    u, v = src(e), dst(e)
+    @test m[u,v] == m[v,u] == sp[u, v] == sp[v, u] == emap[e]
+end
+
+g = DG(10,20)
+emap = EdgeMap(g, rand(10,20))
+m = Matrix(emap)
+@test typeof(m) == Matrix{Float64}
+sp = sparse(emap)
+@test typeof(sp) <: SparseMatrixCSC{Float64}
+
+@test size(m) == size(sp) == (nv(g), nv(g))
+@test countnz(m) == countnz(sp) == ne(g)
+
+for e in edges(g)
+    u, v = src(e), dst(e)
+    @test m[u,v] == sp[u, v] == emap[e]
+end
 
 end # testset

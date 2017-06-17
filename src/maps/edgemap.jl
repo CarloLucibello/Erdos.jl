@@ -158,3 +158,31 @@ Returns a vector of vectors containing the values of the edge map `emap` on grap
 following the same ordering of [`adjacency_list`](@ref)`(g)`.
 """
 edgemap2adjlist(m::AEdgeMap) = [[m[e] for e in out_edges(m.g, i)] for i=1:nv(m.g)]
+
+function Matrix(emap::EdgeMap)
+    g = emap.g
+    M = zeros(valtype(emap), nv(g), nv(g))
+    return fill_mat_from_map!(M, g, emap)
+end
+
+function sparse(emap::EdgeMap)
+    g = emap.g
+    M = spzeros(valtype(emap), nv(g), nv(g))
+    return fill_mat_from_map!(M, g, emap)
+end
+
+function fill_mat_from_map!(M, g::ADiGraph, emap::AEdgeMap)
+    for e in edges(g)
+        u, v = src(e), dst(e)
+        M[u,v] = emap[e]
+    end
+    return M
+end
+
+function fill_mat_from_map!(M, g::AGraph, emap::AEdgeMap)
+    for e in edges(g)
+        u, v = src(e), dst(e)
+        M[u,v] = M[v,u] = emap[e]
+    end
+    return M
+end

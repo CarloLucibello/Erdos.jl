@@ -8,6 +8,8 @@ of `m` if `g` is an undirected graph.
 - conform indexing of `cartesian_product(g,h)` and `tensor_product(g,h)` to julia indexing for matrices:
   - before: `id(i,j) = (i-1)*nv(h) + nv(g)`
   - after: `id(i,j) = i + (j-1)*nv(g)`
+- add `sparse` method to convert and edge map to a sparse matrix
+- add `Matrix` method to convert and edge map to a matrix
 
 ## v0.3  2017.6.11
 - `is_cyclic(g)` -> `has_cycles(g)`. Also it was basically not working for undirected graphs, fixed now.

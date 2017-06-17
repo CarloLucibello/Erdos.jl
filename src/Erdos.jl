@@ -27,7 +27,7 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             sort, push!, pop!, iteratorsize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape,     #iterators
-            haskey #edgemap
+            haskey, Matrix #edgemap
 
 #interface
 export AGraph, ADiGraph, AGraphOrDiGraph,
