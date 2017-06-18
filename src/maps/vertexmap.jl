@@ -47,6 +47,8 @@ get(m::VertexMap, i::Integer, x) = get(m.data, i, x)
 
 ==(m1::VertexMap, m2::VertexMap) = m1.data == m2.data
 
+Base.Vector(vmap::VertexMap) = [vmap[i] for i=1:nv(vmap.g)]
+
 """
     immutable ConstVertexMap{T} <: AVertexMap{T}
         val::T

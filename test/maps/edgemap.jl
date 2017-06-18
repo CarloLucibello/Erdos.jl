@@ -69,7 +69,6 @@ em[Edge(1,2)] = 18
 em[E(1,2)] = 18
 
 @test em[1,2] == 1
-@test size(em) == (typemax(Int),)
 @test values(em) == [1]
 # @test sprint(show, em) == "EdgeMap{Int64}"
 
@@ -130,6 +129,11 @@ for e in edges(g)
     @test m[u,v] == m[v,u] == sp[u, v] == sp[v, u] == emap[e]
 end
 
+@test size(emap) == (nv(g), nv(g))
+@test size(emap, 1) == nv(g)
+@test size(emap, 2) == nv(g)
+@test_throws ErrorException size(emap, 3)
+
 g = DG(10,20)
 emap = EdgeMap(g, rand(10,20))
 m = Matrix(emap)
@@ -144,5 +148,7 @@ for e in edges(g)
     u, v = src(e), dst(e)
     @test m[u,v] == sp[u, v] == emap[e]
 end
+
+@test size(emap) == (nv(g), nv(g))
 
 end # testset
