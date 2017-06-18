@@ -1,7 +1,8 @@
 @testset "$TEST $G" begin
 
+if G <: ANetwork
 ## EDGE
-g = Network(10, 20)
+g = G(10, 20)
 m = eprop!(g, "label", Int)
 
 @test valtype(m) == Int
@@ -43,7 +44,7 @@ eprop(g, "bye")[edg[2]] = "e2"
 @test !has_eprop(g, "hi", edg[2])
 
 ## VERTEX
-g = Network(3)
+g = G(3)
 add_edge!(g,1,2)
 add_edge!(g,2,3)
 m = vprop!(g, "label", [1,2,3])
@@ -71,11 +72,13 @@ m[1] =  4
 
 
 ## GRAPH
-g = DiNetwork(3, 5)
+g = DG(3, 5)
 gprop!(g, "lab", "mygraph")
 @test gprop(g, "lab") == "mygraph"
 @test gprop_names(g) == ["lab"]
 rem_gprop!(g, "lab")
 @test gprop_names(g) == []
+
+end
 
 end #testset

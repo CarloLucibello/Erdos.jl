@@ -17,9 +17,13 @@ Returns a map that associates values of type `T`
 to the vertices of  graph `g`. The underlying storage structures is chosen
 accordingly.
 
-    VertexMap{T}(g, data)
+    VertexMap(g, data)
 
 Construct a VertexMap with `data` as underlying storage.
+
+    VertexMap(g, f)
+
+Construct a vertex map with value `f(u)` for each `u=1:nv(g)`.
 """
 type VertexMap{G<:AGraphOrDiGraph, T, D} <: AVertexMap{T}
     g::G
@@ -35,6 +39,14 @@ function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
     V = vertextype(g)
     return VertexMap(g, T, Dict{Int,T}())
 end
+
+function VertexMap(g::AGraphOrDiGraph, f::Function)
+    V = vertextype(g)
+    T = Base.return_types(f, (V,))[1]
+    data = T[f(i) for i=1:nv(g)]
+    return VertexMap(g, T, data)
+end
+
 
 length(m::VertexMap) = length(m.data)
 getindex(m::VertexMap, i::Integer) = getindex(m.data, i)

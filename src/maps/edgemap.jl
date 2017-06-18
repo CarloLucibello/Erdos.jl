@@ -18,11 +18,15 @@ Returns a map that associates values of type `T`
 to the vertices of  graph `g`. The underlying storage structures is chosen
 accordingly.
 
-    EdgeMap{T}(g, data)
+    EdgeMap(g, data)
 
 Construct a EdgeMap with `data` as underlying storage.
 The storage type can be a matrix or an associative `edg => val` type or
 a vector for graph with indexed edges.
+
+    EdgeMap(g, f)
+
+Construct an edge map with value `f(e)` for each `e` in `edges(g)`.
 """
 type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     g::G
@@ -39,10 +43,27 @@ EdgeMap{T,E<:AEdge}(g::AGraphOrDiGraph, d::Dict{E, T}) = EdgeMap(g, T, d)
 function EdgeMap{T}(g::AGraphOrDiGraph, ::Type{T})
     E = edgetype(g)
     if E <: AIndexedEdge
-        return EdgeMap(g, T, Dict{Int,T}())
+        # data = Vector{T}(ne(g))
+        data = Dict{Int,T}()
     else
-        return EdgeMap(g, T, Dict{E,T}())
+        data = Dict{E,T}()
     end
+    return EdgeMap(g, T, data)
+end
+
+
+function EdgeMap(g::AGraphOrDiGraph, f::Function)
+    E = edgetype(g)
+    T = Base.return_types(f, (E,))[1]
+    if E <: AIndexedEdge
+        data = Vector{T}(ne(g))
+        for e in edges(g)
+            data[idx(e)] = f(e)
+        end
+    else
+        data = Dict(e => f(e) for e in edges(g))
+    end
+    return EdgeMap(g, T, data)
 end
 
 length(m::EdgeMap) = length(m.data)
