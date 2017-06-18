@@ -17,12 +17,19 @@ vm = VertexMap(g, rand(1:10,10))
 @test !haskey(vm, -1)
 @test valtype(vm) == Int
 @test get(vm, 1, -100) != -100
+@test length(Vector(vm)) == 0
+
+g = G(10,20)
+v = rand(10)
+vm = VertexMap(g, v)
+@test Vector(vm) == v
 
 vm = VertexMap(g, Float64)
 @test valtype(vm) == Float64
 @test typeof(vm) <: AVertexMap
 
 vm[1] = 2.
+@test vm[1] == 2
 @test haskey(vm, 1)
 @test !haskey(vm, 2)
 @test get(vm, -1, -100) == -100

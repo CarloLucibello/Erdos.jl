@@ -68,3 +68,6 @@ src(e::IndexedEdge) = e.src
 dst(e::IndexedEdge) = e.dst
 idx(e::IndexedEdge) = e.idx
 reverse(e::IndexedEdge) = IndexedEdge(e.dst, e.src, e.idx)
+
+
+Base.sort(e::AEdge) = src(e) <= dst(e) ? e : reverse(e)

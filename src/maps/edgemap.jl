@@ -52,6 +52,9 @@ length(m::EdgeMap) = length(m.data)
 getindex(m::EdgeMap, i::Integer, j::Integer) = getindex(m, edge(m.g, i, j))
 setindex!(m::EdgeMap, x, i::Integer, j::Integer) = setindex!(m, x, edge(m.g, i, j))
 haskey(m::EdgeMap, i::Integer, j::Integer) = haskey(m, edge(m.g, i, j))
+size(m::EdgeMap) = (nv(m.g), nv(m.g))
+size(m::EdgeMap, i::Integer)::Int = 1 <= i <= 2 ? nv(m.g) : error("wrong dimension")
+
 
 ### MATRIX DATA
 _sort(i, j) = i <= j ? (i, j) : (j , i)
@@ -147,7 +150,6 @@ getindex(m::ConstEdgeMap, i::Integer, j::Integer) = m.val
 setindex!(m::ConstEdgeMap, x, e::AEdge) = nothing
 # setindex!(m::ConstEdgeMap, x, e::AEdge) = error("Cannot assign to ConstEdgeMap")
 get(m::ConstEdgeMap, e::AEdge, x) = m.val
-size(m::ConstEdgeMap) = (typemax(Int),)
 
 values(m::ConstEdgeMap) = [m.val]
 
@@ -159,7 +161,7 @@ following the same ordering of [`adjacency_list`](@ref)`(g)`.
 """
 edgemap2adjlist(m::AEdgeMap) = [[m[e] for e in out_edges(m.g, i)] for i=1:nv(m.g)]
 
-function Matrix(emap::EdgeMap)
+function Base.Matrix(emap::EdgeMap)
     g = emap.g
     M = zeros(valtype(emap), nv(g), nv(g))
     return fill_mat_from_map!(M, g, emap)
