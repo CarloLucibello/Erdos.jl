@@ -39,4 +39,14 @@ vm2 = deepcopy(vm)
 
 @test sprint(show, vm) == "VertexMap: $(vm.data)"
 
+
+g = G(10,20)
+m = VertexMap(g, i -> i^2)
+@test typeof(m.data) == Vector{V}
+@test length(m.data) == 10
+@test length(m) == 10
+for i=1:10
+    @test m[i] == i^2
+end
+
 end # testset

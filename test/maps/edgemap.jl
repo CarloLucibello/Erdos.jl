@@ -151,4 +151,16 @@ end
 
 @test size(emap) == (nv(g), nv(g))
 
+g = G(10,20)
+m = EdgeMap(g, e -> src(e) + dst(e))
+if E <: IndexedEdge
+    @test typeof(m.data) == Vector{V}
+else
+    @test typeof(m.data) == Dict{E, V}
+end
+for e in edges(g)
+    @test m[e] == src(e) + dst(e)
+end
+
+
 end # testset
