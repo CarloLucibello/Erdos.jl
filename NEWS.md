@@ -1,4 +1,7 @@
-## v0.4  2017.6.x
+## v0.5  2017.6.x
+- add `sort` for edges
+
+## v0.4  2017.6.16
 - faster constructor from matrix. Also add the possibility to select only the upper triangular and/or the non-diagonal part.
 - fix a bug with `DiGraph()` constructor returning a `Graph(0,0)`.
 - `EdgeMap(g, m)` for matrix argument `m` now uses only the upper triangular part
