@@ -3,13 +3,8 @@ using Erdos
 
 # Copy the list of features from the README to the
 # Getting Started page in docs, to avoid duplication.
-if VERSION < v"0.6"
-    readme = readlines("README.md")
-    indexbase = readlines("docs/src/indexbase.md")
-else
-    readme = readlines("README.md", chomp=false)
-    indexbase = readlines("docs/src/indexbase.md", chomp=false)
-end
+readme = readlines("README.md", chomp=false)
+indexbase = readlines("docs/src/indexbase.md", chomp=false)
 idx_features = findfirst(readme, "## Features\n") + 1
 open("docs/src/index.md", "w") do f
     for l in indexbase
