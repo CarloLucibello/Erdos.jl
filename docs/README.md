@@ -1,7 +1,8 @@
 To build and inspect the documentation
 ```
-cd docs/
-julia make.jl
+cd Erdos.jl/
+julia docs/make.jl
+cd docs
 mkdocs build
 mkdocs serve
 ```

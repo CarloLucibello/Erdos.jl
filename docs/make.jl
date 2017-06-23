@@ -1,18 +1,17 @@
 using Documenter
-include("../src/Erdos.jl")
 using Erdos
 
 # Copy the list of features from the README to the
 # Getting Started page in docs, to avoid duplication.
 if VERSION < v"0.6"
-    readme = readlines("../README.md")
-    indexbase = readlines("src/indexbase.md")
+    readme = readlines("README.md")
+    indexbase = readlines("docs/src/indexbase.md")
 else
-    readme = readlines("../README.md", chomp=false)
-    indexbase = readlines("src/indexbase.md", chomp=false)
+    readme = readlines("README.md", chomp=false)
+    indexbase = readlines("docs/src/indexbase.md", chomp=false)
 end
 idx_features = findfirst(readme, "## Features") + 1
-open("src/index.md", "w") do f
+open("docs/src/index.md", "w") do f
     for l in indexbase
         println(f, l)
     end
@@ -21,7 +20,7 @@ open("src/index.md", "w") do f
     end
 end
 
-cp("../datasets/README.md","src/datasets.md", remove_destination=true)
+cp("datasets/README.md","docs/src/datasets.md", remove_destination=true)
 
 makedocs(modules=[Erdos], doctest = true)
 
