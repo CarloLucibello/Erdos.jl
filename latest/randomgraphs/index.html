@@ -204,7 +204,7 @@
 
 <p>Grows the graph <code>g</code> according to <a href="https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model">Barabási–Albert</a> process into a graph with <code>n</code> vertices. At each step a new vertex is attached by preferential attachment to <code>k</code> different vertices already present in the graph.</p>
 <p>See also <a href="./#Erdos.barabasi_albert-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G&lt;:Union{Erdos.ADiGraph, Erdos.AGraph}"><code>barabasi_albert</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L161-L170' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L161-L170' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.barabasi_albert-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.barabasi_albert-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.barabasi_albert</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>barabasi_albert(n, k, G=Graph; seed=-1)
@@ -214,7 +214,7 @@ barabasi_albert(n, n0, k, G=Graph; seed=-1)
 <p>Creates a random graph of type <code>G</code> with <code>n</code> vertices according to <a href="https://en.wikipedia.org/wiki/Barab%C3%A1si%E2%80%93Albert_model">Barabási–Albert model</a>. It is grown by adding new vertices to an initial graph with <code>n0</code> vertices (<code>n0=k</code> if not specified). Each new vertex is attached with <code>k</code> edges to <code>k</code> different vertices already present in the system by preferential attachment. The initial graph is empty by default.</p>
 <p>Undirected graphs are created by default. Directed graphs can be created passing a directed graph type as last argument (e.g. <code>DiGraph</code>).</p>
 <p>See also <a href="./#Erdos.barabasi_albert!-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Int64,Int64}"><code>barabasi_albert!</code></a> for growing a given graph.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L137-L150' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L137-L150' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.erdos_renyi-Union{Tuple{G}, Tuple{Int64,Real,Type{G}}, Tuple{Int64,Real}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.erdos_renyi-Union{Tuple{G}, Tuple{Int64,Real,Type{G}}, Tuple{Int64,Real}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.erdos_renyi</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>erdos_renyi(n::Int, p::Real, G=Graph; seed=-1)
@@ -224,7 +224,7 @@ erdos_renyi(n::Int, m::Int, G=Graph; seed=-1)
 <p>Creates an <a href="http://en.wikipedia.org/wiki/Erdős–Rényi_model">Erdős–Rényi</a> random graph of type <code>G</code> with <code>n</code> vertices. Edges are added between pairs of vertices with probability <code>p</code> in the first method. In the second method <code>m</code> edges are randomly chosen insted.</p>
 <p>Undirected graphs are created by default. Directed graphs can be created passing a directed graph type as last argument (e.g. <code>DiGraph</code>)</p>
 <p>Note also that Erdős–Rényi graphs may be generated quickly using <code>erdos_renyi(n, ne)</code> or the  <code>Graph(nv, ne)</code> constructor, which randomly select <code>ne</code> edges among all the potential edges.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L1-L16' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L1-L16' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.random_configuration_model-Union{Tuple{G}, Tuple{Int64,Array{Int64,1},Type{G}}, Tuple{Int64,Array{Int64,1}}} where G<:Erdos.AGraph' href='#Erdos.random_configuration_model-Union{Tuple{G}, Tuple{Int64,Array{Int64,1},Type{G}}, Tuple{Int64,Array{Int64,1}}} where G<:Erdos.AGraph'>#</a>
 <strong><code>Erdos.random_configuration_model</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>random_configuration_model(n::Int, k::Vector{Int}; seed=-1, check_graphical=false)
@@ -233,7 +233,7 @@ erdos_renyi(n::Int, m::Int, G=Graph; seed=-1)
 <p>Creates a random undirected graph according to the <a href="http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf">configuraton model</a>. It contains <code>n</code> vertices, the vertex <code>i</code> having degree <code>k[i]</code>.</p>
 <p>Defining <code>c = mean(k)</code>, it allocates an array of <code>nc</code> <code>Int</code>s, and takes approximately $nc^2$ time.</p>
 <p>If <code>check_graphical=true</code> makes sure that <code>k</code> is a graphical sequence (see <code>is_graphical</code>).</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L411-L423' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L411-L423' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.random_regular_digraph-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Erdos.ADiGraph' href='#Erdos.random_regular_digraph-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Erdos.ADiGraph'>#</a>
 <strong><code>Erdos.random_regular_digraph</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>random_regular_digraph(n::Int, k::Int; dir::Symbol=:out, seed=-1)
@@ -241,7 +241,7 @@ erdos_renyi(n::Int, m::Int, G=Graph; seed=-1)
 
 <p>Creates a random directed <a href="https://en.wikipedia.org/wiki/Regular_graph">regular graph</a> with <code>n</code> vertices, each with degree <code>k</code>. The degree (in or out) can be specified using <code>dir=:in</code> or <code>dir=:out</code>. The default is <code>dir=:out</code>.</p>
 <p>For directed graphs, allocates an $n    imes n$ sparse matrix of boolean as an adjacency matrix and uses that to generate the directed graph.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L448-L458' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L448-L458' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.random_regular_graph-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Erdos.AGraph' href='#Erdos.random_regular_graph-Union{Tuple{G}, Tuple{Int64,Int64,Type{G}}, Tuple{Int64,Int64}} where G<:Erdos.AGraph'>#</a>
 <strong><code>Erdos.random_regular_graph</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>random_regular_graph(n::Int, k::Int; seed=-1)
@@ -249,7 +249,7 @@ erdos_renyi(n::Int, m::Int, G=Graph; seed=-1)
 
 <p>Creates a random undirected <a href="https://en.wikipedia.org/wiki/Regular_graph">regular graph</a> with <code>n</code> vertices, each with degree <code>k</code>.</p>
 <p>For undirected graphs, allocates an array of <code>nk</code> <code>Int</code>s, and takes approximately $nk^2$ time. For $k &gt; n/2$, generates a graph of degree <code>n-k-1</code> and returns its complement.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L373-L383' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L373-L383' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.static_fitness_model-Union{Tuple{G}, Tuple{Int64,Array{T,1},Type{G}}, Tuple{Int64,Array{T,1}}, Tuple{T}} where G<:Erdos.AGraph where T<:Real' href='#Erdos.static_fitness_model-Union{Tuple{G}, Tuple{Int64,Array{T,1},Type{G}}, Tuple{Int64,Array{T,1}}, Tuple{T}} where G<:Erdos.AGraph where T<:Real'>#</a>
 <strong><code>Erdos.static_fitness_model</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>static_fitness_model(m, fitness, G=Graph; seed=-1)
@@ -263,7 +263,7 @@ static_fitness_model(m, fitness_out, fitness_in, G=DiGraph; seed=-1)
 <li>Goh K-I, Kahng B, Kim D: Universal behaviour of load distribution</li>
 </ul>
 <p>in scale-free networks. Phys Rev Lett 87(27):278701, 2001.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L236-L250' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L236-L250' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.static_scale_free-Union{Tuple{G}, Tuple{Int64,Int64,Float64,Type{G}}, Tuple{Int64,Int64,Float64}} where G<:Erdos.AGraph' href='#Erdos.static_scale_free-Union{Tuple{G}, Tuple{Int64,Int64,Float64,Type{G}}, Tuple{Int64,Int64,Float64}} where G<:Erdos.AGraph'>#</a>
 <strong><code>Erdos.static_scale_free</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>function static_scale_free(n, m, α, G=Graph;
@@ -282,7 +282,7 @@ static_fitness_model(m, fitness_out, fitness_in, G=DiGraph; seed=-1)
 <li>Chung F and Lu L: Connected components in a random graph with given degree sequences. Annals of Combinatorics 6, 125-145, 2002.</li>
 <li>Cho YS, Kim JS, Park J, Kahng B, Kim D: Percolation transitions in scale-free networks under the Achlioptas process. Phys Rev Lett 103:135702, 2009.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L313-L335' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L313-L335' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.stochastic_block_model-Union{Tuple{Array{T,2},Array{Int64,1},Type{G}}, Tuple{Array{T,2},Array{Int64,1}}, Tuple{G}, Tuple{T}} where G<:Erdos.AGraph where T<:Real' href='#Erdos.stochastic_block_model-Union{Tuple{Array{T,2},Array{Int64,1},Type{G}}, Tuple{Array{T,2},Array{Int64,1}}, Tuple{G}, Tuple{T}} where G<:Erdos.AGraph where T<:Real'>#</a>
 <strong><code>Erdos.stochastic_block_model</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>stochastic_block_model(c::Matrix{Float64}, n::Vector{Int}; seed::Int = -1)
@@ -293,7 +293,7 @@ stochastic_block_model(cin::Float64, coff::Float64, n::Vector{Int}; seed::Int = 
 <p><code>c[a,b]</code> : Mean number of neighbors of a vertex in block <code>a</code> belonging to block <code>b</code>.            Only the upper triangular part is considered, since the lower traingular is            determined by $c[b,a] = c[a,b] * n[a]/n[b]$. <code>n[a]</code> : Number of vertices in block <code>a</code></p>
 <p>The second form samples from a SBM with <code>c[a,a]=cin</code>, and <code>c[a,b]=coff</code>.</p>
 <p>For a dynamic version of the SBM see the <code>StochasticBlockModel</code> type and related functions.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L490-L505' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L490-L505' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.watts_strogatz-Union{Tuple{G}, Tuple{Int64,Int64,Real,Type{G}}, Tuple{Int64,Int64,Real}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.watts_strogatz-Union{Tuple{G}, Tuple{Int64,Int64,Real,Type{G}}, Tuple{Int64,Int64,Real}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.watts_strogatz</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>watts_strogatz(n, k, β, G=Graph; seed=-1)
@@ -301,7 +301,7 @@ stochastic_block_model(cin::Float64, coff::Float64, n::Vector{Int}; seed::Int = 
 
 <p>Creates a <a href="https://en.wikipedia.org/wiki/Watts_and_Strogatz_model">Watts-Strogatz</a> small model random graph with <code>n</code> vertices, each with degree <code>k</code>. Edges are randomized per the model based on probability <code>β</code>.</p>
 <p>Undirected graphs are created by default. Directed graphs can be created passing a directed graph type as last argument (e.g. <code>DiGraph</code>).</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/296fefe6e400438bd2dd3b1142ec94c0a224c952/src/generators/randgraphs.jl#L44-L53' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/generators/randgraphs.jl#L44-L53' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
