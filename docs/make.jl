@@ -10,7 +10,7 @@ else
     readme = readlines("README.md", chomp=false)
     indexbase = readlines("docs/src/indexbase.md", chomp=false)
 end
-idx_features = findfirst(readme, "## Features") + 1
+idx_features = findfirst(readme, "## Features\n") + 1
 open("docs/src/index.md", "w") do f
     for l in indexbase
         println(f, l)
