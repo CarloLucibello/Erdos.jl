@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Reading / Writing Graphs - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Reading / Writing Graphs";
+    var mkdocs_page_input_path = "persistence.md";
+    var mkdocs_page_url = "/persistence/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Reading / Writing Graphs</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#reading-and-writing-graphs">Reading and writing Graphs</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#examples">Examples</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Reading / Writing Graphs</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/persistence.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Reading-and-writing-Graphs-1'></a></p>
+<h1 id="reading-and-writing-graphs">Reading and writing Graphs</h1>
+<p>Graphs may be written to I/O streams and files using the <code>writegraph</code> function and read with the <code>readgraph</code> function. Currently supported common graph formats are <a href="http://en.wikipedia.org/wiki/GraphML">GraphML</a>, <a href="https://en.wikipedia.org/wiki/Graph_Modelling_Language">GML</a>, <a href="http://gexf.net/format">Gexf</a>, <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">DOT</a>, <a href="http://gephi.org/users/supported-graph-formats/pajek-net-format/">Pajek .net</a>, <a href="https://graph-tool.skewed.de/static/doc/gt_format.html">graph-tool gt</a>. If fast I/O and small memory footprint is a priority, use the <code>.gt</code> binary format.</p>
+<p><a id='Examples-1'></a></p>
+<h2 id="examples">Examples</h2>
+<pre><code class="julia">writegraph(&quot;mygraph.gml&quot;, g) #format is inferred by the name
+writegraph(&quot;mygraph.graphml&quot;, g)
+
+g = readgraph(&quot;mygraph.dot&quot;)
+g = readgraph(&quot;mygraph.net&quot;)
+</code></pre>
+
+<p><a id='Erdos.readgraph-Union{Tuple{G}, Tuple{String,Symbol,Type{G}}, Tuple{String,Symbol}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.readgraph-Union{Tuple{G}, Tuple{String,Symbol,Type{G}}, Tuple{String,Symbol}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
+<strong><code>Erdos.readgraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>readgraph(filename, G=Graph)
+readgraph(filename, t, G=Graph; compressed=false)
+</code></pre>
+
+<p>Reads a graph from  <code>filename</code> in the format <code>t</code>. Returns a graph of type <code>G</code> or the corresponding digraph/graph type. Compressed files can eventually be read.</p>
+<p>Supported formats are <code>:gml, :dot, :graphml, :gexf, :net, :gt</code>.</p>
+<p>If no format is provided, it will be inferred from <code>filename</code>.</p>
+<pre><code>readgraph(s::Symbol, G=Graph)
+</code></pre>
+
+<p>Read a graph identified by <code>s</code> from Erdos datasets collection (e.g. <code>s=:karate</code>). They are stored in the <code>gt</code> binary format in the <code>datasets</code> directory of the package. For a list of available graph refer to the documentation.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/persistence/common.jl#L8-L25' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.readnetwork-Union{Tuple{G}, Tuple{String,Symbol,Type{G}}, Tuple{String,Symbol}} where G<:Union{Erdos.ADiNetwork, Erdos.ANetwork}' href='#Erdos.readnetwork-Union{Tuple{G}, Tuple{String,Symbol,Type{G}}, Tuple{String,Symbol}} where G<:Union{Erdos.ADiNetwork, Erdos.ANetwork}'>#</a>
+<strong><code>Erdos.readnetwork</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>readnetwork(filename, G=Graph)
+readnetwork(filename, t, G=Graph; compressed=false)
+</code></pre>
+
+<p>Reads a graph from  <code>filename</code> in the format <code>t</code>. Returns a graph of type <code>G</code> or the corresponding digraph/graph type. Compressed files can eventually be read.</p>
+<p>Supported formats are <code>:gml, :dot, :graphml, :gexf, :net, :gt</code>.</p>
+<p>If no format is provided, it will be inferred from <code>filename</code>.</p>
+<pre><code>readnetwork(s::Symbol, G=Graph)
+</code></pre>
+
+<p>Read a graph identified by <code>s</code> from Erdos datasets collection (e.g. <code>s=:karate</code>). They are stored in the <code>gt</code> binary format in the <code>datasets</code> directory of the package. For a list of available graph refer to the documentation.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/persistence/common.jl#L54-L71' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.writegraph-Tuple{IO,Union{Erdos.ADiGraph, Erdos.AGraph},Symbol}' href='#Erdos.writegraph-Tuple{IO,Union{Erdos.ADiGraph, Erdos.AGraph},Symbol}'>#</a>
+<strong><code>Erdos.writegraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>writegraph(file, g)
+writegraph(file, g, t; compress=false)
+</code></pre>
+
+<p>Save a graph <code>g</code> to <code>file</code> in the format <code>t</code>.</p>
+<p>Eventually the resulting file can be compressed in the gzip format.</p>
+<p>Currently supported formats are <code>:gml, :graphml, :gexf, :dot, :net, :gt</code>.</p>
+<p>If no format is provided, it will be inferred from <code>file</code> along with compression.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/persistence/common.jl#L99-L110' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.writenetwork-Tuple{IO,Union{Erdos.ADiNetwork, Erdos.ANetwork},Symbol}' href='#Erdos.writenetwork-Tuple{IO,Union{Erdos.ADiNetwork, Erdos.ANetwork},Symbol}'>#</a>
+<strong><code>Erdos.writenetwork</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>writenetwork(file, g)
+writenetwork(file, g, t; compress=false)
+</code></pre>
+
+<p>Save a graph <code>g</code> to <code>file</code> in the format <code>t</code>.</p>
+<p>Eventually the resulting file can be compressed in the gzip format.</p>
+<p>Currently supported formats are <code>:gml, :graphml, :gexf, :dot, :net, :gt</code>.</p>
+<p>If no format is provided, it will be inferred from <code>file</code> along with compression.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/persistence/common.jl#L134-L145' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../datasets/" class="btn btn-neutral float-right" title="Graph Datasets">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../linalg/" class="btn btn-neutral" title="Linear Algebra"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../linalg/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../datasets/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

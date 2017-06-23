@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Deterministic Graphs - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Deterministic Graphs";
+    var mkdocs_page_input_path = "deterministicgraphs.md";
+    var mkdocs_page_url = "/deterministicgraphs/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Deterministic Graphs</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#deterministic-graph-generators">Deterministic Graph Generators</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#static-graphs">Static Graphs</a></li>
+        
+            <li><a class="toctree-l3" href="#small-graphs">Small Graphs</a></li>
+        
+            <li><a class="toctree-l3" href="#euclidean-graphs">Euclidean Graphs</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Deterministic Graphs</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/deterministicgraphs.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Deterministic-Graph-Generators-1'></a></p>
+<h1 id="deterministic-graph-generators">Deterministic Graph Generators</h1>
+<p><a id='Static-Graphs-1'></a></p>
+<h2 id="static-graphs">Static Graphs</h2>
+<p><em>Erdos.jl</em> implements a collection of classic graph generators:</p>
+<p><a id='Erdos.BinaryTree-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph' href='#Erdos.BinaryTree-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.BinaryTree</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>BinaryTree(levels, G=Graph)
+</code></pre>
+
+<p>Creates a binary tree with k-levels vertices are numbered 1:2^levels-1</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L179-L183' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CliqueGraph-Union{Tuple{G}, Tuple{Integer,Integer,Type{G}}, Tuple{Integer,Integer}} where G<:Erdos.AGraph' href='#Erdos.CliqueGraph-Union{Tuple{G}, Tuple{Integer,Integer,Type{G}}, Tuple{Integer,Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.CliqueGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>CliqueGraph(k, n, G=Graph)
+</code></pre>
+
+<p>This function generates a graph with <code>n</code> <code>k</code>-cliques connected circularly by <code>n</code> edges.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L223-L227' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CompleteBipartiteGraph-Union{Tuple{G}, Tuple{Integer,Integer,Type{G}}, Tuple{Integer,Integer}} where G<:Erdos.AGraph' href='#Erdos.CompleteBipartiteGraph-Union{Tuple{G}, Tuple{Integer,Integer,Type{G}}, Tuple{Integer,Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.CompleteBipartiteGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>CompleteBipartiteGraph(n1, n2, G = Graph)
+</code></pre>
+
+<p>Creates a complete bipartite graph with <code>n1+n2</code> vertices. It has edges connecting each pair of vertices in the two sets.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L20-L25' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CompleteDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph' href='#Erdos.CompleteDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.CompleteDiGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>CompleteDiGraph(n, G = DiGraph)
+</code></pre>
+
+<p>Creates a complete digraph with <code>n</code> vertices. A complete digraph has edges connecting each pair of vertices (both an ingoing and outgoing edge).</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L35-L40' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CompleteGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph' href='#Erdos.CompleteGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.CompleteGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>CompleteGraph(n, G = Graph)
+</code></pre>
+
+<p>Creates a complete graph of type <code>G</code> with <code>n</code> vertices. A complete graph has edges connecting each pair of vertices.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L4-L9' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CycleDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph' href='#Erdos.CycleDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.CycleDiGraph</code></strong> &mdash; <em>Method</em>.</p>
+<p>Creates a cycle digraph with <code>n</code> vertices. A cycle digraph is a closed path digraph.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L120-L122' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.CycleGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph' href='#Erdos.CycleGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.CycleGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>CycleGraph(n, G=Graph)
+</code></pre>
+
+<p>Creates a cycle graph with <code>n</code> vertices. A cycle graph is a closed path graph.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L106-L110' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.DoubleBinaryTree-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph' href='#Erdos.DoubleBinaryTree-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.DoubleBinaryTree</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>DoubleBinaryTree(levels, G=Graph)
+</code></pre>
+
+<p>Create a double complete binary tree with k-levels used as an example for spectral clustering by Guattery and Miller 1998.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L195-L200' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.Grid-Union{Tuple{AbstractArray{T,1},Type{G}}, Tuple{AbstractArray{T,1}}, Tuple{G}, Tuple{T}} where G<:Erdos.AGraph where T<:Integer' href='#Erdos.Grid-Union{Tuple{AbstractArray{T,1},Type{G}}, Tuple{AbstractArray{T,1}}, Tuple{G}, Tuple{T}} where G<:Erdos.AGraph where T<:Integer'>#</a>
+<strong><code>Erdos.Grid</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>Grid(dims::AbstractVector, G=Graph; periodic=false)
+</code></pre>
+
+<p>Creates a <code>d</code>-dimensional cubic lattice, with <code>d=length(dims)</code> and length  <code>dims[i]</code> in dimension <code>i</code>. If <code>periodic=true</code> the resulting lattice will have periodic boundary condition in each dimension.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L163-L168' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.PathDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph' href='#Erdos.PathDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.PathDiGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>PathDiGraph(n, G = DiGraph)
+</code></pre>
+
+<p>Creates a path digraph with <code>n</code> vertices. A path graph connects each successive vertex by a single directed edge.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L92-L97' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.PathGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph' href='#Erdos.PathGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.PathGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>PathGraph(n, G = Graph)
+</code></pre>
+
+<p>Creates a path graph with <code>n</code> vertices. A path graph connects each successive vertex by a single edge.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L78-L83' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.RoachGraph-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph' href='#Erdos.RoachGraph-Union{Tuple{G}, Tuple{Int64,Type{G}}, Tuple{Int64}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.RoachGraph</code></strong> &mdash; <em>Method</em>.</p>
+<p>The Roach Graph from Guattery and Miller 1998</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L210' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.StarDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph' href='#Erdos.StarDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.StarDiGraph</code></strong> &mdash; <em>Method</em>.</p>
+<p>Creates a star digraph with <code>n</code> vertices. A star digraph has a central vertex with directed edges to every other vertex.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L67-L70' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.StarGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph' href='#Erdos.StarGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.StarGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>StarGraph(n, G = Graph)
+</code></pre>
+
+<p>Creates a star graph with <code>n</code> vertices. A star graph has a central vertex with edges to each other vertex.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L53-L58' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.WheelDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph' href='#Erdos.WheelDiGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.WheelDiGraph</code></strong> &mdash; <em>Method</em>.</p>
+<p>Creates a wheel digraph with <code>n</code> vertices. A wheel graph is a star digraph with the outer vertices connected via a closed path graph.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L149-L152' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.WheelGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph' href='#Erdos.WheelGraph-Union{Tuple{G}, Tuple{Integer,Type{G}}, Tuple{Integer}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.WheelGraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>WheelGraph(n, G=Graph)
+</code></pre>
+
+<p>Creates a wheel graph with <code>n</code> vertices. A wheel graph is a star graph with the outer vertices connected via a closed path graph.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/staticgraphs.jl#L132-L137' class='documenter-source'>source</a><br></p>
+<p><a id='Small-Graphs-1'></a></p>
+<h2 id="small-graphs">Small Graphs</h2>
+<p>Other classical graphs can be generated by the following function:</p>
+<p><a id='Erdos.digraph-Union{Tuple{G}, Tuple{Int64,Array{Tuple{Int64,Int64},1},Type{G}}, Tuple{Int64,Array{Tuple{Int64,Int64},1}}} where G<:Erdos.ADiGraph' href='#Erdos.digraph-Union{Tuple{G}, Tuple{Int64,Array{Tuple{Int64,Int64},1},Type{G}}, Tuple{Int64,Array{Tuple{Int64,Int64},1}}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.digraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>digraph{G&lt;:AGraph}(n, edgelist::Vector{Tuple{Int,Int}},
+    G = Graph)
+</code></pre>
+
+<p>Build a digraph with <code>n</code> vertices, type <code>G</code>, and given <code>edgelist</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/smallgraphs.jl#L17-L22' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.digraph-Union{Tuple{G}, Tuple{Symbol,Type{G}}, Tuple{Symbol}} where G<:Erdos.ADiGraph' href='#Erdos.digraph-Union{Tuple{G}, Tuple{Symbol,Type{G}}, Tuple{Symbol}} where G<:Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.digraph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>digraph(s::Symbol, G = DiGraph)
+</code></pre>
+
+<p>Creates a notorious digraph <code>s</code> of type <code>G</code>. Admissible values for <code>s</code> are:</p>
+<table>
+<thead>
+<tr>
+<th align="left"><code>s</code></th>
+<th align="left">graph type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">:truncatedtetrahedron</td>
+<td align="left">A skeleton of the <a href="https://en.wikipedia.org/wiki/Truncated_tetrahedron">truncated tetrahedron digraph</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/smallgraphs.jl#L95-L104' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.graph-Union{Tuple{G}, Tuple{Int64,Array{Tuple{Int64,Int64},1},Type{G}}, Tuple{Int64,Array{Tuple{Int64,Int64},1}}} where G<:Erdos.AGraph' href='#Erdos.graph-Union{Tuple{G}, Tuple{Int64,Array{Tuple{Int64,Int64},1},Type{G}}, Tuple{Int64,Array{Tuple{Int64,Int64},1}}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.graph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>graph{G&lt;:AGraph}(n, edgelist::Vector{Tuple{Int,Int}},
+    G = Graph)
+</code></pre>
+
+<p>Build a graph with <code>n</code> vertices, of type <code>G</code>, and given <code>edgelist</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/smallgraphs.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.graph-Union{Tuple{G}, Tuple{Symbol,Type{G}}, Tuple{Symbol}} where G<:Erdos.AGraph' href='#Erdos.graph-Union{Tuple{G}, Tuple{Symbol,Type{G}}, Tuple{Symbol}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.graph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>graph(s::Symbol, G = Graph)
+</code></pre>
+
+<p>Creates a notorious graph <code>s</code> of type <code>G</code>. Admissible values for <code>s</code> are:</p>
+<table>
+<thead>
+<tr>
+<th align="left"><code>s</code></th>
+<th align="left">graph type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">:bull</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Bull_graph">bull graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:chvatal</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Chvátal_graph">Chvátal graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:cubical</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Platonic_graph">Platonic cubical graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:desargues</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Desargues_graph">Desarguesgraph</a>.</td>
+</tr>
+<tr>
+<td align="left">:diamond</td>
+<td align="left">A <a href="http://en.wikipedia.org/wiki/Diamond_graph">diamond graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:dodecahedral</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Platonic_graph">Platonic dodecahedral  graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:frucht</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Frucht_graph">Frucht graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:heawood</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Heawood_graph">Heawood graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:house</td>
+<td align="left">A graph mimicing the classic outline of a house.</td>
+</tr>
+<tr>
+<td align="left">:housex</td>
+<td align="left">A house graph, with two edges crossing the bottom square.</td>
+</tr>
+<tr>
+<td align="left">:icosahedral</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Platonic_graph">Platonic icosahedral   graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:krackhardtkite</td>
+<td align="left">A <a href="http://mathworld.wolfram.com/KrackhardtKite.html">Krackhardt-Kite social network  graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:moebiuskantor</td>
+<td align="left">A <a href="http://en.wikipedia.org/wiki/Möbius–Kantor_graph">Möbius-Kantor graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:octahedral</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Platonic_graph">Platonic octahedral graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:pappus</td>
+<td align="left">A <a href="http://en.wikipedia.org/wiki/Pappus_graph">Pappus graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:petersen</td>
+<td align="left">A <a href="http://en.wikipedia.org/wiki/Petersen_graph">Petersen graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:sedgewickmaze</td>
+<td align="left">A simple maze graph used in Sedgewick's <em>Algorithms in C++: Graph  Algorithms (3rd ed.)</em></td>
+</tr>
+<tr>
+<td align="left">:tetrahedral</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Platonic_graph">Platonic tetrahedral  graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:truncatedcube</td>
+<td align="left">A skeleton of the <a href="https://en.wikipedia.org/wiki/Truncated_cube">truncated cube graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:truncatedtetrahedron</td>
+<td align="left">A skeleton of the <a href="https://en.wikipedia.org/wiki/Truncated_tetrahedron">truncated tetrahedron  graph</a>.</td>
+</tr>
+<tr>
+<td align="left">:tutte</td>
+<td align="left">A <a href="https://en.wikipedia.org/wiki/Tutte_graph">Tutte graph</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>A collection of real world graphs is available through the <a href="../persistence/#Erdos.readgraph-Union{Tuple{G}, Tuple{String,Symbol,Type{G}}, Tuple{String,Symbol}} where G&lt;:Union{Erdos.ADiGraph, Erdos.AGraph}"><code>readgraph</code></a> function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/smallgraphs.jl#L32-L62' class='documenter-source'>source</a><br></p>
+<p><a id='Euclidean-Graphs-1'></a></p>
+<h2 id="euclidean-graphs">Euclidean Graphs</h2>
+<p>Generation of random and static graphs embedded in Euclidean space.</p>
+<p><a id='Erdos.euclidean_graph-Union{Tuple{Array{T,2} where T,Type{G}}, Tuple{Array{T,2} where T}, Tuple{G}} where G<:Erdos.AGraph' href='#Erdos.euclidean_graph-Union{Tuple{Array{T,2} where T,Type{G}}, Tuple{Array{T,2} where T}, Tuple{G}} where G<:Erdos.AGraph'>#</a>
+<strong><code>Erdos.euclidean_graph</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>euclidean_graph(points::Matrix, G; L=1., p=2., cutoff=Inf, bc=:periodic)
+</code></pre>
+
+<p>Given the <code>d×N</code> matrix <code>points</code> builds an Euclidean graph of <code>N</code> vertices according to the following procedure.</p>
+<p>Defining the <code>d</code>-dimensional vectors <code>x[i] = points[:,i]</code>, an edge between vertices <code>i</code> and <code>j</code> is inserted if <code>norm(x[i]-x[j], p) &lt; cutoff</code>. In case of negative <code>cutoff</code> instead every edge is inserted. For <code>p=2</code> we have the standard Euclidean distance. Set <code>bc=:periodic</code> to impose periodic boundary conditions in the box $[0,L]^d$. Set <code>bc=:open</code> for open boundary condition. In this case the keyword argument <code>L</code> will be ignored.</p>
+<p>Returns a graph and Dict containing the distance on each edge.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/generators/euclideangraphs.jl#L1-L16' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../randomgraphs/" class="btn btn-neutral float-right" title="Random Graphs">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../datasets/" class="btn btn-neutral" title="Graph Datasets"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../datasets/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../randomgraphs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

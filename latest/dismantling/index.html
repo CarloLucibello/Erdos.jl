@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Dismantling - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Dismantling";
+    var mkdocs_page_input_path = "dismantling.md";
+    var mkdocs_page_url = "/dismantling/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Dismantling</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#matching">Matching</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Dismantling</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/dismantling.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Matching-1'></a></p>
+<h1 id="matching">Matching</h1>
+<p>Algorithms for optimal network problems.</p>
+<p><a id='Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}' href='#Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}'>#</a>
+<strong><code>Erdos.dismantle_ci</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>dismantle_ci(g::AGraph, l::Integer, nrem; verbose=false)
+</code></pre>
+
+<p>Applies the Collective Influence (CI) heuristic of Ref. [1]  with distance parameter <code>l</code> (tipically <code>l=3,4</code>). Removes a maximum of <code>nrem</code> vertices from <code>g</code>, trying to minimize the size of the maximum connected component of the resulting graph. It stops earlier if the maximum CI goes to zero.</p>
+<p>Set <code>verbose</code> to <code>true</code> for info printing in each iteration.</p>
+<p>Returns <code>(gnew, vmap, remlist)</code>, where <code>gnew</code> is the reduced graph, <code>vmap</code> is a vector mapping the vertices of <code>g</code> to the old ones (see also <a href="../core/#Erdos.rem_vertices!"><code>rem_vertices!</code></a>) and <code>remlist</code> contains the removed vertices by removal order.</p>
+<p>For more fine grained control see <a href="./#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}"><code>dismantle_ci_init</code></a> and <a href="./#Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T"><code>dismantle_ci_oneiter!</code></a>.</p>
+<p><strong>Usage</strong></p>
+<pre><code class="julia">g = Graph(100, 1000)
+l=3
+nrem=10
+gnew, vmap, remlist = dismantle_ci(g, l, nrem)
+
+# or equivalently
+gnew, heap, lneigs = dismantle_ci_init(g, l)
+
+for it=1:nrem
+    irem = dismantle_ci_oneiter!(gnew, heap, lneigs, l)
+    irem &lt;= 0 &amp;&amp; break
+    push!(remlist, irem)
+    println(&quot;Size Max Component: &quot;, maximum(length, connected_components(g)))
+end
+vmap = rem_vertices!(gnew, remlist)
+</code></pre>
+
+<p>[1] Morone F., Makse H. Influence maximization in complex networks through optimal percolation. Nature (2015)</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/dismantling/ci.jl#L1-L40' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}' href='#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}'>#</a>
+<strong><code>Erdos.dismantle_ci_init</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>dismantle_ci_init(g, l)
+</code></pre>
+
+<p>Initialization part of <a href="./#Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}"><code>dismantle_ci</code></a> algorithm. Returns <code>(gnew, heap, lneigs)</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/dismantling/ci.jl#L55-L60' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T' href='#Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T'>#</a>
+<strong><code>Erdos.dismantle_ci_oneiter!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>dismantle_ci_oneiter!(g, heap, lneigs, l)
+</code></pre>
+
+<p>One step of <a href="./#Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}"><code>dismantle_ci</code></a> algorithm. To be called after <a href="./#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}"><code>dismantle_ci_init</code></a> Returns the cleaned vertex if any (see <a href="../core/#Erdos.clean_vertex!"><code>clean_vertex!</code></a>), -1 otherwise.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/dismantling/ci.jl#L70-L76' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../spanningtrees/" class="btn btn-neutral float-right" title="Spanning Trees">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../matching/" class="btn btn-neutral" title="Matching"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../matching/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../spanningtrees/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

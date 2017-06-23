@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Edge And Vertex Maps - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Edge And Vertex Maps";
+    var mkdocs_page_input_path = "maps.md";
+    var mkdocs_page_url = "/maps/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Edge And Vertex Maps</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#edge-and-vertex-maps">Edge and Vertex Maps</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#edge-maps">Edge Maps</a></li>
+        
+            <li><a class="toctree-l3" href="#vertex-maps">Vertex Maps</a></li>
+        
+            <li><a class="toctree-l3" href="#propertystore">PropertyStore</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Edge And Vertex Maps</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/maps.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Edge-and-Vertex-Maps-1'></a></p>
+<h1 id="edge-and-vertex-maps">Edge and Vertex Maps</h1>
+<p>Arbitrary values can be associated to a graph's vertices and edges, and handed over to method's that necessitate them, thanks to the edge maps and vertex maps interfaces. Also, edge and vector maps can be internally stored in <a href="../network_types/#network_types-1">network types</a> and accessed through the <a href="../network_interface/#network_interface-1">property interface</a>.</p>
+<p><a id='Edge-Maps-1'></a></p>
+<h2 id="edge-maps">Edge Maps</h2>
+<p><a id='Erdos.ConstEdgeMap' href='#Erdos.ConstEdgeMap'>#</a>
+<strong><code>Erdos.ConstEdgeMap</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>immutable ConstEdgeMap{T} &lt;: SimpleEdgeMap{T}
+    val::T
+end
+</code></pre>
+
+<p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>emap[u,v] = 4</code>, will fail silently.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/edgemap.jl#L149-L157' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.EdgeMap' href='#Erdos.EdgeMap'>#</a>
+<strong><code>Erdos.EdgeMap</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>type EdgeMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AEdgeMap{T}
+    g::G
+    vtype::Type{T}
+    data::D
+end
+</code></pre>
+
+<p>Type implementing an edge map. The underlying container <code>data</code> can be a dictionary, a matrix or a vector (for graphs with indexed edges).</p>
+<pre><code>EdgeMap{T}(g, ::Type{T})
+</code></pre>
+
+<p>Returns a map that associates values of type <code>T</code> to the vertices of  graph <code>g</code>. The underlying storage structures is chosen accordingly.</p>
+<pre><code>EdgeMap(g, data)
+</code></pre>
+
+<p>Construct a EdgeMap with <code>data</code> as underlying storage. The storage type can be a matrix or an associative <code>edg =&gt; val</code> type or a vector for graph with indexed edges.</p>
+<pre><code>EdgeMap(g, f)
+</code></pre>
+
+<p>Construct an edge map with value <code>f(e)</code> for each <code>e</code> in <code>edges(g)</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/edgemap.jl#L5-L30' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}' href='#Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}'>#</a>
+<strong><code>Erdos.edgemap2adjlist</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>edgemap2adjlist(emap)
+</code></pre>
+
+<p>Returns a vector of vectors containing the values of the edge map <code>emap</code> on graph <code>g</code> following the same ordering of <a href="../core/#Erdos.adjacency_list"><code>adjacency_list</code></a><code>(g)</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/edgemap.jl#L177-L182' class='documenter-source'>source</a><br></p>
+<p><a id='Vertex-Maps-1'></a></p>
+<h2 id="vertex-maps">Vertex Maps</h2>
+<p>Any <code>AbstractVector{T}</code> or <code>Dict{Int,T}</code> can be used as a vertex map.</p>
+<p><a id='Erdos.ConstVertexMap' href='#Erdos.ConstVertexMap'>#</a>
+<strong><code>Erdos.ConstVertexMap</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>immutable ConstVertexMap{T} &lt;: AVertexMap{T}
+    val::T
+end
+</code></pre>
+
+<p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>vm[1] = 4</code>, will fail silently.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/vertexmap.jl#L64-L72' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.VertexMap' href='#Erdos.VertexMap'>#</a>
+<strong><code>Erdos.VertexMap</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>type VertexMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AVertexMap{T}
+    g::G
+    vtype::Type{T}
+    data::D
+end
+</code></pre>
+
+<p>Type implementing an edge map. The underlying container <code>data</code> can be a dictionary or a vector.</p>
+<pre><code>VertexMap{T}(g, ::Type{T})
+</code></pre>
+
+<p>Returns a map that associates values of type <code>T</code> to the vertices of  graph <code>g</code>. The underlying storage structures is chosen accordingly.</p>
+<pre><code>VertexMap(g, data)
+</code></pre>
+
+<p>Construct a VertexMap with <code>data</code> as underlying storage.</p>
+<pre><code>VertexMap(g, f)
+</code></pre>
+
+<p>Construct a vertex map with value <code>f(u)</code> for each <code>u=1:nv(g)</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/vertexmap.jl#L4-L27' class='documenter-source'>source</a><br></p>
+<p><a id='PropertyStore-1'></a></p>
+<h2 id="propertystore">PropertyStore</h2>
+<p><a id='Erdos.PropertyStore' href='#Erdos.PropertyStore'>#</a>
+<strong><code>Erdos.PropertyStore</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>type PropertyStore
+    gmaps::Dict{String, Any}
+    emaps::Dict{String,AEdgeMap}
+    vmaps::Dict{String,AVertexMap}
+end
+</code></pre>
+
+<p>A type storing properties associated to networks.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/c2cbe8c1ca11e11198c850b96a0f4141f929ae42/src/maps/property_store.jl#L1-L9' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../network_types/" class="btn btn-neutral float-right" title="Network Types">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../core/" class="btn btn-neutral" title="Basic Interface"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../core/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../network_types/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>
