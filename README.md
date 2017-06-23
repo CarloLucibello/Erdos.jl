@@ -12,7 +12,7 @@
 [pkg-0.6-url]: http://pkg.julialang.org/?pkg=Erdos
 
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
-[docs-latest-url]: https://carlolucibello.github.io/Erdos.jl/
+[docs-latest-url]: https://carlolucibello.github.io/Erdos.jl/latest
 
 [travis-img]: https://travis-ci.org/CarloLucibello/Erdos.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/CarloLucibello/Erdos.jl
