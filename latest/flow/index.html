@@ -200,19 +200,19 @@
 <p><a id='Erdos.BoykovKolmogorovAlgorithm' href='#Erdos.BoykovKolmogorovAlgorithm'>#</a>
 <strong><code>Erdos.BoykovKolmogorovAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the maximum_flow function to use the Boykov-Kolmogorov algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L18-L20' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L18-L20' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.DinicAlgorithm' href='#Erdos.DinicAlgorithm'>#</a>
 <strong><code>Erdos.DinicAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the maximum_flow function to use Dinic's algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L12-L14' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L12-L14' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.EdmondsKarpAlgorithm' href='#Erdos.EdmondsKarpAlgorithm'>#</a>
 <strong><code>Erdos.EdmondsKarpAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the maximum_flow function to use the Edmonds–Karp algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L6-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L6-L8' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.PushRelabelAlgorithm' href='#Erdos.PushRelabelAlgorithm'>#</a>
 <strong><code>Erdos.PushRelabelAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the maximum_flow function to use the Push-Relabel algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L24-L26' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L24-L26' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.maximum_flow-Union{Tuple{G,Any,Any,AbstractArray{T,2}}, Tuple{G,Any,Any}, Tuple{G}, Tuple{T}} where T<:Number where G<:Erdos.ADiGraph' href='#Erdos.maximum_flow-Union{Tuple{G,Any,Any,AbstractArray{T,2}}, Tuple{G,Any,Any}, Tuple{G}, Tuple{T}} where T<:Number where G<:Erdos.ADiGraph'>#</a>
 <strong><code>Erdos.maximum_flow</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>maximum_flow{T&lt;:Number}(
@@ -259,7 +259,7 @@ f, F, labels = maximum_flow(g, 1, 8)
 f, F, labels = maximum_flow(g,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm())
 </code></pre>
 
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L122-L173' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L122-L173' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.minimum_cut-Tuple{Erdos.ADiGraph,Integer,Integer,Vararg{Any,N} where N}' href='#Erdos.minimum_cut-Tuple{Erdos.ADiGraph,Integer,Integer,Vararg{Any,N} where N}'>#</a>
 <strong><code>Erdos.minimum_cut</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>minimum_cut(g, s, t, capacity_matrix=DefaultCapacity(); kws...)
@@ -267,15 +267,15 @@ f, F, labels = maximum_flow(g,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm
 
 <p>Finds the <code>s-t cut</code> of minimal weight according to the <code>capacities</code> matrix on the directed graph <code>g</code>. The solution is found through a maximal flow algorithm. See <a href="./#Erdos.maximum_flow-Union{Tuple{G,Any,Any,AbstractArray{T,2}}, Tuple{G,Any,Any}, Tuple{G}, Tuple{T}} where T&lt;:Number where G&lt;:Erdos.ADiGraph"><code>maximum_flow</code></a> for the optional arguments.</p>
 <p>Returns a triple <code>(f, cut, labels)</code>, where <code>f</code> is the weight of the cut, <code>cut</code> is a vector of the edges in the cut, and <code>labels</code> gives a partitioning of the vertices in two sets, according to the cut.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/maximum_flow.jl#L222-L233' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/maximum_flow.jl#L222-L233' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.ExtendedMultirouteFlowAlgorithm' href='#Erdos.ExtendedMultirouteFlowAlgorithm'>#</a>
 <strong><code>Erdos.ExtendedMultirouteFlowAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the multiroute_flow function to use the Extended Multiroute Flow algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/multiroute_flow.jl#L12-L14' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/multiroute_flow.jl#L12-L14' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.KishimotoAlgorithm' href='#Erdos.KishimotoAlgorithm'>#</a>
 <strong><code>Erdos.KishimotoAlgorithm</code></strong> &mdash; <em>Type</em>.</p>
 <p>Forces the multiroute_flow function to use the Kishimoto algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/multiroute_flow.jl#L6-L8' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/multiroute_flow.jl#L6-L8' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.multiroute_flow-Union{Tuple{Erdos.ADiGraph,Int64,Int64,AbstractArray{T,2}}, Tuple{Erdos.ADiGraph,Int64,Int64}, Tuple{R}, Tuple{T}} where R<:Real where T<:Real' href='#Erdos.multiroute_flow-Union{Tuple{Erdos.ADiGraph,Int64,Int64,AbstractArray{T,2}}, Tuple{Erdos.ADiGraph,Int64,Int64}, Tuple{R}, Tuple{T}} where R<:Real where T<:Real'>#</a>
 <strong><code>Erdos.multiroute_flow</code></strong> &mdash; <em>Method</em>.</p>
 <p>The generic multiroute_flow function will output three kinds of results:</p>
@@ -357,7 +357,7 @@ f, F, labels = multiroute_flow(flow_graph, 1, 8, capacity_matrix,
 
 </code></pre>
 
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/49693d1264de23b036e50293f2cacd644b129299/src/flow/multiroute_flow.jl#L94-L180' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/54604a8feb98daeba1a478c79e3bd6300b9bc000/src/flow/multiroute_flow.jl#L94-L180' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
