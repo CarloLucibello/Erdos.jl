@@ -28,9 +28,9 @@ n10 = Nonbacktracking(g10)
 @test eltype(n10) == Float64
 @test !issymmetric(n10)
 
-Erdos.contract!(z, n10, v)
+Erdos.contraction!(z, n10, v)
 
-zprime = contract(n10, v)
+zprime = Erdos.contraction(n10, v)
 @test z == zprime
 @test z == 9*ones(Float64, nv(g10))
 

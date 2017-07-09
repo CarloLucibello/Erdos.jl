@@ -108,7 +108,6 @@ cores, kcore,
 adjacency_matrix,laplacian_matrix,
 CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix,
 nonbacktrack_embedding, Nonbacktracking,
-contract,
 
 # astar
 a_star,
