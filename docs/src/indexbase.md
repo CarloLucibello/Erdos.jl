@@ -1,13 +1,16 @@
 # Erdos
-Erdos is a graph library written in Julia. Installation is straightforward:
+**Erdos** is a graph library written in Julia. Installation is straightforward:
 ```julia
 julia> Pkg.add("Erdos")
 ```
-Erdos defines two abstract type, `AGraph` and `ADiGraph`, from which all
-concrete undirected and directed graph types are derived.
+Erdos defines two abstract graph types, `AGraph` and `ADiGraph`, from which all concrete undirected and directed graph types are derived.
 
-All graphs  in Erdos have `1:n` indexed vertices, where `n` is the number of vertices.
-Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced, just defining a few basic methods.
+Two concrete graph types, `Graph` and `Network`, and two digraph types, `DiGraph` and `DiNetwork` are implemented. In all these types the graph topology is represented internally as an adjacency list for each vertex. `(Di)Network`s come with some additional features over `(Di)Graph`s:
+
+ - each edge has a unique index;
+ - vertex/edge maps (also called properties) can be stored internally.
+
+All graphs in **Erdos** have `1:n` indexed vertices, where `n` is the number of vertices. Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced just defining a few basic methods.
 
 ## Basic examples
 ### Constructors
@@ -17,6 +20,9 @@ julia> using Erdos
 
 julia> g = CompleteGraph(100)
 Graph{Int64}(100, 4950)
+
+julia> g = Network(10, 30) # a random graph with 10 vertex and 30 edges
+Network(10, 30)
 
 julia> g = Graph{Int32}(100)
 Graph{Int32}(100, 0)
