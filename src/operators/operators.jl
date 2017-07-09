@@ -472,3 +472,41 @@ eltype(g::AGraphOrDiGraph) = Float64
 length(g::AGraphOrDiGraph) = nv(g)*nv(g)
 ndims(g::AGraphOrDiGraph) = 2
 issymmetric(g::AGraphOrDiGraph) = !is_directed(g)
+
+"""
+    contract!(g, vs)
+    contract!(g, v1, v2, ....)
+
+Merge the vertices in `vs` into a unique vertex.
+"""
+contract!(g::AGraphOrDiGraph, vs::AbstractVector) = contract!(g, Set(vs))
+contract!(g::AGraphOrDiGraph, vs::Integer...) = contract!(g, Set(vs))
+
+function contract!(g::AGraph, vs::Set)
+    n = add_vertex!(g)
+    for v in vs
+        for u in neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, n, u)
+            end
+        end
+    end
+    return rem_vertices!(g, vs)
+end
+
+function contract!(g::ADiGraph, vs::Set)
+    n = add_vertex!(g)
+    for v in vs
+        for u in out_neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, n, u)
+            end
+        end
+        for u in in_neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, u, n)
+            end
+        end
+    end
+    return rem_vertices!(g, vs)
+end

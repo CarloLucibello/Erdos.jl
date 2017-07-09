@@ -447,6 +447,11 @@ vmap = rem_vertices!(g, 1:5)
 @test length(vmap) == length(unique(vmap)) == 5
 @test sort(vmap) == [6:10;]
 
+g1 = G(10, 30)
+g2 = copy(g1)
+@test rem_vertices!(g1, 1, 2, 2) == rem_vertices!(g2, 1, 2)
+@test g1 == g2
+
 g = G(10,20)
 h = copy(g)
 pop_vertex!(g)

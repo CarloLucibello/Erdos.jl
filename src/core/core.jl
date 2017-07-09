@@ -418,14 +418,18 @@ end
 
 
 """
-    rem_vertex!(g, vs)
+    rem_vertices!(g, vs)
+    rem_vertices!(g, v1, v2, ....)
 
 Remove the vertices in `vs` from graph `g`.
-Returns a vector mapping the vertices in the new graph to the
-old ones.
+Returns a vector mapping the vertices in the new graph to the old ones.
 """
-function rem_vertices!(g::AGraphOrDiGraph, vs)
-    vlist = sort(union(vs))
+rem_vertices!(g, vs::Set) = _rem_vertices!(g, sort!(collect(vs)))
+rem_vertices!(g, vs) = _rem_vertices!(g, sort!(union(vs)))
+rem_vertices!(g, vs::Integer...) = _rem_vertices!(g, sort!(union(vs)))
+
+# assume `vlist` sorted and not containing duplicates
+function _rem_vertices!(g::AGraphOrDiGraph, vlist::Vector)
     n = nv(g)
     nrem = length(vlist)
     vmap = [1:n-nrem;]
@@ -443,7 +447,7 @@ function rem_vertices!(g::AGraphOrDiGraph, vs)
         end
     end
 
-    for v in vs
+    for v in vlist
         if v <= n-nrem
             swap_vertices!(g, v, vmap[v])
         end
