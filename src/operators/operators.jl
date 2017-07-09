@@ -1,8 +1,8 @@
 """
     complete(g::ADiGraph)
 
-Returns a digraph containing both the edges `(u,v)`
-of `g` and their reverse `(v,u)`. See also [`complete!`](@ref)
+Returns a digraph containing both the edges `(u, v)`
+of `g` and their reverse `(v, u)`. See also [`complete!`](@ref).
 """
 function complete(g::ADiGraph)
     h = copy(g)
@@ -13,15 +13,12 @@ end
 """
     complete!(g::ADiGraph)
 
-A a digraph containing both the edges `(u,v)`
-of `g` and their reverse `(v,u)`.
+For each edge `(u, v)` in `g`, adds to `g` its reverse, i.e. `(v, u)`.
 """
 function complete!(g::ADiGraph)
     edgs  = collect(edges(g))
     for e in edgs
-        if !has_edge(g, dst(e), src(e))
-            add_edge!(g, dst(e), src(e))
-        end
+        add_edge!(g, dst(e), src(e))
     end
     return g
 end
