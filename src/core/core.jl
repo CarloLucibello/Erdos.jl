@@ -296,7 +296,7 @@ out_adjlist(g::AGraphOrDiGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i
 Returns true if the graph `g` has an edge `e` (from `u` to `v`).
 """
 function has_edge(g::AGraph, u, v)
-    u > nv(g) || v > nv(g) && return false
+    (u > nv(g) || v > nv(g)) && return false
     if degree(g, u) > degree(g, v)
         u, v = v, u
     end

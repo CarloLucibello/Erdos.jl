@@ -475,6 +475,7 @@ g = G(A, upper=true)
 @test !has_edge(g, 1, 3)
 @test !has_edge(g, 2, 2)
 @test has_edge(g, 1, 1)
+@test !has_edge(g, 15, 1)
 g = G(A, upper=true, selfedges=false)
 @test ne(g) == 2
 @test !has_edge(g, 1, 3)
@@ -494,6 +495,8 @@ g = DG(A)
 @test has_edge(g, 1, 1)
 @test !has_edge(g, 2, 2)
 @test has_edge(g, 3, 3)
+@test !has_edge(g, 15, 1)
+
 g = DG(A, selfedges=false)
 @test ne(g) == 5
 @test !has_edge(g, 1, 1)
