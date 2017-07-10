@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Property Interface for Networks - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Property Interface for Networks";
+    var mkdocs_page_input_path = "network_interface.md";
+    var mkdocs_page_url = "/network_interface/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Property Interface for Networks</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#network-types-and-interface">Network Types and Interface</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#property-interface">Property Interface</a></li>
+        
+            <li><a class="toctree-l3" href="#defining-new-network-types">Defining new network types</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Property Interface for Networks</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/network_interface.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='network_interface-1'></a></p>
+<h1 id="network-types-and-interface">Network Types and Interface</h1>
+<p>Networks in <em>Erdos</em> are graphs with additional ability to store internally properties associated to vertices, edges and the graph itself. Edge and vertex properties are nothing else than edge and vertex maps with a name associated to them. <em>Erdos</em> defines some interface methods (and their convenient short form equivalent) to work with networks and properties.</p>
+<p><a id='Property-Interface-1'></a></p>
+<h2 id="property-interface">Property Interface</h2>
+<p><a id='Erdos.add_edge_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T' href='#Erdos.add_edge_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T'>#</a>
+<strong><code>Erdos.add_edge_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>add_edge_property!(g, name, T)
+add_edge_property!(g, name, emap)
+</code></pre>
+
+<p>Add the edge property  <code>name</code> to <code>g</code>.</p>
+<p>If a type <code>T</code> is given as an input, an edge map with valtype <code>T</code> is created and stored into <code>g</code>.</p>
+<p>As an alternative, an existing edge map <code>emap</code> can be stored into <code>g</code>.</p>
+<p><a href="./#Erdos.eprop!"><code>eprop!</code></a> is the short form of this function.</p>
+<p><strong>Example</strong></p>
+<pre><code class="julia">g = random_regular_graph(10, 3, Network)
+
+add_edge_property!(g, &quot;weight&quot;, Float64)
+# or equivalently
+eprop!(g, &quot;weight&quot;, Float64)
+</code></pre>
+
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L111-L132' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.add_vertex_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T' href='#Erdos.add_vertex_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T'>#</a>
+<strong><code>Erdos.add_vertex_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>add_vertex_property!(g, name, T)
+add_vertex_property!(g, name, vmap)
+</code></pre>
+
+<p>Add the vertex property  <code>name</code> to <code>g</code>.</p>
+<p>If a type <code>T</code> is given as an input, a vertex map with valtype <code>T</code> is created and stored into <code>g</code>.</p>
+<p>As an alternative, an existing vertex map <code>vmap</code> can be stored into <code>g</code>.</p>
+<p><a href="./#Erdos.vprop!"><code>vprop!</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L199-L211' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.edge_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>edge_property(g, name)
+</code></pre>
+
+<p>Return an edge map corresponding to property <code>name</code> of edges in <code>g</code>.</p>
+<pre><code>edge_property(g)
+</code></pre>
+
+<p>Returns a dictionary with elements <code>property_name =&gt; edge_map</code>.</p>
+<pre><code>edge_property(g, e)
+</code></pre>
+
+<p>Returns a dictionary of the form <code>name =&gt; val</code> containing all the properties associated to edge <code>e</code>.</p>
+<p><a href="./#Erdos.eprop"><code>eprop</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L153-L168' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.eprop' href='#Erdos.eprop'>#</a>
+<strong><code>Erdos.eprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>edge_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L174' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.eprop!' href='#Erdos.eprop!'>#</a>
+<strong><code>Erdos.eprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.add_edge_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T"><code>add_edge_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L138' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.gprop' href='#Erdos.gprop'>#</a>
+<strong><code>Erdos.gprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>graph_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L94' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.gprop!' href='#Erdos.gprop!'>#</a>
+<strong><code>Erdos.gprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.set_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Any}"><code>set_graph_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L65' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.graph_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>graph_property(g, name)
+</code></pre>
+
+<p>Return the property <code>name</code> of <code>g</code>.</p>
+<pre><code>graph_property(g)
+</code></pre>
+
+<p>Returns a dictionary with elements <code>property_name =&gt; property_value</code></p>
+<p><a href="./#Erdos.gprop"><code>gprop</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L80-L90' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.has_edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.has_edge_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>has_edge_property(g, name)
+has_edge_property(g, name, e)
+</code></pre>
+
+<p>Check if network  <code>g</code> has an edge property named <code>name</code>. The second method checks also if edge <code>e</code> has an assigned value for that property.</p>
+<p><a href="./#Erdos.has_eprop"><code>has_eprop</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L178-L189' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_eprop' href='#Erdos.has_eprop'>#</a>
+<strong><code>Erdos.has_eprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.has_edge_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>has_edge_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L194' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_gprop' href='#Erdos.has_gprop'>#</a>
+<strong><code>Erdos.has_gprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.has_graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>has_graph_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L106' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.has_graph_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.has_graph_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>has_graph_property(g, name)
+</code></pre>
+
+<p>Check if network  <code>g</code> has a graph property named <code>name</code>.</p>
+<p><a href="./#Erdos.has_gprop"><code>has_gprop</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L97-L103' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.has_vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.has_vertex_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>has_vertex_property(g, name, v)
+</code></pre>
+
+<p>Check if network  <code>g</code> has a vertex property named <code>name</code>. The second method checks also if vertex <code>v</code> has an assigned value for that property.</p>
+<p><a href="./#Erdos.has_vprop"><code>has_vprop</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L253-L261' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.has_vprop' href='#Erdos.has_vprop'>#</a>
+<strong><code>Erdos.has_vprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.has_vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>has_vertex_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L266' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.idx-Tuple{Erdos.AIndexedEdge}' href='#Erdos.idx-Tuple{Erdos.AIndexedEdge}'>#</a>
+<strong><code>Erdos.idx</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>idx(e::AIndexedEdge)
+</code></pre>
+
+<p>Returns the index of edge <code>e</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L24-L28' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_edge_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.rem_edge_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.rem_edge_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>rem_edge_property!(g, name)
+</code></pre>
+
+<p>Remove the edge property  <code>name</code> from <code>g</code>.</p>
+<p><a href="./#Erdos.rem_eprop!"><code>rem_eprop!</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L141-L147' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_eprop!' href='#Erdos.rem_eprop!'>#</a>
+<strong><code>Erdos.rem_eprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.rem_edge_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>rem_edge_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L150' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_gprop!' href='#Erdos.rem_gprop!'>#</a>
+<strong><code>Erdos.rem_gprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.rem_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>rem_graph_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L77' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.rem_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.rem_graph_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>rem_graph_property!(g, name)
+</code></pre>
+
+<p>Remove the property <code>name</code> from <code>g</code>.</p>
+<p><a href="./#Erdos.rem_gprop!"><code>rem_gprop!</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L68-L74' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_vertex_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.rem_vertex_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.rem_vertex_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>rem_vertex_property!(g, name)
+</code></pre>
+
+<p>Remove the vertex property  <code>name</code> from <code>g</code>.</p>
+<p><a href="./#Erdos.rem_vprop!"><code>rem_vprop!</code></a> is the short form of this function.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L220-L226' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.rem_vprop!' href='#Erdos.rem_vprop!'>#</a>
+<strong><code>Erdos.rem_vprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.rem_vertex_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>rem_vertex_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L229' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.set_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Any}' href='#Erdos.set_graph_property!-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Any}'>#</a>
+<strong><code>Erdos.set_graph_property!</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>set_graph_property!(g, name, x)
+</code></pre>
+
+<p>Set the property <code>name</code> to value <code>x</code> to <code>g</code>. Creates the property if it doesn't exist. <a href="./#Erdos.gprop!"><code>gprop!</code></a> can be conveniently used as a short form of this function.</p>
+<p><strong>Example</strong></p>
+<pre><code class="julia">g = Network(10, 20)
+set_graph_property!(g, &quot;label&quot;, &quot;My Network&quot;)
+# or equivalently
+gprop!(g, &quot;label&quot;, &quot;My Network&quot;)
+</code></pre>
+
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L49-L62' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}' href='#Erdos.vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}'>#</a>
+<strong><code>Erdos.vertex_property</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>vertex_property(g, name)
+</code></pre>
+
+<p>Return an vertex map corresponding to property <code>name</code> of vertices in <code>g</code>.</p>
+<pre><code>vertex_property(g)
+</code></pre>
+
+<p>Returns a dictionary with elements <code>property_name =&gt; vertex_map</code>.</p>
+<pre><code>vertex_property(g, v)
+</code></pre>
+
+<p>Returns a dictionary of the form <code>name =&gt; val</code> containing all the properties associated to vertex <code>v</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L232-L245' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.vprop' href='#Erdos.vprop'>#</a>
+<strong><code>Erdos.vprop</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.vertex_property-Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString}"><code>vertex_property</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L250' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.vprop!' href='#Erdos.vprop!'>#</a>
+<strong><code>Erdos.vprop!</code></strong> &mdash; <em>Function</em>.</p>
+<p>See <a href="./#Erdos.add_vertex_property!-Union{Tuple{T}, Tuple{Union{Erdos.ADiNetwork, Erdos.ANetwork},AbstractString,Type{T}}} where T"><code>add_vertex_property!</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_network.jl#L216' class='documenter-source'>source</a><br></p>
+<p><a id='Defining-new-network-types-1'></a></p>
+<h2 id="defining-new-network-types">Defining new network types</h2>
+<p>In order to define a custom network type, e.g. <code>MyNet &lt;: ANetwork</code>, the corresponding <a href="./#network_interface-1">interface methods</a>  have to be implemented. This is automatically done for custom network types having a <code>props::PropertyStore</code> member. Take a look to <code>src/factory/net.jl</code> and <code>src/maps/property_store.jl</code> for an example.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../operators/" class="btn btn-neutral float-right" title="Operators">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../network_types/" class="btn btn-neutral" title="Network Types"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../network_types/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../operators/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

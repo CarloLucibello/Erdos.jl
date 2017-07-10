@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Spanning Trees - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Spanning Trees";
+    var mkdocs_page_input_path = "spanningtrees.md";
+    var mkdocs_page_url = "/spanningtrees/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Spanning Trees</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#spanning-trees">Spanning Trees</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Spanning Trees</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/spanningtrees.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Spanning-Trees-1'></a></p>
+<h1 id="spanning-trees">Spanning Trees</h1>
+<p><a id='Erdos.count_spanning_trees-Tuple{Erdos.AGraph}' href='#Erdos.count_spanning_trees-Tuple{Erdos.AGraph}'>#</a>
+<strong><code>Erdos.count_spanning_trees</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>count_spanning_trees(g::AGraph)
+</code></pre>
+
+<p>Returns the number of spanning trees of <code>g</code>, computed through <a href="https://en.wikipedia.org/wiki/Kirchhoff%27s_theorem">Kirchhoff's theorem</a>. The return type is a float, since the number can be very large.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/spanningtrees/spanningtrees.jl#L3-L9' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.minimum_spanning_tree-Union{Tuple{Erdos.AGraph,AbstractArray{T,2}}, Tuple{Erdos.AGraph}, Tuple{T}} where T<:Real' href='#Erdos.minimum_spanning_tree-Union{Tuple{Erdos.AGraph,AbstractArray{T,2}}, Tuple{Erdos.AGraph}, Tuple{T}} where T<:Real'>#</a>
+<strong><code>Erdos.minimum_spanning_tree</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>minimum_spanning_tree{T&lt;:Real}(
+    g, distmx::AbstractMatrix{T} = ConstEdgeMap(g,1)
+)
+</code></pre>
+
+<p>Performs <a href="https://en.wikipedia.org/wiki/Kruskal%27s_algorithm">Kruskal's algorithm</a> on a connected, undirected graph <code>g</code>, having adjacency matrix <code>distmx</code>, and computes minimum spanning tree. Returns a <code>Vector{KruskalHeapEntry}</code>, that contains the containing edges and its weights.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/spanningtrees/kruskal.jl#L22-L31' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../dismantling/" class="btn btn-neutral" title="Dismantling"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../dismantling/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Graph Types - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Graph Types";
+    var mkdocs_page_input_path = "graph_types.md";
+    var mkdocs_page_url = "/graph_types/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Graph Types</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#graph-types-and-constructors">Graph Types and Constructors</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#abstract-types">Abstract Types</a></li>
+        
+            <li><a class="toctree-l3" href="#graph-digraph-edge">Graph / DiGraph / Edge</a></li>
+        
+            <li><a class="toctree-l3" href="#defining-new-types">Defining new types</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../centrality/">Centrality Measures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Graph Types</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/graph_types.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Graph-Types-and-Constructors-1'></a></p>
+<h1 id="graph-types-and-constructors">Graph Types and Constructors</h1>
+<p><em>Erdos.jl</em> defines a type hierarchy and associated methods for expressing a graph topology and implementing related algorithms. The ready to go graph types are the <code>Graph</code> type for undirected graphs and the <code>DiGraph</code> type for directed graphs. Custom types con be defined inheriting from the abstract types <code>AGraph</code> and <code>ADiGraph</code>. Graph types supporting the internal storages of edge/vertex properties are called <strong>networks</strong> in Erdos and are documeted <a href="../network_types/#network_types-1">here</a></p>
+<p><a id='Abstract-Types-1'></a></p>
+<h2 id="abstract-types">Abstract Types</h2>
+<p><a id='Erdos.AGraph' href='#Erdos.AGraph'>#</a>
+<strong><code>Erdos.AGraph</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>abstract type AGraph end
+</code></pre>
+
+<p>Abstract undirected graph type</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_graph.jl#L29-L33' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.ADiGraph' href='#Erdos.ADiGraph'>#</a>
+<strong><code>Erdos.ADiGraph</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>abstract ADiGraph
+</code></pre>
+
+<p>Abstract directed graph type</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_graph.jl#L36-L40' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.AGraphOrDiGraph' href='#Erdos.AGraphOrDiGraph'>#</a>
+<strong><code>Erdos.AGraphOrDiGraph</code></strong> &mdash; <em>Constant</em>.</p>
+<pre><code>const AGraphOrDiGraph = Union{AGraph, ADiGraph}
+</code></pre>
+
+<p>Union of <a href="./#Erdos.AGraph"><code>AGraph</code></a> and <a href="./#Erdos.ADiGraph"><code>ADiGraph</code></a>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_graph.jl#L43-L47' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.AEdge' href='#Erdos.AEdge'>#</a>
+<strong><code>Erdos.AEdge</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>abstract type AEdge end
+</code></pre>
+
+<p>An abstract edge type.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/interface_graph.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='Graph-/-DiGraph-/-Edge-1'></a></p>
+<h2 id="graph-digraph-edge">Graph / DiGraph / Edge</h2>
+<p><a id='Erdos.Graph' href='#Erdos.Graph'>#</a>
+<strong><code>Erdos.Graph</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>type Graph{T&lt;:Integer} &lt;: AGraph
+    ne::Int
+    fadjlist::Vector{Vector{T}}
+end
+</code></pre>
+
+<p>A simple graph type based on an adjacency list.</p>
+<pre><code>Graph{T}(n=0)
+Graph(n=0) = Graph{Int}(n)
+</code></pre>
+
+<p>Construct a <code>Graph</code> with <code>n</code> vertices and no edges.</p>
+<pre><code>Graph{T}(adjmx::AbstractMatrix; upper=false, selfedges=true)
+</code></pre>
+
+<p>Construct a <code>Graph{T}</code> from the adjacency matrix <code>adjmx</code>, placing an edge in correspondence to each nonzero element of <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored. If <code>upper=true</code> only the upper triangular part of <code>adjmx</code> is considered.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/factory/graph.jl#L2-L21' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.DiGraph' href='#Erdos.DiGraph'>#</a>
+<strong><code>Erdos.DiGraph</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>type DiGraph{T&lt;:Integer} &lt;: ADiGraph
+    ne::Int
+    fadjlist::Vector{Vector{T}}
+    badjlist::Vector{Vector{T}}
+end
+</code></pre>
+
+<p>A simple digraph type based on two adjacency lists (forward and backward).</p>
+<pre><code>DiGraph{T}(n=0)
+DiGraph(n=0) = DiGraph{Int}(n)
+</code></pre>
+
+<p>Construct a <code>DiGraph</code> with <code>n</code> vertices and no edges.</p>
+<pre><code>DiGraph{T}(adjmx::AbstractMatrix; selfedges=true)
+</code></pre>
+
+<p>Construct a <code>DiGraph{T}</code> from the adjacency matrix <code>adjmx</code>, placing an edge in correspondence to each nonzero element of <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/factory/graph.jl#L40-L59' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.Edge' href='#Erdos.Edge'>#</a>
+<strong><code>Erdos.Edge</code></strong> &mdash; <em>Type</em>.</p>
+<pre><code>immutable Edge
+    src::Int
+    dst::Int
+end
+</code></pre>
+
+<p>A type representing an edge between two vertices of a graph.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/core/edge.jl#L6-L13' class='documenter-source'>source</a><br></p>
+<p><a id='Defining-new-types-1'></a></p>
+<h2 id="defining-new-types">Defining new types</h2>
+<p>In order to define a custom graph type, e.g. <code>MyGraph &lt;: AGraph</code>, some guarantee have to be respected and some methods have to be exposed. Take a look to the files in <code>src/factory/</code> for some examples. Custom edges, e.g. <code>MyEdge &lt;: AEdge</code>,  have to expose <code>src(e)</code> and <code>dst(e)</code> methods.</p>
+<p><strong>Guarantees</strong>:</p>
+<ul>
+<li>vertices are integers in 1:nv(g)</li>
+</ul>
+<p><strong>Mandatory methods</strong>:</p>
+<ul>
+<li>basic constructors: MyGraph(n), MyGraph())</li>
+<li>nv(g)</li>
+<li>ne(g)</li>
+<li>out_neighbors(g, v)</li>
+<li>in_neighbors(g, v) #digraph</li>
+<li>edge(g, u, v)</li>
+<li>add_edge!(g, u, v)</li>
+<li>rem_edge!(g, u, v)</li>
+<li>add_vertex!(g)</li>
+<li>pop_vertex!(g)</li>
+<li>graphtype(g)</li>
+<li>digraphtype(g)</li>
+<li>edgetype(g)</li>
+<li>vertextype(g)</li>
+<li>swap_vertices!(g, u, v)</li>
+</ul>
+<p>Some methods have general fallbacks relying on the more foundamental API described above, but could probably made more efficient knowing the internal implementation of the graph.</p>
+<p><strong>Reccomended overrides</strong>:</p>
+<ul>
+<li>in_adjlist(g) #digraph</li>
+<li>out_adjlist(g)</li>
+<li>has_edge(g, u, v)</li>
+<li>==(g, h)</li>
+<li>out_edges(g, u)</li>
+<li>in_edges(g, u) # digraph</li>
+<li>rem_edge!(g, e)</li>
+<li>graph(dg)</li>
+<li>digraph(g)</li>
+<li>reverse!(g) #digraph</li>
+<li>unsafe_add_edge!(g, u, v)</li>
+<li>rebuild!(g)</li>
+<li>rem_vertex!(g, v)</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../core/" class="btn btn-neutral float-right" title="Basic Interface">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../core/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

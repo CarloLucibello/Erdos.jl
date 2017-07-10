@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Carlo Lucibello">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Centrality Measures - Erdos.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Centrality Measures";
+    var mkdocs_page_input_path = "centrality.md";
+    var mkdocs_page_url = "/centrality/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Erdos.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Getting Started</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graph_types/">Graph Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../core/">Basic Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../maps/">Edge And Vertex Maps</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_types/">Network Types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../network_interface/">Property Interface for Networks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../operators/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../traversals/">Traversals</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../distance/">Distance</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../shortestpaths/">Shortest Paths</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../linalg/">Linear Algebra</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../persistence/">Reading / Writing Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../datasets/">Graph Datasets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../deterministicgraphs/">Deterministic Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../randomgraphs/">Random Graphs</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Centrality Measures</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#centrality-measures">Centrality Measures</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../community/">Community Structures</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../flow/">Flow and Cut</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../matching/">Matching</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dismantling/">Dismantling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../spanningtrees/">Spanning Trees</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Erdos.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Centrality Measures</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/CarloLucibello/Erdos.jl/edit/master/docs/centrality.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Centrality-Measures-1'></a></p>
+<h1 id="centrality-measures">Centrality Measures</h1>
+<p><a href="https://en.wikipedia.org/wiki/Centrality">Centrality measures</a> describe the importance of a vertex to the rest of the graph using some set of criteria. Centrality measures implemented in <em>Erdos.jl</em> include the following:</p>
+<ul>
+<li><a href="./#Erdos.betweenness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>Erdos.betweenness_centrality</code></a></li>
+<li><a href="./#Erdos.closeness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>Erdos.closeness_centrality</code></a></li>
+<li><a href="./#Erdos.cores-Tuple{Erdos.AGraph}"><code>Erdos.cores</code></a></li>
+<li><a href="./#Erdos.degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>Erdos.degree_centrality</code></a></li>
+<li><a href="./#Erdos.in_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>Erdos.in_degree_centrality</code></a></li>
+<li><a href="./#Erdos.katz_centrality"><code>Erdos.katz_centrality</code></a></li>
+<li><a href="./#Erdos.kcore-Tuple{Erdos.AGraph,Integer}"><code>Erdos.kcore</code></a></li>
+<li><a href="./#Erdos.out_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>Erdos.out_degree_centrality</code></a></li>
+<li><a href="./#Erdos.pagerank"><code>Erdos.pagerank</code></a></li>
+</ul>
+<p><a id='Erdos.betweenness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.betweenness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
+<strong><code>Erdos.betweenness_centrality</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>betweenness_centrality(g; normalize=true, endpoints=false, approx=-1)
+</code></pre>
+
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centrality#Betweenness_centrality">betweenness centrality</a> of the vertices of graph <code>g</code>.</p>
+<p>Betweenness centrality for vertex <code>v</code> is defined as:</p>
+<p>$$
+bc(v) = \frac{1}{\mathcal{N}} \sum_{s \neq t \neq v}
+        \frac{\sigma_{st}(v)}{\sigma_{st}},
+$$</p>
+<p>where $\sigma <em st="st">{st}} \sigma</em>$ is the total number of shortest paths from node <code>s</code> to node <code>t</code> and $\sigma_{st}(v)$ is the number of those paths that pass through <code>v</code>.</p>
+<p>If <code>endpoints=true</code>, endpoints are included in the shortest path count.</p>
+<p>If <code>normalize=true</code>, the betweenness values are normalized by the total number of possible distinct paths between all pairs in the graph. For an undirected graph, this number if <code>((n-1)*(n-2))/2</code> and for a directed graph, <code>(n-1)*(n-2)</code> where <code>n</code> is the number of vertices in the graph.</p>
+<p>If  an integer argument <code>approx &gt; 0</code> is given, returns an approximation of the betweenness centrality of each vertex of the graph involving <code>approx</code> randomly chosen vertices.</p>
+<p><strong>References</strong></p>
+<p>[1] Brandes 2001 &amp; Brandes 2008</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/betweenness.jl#L4-L33' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.closeness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.closeness_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
+<strong><code>Erdos.closeness_centrality</code></strong> &mdash; <em>Method</em>.</p>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centrality#Closeness_centrality">closeness centrality</a> of the graph <code>g</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/closeness.jl#L1-L4' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
+<strong><code>Erdos.degree_centrality</code></strong> &mdash; <em>Method</em>.</p>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centrality#Degree_centrality">degree centrality</a> of the graph <code>g</code>, with optional (default) normalization.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/degree.jl#L19-L21' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.in_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.in_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
+<strong><code>Erdos.in_degree_centrality</code></strong> &mdash; <em>Method</em>.</p>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centrality#Degree_centrality">degree centrality</a> of the graph <code>g</code>, with optional (default) normalization.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/degree.jl#L22-L24' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.out_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.out_degree_centrality-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
+<strong><code>Erdos.out_degree_centrality</code></strong> &mdash; <em>Method</em>.</p>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Centrality#Degree_centrality">degree centrality</a> of the graph <code>g</code>, with optional (default) normalization.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/degree.jl#L25-L27' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.katz_centrality' href='#Erdos.katz_centrality'>#</a>
+<strong><code>Erdos.katz_centrality</code></strong> &mdash; <em>Function</em>.</p>
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/Katz_centrality">Katz centrality</a> of the graph <code>g</code>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/katz.jl#L24-L27' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.pagerank' href='#Erdos.pagerank'>#</a>
+<strong><code>Erdos.pagerank</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>pagerank(g::ADiGraph, α=0.85, n=100, ϵ = 1.0e-6)
+</code></pre>
+
+<p>Calculates the <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a> of the graph <code>g</code>. Can optionally specify a different damping factor (<code>α</code>), number of iterations (<code>n</code>), and convergence threshold (<code>ϵ</code>). If convergence is not reached within <code>n</code> iterations, an error will be returned.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/pagerank.jl#L4-L11' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.cores-Tuple{Erdos.AGraph}' href='#Erdos.cores-Tuple{Erdos.AGraph}'>#</a>
+<strong><code>Erdos.cores</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>cores(g)
+</code></pre>
+
+<p>Returns a vector <code>deg</code> such that if <code>deg[v]=k</code> then the vertex <code>v</code> belongs to the <code>k</code>-core of <code>g</code> and not to the <code>k+1</code>-core.</p>
+<p>See also <a href="./#Erdos.kcore-Tuple{Erdos.AGraph,Integer}"><code>kcore</code></a>.</p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/kcore.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p><a id='Erdos.kcore-Tuple{Erdos.AGraph,Integer}' href='#Erdos.kcore-Tuple{Erdos.AGraph,Integer}'>#</a>
+<strong><code>Erdos.kcore</code></strong> &mdash; <em>Method</em>.</p>
+<pre><code>kcore(g, k) -&gt; (gnew, vmap)
+</code></pre>
+
+<p>Returns the <code>k</code>-core  of <code>g</code> along with a vertex map associating the mutated vertex indexes to the old ones (as in <a href="../core/#Erdos.rem_vertices!"><code>rem_vertices!</code></a>).</p>
+<p>See also <a href="./#Erdos.cores-Tuple{Erdos.AGraph}"><code>cores</code></a></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/centrality/kcore.jl#L62-L69' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../community/" class="btn btn-neutral float-right" title="Community Structures">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../randomgraphs/" class="btn btn-neutral" title="Random Graphs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/CarloLucibello/Erdos.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../randomgraphs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../community/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>
