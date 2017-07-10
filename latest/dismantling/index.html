@@ -204,7 +204,7 @@
 
 <p>Applies the Collective Influence (CI) heuristic of Ref. [1]  with distance parameter <code>l</code> (tipically <code>l=3,4</code>). Removes a maximum of <code>nrem</code> vertices from <code>g</code>, trying to minimize the size of the maximum connected component of the resulting graph. It stops earlier if the maximum CI goes to zero.</p>
 <p>Set <code>verbose</code> to <code>true</code> for info printing in each iteration.</p>
-<p>Returns <code>(gnew, vmap, remlist)</code>, where <code>gnew</code> is the reduced graph, <code>vmap</code> is a vector mapping the vertices of <code>g</code> to the old ones (see also <a href="../core/#Erdos.rem_vertices!"><code>rem_vertices!</code></a>) and <code>remlist</code> contains the removed vertices by removal order.</p>
+<p>Returns <code>(gnew, vmap, remlist)</code>, where <code>gnew</code> is the reduced graph, <code>vmap</code> is a vertex map of the vertices of <code>gnew</code> to the old ones (see also <a href="../core/#Erdos.rem_vertices!"><code>rem_vertices!</code></a>) and <code>remlist</code> contains the removed vertices by removal order.</p>
 <p>For more fine grained control see <a href="./#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}"><code>dismantle_ci_init</code></a> and <a href="./#Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T"><code>dismantle_ci_oneiter!</code></a>.</p>
 <p><strong>Usage</strong></p>
 <pre><code class="julia">g = Graph(100, 1000)
@@ -225,21 +225,21 @@ vmap = rem_vertices!(gnew, remlist)
 </code></pre>
 
 <p>[1] Morone F., Makse H. Influence maximization in complex networks through optimal percolation. Nature (2015)</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/4197f29cd49f926e65ec57498f5037a3c9c578ed/src/dismantling/ci.jl#L1-L40' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/dismantling/ci.jl#L1-L40' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}' href='#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}'>#</a>
 <strong><code>Erdos.dismantle_ci_init</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>dismantle_ci_init(g, l)
 </code></pre>
 
 <p>Initialization part of <a href="./#Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}"><code>dismantle_ci</code></a> algorithm. Returns <code>(gnew, heap, lneigs)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/4197f29cd49f926e65ec57498f5037a3c9c578ed/src/dismantling/ci.jl#L55-L60' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/dismantling/ci.jl#L55-L60' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T' href='#Erdos.dismantle_ci_oneiter!-Union{Tuple{Erdos.AGraph,Any,Array{Array{T,1},1},Integer}, Tuple{T}} where T'>#</a>
 <strong><code>Erdos.dismantle_ci_oneiter!</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>dismantle_ci_oneiter!(g, heap, lneigs, l)
 </code></pre>
 
 <p>One step of <a href="./#Erdos.dismantle_ci-Tuple{Erdos.AGraph,Integer,Integer}"><code>dismantle_ci</code></a> algorithm. To be called after <a href="./#Erdos.dismantle_ci_init-Tuple{Erdos.AGraph,Integer}"><code>dismantle_ci_init</code></a> Returns the cleaned vertex if any (see <a href="../core/#Erdos.clean_vertex!"><code>clean_vertex!</code></a>), -1 otherwise.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/4197f29cd49f926e65ec57498f5037a3c9c578ed/src/dismantling/ci.jl#L70-L76' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/462c82294cd1c2e84e5cbfdb0db5fb57102534fa/src/dismantling/ci.jl#L70-L76' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>

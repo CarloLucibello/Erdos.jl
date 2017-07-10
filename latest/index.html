@@ -204,16 +204,19 @@
               
                 <p><a id='Erdos-1'></a></p>
 <h1 id="erdos">Erdos</h1>
-<p>Erdos is a graph library written in Julia. Installation is straightforward:</p>
+<p><strong>Erdos</strong> is a graph library written in Julia. Installation is straightforward:</p>
 <pre><code class="julia">
 julia&gt; Pkg.add(&quot;Erdos&quot;)
 
 </code></pre>
 
-<p>Erdos defines two abstract type, <code>AGraph</code> and <code>ADiGraph</code>, from which all</p>
-<p>concrete undirected and directed graph types are derived.</p>
-<p>All graphs  in Erdos have <code>1:n</code> indexed vertices, where <code>n</code> is the number of vertices.</p>
-<p>Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced, just defining a few basic methods.</p>
+<p>Erdos defines two abstract graph types, <code>AGraph</code> and <code>ADiGraph</code>, from which all concrete undirected and directed graph types are derived.</p>
+<p>Two concrete graph types, <code>Graph</code> and <code>Network</code>, and two digraph types, <code>DiGraph</code> and <code>DiNetwork</code> are implemented. In all these types the graph topology is represented internally as an adjacency list for each vertex. <code>(Di)Network</code>s come with some additional features over <code>(Di)Graph</code>s:</p>
+<ul>
+<li>each edge has a unique index;</li>
+<li>vertex/edge maps (also called properties) can be stored internally.</li>
+</ul>
+<p>All graphs in <strong>Erdos</strong> have <code>1:n</code> indexed vertices, where <code>n</code> is the number of vertices. Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced just defining a few basic methods.</p>
 <p><a id='Basic-examples-1'></a></p>
 <h2 id="basic-examples">Basic examples</h2>
 <p><a id='Constructors-1'></a></p>
@@ -227,6 +230,12 @@ julia&gt; using Erdos
 julia&gt; g = CompleteGraph(100)
 
 Graph{Int64}(100, 4950)
+
+
+
+julia&gt; g = Network(10, 30) # a random graph with 10 vertex and 30 edges
+
+Network(10, 30)
 
 
 
@@ -586,5 +595,5 @@ Graph{UInt32}(16726, 47594)
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-06-23 14:27:02
+Build Date UTC : 2017-07-10 03:48:47
 -->
