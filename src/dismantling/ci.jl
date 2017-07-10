@@ -9,7 +9,7 @@ if the maximum CI goes to zero.
 Set `verbose` to `true` for info printing in each iteration.
 
 Returns `(gnew, vmap, remlist)`, where `gnew` is the reduced graph, `vmap`
-is a vector mapping the vertices of `g` to the old ones (see also [`rem_vertices!`](@ref))
+is a vertex map of the vertices of `gnew` to the old ones (see also [`rem_vertices!`](@ref))
 and `remlist` contains the removed vertices by removal order.
 
 For more fine grained control see [`dismantle_ci_init`](@ref) and

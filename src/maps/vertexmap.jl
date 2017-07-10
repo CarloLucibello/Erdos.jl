@@ -33,11 +33,11 @@ end
 show{G,T,D}(io::IO, m::VertexMap{G,T,D}) = print(io, "VertexMap: $(m.data)")
 
 VertexMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = VertexMap(g, T, d)
-VertexMap{T}(g::AGraphOrDiGraph, d::Dict{Int, T}) = VertexMap(g, T, d)
+VertexMap{V<:Integer,T}(g::AGraphOrDiGraph, d::Dict{V, T}) = VertexMap(g, T, d)
 
 function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
     V = vertextype(g)
-    return VertexMap(g, T, Dict{Int,T}())
+    return VertexMap(g, T, Dict{V,T}())
 end
 
 function VertexMap(g::AGraphOrDiGraph, f::Function)

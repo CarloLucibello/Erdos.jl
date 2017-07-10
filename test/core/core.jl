@@ -438,14 +438,41 @@ swap_vertices!(g, 1, 10)
 g = CompleteGraph(10, G)
 vmap = rem_vertices!(g, 6:10)
 @test g == CompleteGraph(5, G)
-@test length(vmap) == length(unique(vmap)) == 5
-@test sort(vmap) == [1:5;]
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) == 0
 
 g = CompleteGraph(10, G)
 vmap = rem_vertices!(g, 1:5)
 @test g == CompleteGraph(5, G)
-@test length(vmap) == length(unique(vmap)) == 5
-@test sort(vmap) == [6:10;]
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) ==  5
+for v=1:5
+    @test vmap[v] == v + 5
+end
+
+g = G(10, 20)
+g2 = copy(g)
+vmap = rem_vertices!(g, 6:10)
+for v=10:-1:6
+    rem_vertex!(g2, v)
+end
+@test g == g2
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) == 0
+
+g = DG(10, 20)
+g2 = copy(g)
+vmap = rem_vertices!(g, 1:5)
+for v=5:-1:1
+    rem_vertex!(g2, v)
+end
+@test g == g2
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) ==  5
+for v=1:5
+    @test vmap[v] == v + 5
+end
+
 
 g1 = G(10, 30)
 g2 = copy(g1)

@@ -32,14 +32,7 @@ start(e::AEdge) = 1
 done(e::AEdge, i) = i>2
 next(e::AEdge, i) = (getfield(e,i), i+1)
 # indexed_next(e::Edge, i::Int, state) = (getfield(e,i), i+1)
-
-"""
-    reverse(e::Edge)
-
-Swap `e.src` and `e.dst`.
-"""
 reverse(e::Edge) = Edge(dst(e), src(e))
-
 
 show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)),$(idx(e)))")
 
@@ -68,6 +61,5 @@ src(e::IndexedEdge) = e.src
 dst(e::IndexedEdge) = e.dst
 idx(e::IndexedEdge) = e.idx
 reverse(e::IndexedEdge) = IndexedEdge(e.dst, e.src, e.idx)
-
 
 Base.sort(e::AEdge) = src(e) <= dst(e) ? e : reverse(e)
