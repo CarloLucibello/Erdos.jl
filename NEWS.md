@@ -2,6 +2,9 @@
 - add `sort` for edges
 - add `size(emap)` for edge map `emap` returning `(nv(g), nv(g))`
 - add `Vector(vmap)`  
+- fix bug in `has_edge`
+- add `contract!` method
+- add `rem_vertices!(g, v1, v2, ....)`
 
 
 ## v0.4  2017.6.16
