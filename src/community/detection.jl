@@ -1,18 +1,19 @@
 """
-    community_detection_nback(g::AGraph, k::Int)
+    community_detection_nback(g, k)
 
 Community detection using the spectral properties of
-the non-backtracking matrix of `g` (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
+the non-backtracking matrix of graph `g` (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
+`k` is the number of communities to detect.
 
-`g`: imput Graph
-`k`: number of communities to detect
+See also [`community_detection_bethe`](@ref) for a related community ddetection
+algorithm.
 
-return : array containing vertex assignments
+Returns a vector with the vertex assignments in the communities.
 """
-function community_detection_nback(g::AGraph, k::Int)
+function community_detection_nback(g::AGraph, k::Integer)
     #TODO insert check on connected_components
     ϕ = real(nonbacktrack_embedding(g, k))
-    if k==2
+    if k == 2
         c = community_detection_threshold(g, ϕ[1,:])
     else
         c = kmeans(ϕ, k).assignments
@@ -31,18 +32,19 @@ function community_detection_threshold(g::AGraphOrDiGraph, coords::AbstractArray
     return c
 end
 
+"""
+    nonbacktrack_embedding(g::AGraph, k::Int)
 
-""" Spectral embedding of the non-backtracking matrix of `g`
+Spectral embedding of the non-backtracking matrix of `g`
 (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
 
-`g`: imput Graph
-`k`: number of dimensions in which to embed
+    `g`: imput Graph
+    `k`: number of dimensions in which to embed
 
-return : a matrix ϕ where ϕ[:,i] are the coordinates for vertex i.
+Returns  a matrix `ϕ` where `ϕ[:,i]` are the coordinates for vertex `i`.
 
-Note does not explicitly construct the `nonbacktracking_matrix`.
-See `Nonbacktracking` for details.
-
+Note:  does not explicitly construct the [`nonbacktracking_matrix`](@ref).
+See [`Nonbacktracking`](@ref) for details.
 """
 function nonbacktrack_embedding(g::AGraph, k::Int)
     B = Nonbacktracking(g)
@@ -53,8 +55,8 @@ function nonbacktrack_embedding(g::AGraph, k::Int)
     # we might also use the degree distribution to scale these vectors as is
     # common with the laplacian/adjacency methods.
     for n=1:k-1
-        v= eigv[:,n+1]
-        ϕ[:,n] = contract(B, v)
+        v = eigv[:,n+1]
+        ϕ[:,n] = contraction(B, v)
     end
     return ϕ'
 end
@@ -66,7 +68,7 @@ end
 
 Community detection using the spectral properties of
 the Bethe Hessian matrix associated to `g` (see [Saade et al.](http://papers.nips.cc/paper/5520-spectral-clustering-of-graphs-with-the-bethe-hessian)).
-`k` is the number of community to detect. If omitted or if `k<1` the
+`k` is the number of communities to detect. If omitted or if `k < 1` the
 optimal number of communities will be automatically selected.
 In this case the maximum number of detectable communities is given by `kmax`.
 Returns a vector containing the vertex assignments.
@@ -90,10 +92,11 @@ function community_detection_bethe(g::AGraph, k::Int=-1; kmax::Int=15)
 end
 
 """
+    label_propagation(g; maxiter=1000)
+
 Community detection using the label propagation algorithm (see [Raghavan et al.](http://arxiv.org/abs/0709.2938)).
-`g`: input Graph
-`maxiter`: maximum number of iterations
-return : vertex assignments and the convergence history
+`g` is the input Graph, `maxiter` is the  maximum number of iterations.
+Returns a vertex assignments and the convergence history
 """
 function label_propagation(g::AGraphOrDiGraph; maxiter=1000)
     n = nv(g)

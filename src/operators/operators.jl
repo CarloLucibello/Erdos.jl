@@ -1,8 +1,8 @@
 """
     complete(g::ADiGraph)
 
-Returns a digraph containing both the edges `(u,v)`
-of `g` and their reverse `(v,u)`.
+Returns a digraph containing both the edges `(u, v)`
+of `g` and their reverse `(v, u)`. See also [`complete!`](@ref).
 """
 function complete(g::ADiGraph)
     h = copy(g)
@@ -13,15 +13,12 @@ end
 """
     complete!(g::ADiGraph)
 
-Returns a digraph containing both the edges `(u,v)`
-of `g` and their reverse `(v,u)`.
+For each edge `(u, v)` in `g`, adds to `g` its reverse, i.e. `(v, u)`.
 """
 function complete!(g::ADiGraph)
     edgs  = collect(edges(g))
     for e in edgs
-        if !has_edge(g, dst(e), src(e))
-            add_edge!(g, dst(e), src(e))
-        end
+        add_edge!(g, dst(e), src(e))
     end
     return g
 end
@@ -348,10 +345,6 @@ function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
     end
 end
 
-if VERSION > v"0.6dev"
-    # in julia 0.5 always gets dispatched to this (julia bug)
-    subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
-end
 
 function subnetwork{G<:ANetOrDiNet}(g::G, elist)
     h = G()
@@ -397,6 +390,9 @@ if VERSION >= v"0.6dev"
     for networks.
     """
     getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
+
+    # in julia 0.5 always gets dispatched to this (julia bug)
+    subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
 else
     """
         g[iter]
@@ -457,13 +453,18 @@ end
 
 
 size(g::AGraphOrDiGraph) = (nv(g), nv(g))
+
 """size(g,i) provides 1:nv or 2:nv else 1 """
 size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
 
 """sum(g) provides the number of edges in the graph"""
 sum(g::AGraphOrDiGraph) = ne(g)
 
-"""sparse(g) is the adjacency_matrix of g"""
+"""
+    sparse(g)
+
+Equivalent to [`adjacency_matrix`](@ref).
+"""
 sparse(g::AGraphOrDiGraph) = adjacency_matrix(g)
 
 #arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
@@ -471,3 +472,41 @@ eltype(g::AGraphOrDiGraph) = Float64
 length(g::AGraphOrDiGraph) = nv(g)*nv(g)
 ndims(g::AGraphOrDiGraph) = 2
 issymmetric(g::AGraphOrDiGraph) = !is_directed(g)
+
+"""
+    contract!(g, vs)
+    contract!(g, v1, v2, ....)
+
+Merge the vertices in `vs` into a unique vertex.
+"""
+contract!(g::AGraphOrDiGraph, vs::AbstractVector) = contract!(g, Set(vs))
+contract!(g::AGraphOrDiGraph, vs::Integer...) = contract!(g, Set(vs))
+
+function contract!(g::AGraph, vs::Set)
+    n = add_vertex!(g)
+    for v in vs
+        for u in neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, n, u)
+            end
+        end
+    end
+    return rem_vertices!(g, vs)
+end
+
+function contract!(g::ADiGraph, vs::Set)
+    n = add_vertex!(g)
+    for v in vs
+        for u in out_neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, n, u)
+            end
+        end
+        for u in in_neighbors(g, v)
+            if u ∉ vs
+                add_edge!(g, u, n)
+            end
+        end
+    end
+    return rem_vertices!(g, vs)
+end

@@ -19,6 +19,6 @@ klist = cores(g)
 
 h, vmap = kcore(g, 2)
 @test h == CycleGraph(3)
-@test vmap == [1,2,3]
-
+@test length(vmap) == 0
+@test vmap == VertexMap(g, vertextype(g))
 end # testset

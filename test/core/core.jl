@@ -438,14 +438,46 @@ swap_vertices!(g, 1, 10)
 g = CompleteGraph(10, G)
 vmap = rem_vertices!(g, 6:10)
 @test g == CompleteGraph(5, G)
-@test length(vmap) == length(unique(vmap)) == 5
-@test sort(vmap) == [1:5;]
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) == 0
 
 g = CompleteGraph(10, G)
 vmap = rem_vertices!(g, 1:5)
 @test g == CompleteGraph(5, G)
-@test length(vmap) == length(unique(vmap)) == 5
-@test sort(vmap) == [6:10;]
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) ==  5
+for v=1:5
+    @test vmap[v] == v + 5
+end
+
+g = G(10, 20)
+g2 = copy(g)
+vmap = rem_vertices!(g, 6:10)
+for v=10:-1:6
+    rem_vertex!(g2, v)
+end
+@test g == g2
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) == 0
+
+g = DG(10, 20)
+g2 = copy(g)
+vmap = rem_vertices!(g, 1:5)
+for v=5:-1:1
+    rem_vertex!(g2, v)
+end
+@test g == g2
+@test typeof(vmap) <: AVertexMap
+@test length(vmap) ==  5
+for v=1:5
+    @test vmap[v] == v + 5
+end
+
+
+g1 = G(10, 30)
+g2 = copy(g1)
+@test rem_vertices!(g1, 1, 2, 2) == rem_vertices!(g2, 1, 2)
+@test g1 == g2
 
 g = G(10,20)
 h = copy(g)
@@ -470,6 +502,7 @@ g = G(A, upper=true)
 @test !has_edge(g, 1, 3)
 @test !has_edge(g, 2, 2)
 @test has_edge(g, 1, 1)
+@test !has_edge(g, 15, 1)
 g = G(A, upper=true, selfedges=false)
 @test ne(g) == 2
 @test !has_edge(g, 1, 3)
@@ -489,6 +522,8 @@ g = DG(A)
 @test has_edge(g, 1, 1)
 @test !has_edge(g, 2, 2)
 @test has_edge(g, 3, 3)
+@test !has_edge(g, 15, 1)
+
 g = DG(A, selfedges=false)
 @test ne(g) == 5
 @test !has_edge(g, 1, 1)

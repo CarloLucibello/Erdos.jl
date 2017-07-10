@@ -1,8 +1,13 @@
-## v0.5  2017.6.x
+## v0.5  2017.7.10
+- add constructors `EdgeMap(g, e -> f(e))` and `VertexMap(g, v->f(v))`
 - add `sort` for edges
 - add `size(emap)` for edge map `emap` returning `(nv(g), nv(g))`
 - add `Vector(vmap)`  
-
+- fix bug in `has_edge` throwing error in some corner cases
+- add `contract!` method
+- add `rem_vertices!(g, v1, v2, ....)`
+- `rem_vertices!` now returns a vertex map of the reindexed vertices instead of a vector of length `nv(g)`
+- fix docs deploy
 
 ## v0.4  2017.6.16
 - faster constructor from matrix. Also add the possibility to select only the upper triangular and/or the non-diagonal part.

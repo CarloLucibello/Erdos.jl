@@ -296,7 +296,7 @@ out_adjlist(g::AGraphOrDiGraph) = Vector{Int}[collect(out_neighbors(g, i)) for i
 Returns true if the graph `g` has an edge `e` (from `u` to `v`).
 """
 function has_edge(g::AGraph, u, v)
-    u > nv(g) || v > nv(g) && return false
+    (u > nv(g) || v > nv(g)) && return false
     if degree(g, u) > degree(g, v)
         u, v = v, u
     end
@@ -406,7 +406,7 @@ rebuild!(g::AGraphOrDiGraph) = nothing
 Remove the vertex `v` from graph `g`.
 It will change the label of the last vertex of the old graph to `v`.
 
-See also [`rem_vertices!`](@ref)
+See also [`rem_vertices!`](@ref).
 """
 function rem_vertex!(g::AGraphOrDiGraph, v)
     v in vertices(g) || return false
@@ -418,32 +418,37 @@ end
 
 
 """
-    rem_vertex!(g, vs)
+    rem_vertices!(g, vs)
+    rem_vertices!(g, v1, v2, ....)
 
 Remove the vertices in `vs` from graph `g`.
-Returns a vector mapping the vertices in the new graph to the
-old ones.
+
+Some vertices of `g` may be reindexed during the removal. To keep track of the reindexing,
+a vertex map is returned, associating vertices with changed indexes to their old indexes.
 """
-function rem_vertices!(g::AGraphOrDiGraph, vs)
-    vlist = sort(union(vs))
+rem_vertices!(g, vs::Set) = _rem_vertices!(g, sort!(collect(vs)))
+rem_vertices!(g, vs) = _rem_vertices!(g, sort!(union(vs)))
+rem_vertices!(g, vs::Integer...) = _rem_vertices!(g, sort!(union(vs)))
+
+# assume `vlist` sorted and not containing duplicates
+function _rem_vertices!(g::AGraphOrDiGraph, vlist::Vector)
     n = nv(g)
     nrem = length(vlist)
-    vmap = [1:n-nrem;]
+    # TODO use default vertex map when available
+    vmap = VertexMap(g, vertextype(g))
     vswap = n-nrem+1
     for v in vlist
-        @assert 1 <= v <= n
         if v <= n-nrem
             while vswap in vlist
                 vswap += 1
             end
-            @assert vswap <= n
             clean_vertex!(g, v)
             vmap[v] = vswap
             vswap += 1
         end
     end
 
-    for v in vs
+    for v in vlist
         if v <= n-nrem
             swap_vertices!(g, v, vmap[v])
         end

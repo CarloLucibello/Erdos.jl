@@ -62,13 +62,14 @@ end
 """
     kcore(g, k) -> (gnew, vmap)
 
-Returns the `k`-core  of `g` along with and vector that associates the new vertices
-to the old ones.
+Returns the `k`-core  of `g` along with a vertex map associating the mutated vertex
+indexes to the old ones (as in [`rem_vertices!`](@ref)).
 
 See also [`cores`](@ref)
 """
 function kcore(g::AGraph, k::Integer)
+    #TODO use subgraph
     gnew = copy(g)
-    vmap = rem_vertices!(gnew, find(d-> d<k, cores(g)))
+    vmap = rem_vertices!(gnew, find(d -> d < k, cores(g)))
     return gnew, vmap
 end

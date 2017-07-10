@@ -69,7 +69,7 @@ complement, blkdiag, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,
-subnetwork,
+subnetwork, contract!,
 
 # graph visit
 SimpleGraphVisitor, TrivialGraphVisitor, LogGraphVisitor,
@@ -108,7 +108,6 @@ cores, kcore,
 adjacency_matrix,laplacian_matrix,
 CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix,
 nonbacktrack_embedding, Nonbacktracking,
-contract,
 
 # astar
 a_star,

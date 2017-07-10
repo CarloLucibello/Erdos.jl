@@ -185,6 +185,16 @@ g10 = StarGraph(10, G)
 @test egonet(g10, 1, 0) == G(1, 0)
 @test egonet(g10, 1, 1) == g10
 
+g1 = CompleteGraph(10, G)
+g2 = copy(g1)
+@test contract!(g1, 1, 2, 2) == contract!(g2, 1:2)
+@test g1 == g2 == CompleteGraph(9, G)
+
+g1 = CompleteDiGraph(10, DG)
+g2 = copy(g1)
+@test contract!(g1, 1, 2, 2) == contract!(g2, 1:2)
+@test g1 == g2 == CompleteDiGraph(9, DG)
+
 if G <: ANetwork
     g = readnetwork(:lesmis, G)
 

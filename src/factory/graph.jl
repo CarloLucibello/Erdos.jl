@@ -192,7 +192,7 @@ in_adjlist(g::DiGraph) = g.badjlist
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 function has_edge(g::Graph, u, v)
-    u > nv(g) || v > nv(g) && return false
+    (u > nv(g) || v > nv(g)) && return false
     if degree(g, u) > degree(g, v)
         u, v = v, u
     end
@@ -200,7 +200,7 @@ function has_edge(g::Graph, u, v)
 end
 
 function has_edge(g::DiGraph, u, v)
-    u > nv(g) || v > nv(g) && return false
+    (u > nv(g) || v > nv(g)) && return false
     if out_degree(g,u) < in_degree(g,v)
         return length(searchsorted(out_neighbors(g,u), v)) > 0
     else
