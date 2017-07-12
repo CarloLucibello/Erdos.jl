@@ -51,11 +51,9 @@ function EdgeMap{T}(g::AGraphOrDiGraph, ::Type{T})
     return EdgeMap(g, T, data)
 end
 
-
 function EdgeMap(g::AGraphOrDiGraph, f::Function)
-    E = edgetype(g)
-    T = Base.return_types(f, (E,))[1]
-    if E <: AIndexedEdge
+    if edgetype(g) <: AIndexedEdge
+        T = ne(g) == 0 ? Base.return_types(f, (E,))[1] : typeof(f(first(edges(g))))
         data = Vector{T}(ne(g))
         for e in edges(g)
             data[idx(e)] = f(e)
