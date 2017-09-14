@@ -162,5 +162,16 @@ for e in edges(g)
     @test m[e] == src(e) + dst(e)
 end
 
+p = rand(10)
+m = EdgeMap(g, e -> norm(p[src(e)], p[dst(e)]))
+if E <: IndexedEdge
+    @test typeof(m.data) == Vector{Float64}
+else
+    @test typeof(m.data) == Dict{E, Float64}
+end
+
+g = G(10)
+#test no edges
+@test_throws AssertionError EdgeMap(g, e -> src(e))
 
 end # testset

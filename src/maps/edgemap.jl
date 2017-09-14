@@ -52,14 +52,16 @@ function EdgeMap{T}(g::AGraphOrDiGraph, ::Type{T})
 end
 
 function EdgeMap(g::AGraphOrDiGraph, f::Function)
-    if edgetype(g) <: AIndexedEdge
-        T = ne(g) == 0 ? Base.return_types(f, (E,))[1] : typeof(f(first(edges(g))))
+    @assert ne(g) > 0
+    T = typeof(f(first(edges(g))))
+    E = edgetype(g)
+    if E <: AIndexedEdge
         data = Vector{T}(ne(g))
         for e in edges(g)
             data[idx(e)] = f(e)
         end
     else
-        data = Dict(e => f(e) for e in edges(g))
+        data = Dict{E,T}(e => f(e) for e in edges(g))
     end
     return EdgeMap(g, T, data)
 end
