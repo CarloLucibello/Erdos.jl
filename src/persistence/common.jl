@@ -1,7 +1,7 @@
 NI(x...) = error("This function is not implemented.")
 
 # filemap is filled in the format specific source files
-@compat const filemap = Dict{Symbol, Tuple{Function, Function, Function, Function}}()
+const filemap = Dict{Symbol, Tuple{Function, Function, Function, Function}}()
         # :gml        => (readgml, writegml, readnetgml, writenetgml)
 
 

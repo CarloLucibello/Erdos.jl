@@ -1,6 +1,6 @@
 
 """
-    type Graph{T<:Integer} <: AGraph
+    mutable struct Graph{T<:Integer} <: AGraph
         ne::Int
         fadjlist::Vector{Vector{T}}
     end
@@ -19,7 +19,7 @@ correspondence to each nonzero element of `adjmx`.
 If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
-type Graph{T<:Integer} <: AGraph
+mutable struct Graph{T<:Integer} <: AGraph
     ne::Int
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
                                 # fadjlist is sorted
@@ -38,7 +38,7 @@ Graph() = Graph{Int}()
 
 
 """
-    type DiGraph{T<:Integer} <: ADiGraph
+    mutable struct DiGraph{T<:Integer} <: ADiGraph
         ne::Int
         fadjlist::Vector{Vector{T}}
         badjlist::Vector{Vector{T}}
@@ -57,7 +57,7 @@ Construct a `DiGraph{T}` from the adjacency matrix `adjmx`, placing an edge in
 correspondence to each nonzero element of `adjmx`.
 If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
-type DiGraph{T<:Integer} <: ADiGraph
+mutable struct DiGraph{T<:Integer} <: ADiGraph
     ne
     fadjlist::Vector{Vector{T}} # [src]: (dst, dst, dst)
     badjlist::Vector{Vector{T}} # [dst]: (src, src, src)
@@ -77,7 +77,7 @@ DiGraph{T<:Integer}(n::T) = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
 
 
-@compat const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
+const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 
 edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
 edgetype{T}(::Type{Graph{T}}) = Edge{T}

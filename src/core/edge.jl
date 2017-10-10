@@ -4,7 +4,7 @@ show(io::IO, e::AEdge) = print(io, "$(src(e))=>$(dst(e))")
 ==(e1::AEdge, e2::AEdge) = (src(e1) == src(e2) && dst(e1) == dst(e2))
 
 """
-    immutable Edge
+    struct Edge
         src::Int
         dst::Int
     end
@@ -12,7 +12,7 @@ show(io::IO, e::AEdge) = print(io, "$(src(e))=>$(dst(e))")
 A type representing an edge between two vertices of a graph.
 """
 
-immutable Edge{T} <: AEdge
+struct Edge{T} <: AEdge
     src::T
     dst::T
 end
@@ -37,7 +37,7 @@ reverse(e::Edge) = Edge(dst(e), src(e))
 show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)),$(idx(e)))")
 
 """
-    immutable IndexedEdge <: AIndexedEdge
+    struct IndexedEdge <: AIndexedEdge
         src::Int
         dst::Int
         idx::Int
@@ -49,7 +49,7 @@ An indexed edge type
 
 Creates an edge with invalid index.
 """
-immutable IndexedEdge <: AIndexedEdge
+struct IndexedEdge <: AIndexedEdge
     src::Int
     dst::Int
     idx::Int

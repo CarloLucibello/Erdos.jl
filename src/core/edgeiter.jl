@@ -1,4 +1,4 @@
-immutable EdgeIter{G<:AGraphOrDiGraph}
+struct EdgeIter{G<:AGraphOrDiGraph}
     g::G
 end
 

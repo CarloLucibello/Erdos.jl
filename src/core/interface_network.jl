@@ -5,21 +5,21 @@
 
 Type representing an abstract edge map with value type `T`.
 """
-@compat abstract type AEdgeMap{T} end
+abstract type AEdgeMap{T} end
 
 """
     abstract type AVertexMap{T} end
 
 Type representing an abstract vertex map with value type `T`.
 """
-@compat abstract type AVertexMap{T} end
+abstract type AVertexMap{T} end
 
 """
     abstract type AIndexedEdge <: AEdge end
 
 Edge types with unique indexes, accessed by [`idx`](@ref)
 """
-@compat abstract type AIndexedEdge <: AEdge end
+abstract type AIndexedEdge <: AEdge end
 
 """
     idx(e::AIndexedEdge)
@@ -33,14 +33,14 @@ idx(e::AIndexedEdge) = error("Method not defined")
 
 An abstract graph with the additional possibility to attach properties to vertices and edges.
 """
-@compat abstract type ANetwork <: AGraph end
+abstract type ANetwork <: AGraph end
 
 """
     abstract type ADiNetwork <: ADiGraph end
 
 An abstract directed graph with the additional possibility to attach properties to vertices and edges.
 """
-@compat abstract type ADiNetwork <: ADiGraph end
+abstract type ADiNetwork <: ADiGraph end
 
 const ANetOrDiNet = Union{ANetwork, ADiNetwork}
 

@@ -1,5 +1,5 @@
 """
-    type PropertyStore
+    mutable struct PropertyStore
         gmaps::Dict{String, Any}
         emaps::Dict{String,AEdgeMap}
         vmaps::Dict{String,AVertexMap}
@@ -7,7 +7,7 @@
 
 A type storing properties associated to networks.
 """
-type PropertyStore
+mutable struct PropertyStore
     gmaps::Dict{String, Any}
     emaps::Dict{String,AEdgeMap}
     vmaps::Dict{String,AVertexMap}

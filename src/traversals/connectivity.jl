@@ -126,7 +126,7 @@ See also [`weakly_connected_components`](@ref).
 is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
 
 # Adapated from Graphs.jl
-type TarjanVisitor <: SimpleGraphVisitor
+mutable struct TarjanVisitor <: SimpleGraphVisitor
     stack::Vector{Int}
     onstack::BitVector
     lowlink::Vector{Int}
@@ -279,7 +279,7 @@ function attracting_components(g::ADiGraph)
     return scc[attracting]
 end
 
-type NeighborhoodVisitor{V} <: SimpleGraphVisitor
+mutable struct NeighborhoodVisitor{V} <: SimpleGraphVisitor
     d::Int
     neigs::Vector{V}
 end

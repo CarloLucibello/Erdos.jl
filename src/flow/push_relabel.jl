@@ -1,9 +1,9 @@
-type PushRelabelHeap{V<:Integer,T<:Integer}
+mutable struct PushRelabelHeap{V<:Integer,T<:Integer}
     data::MutableBinaryHeap{Pair{V,T},LessThan2}
     handles::Vector{V}
 end
 
-function (::Type{PushRelabelHeap{V,T}}){V<:Integer,T<:Integer}(n::Integer) 
+function (::Type{PushRelabelHeap{V,T}}){V<:Integer,T<:Integer}(n::Integer)
     handles = zeros(V, n)
     data = MutableBinaryHeap{Pair{V,T},LessThan2}(LessThan2())
     return PushRelabelHeap{V,T}(data, handles)
