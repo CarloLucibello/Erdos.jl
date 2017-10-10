@@ -203,63 +203,63 @@
 </code></pre>
 
 <p>Computes the <a href="https://en.wikipedia.org/wiki/Clustering_coefficient">global clustering coefficient</a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L75-L79' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L75-L79' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.local_clustering' href='#Erdos.local_clustering'>#</a>
 <strong><code>Erdos.local_clustering</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>local_clustering(g, vlist = vertices(g))
 </code></pre>
 
 <p>Returns two vectors, respectively containing  the first and second result of <code>local_clustering_coefficients(g, v)</code> for each <code>v</code> in <code>vlist</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L50-L55' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L50-L55' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.local_clustering-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}' href='#Erdos.local_clustering-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}'>#</a>
 <strong><code>Erdos.local_clustering</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>local_clustering(g, v)
 </code></pre>
 
 <p>Returns a tuple <code>(a,b)</code>, where <code>a</code> is the number of triangles in the neighborhood of <code>v</code> and <code>b</code> is the maximum number of possible triangles. It is related to the local clustering coefficient  by <code>r=a/b</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L12-L18' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L12-L18' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.local_clustering_coefficient' href='#Erdos.local_clustering_coefficient'>#</a>
 <strong><code>Erdos.local_clustering_coefficient</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>local_clustering_coefficient(g, vlist = vertices(g))
 </code></pre>
 
 <p>Returns a vector containing  the <a href="https://en.wikipedia.org/wiki/Clustering_coefficient">local clustering coefficients</a> for vertices <code>vlist</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L43-L47' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L43-L47' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.local_clustering_coefficient-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}' href='#Erdos.local_clustering_coefficient-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}'>#</a>
 <strong><code>Erdos.local_clustering_coefficient</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>local_clustering_coefficient(g, v)
 </code></pre>
 
 <p>Computes the <a href="https://en.wikipedia.org/wiki/Clustering_coefficient">local clustering coefficient</a> for node <code>v</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L1-L5' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.triangles' href='#Erdos.triangles'>#</a>
 <strong><code>Erdos.triangles</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>triangles(g, vlist = vertices(g))
 </code></pre>
 
 <p>Returns a vector containing the number of triangles for vertices <code>vlist</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L67-L71' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L67-L71' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.triangles-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}' href='#Erdos.triangles-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer}'>#</a>
 <strong><code>Erdos.triangles</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>triangles(g, v)
 </code></pre>
 
 <p>Returns the number of triangles in the neighborhood for node <code>v</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/clustering.jl#L35-L39' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/clustering.jl#L35-L39' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.core_periphery_deg-Tuple{Erdos.AGraph}' href='#Erdos.core_periphery_deg-Tuple{Erdos.AGraph}'>#</a>
 <strong><code>Erdos.core_periphery_deg</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>core_periphery_deg(g)
 </code></pre>
 
 <p>A simple degree-based core-periphery detection algorithm (see <a href="http://arxiv.org/abs/1102.5511">Lip</a>). Returns the vertex assignments (1 for core and 2 for periphery).</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/core-periphery.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/core-periphery.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.modularity-Tuple{Erdos.AGraph,Any}' href='#Erdos.modularity-Tuple{Erdos.AGraph,Any}'>#</a>
 <strong><code>Erdos.modularity</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>modularity(g, c)
 </code></pre>
 
 <p>Computes Newman's modularity <code>Q</code> for graph <code>g</code> given the partitioning <code>c</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/modularity.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/modularity.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.maximal_cliques-Tuple{Erdos.AGraph}' href='#Erdos.maximal_cliques-Tuple{Erdos.AGraph}'>#</a>
 <strong><code>Erdos.maximal_cliques</code></strong> &mdash; <em>Method</em>.</p>
 <p>Finds all maximal cliques of an undirected graph.</p>
@@ -273,14 +273,14 @@ julia&gt; maximal_cliques(g)
  [2,1]
 </code></pre>
 
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/cliques.jl#L8-L21' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/cliques.jl#L8-L21' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.community_detection_bethe' href='#Erdos.community_detection_bethe'>#</a>
 <strong><code>Erdos.community_detection_bethe</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>community_detection_bethe(g::AGraph, k=-1; kmax=15)
 </code></pre>
 
 <p>Community detection using the spectral properties of the Bethe Hessian matrix associated to <code>g</code> (see <a href="http://papers.nips.cc/paper/5520-spectral-clustering-of-graphs-with-the-bethe-hessian">Saade et al.</a>). <code>k</code> is the number of communities to detect. If omitted or if <code>k &lt; 1</code> the optimal number of communities will be automatically selected. In this case the maximum number of detectable communities is given by <code>kmax</code>. Returns a vector containing the vertex assignments.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/detection.jl#L66-L75' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/detection.jl#L66-L75' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.community_detection_nback-Tuple{Erdos.AGraph,Integer}' href='#Erdos.community_detection_nback-Tuple{Erdos.AGraph,Integer}'>#</a>
 <strong><code>Erdos.community_detection_nback</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>community_detection_nback(g, k)
@@ -289,14 +289,14 @@ julia&gt; maximal_cliques(g)
 <p>Community detection using the spectral properties of the non-backtracking matrix of graph <code>g</code> (see <a href="http://www.pnas.org/content/110/52/20935.short">Krzakala et al.</a>). <code>k</code> is the number of communities to detect.</p>
 <p>See also <a href="./#Erdos.community_detection_bethe"><code>community_detection_bethe</code></a> for a related community ddetection algorithm.</p>
 <p>Returns a vector with the vertex assignments in the communities.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/detection.jl#L1-L12' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/detection.jl#L1-L12' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.label_propagation-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.label_propagation-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
 <strong><code>Erdos.label_propagation</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>label_propagation(g; maxiter=1000)
 </code></pre>
 
 <p>Community detection using the label propagation algorithm (see <a href="http://arxiv.org/abs/0709.2938">Raghavan et al.</a>). <code>g</code> is the input Graph, <code>maxiter</code> is the  maximum number of iterations. Returns a vertex assignments and the convergence history</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/detection.jl#L94-L100' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/detection.jl#L94-L100' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.nonbacktrack_embedding-Tuple{Erdos.AGraph,Int64}' href='#Erdos.nonbacktrack_embedding-Tuple{Erdos.AGraph,Int64}'>#</a>
 <strong><code>Erdos.nonbacktrack_embedding</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>nonbacktrack_embedding(g::AGraph, k::Int)
@@ -309,7 +309,7 @@ julia&gt; maximal_cliques(g)
 
 <p>Returns  a matrix <code>ϕ</code> where <code>ϕ[:,i]</code> are the coordinates for vertex <code>i</code>.</p>
 <p>Note:  does not explicitly construct the <a href="../linalg/#Erdos.nonbacktracking_matrix-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}"><code>nonbacktracking_matrix</code></a>. See <a href="../linalg/#Erdos.Nonbacktracking"><code>Nonbacktracking</code></a> for details.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/592d424a18868285292098b5be5344e402bd3528/src/community/detection.jl#L35-L48' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/tree/52723c29c2595284bfee4ec09b937dce41b7a7e7/src/community/detection.jl#L35-L48' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
