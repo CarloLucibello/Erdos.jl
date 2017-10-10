@@ -1,5 +1,5 @@
 if !isdefined(:TestEdge)
-type TestEdge <: AEdge
+mutable struct TestEdge <: AEdge
     src::Int
     dst::Int
 end

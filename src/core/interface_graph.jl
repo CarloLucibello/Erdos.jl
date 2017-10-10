@@ -3,7 +3,7 @@
 
 An abstract edge type.
 """
-@compat abstract type AEdge end
+abstract type AEdge end
 
 """
     src(e)
@@ -31,21 +31,21 @@ reverse(e::AEdge) = error("Method not defined")
 
 Abstract undirected graph type
 """
-@compat abstract type AGraph end
+abstract type AGraph end
 
 """
     abstract ADiGraph
 
 Abstract directed graph type
 """
-@compat abstract type ADiGraph end
+abstract type ADiGraph end
 
 """
     const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 
 Union of [`AGraph`](@ref) and [`ADiGraph`](@ref).
 """
-@compat const AGraphOrDiGraph = Union{AGraph, ADiGraph}
+const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 
 ####### Required interface for concrete types ########################
 

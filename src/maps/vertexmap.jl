@@ -2,7 +2,7 @@
 valtype{T}(m::AVertexMap{T}) = T
 
 """
-    type VertexMap{G <: AGraphOrDiGraph, T, D} <: AVertexMap{T}
+    mutable struct VertexMap{G <: AGraphOrDiGraph, T, D} <: AVertexMap{T}
         g::G
         vtype::Type{T}
         data::D
@@ -25,7 +25,7 @@ Construct a VertexMap with `data` as underlying storage.
 
 Construct a vertex map with value `f(u)` for each `u=1:nv(g)`.
 """
-type VertexMap{G<:AGraphOrDiGraph, T, D} <: AVertexMap{T}
+mutable struct VertexMap{G<:AGraphOrDiGraph, T, D} <: AVertexMap{T}
     g::G
     vtype::Type{T}
     data::D
@@ -62,7 +62,7 @@ get(m::VertexMap, i::Integer, x) = get(m.data, i, x)
 Base.Vector(vmap::VertexMap) = [vmap[i] for i=1:nv(vmap.g)]
 
 """
-    immutable ConstVertexMap{T} <: AVertexMap{T}
+    struct ConstVertexMap{T} <: AVertexMap{T}
         val::T
     end
 
@@ -70,7 +70,7 @@ A type representing a constant vector map.
 Any attempt to change the internal value, e.g. `vm[1] = 4`, will
 fail silently.
 """
-immutable ConstVertexMap{T} <: AVertexMap{T}
+struct ConstVertexMap{T} <: AVertexMap{T}
     val::T
 end
 

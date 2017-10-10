@@ -20,7 +20,7 @@ EdgeColorMap :
 - color == 1     => examined
 """
 
-immutable BreadthFirst <: SimpleGraphVisitAlgorithm end
+struct BreadthFirst <: SimpleGraphVisitAlgorithm end
 
 function breadth_first_visit_impl!(
     g::AGraphOrDiGraph,                 # the graph
@@ -84,7 +84,7 @@ end
 # Get the map of the (geodesic) distances from vertices to source by BFS                  #
 ###########################################
 
-immutable GDistanceVisitor <: SimpleGraphVisitor end
+struct GDistanceVisitor <: SimpleGraphVisitor end
 
 """
     gdistances!(g, source, dists) -> dists
@@ -118,7 +118,7 @@ gdistances(g::AGraphOrDiGraph, source) = gdistances!(g, source, fill(0,nv(g)))
 """TreeBFSVisitorVector is a type for representing a BFS traversal
 of the graph as a parents array. This type allows for a more performant implementation.
 """
-type TreeBFSVisitorVector <: SimpleGraphVisitor
+mutable struct TreeBFSVisitorVector <: SimpleGraphVisitor
     tree::Vector{Int}
 end
 
@@ -182,7 +182,7 @@ end
 # Connected Components with BFS            #
 ############################################
 """Performing connected components with BFS starting from seed"""
-type ComponentVisitorVector <: SimpleGraphVisitor
+mutable struct ComponentVisitorVector <: SimpleGraphVisitor
     labels::Vector{Int}
     seed::Int
 end
@@ -198,7 +198,7 @@ end
 ############################################
 # Test graph for bipartiteness             #
 ############################################
-type BipartiteVisitor <: SimpleGraphVisitor
+mutable struct BipartiteVisitor <: SimpleGraphVisitor
     bipartitemap::Vector{UInt8}
     is_bipartite::Bool
 end

@@ -53,7 +53,6 @@ bothmat = adjacency_matrix(g5, :all, Int)
 @test all((bothmat - outmat) .>= 0)
 @test all((bothmat - inmat)  .>= 0)
 
-using Compat
 #check properties of the undirected laplacian carry over.
 for dir in [:in, :out, :all]
     amat = adjacency_matrix(g5, dir, Float64)

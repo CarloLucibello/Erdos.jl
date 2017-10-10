@@ -1,19 +1,17 @@
 """
-@compat abstract type that allows users to pass in their preferred Algorithm
+abstract type that allows users to pass in their preferred Algorithm
 """
-@compat abstract type AbstractMultirouteFlowAlgorithm end
+abstract type AbstractMultirouteFlowAlgorithm end
 
 """
 Forces the multiroute_flow function to use the Kishimoto algorithm.
 """
-type KishimotoAlgorithm <: AbstractMultirouteFlowAlgorithm
-end
+struct KishimotoAlgorithm <: AbstractMultirouteFlowAlgorithm end
 
 """
 Forces the multiroute_flow function to use the Extended Multiroute Flow algorithm.
 """
-type ExtendedMultirouteFlowAlgorithm <: AbstractMultirouteFlowAlgorithm
-end
+struct ExtendedMultirouteFlowAlgorithm <: AbstractMultirouteFlowAlgorithm end
 
 # Methods when the number of routes is more than the connectivity
 # 1) When using Boykov-Kolmogorov as a flow subroutine

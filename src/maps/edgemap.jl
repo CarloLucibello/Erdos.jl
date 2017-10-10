@@ -3,7 +3,7 @@
 valtype{T}(m::AEdgeMap{T}) = T
 
 """
-    type EdgeMap{G <: AGraphOrDiGraph, T, D} <: AEdgeMap{T}
+    mutable struct EdgeMap{G <: AGraphOrDiGraph, T, D} <: AEdgeMap{T}
         g::G
         vtype::Type{T}
         data::D
@@ -28,7 +28,7 @@ a vector for graph with indexed edges.
 
 Construct an edge map with value `f(e)` for each `e` in `edges(g)`.
 """
-type EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
+mutable struct EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     g::G
     vtype::Type{T}
     data::D
@@ -147,7 +147,7 @@ values{G,T,D<:AbstractSparseMatrix}(m::EdgeMap{G,T,D}) = nonzeros(m.data)
 ==(m1::EdgeMap, m2::EdgeMap) = m1.data == m2.data
 
 """
-    immutable ConstEdgeMap{T} <: SimpleEdgeMap{T}
+    struct ConstEdgeMap{T} <: SimpleEdgeMap{T}
         val::T
     end
 
@@ -155,7 +155,7 @@ A type representing a constant vector map.
 Any attempt to change the internal value, e.g. `emap[u,v] = 4`, will
 fail silently.
 """
-immutable ConstEdgeMap{T} <: AEdgeMap{T}
+struct ConstEdgeMap{T} <: AEdgeMap{T}
     val::T
 end
 

@@ -1,7 +1,7 @@
 if !isdefined(:TestIGraph)
-    type TestIGraph <: AGraph; end
-    type TestIDiGraph <: ADiGraph; end
-    type TestIEdge <: AEdge; end
+    struct TestIGraph <: AGraph  end
+    struct TestIDiGraph <: ADiGraph end
+    struct TestIEdge <: AEdge end
 end
 
 @testset "$TEST $G" begin

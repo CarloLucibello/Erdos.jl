@@ -1,5 +1,5 @@
 """
-    type Network <: ANetwork
+    mutable struct Network <: ANetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -24,7 +24,7 @@ correspondence to each nonzero element of `adjmx`.
 If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 If `upper=true` only the upper triangular part of `adjmx` is considered.
 """
-type Network <: ANetwork
+mutable struct Network <: ANetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
@@ -38,7 +38,7 @@ type Network <: ANetwork
 end
 
 """
-    type DiNetwork <: ADiNetwork
+    mutable struct DiNetwork <: ADiNetwork
         ne::Int
         edge_index_range::Int
         out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
@@ -67,7 +67,7 @@ Construct a `DiNetwork` with `n` vertices and no edges.
 Construct a `DiNetwork` from the adjacency matrix `adjmx`.
 If `selfedges=false` the diagonal elements of `adjmx` are ignored.
 """
-type DiNetwork <: ADiNetwork
+mutable struct DiNetwork <: ADiNetwork
     ne::Int
     edge_index_range::Int
     out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist

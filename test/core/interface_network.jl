@@ -1,7 +1,7 @@
 if !isdefined(:TestINet)
-    type TestINet <: ANetwork; end
-    type TestIDiNet <: ADiNetwork; end
-    type TestIIdxEdge <: AIndexedEdge; end
+    struct TestINet <: ANetwork; end
+    struct TestIDiNet <: ADiNetwork; end
+    struct TestIIdxEdge <: AIndexedEdge; end
 end
 
 @testset "$TEST $G" begin

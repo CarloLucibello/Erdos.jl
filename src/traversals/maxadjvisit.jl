@@ -10,9 +10,9 @@
 #
 #################################################
 
-immutable MaximumAdjacency <: SimpleGraphVisitAlgorithm end
+struct MaximumAdjacency <: SimpleGraphVisitAlgorithm end
 
-@compat abstract type AbstractMASVisitor <: SimpleGraphVisitor end
+abstract type AbstractMASVisitor <: SimpleGraphVisitor end
 
 function maximum_adjacency_visit_impl!{T}(
     g::AGraphOrDiGraph,	                      # the graph
@@ -76,7 +76,7 @@ end
 #
 #################################################
 
-type MinCutVisitor{G,T,EM} <: AbstractMASVisitor
+mutable struct MinCutVisitor{G,T,EM} <: AbstractMASVisitor
     g::G
     parities::BitVector
     colormap::Vector{Int}
@@ -143,7 +143,7 @@ end
 #
 #################################################
 
-type MASVisitor{EM,I<:IO} <: AbstractMASVisitor
+mutable struct MASVisitor{EM,I<:IO} <: AbstractMASVisitor
     io::I
     vertices::Vector{Int}
     distmx::EM

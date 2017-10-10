@@ -21,8 +21,7 @@ EdgeColorMap :
 - color == 1     => examined
 """
 
-type DepthFirst <: SimpleGraphVisitAlgorithm
-end
+struct DepthFirst <: SimpleGraphVisitAlgorithm end
 
 function depth_first_visit_impl!{G<:AGraphOrDiGraph}(
     g::G,      # the graph
@@ -91,7 +90,7 @@ end
 
 # Test whether a graph is cyclic
 
-type DFSCyclicTestVisitor <: SimpleGraphVisitor
+mutable struct DFSCyclicTestVisitor <: SimpleGraphVisitor
     found_cycle::Bool
 
     DFSCyclicTestVisitor() = new(false)
@@ -170,7 +169,7 @@ is_tree(g::AGraphOrDiGraph) = !has_cycles(g)
 
 # Topological sort using DFS
 
-type TopologicalSortVisitor <: SimpleGraphVisitor
+mutable struct TopologicalSortVisitor <: SimpleGraphVisitor
     vertices::Vector{Int}
 
     function TopologicalSortVisitor(n)
@@ -204,7 +203,7 @@ function topological_sort_by_dfs(g::AGraphOrDiGraph)
 end
 
 
-type TreeDFSVisitor{G <:ADiGraph} <:SimpleGraphVisitor
+mutable struct TreeDFSVisitor{G <:ADiGraph} <:SimpleGraphVisitor
     tree::G
     predecessor::Vector{Int}
 end

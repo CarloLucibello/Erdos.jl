@@ -40,7 +40,7 @@ function nonbacktracking_matrix(g::AGraphOrDiGraph)
 end
 
 """
-    type Nonbacktracking{G, E}
+    mutable struct Nonbacktracking{G, E}
         g::G
         edgeidmap::Dict{E,Int}
         m::Int
@@ -66,7 +66,7 @@ for computed eigenvectors and conducting linear solves.
 Additionally the `contraction!(vertexspace, nbt, edgespace)` method takes vectors represented in
 the domain of `B` and represents them in the domain of the adjacency matrix of `g`.
 """
-type Nonbacktracking{G, E}
+mutable struct Nonbacktracking{G, E}
     g::G
     edgeidmap::Dict{E,Int}
     m::Int

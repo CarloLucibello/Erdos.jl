@@ -3,7 +3,7 @@
 
 # The concept and trivial implementation of graph visitors
 
-@compat abstract type SimpleGraphVisitor end
+abstract type SimpleGraphVisitor end
 
 # trivial implementation
 
@@ -21,11 +21,11 @@ examine_neighbor!(vis::SimpleGraphVisitor, u, v, ucolor, vcolor, ecolor) = true
 close_vertex!(vis::SimpleGraphVisitor, v) = true
 
 
-immutable TrivialGraphVisitor <: SimpleGraphVisitor end
+struct TrivialGraphVisitor <: SimpleGraphVisitor end
 
 
 # This is the common base for BreadthFirst and DepthFirst
-@compat abstract type SimpleGraphVisitAlgorithm end
+abstract type SimpleGraphVisitAlgorithm end
 
 ###########################################################
 #
@@ -35,7 +35,7 @@ immutable TrivialGraphVisitor <: SimpleGraphVisitor end
 
 # List vertices by the order of being discovered
 
-type VertexListVisitor <: SimpleGraphVisitor
+mutable struct VertexListVisitor <: SimpleGraphVisitor
     vertices::Vector{Int}
 
     function VertexListVisitor(n::Integer=0)
@@ -63,7 +63,7 @@ end
 
 # Print visit log
 
-type LogGraphVisitor{S<:IO} <: SimpleGraphVisitor
+mutable struct LogGraphVisitor{S<:IO} <: SimpleGraphVisitor
     io::S
 end
 
