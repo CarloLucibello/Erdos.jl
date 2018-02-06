@@ -57,7 +57,7 @@ tests = [
     "flow/multiroute_flow",
     "spanningtrees/spanningtrees",
     "spanningtrees/kruskal",
-    "matching/matching",
+    # "matching/matching",
     "dismantling/dismantling",
     "utils"
 ]

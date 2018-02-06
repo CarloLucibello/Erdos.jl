@@ -64,7 +64,7 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **flow operations:** maximum flow, minimum s-t cut
 
-- **matching:** maximum weight matching on arbitrary graphs (through BlossomV algorithm)
+- **matching:** maximum weight matching on arbitrary graphs (through BlossomV algorithm in *ErdosExtra.jl*)
 
 - **dismantling:** collective influencer heuristic
 

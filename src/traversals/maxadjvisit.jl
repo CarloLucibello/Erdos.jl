@@ -44,8 +44,7 @@ function traverse_graph!(
     visitor::AbstractMASVisitor,
     colormap::Vector{Int})
 
-
-    pq = PriorityQueue(Int,T,Base.Order.Reverse)
+    pq = PriorityQueue{Int,T,typeof(Base.Order.Reverse)}(Base.Order.Reverse)
 
     # Set number of visited neighbors for all vertices to 0
     for v in vertices(g)

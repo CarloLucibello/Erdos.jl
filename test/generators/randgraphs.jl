@@ -190,8 +190,8 @@ rd = random_regular_digraph(10, 8, DG, dir=:out, seed=4)
 @test is_directed(rd)
 
 g = stochastic_block_model(2., 3., [100,100], G)
-@test  4 < mean(degree(g)) < 6
+@test  3.5 < mean(degree(g)) < 6.5
 g = stochastic_block_model(3., 4., [100,100,100])
-@test  10 < mean(degree(g)) < 12
+@test  9.5 < mean(degree(g)) < 12.5
 
 end # testset

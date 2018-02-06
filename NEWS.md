@@ -1,3 +1,6 @@
+## v0.6
+- moved BlossomV to ErdosExtra
+
 ## v0.5  2017.7.10
 - add constructors `EdgeMap(g, e -> f(e))` and `VertexMap(g, v->f(v))`
 - add `sort` for edges

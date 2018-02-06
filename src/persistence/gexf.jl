@@ -51,7 +51,7 @@ end
 function readgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
-    name(xroot) == "gexf" || error("Not a Gexf file")
+    nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
     isdir = false
     if haskey(xg, "defaultedgetype")
@@ -64,7 +64,7 @@ end
 function readnetgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
-    name(xroot) == "gexf" || error("Not a Gexf file")
+    nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
     isdir = false
     if haskey(xg, "defaultedgetype")
@@ -79,7 +79,7 @@ function readnetgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     # Note: if no default value is specified for an attribute
     # each node/edge has to implement it
     for xattr in elements(xg)
-        name(xattr) != "attributes" && continue
+        nodename(xattr) != "attributes" && continue
         pk =  xattr["class"] == "node" ? vpropkeys :
               xattr["class"] == "edge" ? epropkeys : error("attr")
 
@@ -121,7 +121,7 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     nodeid = 1
     # traverse the tree to map id to 1:n
     for el in eachelement(getchild(xg,"nodes"))
-        name(el) != "node" && continue #TODO can be removed
+        nodename(el) != "node" && continue #TODO can be removed
         nodes[el["id"]] = nodeid
         nodeid += 1
     end
@@ -134,19 +134,19 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
         @assert name(f) == "node"
         v = nodes[f["id"]]
         for xattr in eachattribute(f)
-            nattr = name(xattr)
+            nattr = nodename(xattr)
             nattr == "id" && continue
             !has_vprop(g, nattr) && vprop!(g, nattr, String)
             vprop(g, nattr)[v] = f[nattr]
         end
         for el in eachelement(f)
-            if name(el) == "attvalues"
+            if nodename(el) == "attvalues"
                 for xattr in eachelement(el)
                     pname, T = vpropkeys[xattr["for"]]
                     vprop(g, pname)[v] = gexfparse(T, xattr["value"])
                 end
             else
-                pname = name(el)
+                pname = nodename(el)
                 if endswith(namespace(el), "viz")
                     pname = "viz:"*pname
                 end
@@ -163,25 +163,25 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     end
 
     for f in eachelement(getchild(xg,"edges"))
-        @assert name(f) == "edge"
+        @assert nodename(f) == "edge"
         u = nodes[f["source"]]
         v = nodes[f["target"]]
         ok, e = add_edge!(g, u, v)
         for xattr in eachattribute(f)
-            nattr = name(xattr)
+            nattr = nodename(xattr)
             nattr ∈ ["id","source","target"] && continue
             Tattr = nattr == "weight" ? Float64 : String
             !has_eprop(g, nattr) && eprop!(g, nattr, Tattr)
             eprop(g, nattr)[e] = Tattr == String ? f[nattr] : parse(Tattr, f[nattr])
         end
         for el in eachelement(f)
-            if name(el) == "attvalues"
+            if nodename(el) == "attvalues"
                 for xattr in eachelement(el)
                     pname, T = epropkeys[xattr["for"]]
                     eprop(g, pname)[e] = gexfparse(T, xattr["value"])
                 end
             else
-                pname = name(el)
+                pname = nodename(el)
                 attr = name.(attributes(el))
                 if "value" in attr && length(attr) == 1
                     !has_eprop(g, pname) && eprop!(g, pname, String)

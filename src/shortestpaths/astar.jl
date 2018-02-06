@@ -13,7 +13,7 @@ function a_star_impl!{T<:Number}(
     )
     V = vertextype(g)
     colormap[s] = 1
-    frontier = PriorityQueue(Tuple{T,Vector{Edge{V}},Int},T)
+    frontier = PriorityQueue{Tuple{T,Vector{Edge{V}},Int},T}()
     frontier[(zero(T), Vector{Edge{V}}(), s)] = zero(T)
 
     path = Vector{Edge{V}}()
