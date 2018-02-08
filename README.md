@@ -28,15 +28,15 @@ Custom graphs and networks can be defined inheriting from *Erdos*' abstract type
 
 Take a look at the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
 
-Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
-
 ## Documentation
 Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl/latest/).
 Methods' documentation is also available via the Julia REPL help system.
 See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.md) for differences with previous versions.
 
-## License
+## Licence and Credits
 *Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
+
+Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
 
 ## Features
 
