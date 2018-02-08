@@ -215,28 +215,28 @@
 </code></pre>
 
 <p>Abstract undirected graph type</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/core/interface_graph.jl#L29-L33' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/core/interface_graph.jl#L29-L33' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.ADiGraph' href='#Erdos.ADiGraph'>#</a>
 <strong><code>Erdos.ADiGraph</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>abstract ADiGraph
 </code></pre>
 
 <p>Abstract directed graph type</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/core/interface_graph.jl#L36-L40' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/core/interface_graph.jl#L36-L40' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.AGraphOrDiGraph' href='#Erdos.AGraphOrDiGraph'>#</a>
 <strong><code>Erdos.AGraphOrDiGraph</code></strong> &mdash; <em>Constant</em>.</p>
 <pre><code>const AGraphOrDiGraph = Union{AGraph, ADiGraph}
 </code></pre>
 
 <p>Union of <a href="./#Erdos.AGraph"><code>AGraph</code></a> and <a href="./#Erdos.ADiGraph"><code>ADiGraph</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/core/interface_graph.jl#L43-L47' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/core/interface_graph.jl#L43-L47' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.AEdge' href='#Erdos.AEdge'>#</a>
 <strong><code>Erdos.AEdge</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>abstract type AEdge end
 </code></pre>
 
 <p>An abstract edge type.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/core/interface_graph.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/core/interface_graph.jl#L1-L5' class='documenter-source'>source</a><br></p>
 <p><a id='Graph-/-DiGraph-/-Edge-1'></a></p>
 <h2 id="graph-digraph-edge">Graph / DiGraph / Edge</h2>
 <p><a id='Erdos.Graph' href='#Erdos.Graph'>#</a>
@@ -257,7 +257,7 @@ Graph(n=0) = Graph{Int}(n)
 </code></pre>
 
 <p>Construct a <code>Graph{T}</code> from the adjacency matrix <code>adjmx</code>, placing an edge in correspondence to each nonzero element of <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored. If <code>upper=true</code> only the upper triangular part of <code>adjmx</code> is considered.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/factory/graph.jl#L2-L21' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/factory/graph.jl#L2-L21' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.DiGraph' href='#Erdos.DiGraph'>#</a>
 <strong><code>Erdos.DiGraph</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct DiGraph{T&lt;:Integer} &lt;: ADiGraph
@@ -277,7 +277,7 @@ DiGraph(n=0) = DiGraph{Int}(n)
 </code></pre>
 
 <p>Construct a <code>DiGraph{T}</code> from the adjacency matrix <code>adjmx</code>, placing an edge in correspondence to each nonzero element of <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/factory/graph.jl#L40-L59' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/factory/graph.jl#L40-L59' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.Edge' href='#Erdos.Edge'>#</a>
 <strong><code>Erdos.Edge</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>struct Edge
@@ -287,7 +287,7 @@ end
 </code></pre>
 
 <p>A type representing an edge between two vertices of a graph.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/6b083c3e8d450d451c359131607f1e3c8806c413/src/core/edge.jl#L6-L13' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/core/edge.jl#L6-L13' class='documenter-source'>source</a><br></p>
 <p><a id='Defining-new-types-1'></a></p>
 <h2 id="defining-new-types">Defining new types</h2>
 <p>In order to define a custom graph type, e.g. <code>MyGraph &lt;: AGraph</code>, some guarantee have to be respected and some methods have to be exposed. Take a look to the files in <code>src/factory/</code> for some examples. Custom edges, e.g. <code>MyEdge &lt;: AEdge</code>,  have to expose <code>src(e)</code> and <code>dst(e)</code> methods.</p>
