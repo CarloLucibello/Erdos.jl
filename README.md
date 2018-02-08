@@ -2,12 +2,9 @@
 [![][docs-latest-img]][docs-latest-url]
 [![][codecov-img]][codecov-url]
 [![][travis-img]][travis-url]
-[![][pkg-0.5-img]][pkg-0.5-url]
 [![][pkg-0.6-img]][pkg-0.6-url]
 
 
-[pkg-0.5-img]: http://pkg.julialang.org/badges/Erdos_0.5.svg
-[pkg-0.5-url]: http://pkg.julialang.org/?pkg=Erdos
 [pkg-0.6-img]: http://pkg.julialang.org/badges/Erdos_0.6.svg
 [pkg-0.6-url]: http://pkg.julialang.org/?pkg=Erdos
 

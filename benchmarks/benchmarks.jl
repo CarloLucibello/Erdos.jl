@@ -11,12 +11,12 @@ BenchmarkTools.DEFAULT_PARAMETERS.seconds = 40.
 BenchmarkTools.DEFAULT_PARAMETERS.time_tolerance = 0.05
 BenchmarkTools.DEFAULT_PARAMETERS.samples = 50000
 
-VERS = VERSION >= v"0.6dev" ? "v0.6" : "v0.5"
+VERS = VERSION >= v"0.7dev" ? "v0.7" : "v0.6"
 bench_dir = Base.source_dir()
 res_dir = joinpath(bench_dir, "results", VERS)
 par_dir = joinpath(bench_dir, "parameters")
-res_dir5 = joinpath(bench_dir, "results", "v0.5")
 res_dir6 = joinpath(bench_dir, "results", "v0.6")
+res_dir7 = joinpath(bench_dir, "results", "v0.7")
 
 ### ADD BENCHMARKS  ###############
 suite = BenchmarkGroup()
@@ -115,8 +115,8 @@ end
 
 comparebench(res,prev::Int=0) = comparebench(loadres(prev), res)
 
-function comparebench56()
-    comparebench(loadres(res_dir5),loadres(res_dir6))
+function comparebench67()
+    comparebench(loadres(res_dir6),loadres(res_dir7))
 end
 
 function comparebench(resold, res)
