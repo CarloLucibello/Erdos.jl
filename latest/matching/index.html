@@ -196,17 +196,7 @@
               
                 <p><a id='Matching-1'></a></p>
 <h1 id="matching">Matching</h1>
-<p>Algorithms for the <a href="https://en.wikipedia.org/wiki/Matching_(graph_theory)">optimal matching problem</a>.</p>
-<p><a id='Erdos.minimum_weight_perfect_matching-Union{Tuple{Erdos.AGraph,Erdos.AEdgeMap{T},Any}, Tuple{Erdos.AGraph,Erdos.AEdgeMap{T}}, Tuple{T}} where T<:Real' href='#Erdos.minimum_weight_perfect_matching-Union{Tuple{Erdos.AGraph,Erdos.AEdgeMap{T},Any}, Tuple{Erdos.AGraph,Erdos.AEdgeMap{T}}, Tuple{T}} where T<:Real'>#</a>
-<strong><code>Erdos.minimum_weight_perfect_matching</code></strong> &mdash; <em>Method</em>.</p>
-<pre><code>minimum_weight_perfect_matching{T}(g, weights::AEdgeMap{T}, cutoff=typemax{T})
-</code></pre>
-
-<p>Given a graph <code>g</code> and an edgemap <code>weights</code> containing non-negative weights associated to edges, returns a matching with the mimimum total weight among the ones containing exactly <code>nv(g)/2</code> edges.</p>
-<p>Edges in <code>g</code> not present in <code>weights</code> will not be considered for the matching. The returned object is of type <code>MatchingResult</code>.</p>
-<p>To reduce computational time, a <code>cutoff</code> argument can be given. Only edges with weight lower than <code>cutoff</code> will be considered for the matching.</p>
-<p>This function relies on the BlossomV.jl package, a julia wrapper around Kolmogorov's BlossomV algorithm.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/80c5dcd204dd01fbe88533a0b867b23bba0ab7fb/src/matching/blossomv.jl#L1-L16' class='documenter-source'>source</a><br></p>
+<p>Algorithms for the <a href="https://en.wikipedia.org/wiki/Matching_(graph_theory)">optimal matching problems</a>.  <a href="https://github.com/CarloLucibello/ErdosExtras.jl">ErdosExtras</a>.  Functionalities moved to  <a href="https://github.com/CarloLucibello/ErdosExtras.jl">ErdosExtras.jl</a>.</p>
               
             </div>
           </div>
