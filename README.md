@@ -28,11 +28,6 @@ Custom graphs and networks can be defined inheriting from *Erdos*' abstract type
 
 Take a look at the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
 
-## Documentation
-Full documentation available at [GitHub Pages](https://carlolucibello.github.io/Erdos.jl/latest/).
-Methods' documentation is also available via the Julia REPL help system.
-See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.md) for differences with previous versions.
-
 ## Licence and Credits
 *Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
 
