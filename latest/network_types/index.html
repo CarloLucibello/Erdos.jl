@@ -215,21 +215,21 @@
 </code></pre>
 
 <p>An abstract graph with the additional possibility to attach properties to vertices and edges.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/core/interface_network.jl#L31-L35' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/core/interface_network.jl#L31-L35' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.ADiNetwork' href='#Erdos.ADiNetwork'>#</a>
 <strong><code>Erdos.ADiNetwork</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>abstract type ADiNetwork &lt;: ADiGraph end
 </code></pre>
 
 <p>An abstract directed graph with the additional possibility to attach properties to vertices and edges.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/core/interface_network.jl#L38-L42' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/core/interface_network.jl#L38-L42' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.AIndexedEdge' href='#Erdos.AIndexedEdge'>#</a>
 <strong><code>Erdos.AIndexedEdge</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>abstract type AIndexedEdge &lt;: AEdge end
 </code></pre>
 
 <p>Edge types with unique indexes, accessed by <a href="../network_interface/#Erdos.idx-Tuple{Erdos.AIndexedEdge}"><code>idx</code></a></p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/core/interface_network.jl#L17-L21' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/core/interface_network.jl#L17-L21' class='documenter-source'>source</a><br></p>
 <p><a id='Network-/-DiNetwork-/-IndexedEdge-1'></a></p>
 <h2 id="network-dinetwork-indexededge">Network / DiNetwork / IndexedEdge</h2>
 <p><a id='Erdos.Network' href='#Erdos.Network'>#</a>
@@ -256,7 +256,7 @@ end
 </code></pre>
 
 <p>Construct a <code>Network</code> from the adjacency matrix <code>adjmx</code>, placing an edge in correspondence to each nonzero element of <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored. If <code>upper=true</code> only the upper triangular part of <code>adjmx</code> is considered.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/factory/net.jl#L1-L26' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/factory/net.jl#L1-L26' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.DiNetwork' href='#Erdos.DiNetwork'>#</a>
 <strong><code>Erdos.DiNetwork</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct DiNetwork &lt;: ADiNetwork
@@ -286,7 +286,7 @@ end
 </code></pre>
 
 <p>Construct a <code>DiNetwork</code> from the adjacency matrix <code>adjmx</code>. If <code>selfedges=false</code> the diagonal elements of <code>adjmx</code> are ignored.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/factory/net.jl#L40-L69' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/factory/net.jl#L40-L69' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.IndexedEdge' href='#Erdos.IndexedEdge'>#</a>
 <strong><code>Erdos.IndexedEdge</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>struct IndexedEdge &lt;: AIndexedEdge
@@ -301,7 +301,7 @@ end
 </code></pre>
 
 <p>Creates an edge with invalid index.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/core/edge.jl#L39-L51' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/core/edge.jl#L39-L51' class='documenter-source'>source</a><br></p>
 <p><a id='Defining-new-network-types-1'></a></p>
 <h2 id="defining-new-network-types">Defining new network types</h2>
 <p>In order to define a custom network type, e.g. <code>MyNet &lt;: ANetwork</code>, the corresponding methods in the preceding paragraph have to be implemented. This is automatically done for custom network types having a <code>props::PropertyStore</code> member. Take a look to <code>src/factory/net.jl</code> and <code>src/maps/property_store.jl</code> for an example.</p>
