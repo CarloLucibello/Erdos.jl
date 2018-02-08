@@ -143,9 +143,6 @@ euclidean_graph,
 # Spanning Trees
 minimum_spanning_tree, count_spanning_trees,
 
-# matching
-# MatchingResult, minimum_weight_perfect_matching, ## moved to ErdosExtra
-
 # dismantling
 dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
@@ -211,7 +208,6 @@ include("flow/maximum_flow.jl")
     include("flow/multiroute_flow.jl")
     include("flow/kishimoto.jl")
     include("flow/ext_multiroute_flow.jl")
-# include("matching/matching.jl") # moved to ErdosExtra
 include("spanningtrees/spanningtrees.jl")
 include("dismantling/ci.jl")
 include("factory/graph.jl")

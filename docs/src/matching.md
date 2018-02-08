@@ -1,3 +1,4 @@
 # Matching
-Algorithms for the [optimal matching problem](<https://en.wikipedia.org/wiki/Matching_(graph_theory)>).
-See *ErdosExtra.jl*.
+Algorithms for the [optimal matching problems](<https://en.wikipedia.org/wiki/Matching_(graph_theory)>).
+ [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl).
+ Functionalities moved to  [ErdosExtras.jl](https://github.com/CarloLucibello/ErdosExtras.jl).
