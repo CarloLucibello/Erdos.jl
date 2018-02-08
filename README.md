@@ -26,7 +26,7 @@ julia> Pkg.add("Erdos")
 Moreover edge and vertex properties can be internally stored in some of the graph types (we call them networks) and read/written in most common graph formats.
 Custom graphs and networks can be defined inheriting from *Erdos*' abstract types.
 
-Have a look to the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
+Take a look at the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
 
 Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
 
