@@ -203,7 +203,7 @@
 </code></pre>
 
 <p>Returns a sparse boolean adjacency matrix for a graph, indexed by <code>[u, v]</code> vertices. <code>true</code> values indicate an edge between <code>u</code> and <code>v</code>. Users may specify a direction (<code>:in</code>, <code>:out</code>, or <code>:all</code> are currently supported; <code>:out</code> is default for both directed and undirected graphs) and a data type for the matrix (defaults to <code>Int</code>).</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/spectral.jl#L9-L17' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/spectral.jl#L9-L17' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.incidence_matrix' href='#Erdos.incidence_matrix'>#</a>
 <strong><code>Erdos.incidence_matrix</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>incidence_matrix(g::AGraphOrDiGraph, T::DataType=Int; oriented=false)
@@ -211,14 +211,14 @@
 
 <p>Returns a sparse node-arc incidence matrix for a graph, indexed by <code>[v, i]</code>, where <code>i</code> is in <code>1:ne(g)</code>, indexing an edge <code>e</code>. For directed graphs, a value of <code>-1</code> indicates that <code>src(e) == v</code>, while a value of <code>1</code> indicates that <code>dst(e) == v</code>. Otherwise, the value is <code>0</code>.</p>
 <p>For undirected graphs, both entries are <code>1</code> if <code>oriented=false</code>, otherwise <code>[v, i] -&gt; -1</code> and <code>[u, i] -&gt; 1</code> if <code>v &lt; u</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/spectral.jl#L78-L89' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/spectral.jl#L78-L89' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.laplacian_matrix' href='#Erdos.laplacian_matrix'>#</a>
 <strong><code>Erdos.laplacian_matrix</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>laplacian_matrix(g, dir::Symbol=:out, T::DataType=Int)
 </code></pre>
 
 <p>Returns a sparse <a href="https://en.wikipedia.org/wiki/Laplacian_matrix">Laplacian matrix</a> for a graph <code>g</code>, indexed by <code>[u, v]</code> vertices. <code>dir</code> has to be <code>:in, :out</code> or <code>:all</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/spectral.jl#L66-L71' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/spectral.jl#L66-L71' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.spectral_distance-Tuple{Erdos.AGraph,Erdos.AGraph,Integer}' href='#Erdos.spectral_distance-Tuple{Erdos.AGraph,Erdos.AGraph,Integer}'>#</a>
 <strong><code>Erdos.spectral_distance</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>spectral_distance(G₁, G₂ [, k])
@@ -227,7 +227,7 @@
 <p>Compute the spectral distance between undirected n-vertex graphs G₁ and G₂ using the top k ≤ n greatest eigenvalues. If k is ommitted, uses full spectrum.</p>
 <p>For further details, please refer to:</p>
 <p>JOVANOVIC, I.; STANIC, Z., 2014. Spectral Distances of Graphs Based on their Different Matrix Representations</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/spectral.jl#L117-L128' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/spectral.jl#L117-L128' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.Nonbacktracking' href='#Erdos.Nonbacktracking'>#</a>
 <strong><code>Erdos.Nonbacktracking</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct Nonbacktracking{G, E}
@@ -249,7 +249,7 @@ edgeidmap: the association between oriented edges and index into the NBT matrix
 
 <p>This type is in the style of GraphMatrices.jl and supports the necessary operations for computed eigenvectors and conducting linear solves.</p>
 <p>Additionally the <code>contraction!(vertexspace, nbt, edgespace)</code> method takes vectors represented in the domain of <code>B</code> and represents them in the domain of the adjacency matrix of <code>g</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/nonbacktracking.jl#L42-L68' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/nonbacktracking.jl#L42-L68' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.nonbacktracking_matrix-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.nonbacktracking_matrix-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
 <strong><code>Erdos.nonbacktracking_matrix</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>nonbacktracking_matrix(g)
@@ -260,7 +260,7 @@ edgeidmap: the association between oriented edges and index into the NBT matrix
 </code></pre>
 
 <p>Returns a matrix <code>B</code>, and an edgemap storing the oriented edges' positions in <code>B</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/c2b11b9e1360d4688c3b2cb403d3c5429c5723ee/src/linalg/nonbacktracking.jl#L1-L10' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ffc5e7155238dbc5dd90a402e73b4f0af35ae7ae/src/linalg/nonbacktracking.jl#L1-L10' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
