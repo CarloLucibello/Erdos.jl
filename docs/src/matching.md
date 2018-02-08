@@ -1,9 +1,4 @@
 # Matching
-Algorithms for the [optimal matching problem](<https://en.wikipedia.org/wiki/Matching_(graph_theory)>).
-
-```@autodocs
-Modules = [Erdos]
-Pages   = ["matching/common.jl",
-           "matching/blossomv.jl"]
-Private = false
-```
+Algorithms for the [optimal matching problems](<https://en.wikipedia.org/wiki/Matching_(graph_theory)>).
+ [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl).
+ Functionalities moved to  [ErdosExtras.jl](https://github.com/CarloLucibello/ErdosExtras.jl).

@@ -26,6 +26,8 @@ julia> Pkg.add("Erdos")
 Moreover edge and vertex properties can be internally stored in some of the graph types (we call them networks) and read/written in most common graph formats.
 Custom graphs and networks can be defined inheriting from *Erdos*' abstract types.
 
+Have a look to the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
+
 Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
 
 ## Documentation
@@ -37,6 +39,10 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 *Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
 
 ## Features
+
+Refer to the [documentation](https://carlolucibello.github.io/Erdos.jl/latest) to explore all the features of Erdos.
+Here is a comprehensive list of the implemente algorithms. (*EE*) denotes algorithms in the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl).
+
 - **core functions:** vertices and edges addition and removal, degree (in/out/all), neighbors (in/out/all)
 
 - **maps** dictionary like types to store properties associated to vertices and edges
@@ -61,7 +67,9 @@ See also [NEWS.md](https://github.com/CarloLucibello/Erdos.jl/blob/master/NEWS.m
 
 - **flow operations:** maximum flow, minimum s-t cut
 
-- **matching:** maximum weight matching on arbitrary graphs (through BlossomV algorithm)
+- **matching:** minim weight matching on arbitrary graphs (*EE*), minimum b-matching (*EE*) 
+
+- **travelling salesman problem:** a TSP solver based on linear programming (*EE*) 
 
 - **dismantling:** collective influencer heuristic
 

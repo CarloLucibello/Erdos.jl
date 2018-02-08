@@ -158,4 +158,3 @@ Graph{UInt32}(16726, 47594)
 ```
 
 ## Ready to explore
-Refer to the documentation to explore all the features of Erdos:

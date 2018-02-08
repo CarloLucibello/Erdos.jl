@@ -8,7 +8,6 @@ module Erdos
 import GZip # I/O
 import StatsFuns # randgraphs
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
-import BlossomV # matching
 import Clustering: kmeans # community detection
 # package Iterators.jl methods are now in utils.jl due to name
 # conflict in julia 0.6 with Base.Iterators
@@ -144,9 +143,6 @@ euclidean_graph,
 # Spanning Trees
 minimum_spanning_tree, count_spanning_trees,
 
-# matching
-MatchingResult, minimum_weight_perfect_matching,
-
 # dismantling
 dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 
@@ -212,7 +208,6 @@ include("flow/maximum_flow.jl")
     include("flow/multiroute_flow.jl")
     include("flow/kishimoto.jl")
     include("flow/ext_multiroute_flow.jl")
-include("matching/matching.jl")
 include("spanningtrees/spanningtrees.jl")
 include("dismantling/ci.jl")
 include("factory/graph.jl")

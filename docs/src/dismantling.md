@@ -1,5 +1,5 @@
-# Matching
-Algorithms for optimal network problems.
+# Dismantling
+Algorithms for network dismantling and influencer search.
 
 ```@autodocs
 Modules = [Erdos]

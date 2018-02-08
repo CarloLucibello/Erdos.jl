@@ -3,7 +3,7 @@
 @deprecate badj(g) adjacency_list(g, :in)
 @deprecate badj(g, v) in_neighbors(g, v)
 @deprecate induced_subgraph subgraph
-@deprecate maximum_weight_maximal_matching minimum_weight_perfect_matching
+#Base.@deprecate_moved minimum_weight_perfect_matching "ErdosExtras" #uncomment on julia 0.7
 @deprecate indegree(g, v) in_degree(g, v)
 @deprecate outdegree(g, v) out_degree(g, v)
 
