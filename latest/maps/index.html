@@ -217,7 +217,7 @@ end
 </code></pre>
 
 <p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>emap[u,v] = 4</code>, will fail silently.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/edgemap.jl#L149-L157' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/edgemap.jl#L149-L157' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.EdgeMap' href='#Erdos.EdgeMap'>#</a>
 <strong><code>Erdos.EdgeMap</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct EdgeMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AEdgeMap{T}
@@ -240,14 +240,14 @@ end
 </code></pre>
 
 <p>Construct an edge map with value <code>f(e)</code> for each <code>e</code> in <code>edges(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/edgemap.jl#L5-L30' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/edgemap.jl#L5-L30' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}' href='#Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}'>#</a>
 <strong><code>Erdos.edgemap2adjlist</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>edgemap2adjlist(emap)
 </code></pre>
 
 <p>Returns a vector of vectors containing the values of the edge map <code>emap</code> on graph <code>g</code> following the same ordering of <a href="../core/#Erdos.adjacency_list"><code>adjacency_list</code></a><code>(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/edgemap.jl#L177-L182' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/edgemap.jl#L177-L182' class='documenter-source'>source</a><br></p>
 <p><a id='Vertex-Maps-1'></a></p>
 <h2 id="vertex-maps">Vertex Maps</h2>
 <p>Any <code>AbstractVector{T}</code> or <code>Dict{Int,T}</code> can be used as a vertex map.</p>
@@ -259,7 +259,7 @@ end
 </code></pre>
 
 <p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>vm[1] = 4</code>, will fail silently.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/vertexmap.jl#L64-L72' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/vertexmap.jl#L64-L72' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.VertexMap' href='#Erdos.VertexMap'>#</a>
 <strong><code>Erdos.VertexMap</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct VertexMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AVertexMap{T}
@@ -282,7 +282,7 @@ end
 </code></pre>
 
 <p>Construct a vertex map with value <code>f(u)</code> for each <code>u=1:nv(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/vertexmap.jl#L4-L27' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/vertexmap.jl#L4-L27' class='documenter-source'>source</a><br></p>
 <p><a id='PropertyStore-1'></a></p>
 <h2 id="propertystore">PropertyStore</h2>
 <p><a id='Erdos.PropertyStore' href='#Erdos.PropertyStore'>#</a>
@@ -295,7 +295,7 @@ end
 </code></pre>
 
 <p>A type storing properties associated to networks.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0f875e791e53fb5e60b3c4c1fa7f9a0477d7696d/src/maps/property_store.jl#L1-L9' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/0342494ac1f957c5fe3d09aeb3ba0c1f3c865f0c/src/maps/property_store.jl#L1-L9' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
