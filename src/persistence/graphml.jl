@@ -5,15 +5,15 @@ function graphml_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
 
     nodeid = 1
     for f in eachelement(el)
-        if name(f) == "node"
+        if nodename(f) == "node"
             nodes[f["id"]] = nodeid
             nodeid += 1
-        elseif name(f) == "edge"
+        elseif nodename(f) == "edge"
             n1 = f["source"]
             n2 = f["target"]
             push!(edges, E(nodes[n1], nodes[n2]))
         else
-            warn("Skipping unknown node '$(name(f))'")
+            warn("Skipping unknown node '$(nodename(f))'")
         end
     end
     g = G(length(nodes))
@@ -38,7 +38,7 @@ function graphml_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     nodeid = 1
     # traverse the tree to map id to 1:n
     for f in eachelement(xg)
-        name(f) != "node" && continue
+        nodename(f) != "node" && continue
         nodes[f["id"]] = nodeid
         nodeid += 1
     end
@@ -48,29 +48,29 @@ function graphml_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     for (pname,T) in values(epropkeys); eprop!(g, pname, T); end
 
     for f in eachelement(xg)
-        if name(f) == "node"
+        if nodename(f) == "node"
             for el in eachelement(f)
-                name(el) != "data" && continue
+                nodename(el) != "data" && continue
                 i = nodes[f["id"]]
                 pname, T = vpropkeys[el["key"]]
                 m = vprop(g, pname)
-                m[i] = graphmlparse(T, content(el))
+                m[i] = graphmlparse(T, nodecontent(el))
             end
-        elseif name(f) == "edge"
+        elseif nodename(f) == "edge"
             n1 = f["source"]
             n2 = f["target"]
             ok, e = add_edge!(g, nodes[n1], nodes[n2]) #TODO
             for el in eachelement(f)
-                name(el) != "data" && continue
+                nodename(el) != "data" && continue
                 pname, T = epropkeys[el["key"]]
                 m = eprop(g, pname)
-                m[e] = graphmlparse(T, content(el))
+                m[e] = graphmlparse(T, nodecontent(el))
             end
-        elseif name(f) == "data"
+        elseif nodename(f) == "data"
             pname, T = gpropkeys[f["key"]]
-            gprop!(g, pname, graphmlparse(T, content(f)))
+            gprop!(g, pname, graphmlparse(T, nodecontent(f)))
         else
-            warn("Skipping unknown xml-node '$(name(f))'")
+            warn("Skipping unknown xml-node '$(nodename(f))'")
         end
     end
     return g
@@ -79,7 +79,7 @@ end
 function readgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
-    name(xroot) == "graphml" || error("Not a GraphML file")
+    nodename(xroot) == "graphml" || error("Not a GraphML file")
     xg = getchild(xroot, "graph")
     isdir = false
     if haskey(xg, "edgedefault")
@@ -93,7 +93,7 @@ end
 function readnetgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
-    name(xroot) == "graphml" || error("Not a GraphML file")
+    nodename(xroot) == "graphml" || error("Not a GraphML file")
     xg = getchild(xroot, "graph")
     isdir = false
     if haskey(xg, "edgedefault")
@@ -104,7 +104,7 @@ function readnetgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     vpropkeys=Dict{String, Tuple{String, DataType}}();
     epropkeys=Dict{String, Tuple{String, DataType}}();
     for el in eachelement(xroot)
-        name(el) != "key" && continue
+        nodename(el) != "key" && continue
         if el["for"] == "graph"
             gpropkeys[el["id"]] = (el["attr.name"], graphml_types_rev[el["attr.type"]])
         elseif el["for"] == "node"
@@ -208,7 +208,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
     for (pname, p) in gprop(g)
         xp = addelement!(xg, "data")
         xp["key"] = gpropkey[pname]
-        setcontent!(xp, graphmlstring(p))
+        setnodecontent!(xp, graphmlstring(p))
     end
 
     for i in 1:nv(g)
@@ -217,7 +217,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         for (pname,p) in vprop(g)
             xp = addelement!(xv, "data")
             xp["key"] = vpropkey[pname]
-            setcontent!(xp, graphmlstring(p[i])) #TODO check has key
+            setnodecontent!(xp, graphmlstring(p[i])) #TODO check has key
         end
     end
 
@@ -228,7 +228,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         for (pname, p) in eprop(g)
             xp = addelement!(xe, "data")
             xp["key"] = epropkey[pname]
-            setcontent!(xp, graphmlstring(p[e])) #TODO check has key
+            setnodecontent!(xp, graphmlstring(p[e])) #TODO check has key
         end
     end
     prettyprint(io, xdoc)

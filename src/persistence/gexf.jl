@@ -131,7 +131,7 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     for (pname,T) in values(epropkeys); eprop!(g, pname, T); end
 
     for f in eachelement(getchild(xg,"nodes"))
-        @assert name(f) == "node"
+        @assert nodename(f) == "node"
         v = nodes[f["id"]]
         for xattr in eachattribute(f)
             nattr = nodename(xattr)
@@ -150,7 +150,7 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
                 if endswith(namespace(el), "viz")
                     pname = "viz:"*pname
                 end
-                attr = name.(attributes(el))
+                attr = nodename.(attributes(el))
                 if "value" in attr && length(attr) == 1
                     !has_vprop(g, pname) && vprop!(g, pname, String)
                     vprop(g, pname)[v] = el["value"]
@@ -182,7 +182,7 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
                 end
             else
                 pname = nodename(el)
-                attr = name.(attributes(el))
+                attr = nodename.(attributes(el))
                 if "value" in attr && length(attr) == 1
                     !has_eprop(g, pname) && eprop!(g, pname, String)
                     eprop(g, pname)[e] = el["value"]
@@ -195,7 +195,7 @@ function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
         # for el in eachelement(f)
         #     pname, T = epropkeys[el["key"]]
         #     m = eprop(g, pname)
-        #     m[e] = gexfparse(T, content(el))
+        #     m[e] = gexfparse(T, nodecontent(el))
         # end
     end
     return g

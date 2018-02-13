@@ -168,7 +168,7 @@ end
 
 function getchild(el::EzXML.Node, s::String)
     childs = elements(el)
-    i = findfirst(x->name(x)==s, childs)
+    i = findfirst(x->nodename(x)==s, childs)
     i == 0 && error("no child $s")
     return childs[i]
 end
@@ -176,6 +176,6 @@ end
 "adds a child `s` to `el` if it doesn't exist"
 function getchild!(el::EzXML.Node, s::String)
     childs = elements(el)
-    i = findfirst(x->name(x)==s, childs)
+    i = findfirst(x->nodename(x)==s, childs)
     return i > 0 ? childs[i] : addelement!(el, s)
 end
