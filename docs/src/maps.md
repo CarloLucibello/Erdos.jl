@@ -5,6 +5,25 @@ interfaces. Also, edge and vector maps can be internally stored in
 [network types](@ref network_types) and accessed through the
 [property interface](@ref network_interface).
 
+**Example usage**:
+```julia
+# create a graph
+g = erdos_renyi(10,0.1)
+
+
+# assign random weights to each edge
+weights = EdgeMap(g, e -> rand())
+
+for e in edges(g)
+   # access map value
+   w = weights[e]
+   # or 
+   i, j = e
+   w = weights[i,j]
+   .....
+end
+``` 
+
 ## Edge Maps
 ```@autodocs
 Modules = [Erdos]

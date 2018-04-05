@@ -37,7 +37,7 @@ vm[1] = 2.
 vm2 = deepcopy(vm)
 @test vm2 == vm
 
-@test sprint(show, vm) == "VertexMap: $(vm.data)"
+# @test sprint(show, vm) == "VertexMap: $(vm.data)"
 
 
 g = G(10,20)

@@ -33,7 +33,6 @@ mutable struct EdgeMap{G<:AGraphOrDiGraph, T, D} <: AEdgeMap{T}
     vtype::Type{T}
     data::D
 end
-show{G,T,D}(io::IO, m::EdgeMap{G,T,D}) = print(io, "EdgeMap: $(m.data)")
 
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractMatrix{T}) = EdgeMap(g, T, d)
 EdgeMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = EdgeMap(g, T, d)

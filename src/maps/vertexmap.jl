@@ -30,7 +30,7 @@ mutable struct VertexMap{G<:AGraphOrDiGraph, T, D} <: AVertexMap{T}
     vtype::Type{T}
     data::D
 end
-show{G,T,D}(io::IO, m::VertexMap{G,T,D}) = print(io, "VertexMap: $(m.data)")
+# show{G,T,D}(io::IO, m::VertexMap{G,T,D}) = print(io, "VertexMap: $(m.data)")
 
 VertexMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = VertexMap(g, T, d)
 VertexMap{V<:Integer,T}(g::AGraphOrDiGraph, d::Dict{V, T}) = VertexMap(g, T, d)
