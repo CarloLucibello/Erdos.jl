@@ -222,7 +222,7 @@
 
 <p>Produces a graph with $|V(g)| + |V(h)|$ vertices and $|E(g)| + |E(h)|$ edges.</p>
 <p>Put simply, the vertices and edges from graph <code>h</code> are appended to graph <code>g</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L76-L83' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L76-L83' class='documenter-source'>source</a><br></p>
 <p><a id='Base.intersect-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Base.intersect-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Base.intersect</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>intersect(g, h)
@@ -230,49 +230,49 @@
 
 <p>Produces a graph with edges that are only in both graph <code>g</code> and graph <code>h</code>.</p>
 <p>Note that this function may produce a graph with 0-degree vertices.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L96-L102' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L96-L102' class='documenter-source'>source</a><br></p>
 <p><a id='Base.join-Tuple{Erdos.AGraph,Erdos.AGraph}' href='#Base.join-Tuple{Erdos.AGraph,Erdos.AGraph}'>#</a>
 <strong><code>Base.join</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>join(g, h)
 </code></pre>
 
 <p>Merges graphs <code>g</code> and <code>h</code> using <code>blkdiag</code> and then adds all the edges between  the vertices in <code>g</code> and those in <code>h</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L154-L159' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L154-L159' class='documenter-source'>source</a><br></p>
 <p><a id='Base.union-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Base.union-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Base.union</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>union(g, h)
 </code></pre>
 
 <p>Merges graphs <code>g</code> and <code>h</code> by taking the set union of all vertices and edges.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L58-L62' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L58-L62' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.cartesian_product-Union{Tuple{G,G}, Tuple{G}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.cartesian_product-Union{Tuple{G,G}, Tuple{G}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.cartesian_product</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>cartesian_product(g, h)
 </code></pre>
 
 <p>Returns the (cartesian product)[https://en.wikipedia.org/wiki/Cartesian_product_of_graphs] of <code>g</code> and <code>h</code></p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L178-L182' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L178-L182' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.complement-Union{Tuple{T}, Tuple{T}} where T<:Erdos.AGraph' href='#Erdos.complement-Union{Tuple{T}, Tuple{T}} where T<:Erdos.AGraph'>#</a>
 <strong><code>Erdos.complement</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>complement(g)
 </code></pre>
 
 <p>Produces the <a href="https://en.wikipedia.org/wiki/Complement_graph">graph complement</a> of a graph.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L26-L31' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L26-L31' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.complete!-Tuple{Erdos.ADiGraph}' href='#Erdos.complete!-Tuple{Erdos.ADiGraph}'>#</a>
 <strong><code>Erdos.complete!</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>complete!(g::ADiGraph)
 </code></pre>
 
 <p>For each edge <code>(u, v)</code> in <code>g</code>, adds to <code>g</code> its reverse, i.e. <code>(v, u)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L13-L17' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L13-L17' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.complete-Tuple{Erdos.ADiGraph}' href='#Erdos.complete-Tuple{Erdos.ADiGraph}'>#</a>
 <strong><code>Erdos.complete</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>complete(g::ADiGraph)
 </code></pre>
 
 <p>Returns a digraph containing both the edges <code>(u, v)</code> of <code>g</code> and their reverse <code>(v, u)</code>. See also <a href="./#Erdos.complete!-Tuple{Erdos.ADiGraph}"><code>complete!</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L1-L6' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.contract!-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},AbstractArray{T,1} where T}' href='#Erdos.contract!-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},AbstractArray{T,1} where T}'>#</a>
 <strong><code>Erdos.contract!</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>contract!(g, vs)
@@ -280,14 +280,14 @@ contract!(g, v1, v2, ....)
 </code></pre>
 
 <p>Merge the vertices in <code>vs</code> into a unique vertex.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L476-L481' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L476-L481' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.crosspath-Union{Tuple{G,Any}, Tuple{G}} where G<:Erdos.AGraph' href='#Erdos.crosspath-Union{Tuple{G,Any}, Tuple{G}} where G<:Erdos.AGraph'>#</a>
 <strong><code>Erdos.crosspath</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>crosspath(g::AGraph, n::Integer)
 </code></pre>
 
 <p>Replicate <code>n</code> times <code>g</code> and connect each vertex with its copies in a path.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L171-L175' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L171-L175' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.difference-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.difference-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.difference</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>difference(g, h)
@@ -295,14 +295,14 @@ contract!(g, v1, v2, ....)
 
 <p>Produces a graph with edges in graph <code>g</code> that are not in graph <code>h</code>.</p>
 <p>Note that this function may produce a graph with 0-degree vertices.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L114-L120' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L114-L120' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.egonet-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer,Integer}' href='#Erdos.egonet-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Integer,Integer}'>#</a>
 <strong><code>Erdos.egonet</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>egonet(g, v::Int, d::Int; dir=:out)
 </code></pre>
 
 <p>Returns the subgraph of <code>g</code> induced by the neighbors of <code>v</code> up to distance <code>d</code>. If <code>g</code> is a <code>DiGraph</code> the <code>dir</code> optional argument specifies the edge direction the edge direction with respect to <code>v</code> (i.e. <code>:in</code> or <code>:out</code>) to be considered. This is equivalent to <a href="./#Erdos.subgraph-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V&lt;:Integer where G&lt;:Union{Erdos.ADiGraph, Erdos.AGraph}"><code>subgraph</code></a><code>(g, neighborhood(g, v, d, dir=dir))[1].</code></p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L408-L415' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L408-L415' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.subgraph-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V<:Integer where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.subgraph-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V<:Integer where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.subgraph</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>subgraph(g, vlist) -&gt; sg, vlist
@@ -329,7 +329,7 @@ sg, vlist = subgraph(g, elist)
 @asssert sg == g[elist]
 </code></pre>
 
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L220-L253' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L220-L253' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.subnetwork-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V<:Integer where G<:Union{Erdos.ADiNetwork, Erdos.ANetwork}' href='#Erdos.subnetwork-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V<:Integer where G<:Union{Erdos.ADiNetwork, Erdos.ANetwork}'>#</a>
 <strong><code>Erdos.subnetwork</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>subnetwork(g, vlist) -&gt; sg, vlist
@@ -337,7 +337,7 @@ subnetwork(g, elist) -&gt; sg, vlist
 </code></pre>
 
 <p>Equivalent to <a href="./#Erdos.subgraph-Union{Tuple{G,AbstractArray{V,1}}, Tuple{G}, Tuple{V}} where V&lt;:Integer where G&lt;:Union{Erdos.ADiGraph, Erdos.AGraph}"><code>subgraph</code></a> but preserves vertex and edge properties when <code>g</code> is a network.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L298-L304' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L298-L304' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.symmetric_difference-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.symmetric_difference-Union{Tuple{T,T}, Tuple{T}} where T<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.symmetric_difference</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>symmetric_difference(g, h)
@@ -345,14 +345,14 @@ subnetwork(g, elist) -&gt; sg, vlist
 
 <p>Produces a graph with edges from graph <code>g</code> that do not exist in graph <code>h</code>, and vice versa.</p>
 <p>Note that this function may produce a graph with 0-degree vertices.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L132-L139' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L132-L139' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.tensor_product-Union{Tuple{G,G}, Tuple{G}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}' href='#Erdos.tensor_product-Union{Tuple{G,G}, Tuple{G}} where G<:Union{Erdos.ADiGraph, Erdos.AGraph}'>#</a>
 <strong><code>Erdos.tensor_product</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>tensor_product(g, h)
 </code></pre>
 
 <p>Returns the (tensor product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of <code>g</code> and <code>h</code></p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/operators/operators.jl#L201-L205' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/operators/operators.jl#L201-L205' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
