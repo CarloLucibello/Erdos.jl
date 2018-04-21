@@ -62,7 +62,7 @@ Here is a comprehensive list of the implemente algorithms. (*EE*) denotes algori
 
 - **flow operations:** maximum flow, minimum s-t cut
 
-- **matching:** minim weight matching on arbitrary graphs (*EE*), minimum b-matching (*EE*) 
+- **matching:** minimum weight matching on arbitrary graphs (*EE*), minimum b-matching (*EE*) 
 
 - **travelling salesman problem:** a TSP solver based on linear programming (*EE*) 
 
