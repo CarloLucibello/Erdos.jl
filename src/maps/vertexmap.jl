@@ -1,5 +1,6 @@
 # AVertexMap{T} defined in newtwork_interface.jl
 valtype{T}(m::AVertexMap{T}) = T
+eltype{T}(m::AVertexMap{T}) = T
 
 """
     mutable struct VertexMap{G <: AGraphOrDiGraph, T, D} <: AVertexMap{T}
@@ -41,13 +42,9 @@ function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
 end
 
 function VertexMap(g::AGraphOrDiGraph, f::Function)
-    V = vertextype(g)
-    T = Base.return_types(f, (V,))[1]
-    data = T[f(i) for i=1:nv(g)]
-    return VertexMap(g, T, data)
+    data = f.(vertices(g))
+    return VertexMap(g, eltype(data), data)
 end
-
-
 length(m::VertexMap) = length(m.data)
 getindex(m::VertexMap, i::Integer) = getindex(m.data, i)
 setindex!(m::VertexMap, x, i::Integer) = setindex!(m.data, x, i)

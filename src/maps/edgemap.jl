@@ -1,5 +1,4 @@
 # AEdgeMap{T} defined in newtwork_sinterface.jl
-
 valtype{T}(m::AEdgeMap{T}) = T
 
 """
@@ -53,14 +52,12 @@ end
 
 function EdgeMap(g::AGraphOrDiGraph, f::Function)
     E = edgetype(g)
-    T = Base.return_types(f, (E,))[1]
     if E <: AIndexedEdge
-        data = Vector{T}(ne(g))
-        for e in edges(g)
-            data[idx(e)] = f(e)
-        end
+        data = f.(edges(g))
+        T = eltype(data)
     else
         data = Dict(e => f(e) for e in edges(g))
+        T = valtype(data)
     end
     return EdgeMap(g, T, data)
 end
