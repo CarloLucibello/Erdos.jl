@@ -53,7 +53,13 @@ end
 function EdgeMap(g::AGraphOrDiGraph, f::Function)
     E = edgetype(g)
     if E <: AIndexedEdge
-        data = f.(edges(g))
+        data_ = [f(e) for e in edges(g)]
+        # since edges(g) doesn't iterate according to index
+        # have to permute after
+        data = similar(data_)
+        for (i, e) in enumerate(edges(g))
+            data[idx(e)] = data_[i]
+        end
         T = eltype(data)
     else
         data = Dict(e => f(e) for e in edges(g))
