@@ -3,7 +3,7 @@
 
 Returns an iterator to the vertices of a graph (i.e. 1:nv(g))
 """
-vertices(g::AGraphOrDiGraph) = 1:nv(g)
+vertices(g::AGraphOrDiGraph) = one(vertextype(g)):nv(g)
 
 """
     adjacency_list(g::AGraph)
@@ -96,25 +96,25 @@ is_directed{G<:ADiGraph}(::Type{G}) = true
 
 Returns the number of edges which start at vertex `v`.
 """
-in_degree(g::AGraphOrDiGraph, v) = length(in_neighbors(g,v))
+in_degree(g::AGraphOrDiGraph, v::Integer) = length(in_neighbors(g,v))
 
 """
     out_degree(g, v)
 
 Returns the number of edges which end at vertex `v`.
 """
-out_degree(g::AGraphOrDiGraph, v) = length(out_neighbors(g,v))
+out_degree(g::AGraphOrDiGraph, v::Integer) = length(out_neighbors(g,v))
 
 """
     degree(g, v)
 
 Return the number of edges  from the vertex `v`.
 """
-degree(g::AGraphOrDiGraph, v) = out_degree(g, v)
+degree(g::AGraphOrDiGraph, v::Integer) = out_degree(g, v)
 
-in_degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [in_degree(g,x) for x in v]
-out_degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [out_degree(g,x) for x in v]
-degree(g::AGraphOrDiGraph, v::AbstractVector{Int} = vertices(g)) = [degree(g,x) for x in v]
+in_degree(g::AGraphOrDiGraph, v::AbstractVector{<:Integer} = vertices(g)) = [in_degree(g,x) for x in v]
+out_degree(g::AGraphOrDiGraph, v::AbstractVector{<:Integer} = vertices(g)) = [out_degree(g,x) for x in v]
+degree(g::AGraphOrDiGraph, v::AbstractVector{<:Integer} = vertices(g)) = [degree(g,x) for x in v]
 
 """
     neighbors(g, v)
@@ -125,17 +125,17 @@ For directed graph, this is equivalent to [`out_neighbors`](@ref)(g, v).
 
 NOTE: it may return a reference, not a copy. Do not modify result.
 """
-neighbors(g::AGraphOrDiGraph, v) = out_neighbors(g, v)
-in_neighbors(g::AGraph, v) = out_neighbors(g, v)
+neighbors(g::AGraphOrDiGraph, v::Integer) = out_neighbors(g, v)
+in_neighbors(g::AGraph, v::Integer) = out_neighbors(g, v)
 
 """
     all_neighbors(g, v)
 
 Iterates over all distinct in/out neighbors of vertex `v` in `g`.
 """
-all_neighbors(g::AGraph, v) = out_neighbors(g, v)
+all_neighbors(g::AGraph, v::Integer) = out_neighbors(g, v)
 
-all_neighbors(g::ADiGraph, v) =
+all_neighbors(g::ADiGraph, v::Integer) =
     distinct(chain(out_neighbors(g, v), in_neighbors(g, v)))
 
 """
@@ -153,7 +153,7 @@ density(g::ADiGraph) = ne(g) / (nv(g) * (nv(g)-1))
 
 Remove all incident edges on vertex `v` in `g`.
 """
-function clean_vertex!(g::AGraphOrDiGraph, v)
+function clean_vertex!(g::AGraphOrDiGraph, v::Integer)
     edgs = collect(all_edges(g, v))
     for e in edgs
         rem_edge!(g, e)

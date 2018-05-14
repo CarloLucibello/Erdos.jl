@@ -39,7 +39,6 @@ vm2 = deepcopy(vm)
 
 # @test sprint(show, vm) == "VertexMap: $(vm.data)"
 
-
 g = G(10,20)
 m = VertexMap(g, i -> i^2)
 @test typeof(m.data) == Vector{V}
@@ -48,5 +47,10 @@ m = VertexMap(g, i -> i^2)
 for i=1:10
     @test m[i] == i^2
 end
+
+m = VertexMap(g, i -> rand(2))
+@test typeof(m.data) == Vector{Vector{Float64}}
+@test length(m.data) == length(m) == nv(g)
+@test  eltype(m) == valtype(m) == eltype(m.data) == Vector{Float64}
 
 end # testset

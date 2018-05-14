@@ -148,6 +148,7 @@ for e in edges(g)
     u, v = src(e), dst(e)
     @test m[u,v] == sp[u, v] == emap[e]
 end
+@test valtype(emap) == Float64
 
 @test size(emap) == (nv(g), nv(g))
 
@@ -161,6 +162,11 @@ end
 for e in edges(g)
     @test m[e] == src(e) + dst(e)
 end
+@test valtype(m) == V
 
+m = EdgeMap(g, e -> vecnorm(rand(2)))
+@test valtype(m) == Float64
+m = EdgeMap(g, e -> rand(2))
+@test valtype(m) == Vector{Float64}
 
 end # testset

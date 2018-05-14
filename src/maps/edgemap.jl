@@ -1,5 +1,4 @@
 # AEdgeMap{T} defined in newtwork_sinterface.jl
-
 valtype{T}(m::AEdgeMap{T}) = T
 
 """
@@ -53,14 +52,18 @@ end
 
 function EdgeMap(g::AGraphOrDiGraph, f::Function)
     E = edgetype(g)
-    T = Base.return_types(f, (E,))[1]
     if E <: AIndexedEdge
-        data = Vector{T}(ne(g))
-        for e in edges(g)
-            data[idx(e)] = f(e)
+        data_ = [f(e) for e in edges(g)]
+        # since edges(g) doesn't iterate according to index
+        # have to permute after
+        data = similar(data_)
+        for (i, e) in enumerate(edges(g))
+            data[idx(e)] = data_[i]
         end
+        T = eltype(data)
     else
         data = Dict(e => f(e) for e in edges(g))
+        T = valtype(data)
     end
     return EdgeMap(g, T, data)
 end
