@@ -206,7 +206,7 @@ center(all_ecc)
 <p>Returns the set of all vertices whose eccentricity is equal to the graph's radius (that is, the set of vertices with the smallest eccentricity).</p>
 <p>Eventually a vector <code>all_ecc</code> contain the eccentricity of each node can be passed as argument.</p>
 <p>See <a href="./#Erdos.eccentricities"><code>eccentricities</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L94-L105' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L94-L105' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.diameter' href='#Erdos.diameter'>#</a>
 <strong><code>Erdos.diameter</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>diameter(g, distmx=ConstEdgeMap(g,1))
@@ -214,7 +214,7 @@ center(all_ecc)
 
 <p>Returns the maximum distance between any two vertices in <code>g</code>. Distances  between two adjacent nodes are given by <code>distmx</code>.</p>
 <p>See also <a href="./#Erdos.eccentricities"><code>eccentricities</code></a>, <a href="./#Erdos.radius"><code>radius</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L51-L58' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L51-L58' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.eccentricities' href='#Erdos.eccentricities'>#</a>
 <strong><code>Erdos.eccentricities</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>eccentricities(g, distmx=ConstEdgeMap(g,1))
@@ -224,7 +224,7 @@ eccentricities(g, vs, distmx=ConstEdgeMap(g,1))
 <p>Returns <code>[eccentricity(g,v,distmx) for v in vs]</code>. When <code>vs</code> it is not supplied, considers all node in the graph.</p>
 <p>See also <a href="./#Erdos.eccentricity"><code>eccentricity</code></a>.</p>
 <p>Note: the eccentricity vector returned by <code>eccentricity</code> may be eventually used as input in some eccentricity related measures (<a href="./#Erdos.periphery-Tuple{Array{T,1} where T}"><code>periphery</code></a>, <a href="./#Erdos.center-Tuple{Array{T,1} where T}"><code>center</code></a>).</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L25-L37' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L25-L37' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.eccentricity' href='#Erdos.eccentricity'>#</a>
 <strong><code>Erdos.eccentricity</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>eccentricity(g, v, distmx=ConstEdgeMap(g,1))
@@ -232,7 +232,7 @@ eccentricities(g, vs, distmx=ConstEdgeMap(g,1))
 
 <p>Calculates the eccentricity[ies] of a vertex <code>v</code>, An optional matrix of edge distances may be supplied.</p>
 <p>The eccentricity of a vertex is the maximum shortest-path distance between it and all other vertices in the graph.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L5-L13' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L5-L13' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.periphery-Tuple{Array{T,1} where T}' href='#Erdos.periphery-Tuple{Array{T,1} where T}'>#</a>
 <strong><code>Erdos.periphery</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>periphery(g, distmx=ConstEdgeMap(g,1))
@@ -242,7 +242,7 @@ periphery(all_ecc)
 <p>Returns the set of all vertices whose eccentricity is equal to the graph's diameter (that is, the set of vertices with the largest eccentricity).</p>
 <p>Eventually a vector <code>all_ecc</code> contain the eccentricity of each node can be passed as argument.</p>
 <p>See <a href="./#Erdos.eccentricities"><code>eccentricities</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L74-L85' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L74-L85' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.radius' href='#Erdos.radius'>#</a>
 <strong><code>Erdos.radius</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>radius(g, distmx=ConstEdgeMap(g,1))
@@ -250,15 +250,15 @@ periphery(all_ecc)
 
 <p>Returns the minimum distance between any two vertices in <code>g</code>. Distances  between two adjacent nodes are given by <code>distmx</code>.</p>
 <p>See <a href="./#Erdos.eccentricities"><code>eccentricities</code></a>, <a href="./#Erdos.diameter"><code>diameter</code></a>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/distance.jl#L63-L70' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/distance.jl#L63-L70' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.BoundedMinkowskiCost-Tuple{AbstractArray{T,1} where T,AbstractArray{T,1} where T}' href='#Erdos.BoundedMinkowskiCost-Tuple{AbstractArray{T,1} where T,AbstractArray{T,1} where T}'>#</a>
 <strong><code>Erdos.BoundedMinkowskiCost</code></strong> &mdash; <em>Method</em>.</p>
 <p>Similar to MinkowskiCost, but ensures costs smaller than 2τ.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/edit_distance.jl#L122-L124' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/edit_distance.jl#L122-L124' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.MinkowskiCost-Tuple{AbstractArray{T,1} where T,AbstractArray{T,1} where T}' href='#Erdos.MinkowskiCost-Tuple{AbstractArray{T,1} where T,AbstractArray{T,1} where T}'>#</a>
 <strong><code>Erdos.MinkowskiCost</code></strong> &mdash; <em>Method</em>.</p>
 <p>For labels μ₁ on the vertices of graph G₁ and labels μ₂ on the vertices of graph G₂, compute the p-norm cost of substituting vertex u ∈ G₁ by vertex v ∈ G₂.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/edit_distance.jl#L113-L117' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/edit_distance.jl#L113-L117' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.edit_distance-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Union{Erdos.ADiGraph, Erdos.AGraph}}' href='#Erdos.edit_distance-Tuple{Union{Erdos.ADiGraph, Erdos.AGraph},Union{Erdos.ADiGraph, Erdos.AGraph}}'>#</a>
 <strong><code>Erdos.edit_distance</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>edit_distance(G₁, G₂;
@@ -291,7 +291,7 @@ periphery(all_ecc)
 <p>For further details, please refer to:</p>
 <p>RIESEN, K., 2015. Structural Pattern Recognition with Graph Edit Distance: Approximation Algorithms and Applications. (Chapter 2)</p>
 <p>Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/1830bf2fb4a5f48d53e6183663328fb0640a4687/src/distances/edit_distance.jl#L1-L42' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/62ac8ce1c65fcceb9de65dcf85fa1e47a6a91a5f/src/distances/edit_distance.jl#L1-L42' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
