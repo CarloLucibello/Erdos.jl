@@ -23,12 +23,12 @@ capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)
 """
 
-function boykov_kolmogorov_impl{T<:Number}(
+function boykov_kolmogorov_impl(
     residual_graph::ADiGraph,               # the input graph
     source,                           # the source vertex
     target,                           # the target vertex
     capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-    )
+    ) where T<:Number
 
     n = nv(residual_graph)
 
@@ -60,7 +60,7 @@ function boykov_kolmogorov_impl{T<:Number}(
     return flow, flow_matrix, TREE
 end
 
-function find_path!{T<:Number}(
+function find_path!(
     residual_graph::ADiGraph,               # the input graph
     source,                           # the source vertex
     target,                           # the target vertex
@@ -69,7 +69,7 @@ function find_path!{T<:Number}(
     PARENT::Vector{Int},                   # parent table
     TREE::Vector{Int},                     # tree table
     A::Vector{Int}                         # active set
-    )
+    ) where T<:Number
 
     tree_cap(p,q) = TREE[p] == 1 ? capacity_matrix[p,q] - flow_matrix[p,q] :
                                     capacity_matrix[q,p] - flow_matrix[q,p]
@@ -80,7 +80,7 @@ function find_path!{T<:Number}(
                 if TREE[q] == 0
                     TREE[q] = TREE[p]
                     PARENT[q] = p
-                    unshift!(A, q)
+                    pushfirst!(A, q)
                 end
                 if TREE[q] ≠ 0 && TREE[q] ≠ TREE[p]
                     # p -> source
@@ -114,14 +114,14 @@ function find_path!{T<:Number}(
     return Vector{Int}()
 end
 
-function augment!{T<:Number}(
+function augment!(
     path::AbstractVector,                  # path from source to target
     flow_matrix::AbstractMatrix{T},       # the current flow matrix
     capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     PARENT::Vector{Int},                   # parent table
     TREE::Vector{Int},                     # tree table
     O::Vector{Int}                         # orphan set
-    )
+    ) where T<:Number
 
     # bottleneck capacity
     Δ = Inf
@@ -141,11 +141,11 @@ function augment!{T<:Number}(
         if flow_matrix[p,q] == capacity_matrix[p,q]
             if TREE[p] == TREE[q] == 1
                 PARENT[q] = 0
-                unshift!(O, q)
+                pushfirst!(O, q)
             end
             if TREE[p] == TREE[q] == 2
                 PARENT[p] = 0
-                unshift!(O, p)
+                pushfirst!(O, p)
             end
         end
     end
@@ -153,7 +153,7 @@ function augment!{T<:Number}(
     return Δ
 end
 
-function adopt!{T<:Number}(
+function adopt!(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
@@ -163,7 +163,7 @@ function adopt!{T<:Number}(
     TREE::Vector{Int},                     # tree table
     A::Vector{Int},                        # active set
     O::Vector{Int}                         # orphan set
-    )
+    ) where T<:Number
 
     tree_cap(p,q) = TREE[p] == 1 ? capacity_matrix[p,q] - flow_matrix[p,q] :
     capacity_matrix[q,p] - flow_matrix[q,p]
@@ -191,11 +191,11 @@ function adopt!{T<:Number}(
             for q in neighbors(residual_graph, p)
                 if TREE[q] == TREE[p]
                     if tree_cap(q,p) > 0
-                        unshift!(A, q)
+                        pushfirst!(A, q)
                     end
                     if PARENT[q] == p
                         PARENT[q] = 0
-                        unshift!(O, q)
+                        pushfirst!(O, q)
                     end
                 end
             end

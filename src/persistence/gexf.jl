@@ -29,7 +29,7 @@ function writegexf(f::IO, g::AGraphOrDiGraph)
     return 1
 end
 
-function gexf_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
+function gexf_read_one_graph!(el::EzXML.Node, ::Type{G}) where G
     elnodes = getchild(el, "nodes")
     nodes = Dict{String,Int}()
     for (i,f) in enumerate(eachelement(elnodes))
@@ -48,8 +48,8 @@ function gexf_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
     return g
 end
 
-function readgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
-    xdoc = parsexml(readstring(io))
+function readgexf(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
@@ -61,8 +61,8 @@ function readgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     return gexf_read_one_graph!(xg, H)
 end
 
-function readnetgexf{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
-    xdoc = parsexml(readstring(io))
+function readnetgexf(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
@@ -115,8 +115,8 @@ gexfparse(T, x::String) = parse(T, x)
 gexfparse(::Type{String}, x::String) = x
 
 
-function gexf_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
-                        gpropkeys, vpropkeys, epropkeys)
+function gexf_read_one_net!(xg::EzXML.Node, ::Type{G},
+                        gpropkeys, vpropkeys, epropkeys) where G
     nodes = Dict{String,Int}()
     nodeid = 1
     # traverse the tree to map id to 1:n

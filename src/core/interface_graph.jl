@@ -138,7 +138,7 @@ edge(g::AGraphOrDiGraph, u, v) = Edge{Int}(u, v)
 Returns the type of edges of graph `g` (or graph type `G`), i. e.
 the element type returned of the iterator `edges(g)`.
 """
-edgetype{G<:AGraphOrDiGraph}(::Type{G}) = Edge{Int}
+edgetype(::Type{G}) where {G<:AGraphOrDiGraph} = Edge{Int}
 
 
 """
@@ -147,7 +147,7 @@ edgetype{G<:AGraphOrDiGraph}(::Type{G}) = Edge{Int}
 
 Returns the integer type of vertices of graph `g` (or graph type `G`).
 """
-vertextype{G<:AGraphOrDiGraph}(::Type{G}) = Int
+vertextype(::Type{G}) where {G<:AGraphOrDiGraph} = Int
 
 """
     graphtype{G<:AGraphOrDiGraph}(::Type{G})
@@ -155,7 +155,7 @@ vertextype{G<:AGraphOrDiGraph}(::Type{G}) = Int
 The graph type corresponding to `G`. If `G<:AGraph` returns `G`,
 if `G<:ADiGraph` returns a type `H<:AGraph`.
 """
-graphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
+graphtype(::Type{G}) where {G<:AGraphOrDiGraph} = error("Method not defined")
 
 """
     digraphtype{G<:AGraphOrDiGraph}(::Type{G})
@@ -163,7 +163,7 @@ graphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
 The digraph type corresponding to `G`. If `G<:ADiGraph` returns `G`,
 if `G<:AGraph` returns a type `H<:ADiGraph`.
 """
-digraphtype{G<:AGraphOrDiGraph}(::Type{G}) = error("Method not defined")
+digraphtype(::Type{G}) where {G<:AGraphOrDiGraph} = error("Method not defined")
 
 """
     pop_vertex!(g)

@@ -23,12 +23,12 @@ EdgeColorMap :
 
 struct DepthFirst <: SimpleGraphVisitAlgorithm end
 
-function depth_first_visit_impl!{G<:AGraphOrDiGraph}(
+function depth_first_visit_impl!(
     g::G,      # the graph
     stack,                          # an (initialized) stack of vertex
     vcolormap::AVertexMap,    # an (initialized) color-map to indicate status of vertices
     ecolormap::AEdgeMap,      # an (initialized) color-map to indicate status of edges
-    visitor::SimpleGraphVisitor)  # the visitor
+    visitor::SimpleGraphVisitor) where G<:AGraphOrDiGraph  # the visitor
 
 
     while !isempty(stack)
@@ -208,7 +208,7 @@ mutable struct TreeDFSVisitor{G <:ADiGraph} <:SimpleGraphVisitor
     predecessor::Vector{Int}
 end
 
-TreeDFSVisitor{G}(n, ::Type{G}) = TreeDFSVisitor(digraph(G(n)), zeros(Int,n))
+TreeDFSVisitor(n, ::Type{G}) where {G} = TreeDFSVisitor(digraph(G(n)), zeros(Int,n))
 
 function examine_neighbor!(visitor::TreeDFSVisitor, u, v, ucolor, vcolor, ecolor)
     if (vcolor == 0)
@@ -223,7 +223,7 @@ end
 Provides a depth-first traversal of the graph `g` starting with source vertex `s`,
 and returns a directed acyclic graph of vertices in the order they were discovered.
 """
-function dfs_tree{G}(g::G, s)
+function dfs_tree(g::G, s) where G
     nvg = nv(g)
     visitor = TreeDFSVisitor(nvg, G)
     traverse_graph!(g, DepthFirst(), s, visitor)

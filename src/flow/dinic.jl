@@ -12,12 +12,12 @@ target::Int                            # the target vertex
 capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
 
-function dinic_impl{T<:Number}(
+function dinic_impl(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
     capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-    )
+    ) where T<:Number
     n = nv(residual_graph)                     # number of vertexes
 
     flow_matrix = zeros(T, n, n)           # initialize flow matrix
@@ -45,13 +45,13 @@ target::Int                            # the target vertex
 capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 flow_matrix::AbstractMatrix{T}        # the current flow matrix
 """
-function blocking_flow!{T<:Number}(
+function blocking_flow!(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
     capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     flow_matrix::AbstractMatrix{T},       # the current flow matrix
-    )
+    ) where T<:Number
     P = zeros(T, nv(residual_graph))
     return blocking_flow!(residual_graph,
                           source,
@@ -75,14 +75,14 @@ flow_matrix::AbstractMatrix{T}        # the current flow matrix
 P::AbstractVector{Int}               # Parent vector to store Level Graph
 """
 
-function blocking_flow!{T<:Number}(
+function blocking_flow!(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
     target::Int,                           # the target vertex
     capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     flow_matrix::AbstractMatrix{T},       # the current flow matrix
     P::AbstractVector{Int}               # Parent vector to store Level Graph
-    )
+    ) where T<:Number
     n = nv(residual_graph)                     # number of vertexes
 
     fill!(P, -1)
@@ -96,7 +96,7 @@ function blocking_flow!{T<:Number}(
         for v in out_neighbors(residual_graph, u)
             if P[v] == -1 && capacity_matrix[u,v] > flow_matrix[u,v]
                 P[v] = u
-                unshift!(Q, v)
+                pushfirst!(Q, v)
             end
         end
     end

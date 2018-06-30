@@ -1,4 +1,4 @@
-function _readgml{G}(io::IO, line, ::Type{G})
+function _readgml(io::IO, line, ::Type{G}) where G
     mapping = Dict{Int,Int}()
     i = 0
     while startswith(line, "node")
@@ -38,7 +38,7 @@ function _readgml{G}(io::IO, line, ::Type{G})
     return g
 end
 
-function readgml{G}(io::IO, ::Type{G})
+function readgml(io::IO, ::Type{G}) where G
     H = G
     line = readline(io) |> strip
     @assert startswith(line, "graph")
@@ -62,7 +62,7 @@ function gmltypeof(valstr)
     end
 end
 
-gmlval{T}(::Type{T}, x) = parse(T, x)
+gmlval(::Type{T}, x) where {T} = parse(T, x)
 gmlval(::Type{String}, x) = strip(x, '\"')
 function splitgml(s::AbstractString)
     i = findfirst(s, ' ')
@@ -125,7 +125,7 @@ function _readnetgml(io::IO, line, g)
 end
 
 
-function readnetgml{G<:ANetOrDiNet}(io::IO, ::Type{G})
+function readnetgml(io::IO, ::Type{G}) where G<:ANetOrDiNet
     H = G
     line = readline(io) |> strip
     @assert startswith(line, "graph")

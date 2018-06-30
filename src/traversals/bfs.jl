@@ -31,7 +31,7 @@ function breadth_first_visit_impl!(
     fneig)                        # direction [:in,:out]
 
     while !isempty(queue)
-        u = shift!(queue)
+        u = popfirst!(queue)
         open_vertex!(visitor, u)
         ucolor = vcolormap[u]
 
@@ -127,7 +127,7 @@ function TreeBFSVisitorVector(n::Integer)
 end
 
 """tree converts a parents array into a digraph"""
-function tree{G}(parents::AbstractVector, ::Type{G})
+function tree(parents::AbstractVector, ::Type{G}) where G
     n = length(parents)
     t = digraph(G(n))
     for i in 1:n
@@ -172,7 +172,7 @@ end
 Provides a breadth-first traversal of the graph `g` starting with source vertex `s`,
 and returns a directed acyclic graph of vertices in the order they were discovered.
 """
-function bfs_tree{G<:AGraphOrDiGraph}(g::G, s)
+function bfs_tree(g::G, s) where G<:AGraphOrDiGraph
     visitor = TreeBFSVisitorVector(nv(g))
     bfs_tree!(visitor, g, s)
     return tree(visitor.tree, G)

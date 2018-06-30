@@ -228,7 +228,7 @@ function period(g::ADiGraph)
 end
 
 """Computes the condensation graph of the strongly connected components."""
-function _condensation{T<:ADiGraph}(g::T, scc::Vector{Vector{Int}})
+function _condensation(g::T, scc::Vector{Vector{Int}}) where T<:ADiGraph
     h = T(length(scc))
 
     component = Vector{Int}(nv(g))

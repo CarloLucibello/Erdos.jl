@@ -2,7 +2,7 @@ struct EdgeIter{G<:AGraphOrDiGraph}
     g::G
 end
 
-@inline function start{G<:AGraph}(it::EdgeIter{G})
+@inline function start(it::EdgeIter{G}) where G<:AGraph
     s = _start(it)
     while !_done(it, s)
         e, t = _next(it, s)
@@ -14,7 +14,7 @@ end
     (true, edge(it.g, 1, 2), s)
 end
 
-@inline function next{G<:AGraph}(it::EdgeIter{G}, st)
+@inline function next(it::EdgeIter{G}, st) where G<:AGraph
     _, e, s = st
     while !_done(it, s)
         w, t = _next(it, s)
@@ -26,11 +26,11 @@ end
     e, (true, e, s)
 end
 
-@inline done{G<:AGraph}(it::EdgeIter{G}, s) = s[1]
+@inline done(it::EdgeIter{G}, s) where {G<:AGraph} = s[1]
 
-@inline start{G<:ADiGraph}(it::EdgeIter{G}) = _start(it)
-@inline next{G<:ADiGraph}(it::EdgeIter{G}, s) = _next(it, s)
-@inline done{G<:ADiGraph}(it::EdgeIter{G}, s) = _done(it, s)
+@inline start(it::EdgeIter{G}) where {G<:ADiGraph} = _start(it)
+@inline next(it::EdgeIter{G}, s) where {G<:ADiGraph} = _next(it, s)
+@inline done(it::EdgeIter{G}, s) where {G<:ADiGraph} = _done(it, s)
 
 @inline function _start(it::EdgeIter)
     i = 1

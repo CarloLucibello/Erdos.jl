@@ -3,7 +3,7 @@
 # Test of Min-Cut and maximum adjacency visit
 
 using Erdos
-using Base.Test
+using Test
 
 g = G(8)
 

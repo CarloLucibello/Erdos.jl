@@ -1,5 +1,5 @@
 using Erdos
-using Base.Test
+using Test
 
 testdir = dirname(@__FILE__)
 

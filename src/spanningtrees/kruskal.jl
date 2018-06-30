@@ -29,10 +29,10 @@ on a connected, undirected graph `g`, having adjacency matrix `distmx`,
 and computes minimum spanning tree. Returns a `Vector{KruskalHeapEntry}`,
 that contains the containing edges and its weights.
 """
-function minimum_spanning_tree{T<:Real}(
+function minimum_spanning_tree(
     g::AGraph,
     distmx::AbstractMatrix{T} = ConstEdgeMap(g,1)
-)
+) where T<:Real
     E = edgetype(g)
     V = vertextype(g)
     edge_list = Vector{KruskalHeapEntry{E,T}}()

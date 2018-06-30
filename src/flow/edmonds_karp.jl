@@ -10,12 +10,12 @@ Requires arguments:
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
 
-function edmonds_karp_impl{T<:Number}(
+function edmonds_karp_impl(
         residual_graph::ADiGraph,               # the input graph
         source,                           # the source vertex
         target,                           # the target vertex
         capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-    )
+    ) where T<:Number
     n = nv(residual_graph)                     # number of vertexes
     flow = 0
     flow_matrix = zeros(T, n, n)           # initialize flow matrix
@@ -61,11 +61,11 @@ Requires arguments:
 - flow_matrix::AbstractMatrix{T}        # the current flow matrix
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-function augment_path!{T<:Number}(
+function augment_path!(
     path::Vector,                     # input path
     flow_matrix::AbstractMatrix{T},       # the current flow matrix
     capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-    )
+    ) where T<:Number
     augment = typemax(T)                   # initialize augment
     for i in 1:length(path)-1              # calculate min capacity along path
         u = path[i]
@@ -92,13 +92,13 @@ Flag Values:
 1 => No Path to target
 2 => No Path to source
 """
-function fetch_path{T<:Number}(
+function fetch_path(
     residual_graph::ADiGraph,               # the input graph
     source,                           # the source vertex
     target,                           # the target vertex
     flow_matrix::AbstractMatrix{T},       # the current flow matrix
     capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-    )
+    ) where T<:Number
     n = nv(residual_graph)
     P = -1 * ones(Int, n)
     S = -1 * ones(Int, n)
@@ -129,7 +129,7 @@ Requires arguments:
     P::Vector{Int}                         # parent table of path init to -1s
     S::Vector{Int}                         # successor table of path init to -1s
 """
-function fetch_path!{T<:Number}(
+function fetch_path!(
     residual_graph::ADiGraph,               # the input graph
     source,                           # the source vertex
     target,                           # the target vertex
@@ -137,7 +137,7 @@ function fetch_path!{T<:Number}(
     capacity_matrix::AbstractMatrix{T},   # edge flow capacities
     P::Vector{Int},                        # parent table of path init to -1s
     S::Vector{Int}                         # successor table of path init to -1s
-    )
+    ) where T<:Number
     n = nv(residual_graph)
 
     P[source] = -2
@@ -157,7 +157,7 @@ function fetch_path!{T<:Number}(
                 if capacity_matrix[u,v] - flow_matrix[u,v] > 0 && P[v] == -1
                     P[v] = u
                     if S[v] == -1
-                        unshift!(Q_f, v)
+                        pushfirst!(Q_f, v)
                     else
                         return v, P, S, 0 # 0 indicates success
                     end
@@ -172,7 +172,7 @@ function fetch_path!{T<:Number}(
                     S[u] = v
                     P[u] != -1 && return  u, P, S, 0 # 0 indicates success
 
-                    unshift!(Q_r, u)
+                    pushfirst!(Q_r, u)
                 end
 
             end

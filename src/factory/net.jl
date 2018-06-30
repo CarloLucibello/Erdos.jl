@@ -83,10 +83,10 @@ end
 
 const NetOrDiNet = Union{Network, DiNetwork}
 
-edgetype{G<:NetOrDiNet}(::Type{G}) = IndexedEdge
+edgetype(::Type{G}) where {G<:NetOrDiNet} = IndexedEdge
 graphtype(::Type{DiNetwork}) = Network
 digraphtype(::Type{Network}) = DiNetwork
-vertextype{G<:NetOrDiNet}(::Type{G}) = Int
+vertextype(::Type{G}) where {G<:NetOrDiNet} = Int
 
 #### GRAPH CONSTRUCTORS
 function DiNetwork(n::Integer = 0)

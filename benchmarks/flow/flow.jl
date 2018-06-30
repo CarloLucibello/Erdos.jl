@@ -30,7 +30,7 @@ g = random_regular_graph(N, 3, seed=1)
 h = randn(N)
 J = 1.
 
-function net_capacity{T}(g::AGraph, h::Vector{T}, J::AbstractFloat)
+function net_capacity(g::AGraph, h::Vector{T}, J::AbstractFloat) where T
     N = nv(g)
     dg = digraph(g)
     add_vertices!(dg, 2)

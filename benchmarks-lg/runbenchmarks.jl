@@ -1,6 +1,6 @@
 using LightGraphs
 using BenchmarkTools
-using Base.Dates
+using Dates
 import JLD: load, save
 
 TUNE = false
@@ -70,7 +70,7 @@ for group in GROUPS
     regr = regressions(judgement)
     if length(regr) > 0
         has_regressions = false
-        warn("REGRESSIONS FOUND:")
+        @warn("REGRESSIONS FOUND:")
         println(regr)
     end
     improvs = improvements(judgement)

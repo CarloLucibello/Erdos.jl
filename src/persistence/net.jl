@@ -25,7 +25,7 @@ end
 Reads a graph from file `f` in the [Pajek .net](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
 Returns 1 (number of graphs written).
 """
-function readpajek{G}(f::IO, ::Type{G})
+function readpajek(f::IO, ::Type{G}) where G
     line =readline(f)
     # skip comments
     while startswith(line, "%")
@@ -34,17 +34,17 @@ function readpajek{G}(f::IO, ::Type{G})
     n = parse(Int, matchall(r"\d+",line)[1])
     for fline in eachline(f)
         line = fline
-        (ismatch(r"^\*Arcs",line) || ismatch(r"^\*Edges",line)) && break
+        (occursin(r"^\*Arcs",line) || occursin(r"^\*Edges",line)) && break
     end
-    dir = ismatch(r"^\*Arcs",line)
+    dir = occursin(r"^\*Arcs",line)
     g = G(n)
     g = dir ? digraph(g) : graph(g)
     readpajek_edges!(g, f, line)
     return g
 end
 
-function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
-    while ismatch(r"^\*Edges",line) && !eof(f)
+function readpajek_edges!(g::G, f::IO, line) where G<:AGraph
+    while occursin(r"^\*Edges",line) && !eof(f)
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
@@ -56,8 +56,8 @@ function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
     rebuild!(g)
 end
 
-function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
-    while ismatch(r"^\*Arcs",line) # add edges in both directions
+function readpajek_edges!(g::G, f::IO, line) where G<:ADiGraph
+    while occursin(r"^\*Arcs",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
@@ -66,7 +66,7 @@ function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
             unsafe_add_edge!(g, i1, i2)
         end
     end
-    while ismatch(r"^\*Edges",line) # add edges in both directions
+    while occursin(r"^\*Edges",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
