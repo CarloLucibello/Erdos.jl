@@ -29,7 +29,7 @@ end
 Produces the [graph complement](https://en.wikipedia.org/wiki/Complement_graph)
 of a graph.
 """
-function complement{T<:AGraph}(g::T)
+function complement(g::T) where T<:AGraph
     gnv = nv(g)
     h = T(gnv)
     for i=1:gnv
@@ -42,7 +42,7 @@ function complement{T<:AGraph}(g::T)
     return h
 end
 
-function complement{T<:ADiGraph}(g::T)
+function complement(g::T) where T<:ADiGraph
     gnv = nv(g)
     h = T(gnv)
     for i=1:gnv
@@ -60,7 +60,7 @@ end
 
 Merges graphs `g` and `h` by taking the set union of all vertices and edges.
 """
-function union{T<:AGraphOrDiGraph}(g::T, h::T)
+function union(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     hnv = nv(h)
 
@@ -81,7 +81,7 @@ edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
 """
-function blkdiag{T<:AGraphOrDiGraph}(g::T, h::T)
+function blkdiag(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     r = T(gnv + nv(h))
     for e in edges(g)
@@ -100,7 +100,7 @@ Produces a graph with edges that are only in both graph `g` and graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function intersect{T<:AGraphOrDiGraph}(g::T, h::T)
+function intersect(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     hnv = nv(h)
 
@@ -118,7 +118,7 @@ Produces a graph with edges in graph `g` that are not in graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function difference{T<:AGraphOrDiGraph}(g::T, h::T)
+function difference(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     hnv = nv(h)
 
@@ -137,7 +137,7 @@ and vice versa.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function symmetric_difference{T<:AGraphOrDiGraph}(g::T, h::T)
+function symmetric_difference(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     hnv = nv(h)
 
@@ -173,14 +173,14 @@ end
 
 Replicate `n` times `g` and connect each vertex with its copies in a path.
 """
-crosspath{G<:AGraph}(g::G, n) = cartesian_product(g, PathGraph(n, G))
+crosspath(g::G, n) where {G<:AGraph} = cartesian_product(g, PathGraph(n, G))
 
 """
     cartesian_product(g, h)
 
 Returns the (cartesian product)[https://en.wikipedia.org/wiki/Cartesian_product_of_graphs] of `g` and `h`
 """
-function cartesian_product{G<:AGraphOrDiGraph}(g::G, h::G)
+function cartesian_product(g::G, h::G) where G<:AGraphOrDiGraph
     z = G(nv(g) * nv(h))
     id(i, j) = i + (j-1) * nv(g)
 
@@ -203,7 +203,7 @@ end
 
 Returns the (tensor product)[https://en.wikipedia.org/wiki/Tensor_product_of_graphs] of `g` and `h`
 """
-function tensor_product{G<:AGraphOrDiGraph}(g::G, h::G)
+function tensor_product(g::G, h::G) where G<:AGraphOrDiGraph
     z = G(nv(g)*nv(h))
     id(i, j) = i + (j-1)*nv(g)
     for (j1, j2) in edges(h)
@@ -251,7 +251,7 @@ sg, vlist = subgraph(g, elist)
 @asssert sg == g[elist]
 ```
 """
-function subgraph{G<:AGraphOrDiGraph,V<:Integer}(g::G, vlist::AbstractVector{V})
+function subgraph(g::G, vlist::AbstractVector{V}) where {G<:AGraphOrDiGraph,V<:Integer}
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()
@@ -274,7 +274,7 @@ function _build_subraph!(h::AGraphOrDiGraph, g, vset, newvid)
     end
 end
 
-function subgraph{G<:AGraphOrDiGraph}(g::G, elist)
+function subgraph(g::G, elist) where G<:AGraphOrDiGraph
     h = G()
     V = vertextype(h)
     newvid = Dict{V, V}()
@@ -303,7 +303,7 @@ Equivalent to [`subgraph`](@ref) but preserves vertex and edge properties
 when `g` is a network.
 """
 
-function subnetwork{G<:ANetOrDiNet,V<:Integer}(g::G, vlist::AbstractVector{V})
+function subnetwork(g::G, vlist::AbstractVector{V}) where {G<:ANetOrDiNet,V<:Integer}
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
     newvid = Dict{V, V}()
@@ -346,7 +346,7 @@ function _build_subnetwork!(h::ANetOrDiNet, g, vset, newvid)
 end
 
 
-function subnetwork{G<:ANetOrDiNet}(g::G, elist)
+function subnetwork(g::G, elist) where G<:ANetOrDiNet
     h = G()
     V = vertextype(h)
     newvid = Dict{V, V}()
@@ -381,29 +381,16 @@ function subnetwork{G<:ANetOrDiNet}(g::G, elist)
 end
 
 
-if VERSION >= v"0.6dev"
-    """
+"""
         g[iter]
 
     Returns the subgraph induced by the vertex or edge iterable `iter`.
     Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
     for networks.
     """
-    getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
-
-    # in julia 0.5 always gets dispatched to this (julia bug)
-    subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
-else
-    """
-        g[iter]
-
-    Returns the subgraph induced by the vertex or edge iterable `iter`.
-    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
-    for networks.
-    """
-    getindex(g::AGraphOrDiGraph, iter) = subgraph(g, iter)[1]
-    getindex(g::ANetOrDiNet, iter) = subnetwork(g, iter)[1]
-end
+getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
+# in julia 0.5 always gets dispatched to this (julia bug)
+subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
 
 """
     egonet(g, v::Int, d::Int; dir=:out)
@@ -421,7 +408,7 @@ egonet(g::AGraphOrDiGraph, v::Integer, d::Integer; dir=:out) =  g[neighborhood(g
 # """Provides multiplication of a graph `g` by a vector `v` such that spectral
 # graph functions in [GraphMatrices.jl](https://github.com/jpfairbanks/GraphMatrices.jl) can utilize Erdos natively.
 # """
-function *{T<:Number}(g::AGraph, v::Vector{T})
+function *(g::AGraph, v::Vector{T}) where T<:Number
     length(v) == nv(g) || error("Vector size must equal number of vertices")
     y = zeros(T, nv(g))
     for e in edges(g)
@@ -433,7 +420,7 @@ function *{T<:Number}(g::AGraph, v::Vector{T})
     return y
 end
 
-function *{T<:Number}(g::ADiGraph, v::Vector{T})
+function *(g::ADiGraph, v::Vector{T}) where T<:Number
     length(v) == nv(g) || error("Vector size must equal number of vertices")
     y = zeros(T, nv(g))
     for e in edges(g)
@@ -455,7 +442,7 @@ end
 size(g::AGraphOrDiGraph) = (nv(g), nv(g))
 
 """size(g,i) provides 1:nv or 2:nv else 1 """
-size(g::AGraph,dim::Int) = (dim == 1 || dim == 2)? nv(g) : 1
+size(g::AGraph,dim::Int) = (dim == 1 || dim == 2) ? nv(g) : 1
 
 """sum(g) provides the number of edges in the graph"""
 sum(g::AGraphOrDiGraph) = ne(g)

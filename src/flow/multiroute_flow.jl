@@ -16,24 +16,24 @@ struct ExtendedMultirouteFlowAlgorithm <: AbstractMultirouteFlowAlgorithm end
 # Methods when the number of routes is more than the connectivity
 # 1) When using Boykov-Kolmogorov as a flow subroutine
 # 2) Other flow algorithm
-function empty_flow{T<:Real}(
+function empty_flow(
   capacity_matrix::AbstractMatrix{T},     # edge flow capacities
   flow_algorithm::BoykovKolmogorovAlgorithm # keyword argument for algorithm
-  )
+  ) where T<:Real
   n = size(capacity_matrix, 1)
   return zero(T), zeros(T, n, n), zeros(T, n)
 end
 # 2) Other flow algorithm
-function empty_flow{T<:Real}(
+function empty_flow(
   capacity_matrix::AbstractMatrix{T},     # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm     # keyword argument for algorithm
-  )
+  ) where T<:Real
   n = size(capacity_matrix, 1)
   return zero(T), zeros(T, n, n)
 end
 
 # Method for Kishimoto algorithm
-function multiroute_flow{T<:Real}(
+function multiroute_flow(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
@@ -41,13 +41,13 @@ function multiroute_flow{T<:Real}(
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   mrf_algorithm::KishimotoAlgorithm,     # keyword argument for algorithm
   routes::Int                            # keyword argument for routes
-  )
+  ) where T<:Real
   return kishimoto(flow_graph, source, target, capacity_matrix, flow_algorithm, routes)
 end
 
 ## Methods for Extended Multiroute Flow Algorithm
 #1 When the breaking points are not already known
-function multiroute_flow{T<:Real, R<:Real}(
+function multiroute_flow(
   flow_graph::ADiGraph,                            # the input graph
   source::Int,                                    # the source vertex
   target::Int,                                    # the target vertex
@@ -55,19 +55,19 @@ function multiroute_flow{T<:Real, R<:Real}(
   flow_algorithm::AbstractFlowAlgorithm,          # keyword argument for algorithm
   mrf_algorithm::ExtendedMultirouteFlowAlgorithm, # keyword argument for algorithm
   routes::R                                       # keyword argument for routes
-  )
+  ) where {T<:Real, R<:Real}
   return emrf(flow_graph, source, target, capacity_matrix, flow_algorithm, routes)
 end
 #2 When the breaking points are already known
 #2-a Output: flow value (paired with the associated restriction)
-function multiroute_flow{T<:Real, R<:Real}(
+function multiroute_flow(
   breakingpoints::Vector{Tuple{T, T, Int}},       # vector of breaking points
   routes::R                                       # keyword argument for routes
-  )
+  ) where {T<:Real, R<:Real}
   return intersection(breakingpoints, routes)
 end
 #2-b Output: flow value, flows(, labels)
-function multiroute_flow{T1<:Real, T2<:Real, R<:Real}(
+function multiroute_flow(
   breakingpoints::Vector{Tuple{T1, T1, Int}}, # vector of breaking points
   routes::R,                                # keyword argument for routes
   flow_graph::ADiGraph,                      # the input graph
@@ -77,7 +77,7 @@ function multiroute_flow{T1<:Real, T2<:Real, R<:Real}(
     DefaultCapacity(flow_graph);
   flow_algorithm::AbstractFlowAlgorithm  =  # keyword argument for algorithm
     PushRelabelAlgorithm()
-  )
+  ) where {T1<:Real, T2<:Real, R<:Real}
   x, f = intersection(breakingpoints, routes)
 
   # For other cases, capacities need to be Floats
@@ -177,7 +177,7 @@ f, F, labels = multiroute_flow(flow_graph, 1, 8, capacity_matrix,
 ```
 """
 
-function multiroute_flow{T<:Real, R<:Real}(
+function multiroute_flow(
   flow_graph::ADiGraph,                    # the input graph
   source::Int,                            # the source vertex
   target::Int,                            # the target vertex
@@ -188,7 +188,7 @@ function multiroute_flow{T<:Real, R<:Real}(
   mrf_algorithm::AbstractMultirouteFlowAlgorithm  =    # keyword argument for algorithm
     KishimotoAlgorithm(),
   routes::R = 0              # keyword argument for number of routes (0 = all values)
-  )
+  ) where {T<:Real, R<:Real}
   # a flow with a set of 1-disjoint pathes is a classical max-flow
   (routes == 1) &&
   return maximum_flow(flow_graph, source, target, capacity_matrix, algorithm=flow_algorithm)

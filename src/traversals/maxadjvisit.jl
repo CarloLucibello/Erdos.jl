@@ -14,11 +14,11 @@ struct MaximumAdjacency <: SimpleGraphVisitAlgorithm end
 
 abstract type AbstractMASVisitor <: SimpleGraphVisitor end
 
-function maximum_adjacency_visit_impl!{T}(
+function maximum_adjacency_visit_impl!(
     g::AGraphOrDiGraph,	                      # the graph
     pq::PriorityQueue{Int, T},               # priority queue
     visitor::AbstractMASVisitor,                      # the visitor
-    colormap::Vector{Int})                            # traversal status
+    colormap::Vector{Int}) where T                            # traversal status
 
     while !isempty(pq)
         u = dequeue!(pq)
@@ -149,7 +149,7 @@ mutable struct MASVisitor{EM,I<:IO} <: AbstractMASVisitor
     log::Bool
 end
 
-function discover_vertex!{T}(visitor::MASVisitor{T}, v)
+function discover_vertex!(visitor::MASVisitor{T}, v) where T
     push!(visitor.vertices,v)
     visitor.log ? println(visitor.io, "discover vertex: $v") : nothing
     return true

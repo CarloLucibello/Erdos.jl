@@ -17,10 +17,10 @@ struct Edge{T} <: AEdge
     dst::T
 end
 
-Edge{G<:ADiGraph}(::Type{G},u,v) = Edge(u,v)
-Edge{G<:AGraph}(::Type{G},u,v) =  v > u ? Edge(u,v) : Edge(v,u)
+Edge(::Type{G},u,v) where {G<:ADiGraph} = Edge(u,v)
+Edge(::Type{G},u,v) where {G<:AGraph} =  v > u ? Edge(u,v) : Edge(v,u)
 
-function Edge{T,S}(u::T, v::S)
+function Edge(u::T, v::S) where {T,S}
     V = promote_type(T,S)
     return Edge{V}(promote(u, v)...)
 end

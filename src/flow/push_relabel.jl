@@ -3,23 +3,23 @@ mutable struct PushRelabelHeap{V<:Integer,T<:Integer}
     handles::Vector{V}
 end
 
-function (::Type{PushRelabelHeap{V,T}}){V<:Integer,T<:Integer}(n::Integer)
+function PushRelabelHeap{V,T}(n::Integer) where {V<:Integer,T<:Integer}
     handles = zeros(V, n)
     data = MutableBinaryHeap{Pair{V,T},LessThan2}(LessThan2())
     return PushRelabelHeap{V,T}(data, handles)
 end
 
-function push!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::V, v::T)
+function push!(h::PushRelabelHeap{V,T}, k::V, v::T) where {V<:Integer,T<:Integer}
     a = push!(h.data, k=>v)
     h.handles[k] = a
 end
-push!{V,T}(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) = push!(h, V(k), T(v))
+push!(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) where {V,T} = push!(h, V(k), T(v))
 
-function update!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::V, v::T)
+function update!(h::PushRelabelHeap{V,T}, k::V, v::T) where {V<:Integer,T<:Integer}
     a = h.handles[k]
     a > 0 && update!(h.data, a, k=>v)
 end
-update!{V<:Integer,T<:Integer}(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) = update!(h, V(k), T(v))
+update!(h::PushRelabelHeap{V,T}, k::Integer, v::Integer) where {V<:Integer,T<:Integer} = update!(h, V(k), T(v))
 
 function pop!(h::PushRelabelHeap)
     k = pop!(h.data)[1]
@@ -47,13 +47,13 @@ Requires arguments:
 - target                            # the target vertex
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-function push_relabel_impl{T<:Number}(
+function push_relabel_impl(
         g::ADiGraph,               # the input graph
         source,                           # the source vertex
         target,                           # the target vertex
         capacity_matrix::Vector{Vector{T}},   # edge flow capacities
         pos
-    )
+    ) where T<:Number
 
     n = nv(g)
     # flow_matrix = zeros(T, n, n)
@@ -107,12 +107,12 @@ Requires arguments:
 - excess::AbstractVector{T}
 """
 
-function enqueue_vertex!{T<:Number}(
+function enqueue_vertex!(
         Q::PushRelabelHeap,
         v,                                # input vertex
         active::AbstractVector{Bool},
         excess::Vector{T},
-        height::Vector{Int})
+        height::Vector{Int}) where T<:Number
 
     @inbounds if !active[v] && excess[v] > 0
         active[v] = true
@@ -136,7 +136,7 @@ Requires arguements:
 - active::AbstractVector{Bool}
 - Q::PushRelabelHeap
 """
-function push_flow!{T<:Number}(
+function push_flow!(
         g::ADiGraph,             # the input graph
         u,                              # input from-vertex
         v,                                 # input to-vetex
@@ -148,7 +148,7 @@ function push_flow!{T<:Number}(
         active::AbstractVector{Bool},
         Q::PushRelabelHeap,
         pos
-    )
+    ) where T<:Number
 
     height[u] <= height[v] && return
     flow = min(excess[u], capacity_matrix[u][k] - flow_matrix[u][k])
@@ -181,7 +181,7 @@ Requires arguments:
 - count::AbstractVector{Int}
 - Q::PushRelabelHeap
 """
-function gap!{T<:Number}(
+function gap!(
         g::ADiGraph,               # the input graph
         h,                                # cutoff height
         excess::AbstractVector{T},
@@ -189,7 +189,7 @@ function gap!{T<:Number}(
         active::AbstractVector{Bool},
         count::AbstractVector{Int},
         Q::PushRelabelHeap
-    )
+    ) where T<:Number
 
     n = nv(g)
     @inbounds for v in vertices(g)
@@ -221,7 +221,7 @@ Requires arguments:
 - Q::AbstractVector{Int}
 """
 
-function relabel!{T<:Number}(
+function relabel!(
         g::ADiGraph,                # the input graph
         v,                                 # input vertex to be relabeled
         capacity_matrix,
@@ -231,7 +231,7 @@ function relabel!{T<:Number}(
         active::AbstractVector{Bool},
         count::Vector{Int},
         Q::PushRelabelHeap
-    )
+    ) where T<:Number
 
     n = nv(g)
     count[height[v]+1] -= 1
@@ -263,7 +263,7 @@ Requires arguments:
 - count::AbstractVector{Int}
 - Q::PushRelabelHeap
 """
-function discharge!{T<:Number}(
+function discharge!(
         g::ADiGraph,                # the input graph
         v,                                 # vertex to be discharged
         capacity_matrix,
@@ -274,7 +274,7 @@ function discharge!{T<:Number}(
         count::Vector{Int},
         Q::PushRelabelHeap,
         pos
-    )
+    ) where T<:Number
 
     for (k, u) in enumerate(neighbors(g, v))
         excess[v] == 0 && break

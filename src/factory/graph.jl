@@ -25,15 +25,15 @@ mutable struct Graph{T<:Integer} <: AGraph
                                 # fadjlist is sorted
 end
 
-function (::Type{Graph{T}}){T<:Integer}(n::Integer = 0)
+function Graph{T}(n::Integer = 0) where T<:Integer
     fadjlist = [Vector{T}() for _=1:n]
     return Graph{T}(0, fadjlist)
 end
 
-(::Type{Graph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+Graph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
     erdos_renyi(n, m, Graph{T}; seed=seed)
-Graph{T<:Integer}(n::T, m::T; kws...) = Graph{T}(n, m; kws...)
-Graph{T<:Integer}(n::T) = Graph{T}(n)
+Graph(n::T, m::T; kws...) where {T<:Integer} = Graph{T}(n, m; kws...)
+Graph(n::T) where {T<:Integer} = Graph{T}(n)
 Graph() = Graph{Int}()
 
 
@@ -64,33 +64,33 @@ mutable struct DiGraph{T<:Integer} <: ADiGraph
                                 # fadjlist and badjlist are sorted
 end
 
-function (::Type{DiGraph{T}}){T<:Integer}(n::Integer = 0)
+function DiGraph{T}(n::Integer = 0) where T<:Integer
     fadjlist = [Vector{T}() for _=1:n]
     badjlist = [Vector{T}() for _=1:n]
     return DiGraph{T}(0, fadjlist, badjlist)
 end
 
-(::Type{DiGraph{T}}){T<:Integer}(n::Integer, m::Integer; seed = -1) =
+DiGraph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
     erdos_renyi(n, m, DiGraph{T}; seed=seed)
-DiGraph{T<:Integer}(n::T, m::T; kws...) = DiGraph{T}(n, m; kws...)
-DiGraph{T<:Integer}(n::T) = DiGraph{T}(n)
+DiGraph(n::T, m::T; kws...) where {T<:Integer} = DiGraph{T}(n, m; kws...)
+DiGraph(n::T) where {T<:Integer} = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
 
 
 const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 
-edgetype{T}(::Type{DiGraph{T}}) = Edge{T}
-edgetype{T}(::Type{Graph{T}}) = Edge{T}
-graphtype{T}(::Type{DiGraph{T}}) = Graph{T}
+edgetype(::Type{DiGraph{T}}) where {T} = Edge{T}
+edgetype(::Type{Graph{T}}) where {T} = Edge{T}
+graphtype(::Type{DiGraph{T}}) where {T} = Graph{T}
 graphtype(::Type{DiGraph}) = Graph{Int}
 graphtype(::Type{Graph}) = Graph{Int}
 digraphtype(::Type{DiGraph}) = DiGraph{Int}
 digraphtype(::Type{Graph}) = DiGraph{Int}
-digraphtype{T}(::Type{Graph{T}}) = DiGraph{T}
-vertextype{T}(::Type{Graph{T}}) = T
-vertextype{T}(::Type{DiGraph{T}}) = T
+digraphtype(::Type{Graph{T}}) where {T} = DiGraph{T}
+vertextype(::Type{Graph{T}}) where {T} = T
+vertextype(::Type{DiGraph{T}}) where {T} = T
 
-nv{T}(g::GraphOrDiGraph{T}) = T(length(g.fadjlist))
+nv(g::GraphOrDiGraph{T}) where {T} = T(length(g.fadjlist))
 ne(g::GraphOrDiGraph) = g.ne
 
 pop_vertex!(g::Graph) = (clean_vertex!(g, nv(g)); pop!(g.fadjlist); nv(g)+1)
@@ -122,12 +122,12 @@ function rem_edge!(g::Graph, u, v)
     return true # edge successfully removed
 end
 
-function add_vertex!{T}(g::Graph{T})
+function add_vertex!(g::Graph{T}) where T
     push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
 
-function copy{T}(g::DiGraph{T})
+function copy(g::DiGraph{T}) where T
     return DiGraph{T}(g.ne, deepcopy(g.fadjlist), deepcopy(g.badjlist))
 end
 
@@ -151,13 +151,13 @@ function rem_edge!(g::DiGraph, u, v)
     return true
 end
 
-function add_vertex!{T}(g::DiGraph{T})
+function add_vertex!(g::DiGraph{T}) where T
     push!(g.badjlist, Vector{T}())
     push!(g.fadjlist, Vector{T}())
     return nv(g)
 end
 
-function reverse{T}(g::DiGraph{T})
+function reverse(g::DiGraph{T}) where T
     gnv = nv(g)
     gne = ne(g)
     h = DiGraph{T}(gnv)
@@ -177,18 +177,18 @@ end
 out_neighbors(g::GraphOrDiGraph,v) = g.fadjlist[v]
 in_neighbors(g::DiGraph,v) = g.badjlist[v]
 
-edge{T}(g::DiGraph{T}, u, v) = Edge{T}(u, v)
-edge{T}(g::Graph{T}, u, v) = Edge{T}(u, v)
+edge(g::DiGraph{T}, u, v) where {T} = Edge{T}(u, v)
+edge(g::Graph{T}, u, v) where {T} = Edge{T}(u, v)
 # edge(g::Graph, u, v) = u <= v ? Edge(u, v) : Edge(v, u)
 
 #### fallbaks override #######
 
-digraph{T}(g::Graph{T}) = DiGraph{T}(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
+digraph(g::Graph{T}) where {T} = DiGraph{T}(2ne(g), deepcopy(g.fadjlist), deepcopy(g.fadjlist))
 
 out_adjlist(g::GraphOrDiGraph) = g.fadjlist
 in_adjlist(g::DiGraph) = g.badjlist
 
-=={G<:GraphOrDiGraph}(g::G, h::G) = nv(g) == nv(h) &&
+==(g::G, h::G) where {G<:GraphOrDiGraph} = nv(g) == nv(h) &&
                 ne(g) == ne(h) && g.fadjlist == h.fadjlist
 
 function has_edge(g::Graph, u, v)

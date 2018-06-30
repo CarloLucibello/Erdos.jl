@@ -9,7 +9,7 @@ function _degree_centrality(g::AGraphOrDiGraph, gtype::Integer; normalize=true)
        else                 # count only out degree
            deg = out_degree(g, v)
        end
-       s = normalize? (1.0 / (n_v - 1.0)) : 1.0
+       s = normalize ? (1.0 / (n_v - 1.0)) : 1.0
        c[v] = deg*s
    end
    return c

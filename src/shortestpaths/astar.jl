@@ -3,14 +3,14 @@
 
 # A* shortest-path algorithm
 
-function a_star_impl!{T<:Number}(
+function a_star_impl!(
         g::AGraphOrDiGraph,# the graph
         s::Integer,
         t::Integer, # the end vertex
         colormap::Vector{Int},  # an (initialized) color-map to indicate status of vertices
         distmx::AEdgeMap{T},
         heuristic::Function    # heuristic fn (under)estimating distance to target
-    )
+    ) where T<:Number
     V = vertextype(g)
     colormap[s] = 1
     frontier = PriorityQueue{Tuple{T,Vector{Edge{V}},Int},T}()

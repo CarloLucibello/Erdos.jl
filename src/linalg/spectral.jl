@@ -17,7 +17,7 @@ matrix (defaults to `Int`).
 """
 function adjacency_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
     n_v = nv(g)
-    nz = ne(g) * (is_directed(g)? 1 : 2)
+    nz = ne(g) * (is_directed(g) ? 1 : 2)
     colpt = ones(Int, n_v + 1)
 
     # see below - we iterate over columns. That's why we take the

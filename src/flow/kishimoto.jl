@@ -1,13 +1,13 @@
 # Method when using Boykov-Kolmogorov as a subroutine
 # Kishimoto algorithm
-function kishimoto{T<:AbstractFloat}(
+function kishimoto(
   flow_graph::ADiGraph,                       # the input graph
   source::Int,                               # the source vertex
   target::Int,                               # the target vertex
   capacity_matrix::AbstractMatrix{T},      # edge flow capacities
   flow_algorithm::BoykovKolmogorovAlgorithm, # keyword argument for algorithm
   routes::Int                                # keyword argument for routes
-  )
+  ) where T<:AbstractFloat
   # Initialisation
   flow, F, labels = maximum_flow(flow_graph, source, target,
          capacity_matrix, algorithm = flow_algorithm)
@@ -45,14 +45,14 @@ Requires arguments:
 - routes::Int                            # keyword argument for routes
 """
 
-function kishimoto{T<:AbstractFloat}(
+function kishimoto(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   routes::Int                            # keyword argument for routes
-  )
+  ) where T<:AbstractFloat
   # Initialisation
   flow, F = maximum_flow(flow_graph, source, target,
          capacity_matrix, algorithm = flow_algorithm)
