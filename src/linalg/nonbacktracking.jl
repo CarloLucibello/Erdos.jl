@@ -95,7 +95,7 @@ size(nbt::Nonbacktracking) = (nbt.m,nbt.m)
 eltype(nbt::Nonbacktracking) = Float64
 issymmetric(nbt::Nonbacktracking) = false
 
-function *{G, T<:Number}(nbt::Nonbacktracking{G}, x::Vector{T})
+function *(nbt::Nonbacktracking{G}, x::Vector{T}) where {G, T<:Number}
     E = Edge{vertextype(nbt.g)}
     length(x) == nbt.m || error("dimension mismatch")
     y = zeros(T, length(x))
@@ -117,7 +117,7 @@ function A_mul_B!(C, nbt::Nonbacktracking, B)
     return C
 end
 
-function coo_sparse{G}(nbt::Nonbacktracking{G})
+function coo_sparse(nbt::Nonbacktracking{G}) where G
     E = Edge{vertextype(nbt.g)}
     m = nbt.m
     #= I,J = zeros(Int, m), zeros(Int, m) =#
@@ -138,7 +138,7 @@ end
 
 sparse(nbt::Nonbacktracking) = sparse(coo_sparse(nbt)..., nbt.m,nbt.m)
 
-function *{G, T<:Number}(nbt::Nonbacktracking{G}, x::AbstractMatrix{T})
+function *(nbt::Nonbacktracking{G}, x::AbstractMatrix{T}) where {G, T<:Number}
     y = zeros(x)
     for i in 1:nbt.m
         y[:,i] = nbt * x[:,i]
@@ -151,7 +151,7 @@ end
 
 In place version of `contraction(nbt, edgespace)`. Modifies the first argument.
 """
-function contraction!{G}(vertexspace::Vector, nbt::Nonbacktracking{G}, edgespace::Vector)
+function contraction!(vertexspace::Vector, nbt::Nonbacktracking{G}, edgespace::Vector) where G
     E = Edge{vertextype(nbt.g)}
     for i=1:nv(nbt.g)
         for j in neighbors(nbt.g, i)

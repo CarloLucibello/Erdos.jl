@@ -74,7 +74,7 @@ One step of [`dismantle_ci`](@ref) algorithm.
 To be called after [`dismantle_ci_init`](@ref)
 Returns the cleaned vertex if any (see [`clean_vertex!`](@ref)), -1 otherwise.
 """
-function dismantle_ci_oneiter!{T}(g::AGraph, h, lneigs::Vector{Vector{T}}, l::Integer)
+function dismantle_ci_oneiter!(g::AGraph, h, lneigs::Vector{Vector{T}}, l::Integer) where T
     itop, citop = top(h)
     citop < 0 && return -1
     clean_vertex!(g, itop)
@@ -93,4 +93,4 @@ function ci(g::AGraph, neigs::Vector, i::Int)
 end
 
 updateheap!(g::AGraph, h, j::Int, neigs::Vector) = update!(h, j, j=>ci(g, neigs, j))
-updateheap!{T}(g::AGraph, h, j::T, neigs::Vector) = updateheap!(g, h, Int(j), neigs)
+updateheap!(g::AGraph, h, j::T, neigs::Vector) where {T} = updateheap!(g, h, Int(j), neigs)

@@ -7,7 +7,7 @@
 Creates a complete graph of type `G` with `n` vertices. A complete graph has edges
 connecting each pair of vertices.
 """
-function CompleteGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+function CompleteGraph(n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(n)
     for i = 1:n, j=i+1:n
         unsafe_add_edge!(g, i, j)
@@ -23,7 +23,7 @@ end
 Creates a complete bipartite graph with `n1+n2` vertices. It has edges
 connecting each pair of vertices in the two sets.
 """
-function CompleteBipartiteGraph{G<:AGraph}(n1::Integer, n2::Integer, ::Type{G} = Graph)
+function CompleteBipartiteGraph(n1::Integer, n2::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(n1+n2)
     for i = 1:n1, j=n1+1:n1+n2
         unsafe_add_edge!(g, i, j)
@@ -38,7 +38,7 @@ end
 Creates a complete digraph with `n` vertices. A complete digraph has edges
 connecting each pair of vertices (both an ingoing and outgoing edge).
 """
-function CompleteDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+function CompleteDiGraph(n::Integer, ::Type{G} = DiGraph) where G<:ADiGraph
     g = G(n)
     for i = 1:n, j=1:i-1
         unsafe_add_edge!(g, i,j)
@@ -56,7 +56,7 @@ end
 Creates a star graph with `n` vertices. A star graph has a central vertex
 with edges to each other vertex.
 """
-function StarGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+function StarGraph(n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(n)
     for i = 2:n
         add_edge!(g, 1, i)
@@ -67,7 +67,7 @@ end
 """Creates a star digraph with `n` vertices. A star digraph has a central
 vertex with directed edges to every other vertex.
 """
-function StarDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+function StarDiGraph(n::Integer, ::Type{G} = DiGraph) where G<:ADiGraph
     g = G(n)
     for i = 2:n
         add_edge!(g, 1,i)
@@ -81,7 +81,7 @@ end
 Creates a path graph with `n` vertices. A path graph connects each
 successive vertex by a single edge.
 """
-function PathGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+function PathGraph(n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(n)
     for i = 2:n
         add_edge!(g, i-1, i)
@@ -95,7 +95,7 @@ end
 Creates a path digraph with `n` vertices. A path graph connects each
 successive vertex by a single directed edge.
 """
-function PathDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+function PathDiGraph(n::Integer, ::Type{G} = DiGraph) where G<:ADiGraph
     g = G(n)
     for i = 2:n
         add_edge!(g, i-1, i)
@@ -108,7 +108,7 @@ end
 
 Creates a cycle graph with `n` vertices. A cycle graph is a closed path graph.
 """
-function CycleGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+function CycleGraph(n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(n)
     for i = 1:n-1
         add_edge!(g, i, i+1)
@@ -119,7 +119,7 @@ end
 
 """Creates a cycle digraph with `n` vertices. A cycle digraph is a closed path digraph.
 """
-function CycleDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+function CycleDiGraph(n::Integer, ::Type{G} = DiGraph) where G<:ADiGraph
     g = G(n)
     for i = 1:n-1
         add_edge!(g, i, i+1)
@@ -135,7 +135,7 @@ end
 Creates a wheel graph with `n` vertices. A wheel graph is a star graph with
 the outer vertices connected via a closed path graph.
 """
-function WheelGraph{G<:AGraph}(n::Integer, ::Type{G} = Graph)
+function WheelGraph(n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = StarGraph(n, G)
     for i = 3:n
         add_edge!(g, i-1, i)
@@ -149,7 +149,7 @@ end
 """Creates a wheel digraph with `n` vertices. A wheel graph is a star digraph
 with the outer vertices connected via a closed path graph.
 """
-function WheelDiGraph{G<:ADiGraph}(n::Integer, ::Type{G} = DiGraph)
+function WheelDiGraph(n::Integer, ::Type{G} = DiGraph) where G<:ADiGraph
     g = StarDiGraph(n, G)
     for i = 3:n
         add_edge!(g, i-1, i)
@@ -166,8 +166,8 @@ end
 Creates a `d`-dimensional cubic lattice, with `d=length(dims)` and length  `dims[i]` in dimension `i`.
 If `periodic=true` the resulting lattice will have periodic boundary condition in each dimension.
 """
-function Grid{T<:Integer,G<:AGraph}(dims::AbstractVector{T}, ::Type{G} = Graph;
-        periodic=false)
+function Grid(dims::AbstractVector{T}, ::Type{G} = Graph;
+        periodic=false) where {T<:Integer,G<:AGraph}
     f = periodic ? d->CycleGraph(d, G) : d->PathGraph(d, G)
     g = f(dims[1])
     for d in dims[2:end]
@@ -181,7 +181,7 @@ end
 
 Creates a binary tree with k-levels vertices are numbered 1:2^levels-1
 """
-function BinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
+function BinaryTree(levels::Int, ::Type{G} = Graph) where G<:AGraph
     g = G(2^levels-1)
     for i in 0:levels-2
         for j in 2^i:2^(i+1)-1
@@ -198,7 +198,7 @@ end
 Create a double complete binary tree with k-levels
 used as an example for spectral clustering by Guattery and Miller 1998.
 """
-function DoubleBinaryTree{G<:AGraph}(levels::Int, ::Type{G} = Graph)
+function DoubleBinaryTree(levels::Int, ::Type{G} = Graph) where G<:AGraph
     gl = BinaryTree(levels, G)
     gr = BinaryTree(levels, G)
     g = blkdiag(gl, gr)
@@ -208,7 +208,7 @@ end
 
 
 """The Roach Graph from Guattery and Miller 1998"""
-function RoachGraph{G<:AGraph}(k::Int, ::Type{G} = Graph)
+function RoachGraph(k::Int, ::Type{G} = Graph) where G<:AGraph
     dipole = CompleteGraph(2, G)
     nopole = G(2)
     antannae = crosspath(nopole, k)
@@ -225,7 +225,7 @@ end
 
 This function generates a graph with `n` `k`-cliques connected circularly by `n` edges.
 """
-function CliqueGraph{G<:AGraph}(k::Integer, n::Integer, ::Type{G} = Graph)
+function CliqueGraph(k::Integer, n::Integer, ::Type{G} = Graph) where G<:AGraph
     g = G(k*n)
     for c=1:n
         for i=(c-1)*k+1:c*k-1, j=i+1:c*k

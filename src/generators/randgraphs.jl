@@ -14,8 +14,8 @@ Note also that Erdős–Rényi graphs may be generated quickly using `erdos_reny
 or the  `Graph(nv, ne)` constructor, which randomly select `ne` edges among all the potential
 edges.
 """
-function erdos_renyi{G<:AGraphOrDiGraph}(n::Int, p::Real, ::Type{G} = Graph;
-        seed::Int=-1)
+function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
+        seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     if seed >= 0
         # init dsfmt generator without altering GLOBAL_RNG
@@ -25,8 +25,8 @@ function erdos_renyi{G<:AGraphOrDiGraph}(n::Int, p::Real, ::Type{G} = Graph;
     return erdos_renyi(n, m, G; seed=seed)
 end
 
-function erdos_renyi{G<:AGraphOrDiGraph}(n::Int, m::Int, ::Type{G} = Graph;
-        seed::Int = -1)
+function erdos_renyi(n::Int, m::Int, ::Type{G} = Graph;
+        seed::Int = -1) where G<:AGraphOrDiGraph
     maxe = is_directed(G) ? n * (n-1) : div(n * (n-1), 2)
     @assert(m <= maxe, "Maximum number of edges for this generator is $maxe")
     m > 2/3 * maxe && return complement(erdos_renyi(n, maxe-m, G; seed=seed))
@@ -51,8 +51,8 @@ randomized per the model based on probability `β`.
 Undirected graphs are created by default. Directed graphs can be created
 passing a directed graph type as last argument (e.g. `DiGraph`).
 """
-function watts_strogatz{G<:AGraphOrDiGraph}(n::Int, k::Int, β::Real, ::Type{G} = Graph;
-        seed::Int = -1)
+function watts_strogatz(n::Int, k::Int, β::Real, ::Type{G} = Graph;
+        seed::Int = -1) where G<:AGraphOrDiGraph
     @assert k < n/2
     g = G(n)
     rng = getRNG(seed)
@@ -80,7 +80,7 @@ function watts_strogatz{G<:AGraphOrDiGraph}(n::Int, k::Int, β::Real, ::Type{G} 
     return g
 end
 
-function _suitable{T}(edges::Set{Edge{T}}, potential_edges::Dict{T, T})
+function _suitable(edges::Set{Edge{T}}, potential_edges::Dict{T, T}) where T
     isempty(potential_edges) && return true
     list = keys(potential_edges)
     for s1 in list, s2 in list
@@ -90,9 +90,9 @@ function _suitable{T}(edges::Set{Edge{T}}, potential_edges::Dict{T, T})
     return false
 end
 
-_try_creation_rrg{T<:Integer}(n::T, k::T, rng::AbstractRNG) = _try_creation_rrg(n, fill(k,n), rng)
+_try_creation_rrg(n::T, k::T, rng::AbstractRNG) where {T<:Integer} = _try_creation_rrg(n, fill(k,n), rng)
 
-function _try_creation_rrg{T<:Integer}(n::T, k::Vector{T}, rng::AbstractRNG)
+function _try_creation_rrg(n::T, k::Vector{T}, rng::AbstractRNG) where T<:Integer
     E = Edge{T}
     edges = Set{E}()
     m = 0
@@ -148,11 +148,11 @@ passing a directed graph type as last argument (e.g. `DiGraph`).
 
 See also [`barabasi_albert!`](@ref) for growing a given graph.
 """
-barabasi_albert{G<:AGraphOrDiGraph}(n::Int, k::Int, ::Type{G}=Graph; keyargs...) =
+barabasi_albert(n::Int, k::Int, ::Type{G}=Graph; keyargs...) where {G<:AGraphOrDiGraph} =
     barabasi_albert(n, k, k, G; keyargs...)
 
-function barabasi_albert{G<:AGraphOrDiGraph}(n::Int, n0::Int, k::Int, ::Type{G}=Graph;
-        seed::Int = -1)
+function barabasi_albert(n::Int, n0::Int, k::Int, ::Type{G}=Graph;
+        seed::Int = -1) where G<:AGraphOrDiGraph
     g = G(n0)
     barabasi_albert!(g, n, k; seed = seed)
     return g
@@ -248,8 +248,8 @@ Reference:
 * Goh K-I, Kahng B, Kim D: Universal behaviour of load distribution
 in scale-free networks. Phys Rev Lett 87(27):278701, 2001.
 """
-function static_fitness_model{T<:Real, G<:AGraph}(m::Int, fitness::Vector{T},
-        ::Type{G}=Graph; seed::Int=-1)
+function static_fitness_model(m::Int, fitness::Vector{T},
+        ::Type{G}=Graph; seed::Int=-1) where {T<:Real, G<:AGraph}
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness)
     m == 0 && return G(n)
@@ -269,8 +269,8 @@ function static_fitness_model{T<:Real, G<:AGraph}(m::Int, fitness::Vector{T},
     return g
 end
 
-function static_fitness_model{T<:Real,S<:Real, G<:ADiGraph}(m::Int, fitness_out::Vector{T},
-        fitness_in::Vector{S}, ::Type{G}=DiGraph; seed::Int=-1)
+function static_fitness_model(m::Int, fitness_out::Vector{T},
+        fitness_in::Vector{S}, ::Type{G}=DiGraph; seed::Int=-1) where {T<:Real,S<:Real, G<:ADiGraph}
     @assert(m >= 0, "invalid number of edges")
     n = length(fitness_out)
     @assert(length(fitness_in) == n, "fitness_in must have the same size as fitness_out")
@@ -294,7 +294,7 @@ function static_fitness_model{T<:Real,S<:Real, G<:ADiGraph}(m::Int, fitness_out:
     return g
 end
 
-function _create_static_fitness_graph!{T<:Real,S<:Real}(g::AGraphOrDiGraph, m::Int, cum_fitness_out::Vector{T}, cum_fitness_in::Vector{S}, seed::Int)
+function _create_static_fitness_graph!(g::AGraphOrDiGraph, m::Int, cum_fitness_out::Vector{T}, cum_fitness_in::Vector{S}, seed::Int) where {T<:Real,S<:Real}
     rng = getRNG(seed)
     max_out = cum_fitness_out[end]
     max_in = cum_fitness_in[end]
@@ -333,16 +333,16 @@ References:
 
 * Cho YS, Kim JS, Park J, Kahng B, Kim D: Percolation transitions in scale-free networks under the Achlioptas process. Phys Rev Lett 103:135702, 2009.
 """
-function static_scale_free{G<:AGraph}(n::Int, m::Int, α::Float64, ::Type{G} = Graph;
-        seed::Int=-1, finite_size_correction::Bool=true)
+function static_scale_free(n::Int, m::Int, α::Float64, ::Type{G} = Graph;
+        seed::Int=-1, finite_size_correction::Bool=true) where G<:AGraph
     @assert(n >= 0, "Invalid number of nodes")
     @assert(α >= 2, "out-degree exponent must be >= 2")
     fitness = _construct_fitness(n, α, finite_size_correction)
     static_fitness_model(m, fitness, G, seed=seed)
 end
 
-function static_scale_free{G<:ADiGraph}(n::Int, m::Int, α_out::Float64, α_in::Float64, ::Type{G} = DiGraph;
-        seed::Int=-1, finite_size_correction::Bool=true)
+function static_scale_free(n::Int, m::Int, α_out::Float64, α_in::Float64, ::Type{G} = DiGraph;
+        seed::Int=-1, finite_size_correction::Bool=true) where G<:ADiGraph
     @assert(n >= 0, "Invalid number of nodes")
     @assert(α_out >= 2, "out-degree exponent must be >= 2")
     @assert(α_in >= 2, "in-degree exponent must be >= 2")
@@ -381,8 +381,8 @@ For undirected graphs, allocates an array of `nk` `Int`s, and takes
 approximately ``nk^2`` time. For ``k > n/2``, generates a graph of degree
 `n-k-1` and returns its complement.
 """
-function random_regular_graph{G<:AGraph}(n::Int, k::Int, ::Type{G}=Graph;
-        seed::Int=-1)
+function random_regular_graph(n::Int, k::Int, ::Type{G}=Graph;
+        seed::Int=-1) where G<:AGraph
     @assert(iseven(n*k), "n * k must be even")
     @assert(0 <= k < n, "the 0 <= k < n inequality must be satisfied")
     if k == 0
@@ -421,8 +421,8 @@ approximately ``nc^2`` time.
 
 If `check_graphical=true` makes sure that `k` is a graphical sequence (see `is_graphical`).
 """
-function random_configuration_model{G<:AGraph}(n::Int, k::Vector{Int}, ::Type{G}=Graph;
-        seed::Int=-1, check_graphical::Bool=false)
+function random_configuration_model(n::Int, k::Vector{Int}, ::Type{G}=Graph;
+        seed::Int=-1, check_graphical::Bool=false) where G<:AGraph
     @assert(n == length(k), "a degree sequence of length n has to be provided")
     m = sum(k)
     @assert(iseven(m), "sum(k) must be even")
@@ -456,8 +456,8 @@ specified using `dir=:in` or `dir=:out`. The default is `dir=:out`.
 For directed graphs, allocates an ``n \times n`` sparse matrix of boolean as an
 adjacency matrix and uses that to generate the directed graph.
 """
-function random_regular_digraph{G<:ADiGraph}(n::Int, k::Int, ::Type{G}=DiGraph;
-        dir::Symbol=:out, seed::Int=-1)
+function random_regular_digraph(n::Int, k::Int, ::Type{G}=DiGraph;
+        dir::Symbol=:out, seed::Int=-1) where G<:ADiGraph
     #TODO remove the function sample from StatsBase for one allowing the use
     # of a local rng
     @assert(0 <= k < n, "the 0 <= k < n inequality must be satisfied")
@@ -503,8 +503,8 @@ The second form samples from a SBM with `c[a,a]=cin`, and `c[a,b]=coff`.
 For a dynamic version of the SBM see the `StochasticBlockModel` type and
 related functions.
 """
-function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int},
-        ::Type{G}=Graph; seed::Int = -1)
+function stochastic_block_model(c::Matrix{T}, n::Vector{Int},
+        ::Type{G}=Graph; seed::Int = -1) where {T<:Real, G<:AGraph}
     @assert size(c,1) == length(n)
     @assert size(c,2) == length(n)
     # init dsfmt generator without altering GLOBAL_RNG
@@ -519,7 +519,7 @@ function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int}
     for a=1:K
         ra = cum[a]+1:cum[a+1]
         for b=a:K
-            @assert a==b? c[a,b] <= n[b]-1 : c[a,b] <= n[b]   "Mean degree cannot be greater than available neighbors in the block."
+            @assert a==b ? c[a,b] <= n[b]-1 : c[a,b] <= n[b]   "Mean degree cannot be greater than available neighbors in the block."
 
             m = a==b ? div(n[a]*(n[a]-1),2) : n[a]*n[b]
             p = a==b ? n[a]*c[a,b] / (2m) : n[a]*c[a,b]/m
@@ -540,8 +540,8 @@ function stochastic_block_model{T<:Real, G<:AGraph}(c::Matrix{T}, n::Vector{Int}
     return g
 end
 
-function stochastic_block_model{T<:Real, G<:AGraph}(cint::T, cext::T, n::Vector{Int},
-        ::Type{G}=Graph; seed::Int=-1)
+function stochastic_block_model(cint::T, cext::T, n::Vector{Int},
+        ::Type{G}=Graph; seed::Int=-1) where {T<:Real, G<:AGraph}
     K = length(n)
     c = [ifelse(a==b, cint, cext) for a=1:K,b=1:K]
     stochastic_block_model(c, n, G, seed=seed)

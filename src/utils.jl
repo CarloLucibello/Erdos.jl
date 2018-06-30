@@ -72,11 +72,11 @@ struct Distinct{I, J}
     seen::Dict{J, Int}
 end
 
-iteratorsize{T<:Distinct}(::Type{T}) = SizeUnknown()
+iteratorsize(::Type{T}) where {T<:Distinct} = SizeUnknown()
 
-eltype{I, J}(::Type{Distinct{I, J}}) = J
+eltype(::Type{Distinct{I, J}}) where {I, J} = J
 
-distinct{I}(xs::I) = Distinct{I, eltype(xs)}(xs, Dict{eltype(xs), Int}())
+distinct(xs::I) where {I} = Distinct{I, eltype(xs)}(xs, Dict{eltype(xs), Int}())
 
 function start(it::Distinct)
     start(it.xs), 1
@@ -107,9 +107,9 @@ struct Chain{T<:Tuple}
     xss::T
 end
 
-iteratorsize{T}(::Type{Chain{T}}) = _chain_is(T)
+iteratorsize(::Type{Chain{T}}) where {T} = _chain_is(T)
 
-@generated function _chain_is{T}(t::Type{T})
+@generated function _chain_is(t::Type{T}) where T
     for itype in T.types
         if iteratorsize(itype) == IsInfinite()
             return :(IsInfinite())
@@ -125,7 +125,7 @@ chain(xss...) = Chain(xss)
 length(it::Chain{Tuple{}}) = 0
 length(it::Chain) = sum(length, it.xss)
 
-eltype{T}(::Type{Chain{T}}) = typejoin([eltype(t) for t in T.parameters]...)
+eltype(::Type{Chain{T}}) where {T} = typejoin([eltype(t) for t in T.parameters]...)
 
 function start(it::Chain)
     i = 1
@@ -163,7 +163,7 @@ done(it::Chain, state) = state[1] > length(it.xss)
 # for generic iterables with length
 myrand(itr) = nth(itr, _myrand(length(itr)))
 
-_myrand{T<:Integer}(n::T) = ceil(T, rand() * n)
+_myrand(n::T) where {T<:Integer} = ceil(T, rand() * n)
 
 randbinomial(m::Integer,p::AbstractFloat) =
     convert(Int, StatsFuns.RFunctions.binomrand(m, p))
@@ -176,5 +176,5 @@ compare(c::GreaterThan2, x, y) = x[2] > y[2]
 compare(c::LessThan2, x, y) = x[2] < y[2]
 
 
-signedtype{T<:Integer}(::Type{T}) = typeof(signed(T(0)))
-signedtype{T<:AbstractFloat}(::Type{T}) = T
+signedtype(::Type{T}) where {T<:Integer} = typeof(signed(T(0)))
+signedtype(::Type{T}) where {T<:AbstractFloat} = T

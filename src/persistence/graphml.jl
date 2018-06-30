@@ -1,4 +1,4 @@
-function graphml_read_one_graph!{G}(el::EzXML.Node, ::Type{G})
+function graphml_read_one_graph!(el::EzXML.Node, ::Type{G}) where G
     nodes = Dict{String,Int}()
     E = Edge{Int}
     edges = Vector{E}()
@@ -25,15 +25,10 @@ end
 
 graphmlparse(T, x::String) = parse(T, x)
 graphmlparse(::Type{String}, x::String) = x
-if VERSION < v"0.6.0-dev.693" # julia PR #16986
-graphmlparse{T}(::Type{Vector{T}}, x::String) =
-    map(v->parse(T,v),  split(x, ','))
-else
-graphmlparse{T}(::Type{Vector{T}}, x::String) = parse.(T, split(x, ','))
-end
+graphmlparse(::Type{Vector{T}}, x::String) where {T} = parse.(T, split(x, ','))
 
-function graphml_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
-                        gpropkeys, vpropkeys, epropkeys)
+function graphml_read_one_net!(xg::EzXML.Node, ::Type{G},
+                        gpropkeys, vpropkeys, epropkeys) where G
     nodes = Dict{String,Int}()
     nodeid = 1
     # traverse the tree to map id to 1:n
@@ -76,7 +71,7 @@ function graphml_read_one_net!{G}(xg::EzXML.Node, ::Type{G},
     return g
 end
 
-function readgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
+function readgraphml(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "graphml" || error("Not a GraphML file")
@@ -90,7 +85,7 @@ function readgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
 end
 
 
-function readnetgraphml{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
+function readnetgraphml(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
     xdoc = parsexml(readstring(io))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "graphml" || error("Not a GraphML file")

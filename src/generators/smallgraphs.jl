@@ -4,8 +4,8 @@
 
 Build a graph with `n` vertices, of type `G`, and given `edgelist`.
 """
-function graph{G<:AGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
-        ::Type{G} = Graph)
+function graph(n::Int, edgelist::Vector{Tuple{Int,Int}},
+        ::Type{G} = Graph) where G<:AGraph
     g = G(n)
     for (s,d) in edgelist
         #TODO asssert s,d <= n
@@ -20,8 +20,8 @@ end
 
 Build a digraph with `n` vertices, type `G`, and given `edgelist`.
 """
-function digraph{G<:ADiGraph}(n::Int, edgelist::Vector{Tuple{Int,Int}},
-        ::Type{G} = DiGraph)
+function digraph(n::Int, edgelist::Vector{Tuple{Int,Int}},
+        ::Type{G} = DiGraph) where G<:ADiGraph
     g = G(n)
     for (s,d) in edgelist
         add_edge!(g, s, d)
@@ -60,7 +60,7 @@ Creates a notorious graph `s` of type `G`. Admissible values for `s` are:
 
 A collection of real world graphs is available through the [`readgraph`](@ref) function.
 """
-function graph{G<:AGraph}(s::Symbol, ::Type{G} = Graph)
+function graph(s::Symbol, ::Type{G} = Graph) where G<:AGraph
     graphmap = Dict(
         :bull            => BullGraph,
         :chvatal         => ChvatalGraph,
@@ -102,7 +102,7 @@ Creates a notorious digraph `s` of type `G`. Admissible values for `s` are:
 | :truncatedtetrahedron   |   A skeleton of the [truncated tetrahedron digraph](https://en.wikipedia.org/wiki/Truncated_tetrahedron). |
 
 """
-function digraph{G<:ADiGraph}(s::Symbol, ::Type{G} = DiGraph)
+function digraph(s::Symbol, ::Type{G} = DiGraph) where G<:ADiGraph
     graphmap = Dict(
     :truncatedtetrahedron    => TruncatedTetrahedronDiGraph,
     )
@@ -113,15 +113,15 @@ function digraph{G<:ADiGraph}(s::Symbol, ::Type{G} = DiGraph)
     error("Please choose a valid graph")
 end
 
-DiamondGraph{G<:AGraph}(::Type{G}) =
+DiamondGraph(::Type{G}) where {G<:AGraph} =
     graph(4, [(1,2), (1,3), (2,3), (2,4), (3,4)], G)
 
 
-BullGraph{G<:AGraph}(::Type{G}) =
+BullGraph(::Type{G}) where {G<:AGraph} =
     graph(5, [(1,2), (1,3), (2,3), (2,4), (3,5)], G)
 
 
-function ChvatalGraph{G<:AGraph}(::Type{G})
+function ChvatalGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 5), (1, 7), (1, 10),
         (2, 3), (2, 6), (2, 8),
@@ -138,7 +138,7 @@ function ChvatalGraph{G<:AGraph}(::Type{G})
 end
 
 
-function CubicalGraph{G<:AGraph}(::Type{G})
+function CubicalGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 4), (1, 5),
         (2, 3), (2, 8),
@@ -151,7 +151,7 @@ function CubicalGraph{G<:AGraph}(::Type{G})
 end
 
 
-function DesarguesGraph{G<:AGraph}(::Type{G})
+function DesarguesGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 6), (1, 20),
         (2, 3), (2, 17),
@@ -177,7 +177,7 @@ function DesarguesGraph{G<:AGraph}(::Type{G})
 end
 
 
-function DodecahedralGraph{G<:AGraph}(::Type{G})
+function DodecahedralGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 11), (1, 20),
         (2, 3), (2, 9),
@@ -203,7 +203,7 @@ function DodecahedralGraph{G<:AGraph}(::Type{G})
 end
 
 
-function FruchtGraph{G<:AGraph}(::Type{G})
+function FruchtGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 7), (1, 8),
         (2, 3), (2, 8),
@@ -220,7 +220,7 @@ function FruchtGraph{G<:AGraph}(::Type{G})
 end
 
 
-function HeawoodGraph{G<:AGraph}(::Type{G})
+function HeawoodGraph(::Type{G}) where G<:AGraph
     e = [
     (1, 2), (1, 6), (1, 14),
     (2, 3), (2, 11),
@@ -240,13 +240,13 @@ function HeawoodGraph{G<:AGraph}(::Type{G})
 end
 
 
-function HouseGraph{G<:AGraph}(::Type{G})
+function HouseGraph(::Type{G}) where G<:AGraph
     e = [ (1, 2), (1, 3), (2, 4), (3, 4), (3, 5), (4, 5) ]
     return graph(5, e, G)
 end
 
 
-function HouseXGraph{G<:AGraph}(::Type{G})
+function HouseXGraph(::Type{G}) where G<:AGraph
     g = HouseGraph(G)
     add_edge!(g, 1, 4)
     add_edge!(g, 2, 3)
@@ -254,7 +254,7 @@ function HouseXGraph{G<:AGraph}(::Type{G})
 end
 
 
-function IcosahedralGraph{G<:AGraph}(::Type{G})
+function IcosahedralGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 6), (1, 8), (1, 9), (1, 12),
         (2, 3), (2, 6), (2, 7), (2, 9),
@@ -270,7 +270,7 @@ function IcosahedralGraph{G<:AGraph}(::Type{G})
 end
 
 
-function KrackhardtKiteGraph{G<:AGraph}(::Type{G})
+function KrackhardtKiteGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 3), (1, 4), (1, 6),
         (2, 4), (2, 5), (2, 7),
@@ -286,7 +286,7 @@ function KrackhardtKiteGraph{G<:AGraph}(::Type{G})
 end
 
 
-function MoebiusKantorGraph{G<:AGraph}(::Type{G})
+function MoebiusKantorGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 6), (1, 16),
         (2, 3), (2, 13),
@@ -308,7 +308,7 @@ function MoebiusKantorGraph{G<:AGraph}(::Type{G})
 end
 
 
-function OctahedralGraph{G<:AGraph}(::Type{G})
+function OctahedralGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 3), (1, 4), (1, 5),
         (2, 3), (2, 4), (2, 6),
@@ -320,7 +320,7 @@ function OctahedralGraph{G<:AGraph}(::Type{G})
 end
 
 
-function PappusGraph{G<:AGraph}(::Type{G})
+function PappusGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 6), (1, 18),
         (2, 3), (2, 9),
@@ -344,7 +344,7 @@ function PappusGraph{G<:AGraph}(::Type{G})
 end
 
 
-function PetersenGraph{G<:AGraph}(::Type{G})
+function PetersenGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 5), (1, 6),
         (2, 3), (2, 7),
@@ -358,7 +358,7 @@ function PetersenGraph{G<:AGraph}(::Type{G})
     return graph(10, e, G)
 end
 
-function SedgewickMazeGraph{G<:AGraph}(::Type{G})
+function SedgewickMazeGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 3),
         (1, 6), (1, 8),
@@ -371,11 +371,11 @@ function SedgewickMazeGraph{G<:AGraph}(::Type{G})
 end
 
 
-TetrahedralGraph{G<:AGraph}(::Type{G}) =
+TetrahedralGraph(::Type{G}) where {G<:AGraph} =
     graph(4, [(1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)])
 
 
-function TruncatedCubeGraph{G<:AGraph}(::Type{G})
+function TruncatedCubeGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2), (1, 3), (1, 5),
         (2, 12), (2, 15),
@@ -404,7 +404,7 @@ function TruncatedCubeGraph{G<:AGraph}(::Type{G})
 end
 
 
-function TruncatedTetrahedronGraph{G<:AGraph}(::Type{G})
+function TruncatedTetrahedronGraph(::Type{G}) where G<:AGraph
     e = [
         (1, 2),(1, 3),(1, 10),
         (2, 3),(2, 7),
@@ -422,7 +422,7 @@ function TruncatedTetrahedronGraph{G<:AGraph}(::Type{G})
 end
 
 
-function TruncatedTetrahedronDiGraph{G<:ADiGraph}(::Type{G})
+function TruncatedTetrahedronDiGraph(::Type{G}) where G<:ADiGraph
     e = [
         (1, 2),(1, 3),(1, 10),
         (2, 3),(2, 7),
@@ -440,7 +440,7 @@ function TruncatedTetrahedronDiGraph{G<:ADiGraph}(::Type{G})
 end
 
 
-function TutteGraph{G<:AGraph}(::Type{G})
+function TutteGraph(::Type{G}) where G<:AGraph
     e = [
     (1, 2),(1, 3),(1, 4),
     (2, 5),(2, 27),

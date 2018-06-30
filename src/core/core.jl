@@ -51,14 +51,14 @@ has_vertex(g::AGraphOrDiGraph, v) = v in vertices(g)
 show(io::IO, g::AGraphOrDiGraph) = shortshow(io, g)
 show(io::IO, g::ANetOrDiNet) = longshow(io, g)
 
-function shortshow{G<:AGraphOrDiGraph}(io::IO, g::G)
+function shortshow(io::IO, g::G) where G<:AGraphOrDiGraph
     print(io, split("$G",'.')[end],
         "($(nv(g)), $(ne(g)))")
         # is_directed(g) ? " undirected graph" : " directed graph")
 end
 
 
-function longshow{G<:ANetOrDiNet}(io::IO, g::G)
+function longshow(io::IO, g::G) where G<:ANetOrDiNet
     print(io, split("$G",'.')[end], "($(nv(g)), $(ne(g)))")
     print(io, " with ")
     _printstrvec(io, gprop_names(g))
@@ -88,8 +88,8 @@ Check if `g` a graph with directed edges.
 """
 is_directed(g::AGraph) = false
 is_directed(g::ADiGraph) = true
-is_directed{G<:AGraph}(::Type{G}) = false
-is_directed{G<:ADiGraph}(::Type{G}) = true
+is_directed(::Type{G}) where {G<:AGraph} = false
+is_directed(::Type{G}) where {G<:ADiGraph} = true
 
 """
     in_degree(g, v)
@@ -162,13 +162,13 @@ end
 
 copy(g::AGraphOrDiGraph) = deepcopy(g)
 
-graphtype{G<:AGraph}(::Type{G}) = G
-digraphtype{G<:ADiGraph}(::Type{G}) = G
+graphtype(::Type{G}) where {G<:AGraph} = G
+digraphtype(::Type{G}) where {G<:ADiGraph} = G
 
-edgetype{G<:AGraphOrDiGraph}(g::G) = edgetype(G)
-graphtype{G<:AGraphOrDiGraph}(g::G) = graphtype(G)
-digraphtype{G<:AGraphOrDiGraph}(g::G) = digraphtype(G)
-vertextype{G<:AGraphOrDiGraph}(g::G) = vertextype(G)
+edgetype(g::G) where {G<:AGraphOrDiGraph} = edgetype(G)
+graphtype(g::G) where {G<:AGraphOrDiGraph} = graphtype(G)
+digraphtype(g::G) where {G<:AGraphOrDiGraph} = digraphtype(G)
+vertextype(g::G) where {G<:AGraphOrDiGraph} = vertextype(G)
 
 
 graph(g::AGraph) = g
@@ -176,14 +176,14 @@ digraph(g::ADiGraph) = g
 
 #### FALLBACKS #################
 
-function (::Type{G}){G<:ADiGraph, T<:Number}(adjmx::AbstractMatrix{T}
-        ; selfedges=true)
+function (::Type{G})(adjmx::AbstractMatrix{T}
+        ; selfedges=true) where {G<:ADiGraph, T<:Number}
     op =  selfedges ? ((x,y) -> true)  : (!=)
     return _graph_from_matr!(G, op, adjmx)
 end
 
-function (::Type{G}){G<:AGraph, T<:Number}(adjmx::AbstractMatrix{T}
-        ; upper=false, selfedges=true)
+function (::Type{G})(adjmx::AbstractMatrix{T}
+        ; upper=false, selfedges=true) where {G<:AGraph, T<:Number}
 
   op =  upper && !selfedges  ? (<) :
         upper && selfedges   ? (<=)  :
@@ -220,7 +220,7 @@ function _graph_from_matr!(G, op, adjmx::SparseMatrixCSC)
     return g
 end
 
-(::Type{G}){G<:AGraphOrDiGraph}(n::Integer, m::Integer; seed = -1) = erdos_renyi(n, m, G; seed=seed)
+(::Type{G})(n::Integer, m::Integer; seed = -1) where {G<:AGraphOrDiGraph} = erdos_renyi(n, m, G; seed=seed)
 
 function digraph(g::AGraph)
     G = digraphtype(g)
@@ -241,7 +241,7 @@ function graph(g::ADiGraph)
     return h
 end
 
-function =={G<:AGraphOrDiGraph}(g::G, h::G)
+function ==(g::G, h::G) where G<:AGraphOrDiGraph
     nv(g) != nv(h) && return false
     ne(g) != ne(h) && return false
     for i=1:nv(g)
@@ -356,7 +356,7 @@ all_edges(g::ADiGraph, v) = chain(out_edges(g, v), in_edges(g, v))
 Produces a graph where all edges are reversed from the
 original.
 """
-function reverse{G<:ADiGraph}(g::G)
+function reverse(g::G) where G<:ADiGraph
     h = G(nv(g))
     for e in edges(g)
         add_edge!(h, reverse(e))
