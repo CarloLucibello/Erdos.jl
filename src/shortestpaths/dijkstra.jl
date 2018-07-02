@@ -55,7 +55,7 @@ function dijkstra_shortest_paths(
         u = hentry.vertex
         for e in out_edges(g,u)
             v = dst(e)
-            alt = (dists[u] == typemax(T))? typemax(T) : dists[u] + distmx[e]
+            alt = (dists[u] == typemax(T)) ? typemax(T) : dists[u] + distmx[e]
 
             if !visited[v]
                 dists[v] = alt

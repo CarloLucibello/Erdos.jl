@@ -130,7 +130,7 @@ add_edge_property!(g, "weight", Float64)
 eprop!(g, "weight", Float64)
 ```
 """
-add_edge_property!{T}(g::ANetOrDiNet, name::AbstractString, ::Type{T}) = add_edge_property!(g.props, name, EdgeMap(g, T))
+add_edge_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_edge_property!(g.props, name, EdgeMap(g, T))
 add_edge_property!(g::ANetOrDiNet, name::AbstractString, emap::AEdgeMap) = add_edge_property!(g.props, name, emap)
 add_edge_property!(g::ANetOrDiNet, name::AbstractString, data) = add_edge_property!(g, name, EdgeMap(g, data))
 
@@ -209,7 +209,7 @@ As an alternative, an existing vertex map `vmap` can be stored into `g`.
 
 [`vprop!`](@ref) is the short form of this function.
 """
-add_vertex_property!{T}(g::ANetOrDiNet, name::AbstractString, ::Type{T}) = add_vertex_property!(g.props, name, VertexMap(g, T))
+add_vertex_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_vertex_property!(g.props, name, VertexMap(g, T))
 add_vertex_property!(g::ANetOrDiNet, name::AbstractString, vmap::AVertexMap) = add_vertex_property!(g.props, name, vmap)
 add_vertex_property!(g::ANetOrDiNet, name::AbstractString, data) = add_vertex_property!(g, name, VertexMap(g, data))
 

@@ -18,14 +18,14 @@ Requires arguments:
 """
 
 # EMRF (Extended Multiroute Flow) algorithms
-function emrf{T<:AbstractFloat, R<:Real}(
+function emrf(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
   routes::R = 0
-  )
+  ) where {T<:AbstractFloat, R<:Real}
   breakingpoints = breakingPoints(flow_graph, source, target, capacity_matrix)
   if routes > zero(R)
     x, f = intersection(breakingpoints, routes)
@@ -45,12 +45,12 @@ Requires arguments:
 - capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
 
-function auxiliaryPoints{T<:AbstractFloat}(
+function auxiliaryPoints(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractMatrix{T}   # edge flow capacities
-  )
+  ) where T<:AbstractFloat
   # Problem descriptors
   λ = maximum_flow(flow_graph, source, target)[1] # Connectivity
   n = nv(flow_graph) # number of nodes
@@ -110,12 +110,12 @@ Requires arguments:
 - capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
 
-function breakingPoints{T<:AbstractFloat}(
+function breakingPoints(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
   target::Int,                           # the target vertex
   capacity_matrix::AbstractMatrix{T}   # edge flow capacities
-  )
+  ) where T<:AbstractFloat
   auxpoints = auxiliaryPoints(flow_graph, source, target, capacity_matrix)
   λ = length(auxpoints) - 1
   left_index = 1
@@ -150,9 +150,9 @@ Requires argument:
 # Function to get the nonzero min and max function of a Matrix
 # note: this is more efficient than maximum() / minimum() / extrema()
 #       since we have to ignore zero values.
-function minmaxCapacity{T<:AbstractFloat}(
+function minmaxCapacity(
   capacity_matrix::AbstractMatrix{T}    # edge flow capacities
-  )
+  ) where T<:AbstractFloat
   cmin, cmax = typemax(T), typemin(T)
   for c in capacity_matrix
     if c > zero(T)
@@ -173,12 +173,12 @@ Requires argument:
   restriction::T                         # value of the restriction
 """
 # Function to get the slope of the restricted flow
-function slope{T<:AbstractFloat}(
+function slope(
   flow_graph::ADiGraph,                   # the input graph
   capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
-  )
+  ) where T<:AbstractFloat
   slope = 0
   for e in edges(flow_graph)
       if cut[dst(e)] == 2 > cut[src(e)] &&
@@ -200,14 +200,14 @@ Requires argument:
 """
 
 # Compute the (expected) intersection of two lines
-function intersection{T<:AbstractFloat, R<:Real}(
+function intersection(
   x1::T,          # x coordinate of point 1
   y1::T,          # y coordinate of point 1
   a1::Int,        # slope passing by point 1
   x2::T,          # x coordinate of point 2
   y2::T,          # y coordinate of point 2
   a2::R           # slope passing by point 2
-  )
+  ) where {T<:AbstractFloat, R<:Real}
 
   (a1 == a2) && return -1., -1. # result will be ignored in other intersection method
   b1 = y1 - a1 * x1
@@ -217,10 +217,10 @@ function intersection{T<:AbstractFloat, R<:Real}(
   return x, y
 end
 # Compute the intersection between a set of segment and a line of slope k passing by the origin
-function intersection{T<:AbstractFloat, R<:Real}(
+function intersection(
   points::Vector{Tuple{T, T, Int}},  # vector of breaking points
   k::R                               # number of routes (slope of the line)
-  )
+  ) where {T<:AbstractFloat, R<:Real}
   λ = points[1][1] # Connectivity
 
   # Loop over the segments (pair of breaking points)
@@ -242,9 +242,9 @@ Requires argument:
   a::Tuple{T, T},         # Point A with floating coordinates
   b::Tuple{T, T}          # Point B with floating coordinates
 """
-function ≈{T<:AbstractFloat}(
+function ≈(
   a::Tuple{T, T},         # Point A with floating coordinates
   b::Tuple{T, T}          # Point B with floating coordinates
-  )
+  ) where T<:AbstractFloat
   return a[1] ≈ b[1] && a[2] ≈ b[2]
 end

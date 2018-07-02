@@ -14,8 +14,8 @@ will be ignored.
 
 Returns a graph and Dict containing the distance on each edge.
 """
-function euclidean_graph{G<:AGraph}(points::Matrix, ::Type{G} = Graph;
-            L=1., p=2., cutoff=Inf, bc=:open)
+function euclidean_graph(points::Matrix, ::Type{G} = Graph;
+            L=1., p=2., cutoff=Inf, bc=:open) where G<:AGraph
     d, N = size(points)
     g = G(N)
     weights = Dict{Edge,Float64}()

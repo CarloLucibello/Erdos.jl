@@ -46,7 +46,7 @@ function writenetgt(io::IO, g::ANetOrDiNet)
 end
 
 
-function writegt_adj{T}(io::IO, g::ADiGraph, ::Type{T})
+function writegt_adj(io::IO, g::ADiGraph, ::Type{T}) where T
     for i=1:nv(g)
         write(io, UInt64(out_degree(g, i)))
         for v in out_neighbors(g, i)
@@ -55,7 +55,7 @@ function writegt_adj{T}(io::IO, g::ADiGraph, ::Type{T})
     end
 end
 
-function writegt_adj{T}(io::IO, g::AGraph, ::Type{T})
+function writegt_adj(io::IO, g::AGraph, ::Type{T}) where T
     for i=1:nv(g)
         neigs = out_neighbors(g, i)
         k = count(j -> j>=i, neigs)
@@ -114,7 +114,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
     end
 end
 
-function readgt{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
+function readgt(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
     @assert String(read(io, 6)) == _magic "gt file not correctly formatted"
     ver = read(io, UInt8)  ## version
     indian = read(io, Bool)
@@ -130,7 +130,7 @@ function readgt{G<:AGraphOrDiGraph}(io::IO, ::Type{G})
     return g
 end
 
-function readnetgt{G<:ANetOrDiNet}(io::IO, ::Type{G})
+function readnetgt(io::IO, ::Type{G}) where G<:ANetOrDiNet
     @assert String(read(io, 6)) == _magic "gt file not correctly formatted"
     ver = read(io, UInt8)  ## version
     indian = read(io, Bool)
@@ -192,15 +192,15 @@ const gtpropmap = DataType[   Bool,                   #0x00
                               Vector{String}          #0x0d
                         ]
 
-readgt_prop{T<:Num}(io, ::Type{T}, num) = read(io, T, num)
-readgt_prop{T<:VecNum}(io, ::Type{T}, num) = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
+readgt_prop(io, ::Type{T}, num) where {T<:Num} = read(io, T, num)
+readgt_prop(io, ::Type{T}, num) where {T<:VecNum} = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
 readgt_prop(io, ::Type{String}, num) = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
 
-writegt_prop{T<:Num}(io, x::T) = write(io, x)
-writegt_prop{T<:VecNum}(io, x::T) = (write(io, length(x)); write(io, x))
+writegt_prop(io, x::T) where {T<:Num} = write(io, x)
+writegt_prop(io, x::T) where {T<:VecNum} = (write(io, length(x)); write(io, x))
 writegt_prop(io, x::String) = (write(io, sizeof(x)); write(io, x))
 
-function readgt_adj!{T}(io::IO, g::ADiGraph, ::Type{T})
+function readgt_adj!(io::IO, g::ADiGraph, ::Type{T}) where T
     for i=1:nv(g)
         k = read(io, UInt64)
         for _=1:k
@@ -212,7 +212,7 @@ function readgt_adj!{T}(io::IO, g::ADiGraph, ::Type{T})
     # rebuild!(g)
 end
 
-function readgt_adj!{T}(io::IO, g::AGraph, ::Type{T})
+function readgt_adj!(io::IO, g::AGraph, ::Type{T}) where T
     for i=1:nv(g)
         k = read(io, UInt64)
         for _=1:k

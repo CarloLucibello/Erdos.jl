@@ -23,7 +23,7 @@ Read a graph identified by `s` from Erdos datasets collection (e.g. `s=:karate`)
 They are stored in the `gt` binary format in the `datasets` directory of the package.
 For a list of available graph refer to the documentation.
 """
-function readgraph{G<:AGraphOrDiGraph}(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false)
+function readgraph(fn::String, t::Symbol, ::Type{G}=Graph; compressed=false) where G<:AGraphOrDiGraph
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     io = compressed ? GZip.open(fn,"r") : open(fn,"r")
     g = readgraph(io, t, G)
@@ -31,11 +31,11 @@ function readgraph{G<:AGraphOrDiGraph}(fn::String, t::Symbol, ::Type{G}=Graph; c
     return g
 end
 
-function readgraph{G<:AGraphOrDiGraph}(io::IO, t::Symbol, ::Type{G}=Graph)
+function readgraph(io::IO, t::Symbol, ::Type{G}=Graph) where G<:AGraphOrDiGraph
     return filemap[t][1](io, G)
 end
 
-function readgraph{G<:AGraphOrDiGraph}(fn::String, ::Type{G}=Graph)
+function readgraph(fn::String, ::Type{G}=Graph) where G<:AGraphOrDiGraph
     compressed = false
     ft = split(fn,'.')[end]
     if ft == "gz"
@@ -47,7 +47,7 @@ function readgraph{G<:AGraphOrDiGraph}(fn::String, ::Type{G}=Graph)
 end
 
 const DATASETS_DIR = joinpath(Base.source_dir(), "..", "..", "datasets")
-function readgraph{G<:AGraphOrDiGraph}(s::Symbol, ::Type{G}=Graph)
+function readgraph(s::Symbol, ::Type{G}=Graph) where G<:AGraphOrDiGraph
     readgraph(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
 end
 
@@ -69,7 +69,7 @@ Read a graph identified by `s` from Erdos datasets collection (e.g. `s=:karate`)
 They are stored in the `gt` binary format in the `datasets` directory of the package.
 For a list of available graph refer to the documentation.
 """
-function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Network; compressed=false)
+function readnetwork(fn::String, t::Symbol, ::Type{G}=Network; compressed=false) where G<:ANetOrDiNet
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     io = compressed ? GZip.open(fn,"r") : open(fn,"r")
     g = readnetwork(io, t, G)
@@ -77,11 +77,11 @@ function readnetwork{G<:ANetOrDiNet}(fn::String, t::Symbol, ::Type{G}=Network; c
     return g
 end
 
-function readnetwork{G<:ANetOrDiNet}(io::IO, t::Symbol, ::Type{G}=Network)
+function readnetwork(io::IO, t::Symbol, ::Type{G}=Network) where G<:ANetOrDiNet
     return filemap[t][3](io, G)
 end
 
-function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Network)
+function readnetwork(fn::String, ::Type{G}=Network) where G<:ANetOrDiNet
     compressed = false
     ft = split(fn,'.')[end]
     if ft == "gz"
@@ -92,7 +92,7 @@ function readnetwork{G<:ANetOrDiNet}(fn::String, ::Type{G}=Network)
     return readnetwork(fn, Symbol(ft), G; compressed=compressed)
 end
 
-function readnetwork{G<:AGraphOrDiGraph}(s::Symbol, ::Type{G}=Network)
+function readnetwork(s::Symbol, ::Type{G}=Network) where G<:AGraphOrDiGraph
     readnetwork(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
 end
 

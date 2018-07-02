@@ -1,6 +1,6 @@
 # AVertexMap{T} defined in newtwork_interface.jl
-valtype{T}(m::AVertexMap{T}) = T
-eltype{T}(m::AVertexMap{T}) = T
+valtype(m::AVertexMap{T}) where {T} = T
+eltype(m::AVertexMap{T}) where {T} = T
 
 """
     mutable struct VertexMap{G <: AGraphOrDiGraph, T, D} <: AVertexMap{T}
@@ -33,10 +33,10 @@ mutable struct VertexMap{G<:AGraphOrDiGraph, T, D} <: AVertexMap{T}
 end
 # show{G,T,D}(io::IO, m::VertexMap{G,T,D}) = print(io, "VertexMap: $(m.data)")
 
-VertexMap{T}(g::AGraphOrDiGraph, d::AbstractVector{T}) = VertexMap(g, T, d)
-VertexMap{V<:Integer,T}(g::AGraphOrDiGraph, d::Dict{V, T}) = VertexMap(g, T, d)
+VertexMap(g::AGraphOrDiGraph, d::AbstractVector{T}) where {T} = VertexMap(g, T, d)
+VertexMap(g::AGraphOrDiGraph, d::Dict{V, T}) where {V<:Integer,T} = VertexMap(g, T, d)
 
-function VertexMap{T}(g::AGraphOrDiGraph, ::Type{T})
+function VertexMap(g::AGraphOrDiGraph, ::Type{T}) where T
     V = vertextype(g)
     return VertexMap(g, T, Dict{V,T}())
 end
@@ -48,9 +48,9 @@ end
 length(m::VertexMap) = length(m.data)
 getindex(m::VertexMap, i::Integer) = getindex(m.data, i)
 setindex!(m::VertexMap, x, i::Integer) = setindex!(m.data, x, i)
-haskey{G,T,D<:AbstractVector}(m::VertexMap{G,T,D}, i::Integer) =
+haskey(m::VertexMap{G,T,D}, i::Integer) where {G,T,D<:AbstractVector} =
     1 <= i <= length(m)
-haskey{G,T,D<:Dict}(m::VertexMap{G,T,D}, i::Integer) =
+haskey(m::VertexMap{G,T,D}, i::Integer) where {G,T,D<:Dict} =
     haskey(m.data, i)
 get(m::VertexMap, i::Integer, x) = get(m.data, i, x)
 

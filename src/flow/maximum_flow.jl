@@ -31,12 +31,12 @@ mutable struct DefaultCapacity{G<:ADiGraph, I<:Integer} <: AbstractMatrix{I}
     g::G
     nv::I
 end
-DefaultCapacity{G<:ADiGraph}(g::G) = DefaultCapacity(g, signed(nv(g)))
+DefaultCapacity(g::G) where {G<:ADiGraph} = DefaultCapacity(g, signed(nv(g)))
 
 getindex(d::DefaultCapacity, s, t) = has_edge(d.g, s , t) ? 1 : 0
 size(d::DefaultCapacity) = (d.nv, d.nv)
 
-function _complete{T}(g::ADiGraph, capacity_matrix::AbstractMatrix{T})
+function _complete(g::ADiGraph, capacity_matrix::AbstractMatrix{T}) where T
     S = signedtype(T)
     c = Vector{Vector{S}}()
     for i=1:nv(g)
@@ -77,9 +77,9 @@ end
 Computers the residual graph of `g` associated to given `flow` and `capacity`.
 See wikipedia.
 """
-function residual_graph{G<:ADiGraph,T<:Number}(g::G,
+function residual_graph(g::G,
         capacity::Vector{Vector{T}}, flow::Vector{Vector{T}}
-    )
+    ) where {G<:ADiGraph,T<:Number}
     h = G(nv(g))
     for i=1:nv(g)
         c = capacity[i]
@@ -93,7 +93,7 @@ function residual_graph{G<:ADiGraph,T<:Number}(g::G,
     return h
 end
 
-function residual_graph{G<:ADiGraph}(g::G, capacity::AbstractMatrix, flow::AbstractMatrix)
+function residual_graph(g::G, capacity::AbstractMatrix, flow::AbstractMatrix) where G<:ADiGraph
     h = G(nv(g))
     for e in edges(g)
         i, j = src(e), dst(e)
@@ -104,7 +104,7 @@ function residual_graph{G<:ADiGraph}(g::G, capacity::AbstractMatrix, flow::Abstr
     return h
 end
 
-function cut_labels{G<:ADiGraph}(g::G, source, capacity, flow)
+function cut_labels(g::G, source, capacity, flow) where G<:ADiGraph
     h = residual_graph(g, capacity, flow)
     svertices = neighborhood(h, source, nv(h))
     labels = fill(2, nv(h))
@@ -167,7 +167,7 @@ f, F, labels = maximum_flow(g, 1, 8)
 f, F, labels = maximum_flow(g,1,8,capacity_matrix,algorithm=EdmondsKarpAlgorithm())
 ```
 """
-function maximum_flow{G<:ADiGraph, T<:Number}(
+function maximum_flow(
         g::G,                   # the input graph
         source,                           # the source vertex
         target,                           # the target vertex
@@ -176,7 +176,7 @@ function maximum_flow{G<:ADiGraph, T<:Number}(
         algorithm::AbstractFlowAlgorithm  =    # keyword argument for algorithm
             PushRelabelAlgorithm(),
         restriction::T = zero(T)
-    )
+    ) where {G<:ADiGraph, T<:Number}
     if restriction > zero(T)
         capacity_matrix = min.(restriction, capacity_matrix)
     end
@@ -203,12 +203,12 @@ function maximum_flow{G<:ADiGraph, T<:Number}(
     return f, F, labels
 end
 
-function maximum_flow{G<:ADiGraph, T<:Number}(
+function maximum_flow(
         flow_graph::G,                   # the input graph
         source,                           # the source vertex
         target,                           # the target vertex
         capacities::Vector{Vector{T}}
-    )
+    ) where {G<:ADiGraph, T<:Number}
     pos = poslist(flow_graph)
     f, F = push_relabel_impl(flow_graph, source, target, capacities, pos)
     labels = cut_labels(flow_graph, source, capacities, F)

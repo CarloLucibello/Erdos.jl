@@ -25,7 +25,7 @@ end
 Reads a graph from file `f` in the [Pajek .net](http://gephi.github.io/users/supported-graph-formats/pajek-net-format/) format.
 Returns 1 (number of graphs written).
 """
-function readpajek{G}(f::IO, ::Type{G})
+function readpajek(f::IO, ::Type{G}) where G
     line =readline(f)
     # skip comments
     while startswith(line, "%")
@@ -43,7 +43,7 @@ function readpajek{G}(f::IO, ::Type{G})
     return g
 end
 
-function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
+function readpajek_edges!(g::G, f::IO, line) where G<:AGraph
     while ismatch(r"^\*Edges",line) && !eof(f)
         for fline in eachline(f)
             line = fline
@@ -56,7 +56,7 @@ function readpajek_edges!{G<:AGraph}(g::G, f::IO, line)
     rebuild!(g)
 end
 
-function readpajek_edges!{G<:ADiGraph}(g::G, f::IO, line)
+function readpajek_edges!(g::G, f::IO, line) where G<:ADiGraph
     while ismatch(r"^\*Arcs",line) # add edges in both directions
         for fline in eachline(f)
             line = fline

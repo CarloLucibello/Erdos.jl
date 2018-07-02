@@ -37,7 +37,7 @@ a vector representing the path from vertex `v` to vertex `d`.
 enumerate_paths(state::AbstractPathState, dest) = enumerate_paths(state, [dest])[1]
 enumerate_paths(state::AbstractPathState) = enumerate_paths(state, [1:length(state.parents);])
 
-function enumerate_paths{V}(state::AbstractPathState, dest::Vector{V})
+function enumerate_paths(state::AbstractPathState, dest::Vector{V}) where V
     parents = state.parents
 
     num_dest = length(dest)
