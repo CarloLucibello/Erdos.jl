@@ -207,6 +207,24 @@
                 <p><a id='Edge-and-Vertex-Maps-1'></a></p>
 <h1 id="edge-and-vertex-maps">Edge and Vertex Maps</h1>
 <p>Arbitrary values can be associated to a graph's vertices and edges, and handed over to method's that necessitate them, thanks to the edge maps and vertex maps interfaces. Also, edge and vector maps can be internally stored in <a href="../network_types/#network_types-1">network types</a> and accessed through the <a href="../network_interface/#network_interface-1">property interface</a>.</p>
+<p><strong>Example usage</strong>:</p>
+<pre><code class="julia"># create a graph
+g = erdos_renyi(10,0.1)
+
+
+# assign random weights to each edge
+weights = EdgeMap(g, e -&gt; rand())
+
+for e in edges(g)
+   # access map value
+   w = weights[e]
+   # or 
+   i, j = e
+   w = weights[i,j]
+   .....
+end
+</code></pre>
+
 <p><a id='Edge-Maps-1'></a></p>
 <h2 id="edge-maps">Edge Maps</h2>
 <p><a id='Erdos.ConstEdgeMap' href='#Erdos.ConstEdgeMap'>#</a>
@@ -217,7 +235,7 @@ end
 </code></pre>
 
 <p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>emap[u,v] = 4</code>, will fail silently.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/edgemap.jl#L149-L157' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/edgemap.jl#L151-L159' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.EdgeMap' href='#Erdos.EdgeMap'>#</a>
 <strong><code>Erdos.EdgeMap</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct EdgeMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AEdgeMap{T}
@@ -240,14 +258,14 @@ end
 </code></pre>
 
 <p>Construct an edge map with value <code>f(e)</code> for each <code>e</code> in <code>edges(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/edgemap.jl#L5-L30' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/edgemap.jl#L4-L29' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}' href='#Erdos.edgemap2adjlist-Tuple{Erdos.AEdgeMap}'>#</a>
 <strong><code>Erdos.edgemap2adjlist</code></strong> &mdash; <em>Method</em>.</p>
 <pre><code>edgemap2adjlist(emap)
 </code></pre>
 
 <p>Returns a vector of vectors containing the values of the edge map <code>emap</code> on graph <code>g</code> following the same ordering of <a href="../core/#Erdos.adjacency_list"><code>adjacency_list</code></a><code>(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/edgemap.jl#L177-L182' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/edgemap.jl#L179-L184' class='documenter-source'>source</a><br></p>
 <p><a id='Vertex-Maps-1'></a></p>
 <h2 id="vertex-maps">Vertex Maps</h2>
 <p>Any <code>AbstractVector{T}</code> or <code>Dict{Int,T}</code> can be used as a vertex map.</p>
@@ -259,7 +277,7 @@ end
 </code></pre>
 
 <p>A type representing a constant vector map. Any attempt to change the internal value, e.g. <code>vm[1] = 4</code>, will fail silently.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/vertexmap.jl#L64-L72' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/vertexmap.jl#L61-L69' class='documenter-source'>source</a><br></p>
 <p><a id='Erdos.VertexMap' href='#Erdos.VertexMap'>#</a>
 <strong><code>Erdos.VertexMap</code></strong> &mdash; <em>Type</em>.</p>
 <pre><code>mutable struct VertexMap{G &lt;: AGraphOrDiGraph, T, D} &lt;: AVertexMap{T}
@@ -282,7 +300,7 @@ end
 </code></pre>
 
 <p>Construct a vertex map with value <code>f(u)</code> for each <code>u=1:nv(g)</code>.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/vertexmap.jl#L4-L27' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/vertexmap.jl#L5-L28' class='documenter-source'>source</a><br></p>
 <p><a id='PropertyStore-1'></a></p>
 <h2 id="propertystore">PropertyStore</h2>
 <p><a id='Erdos.PropertyStore' href='#Erdos.PropertyStore'>#</a>
@@ -295,7 +313,7 @@ end
 </code></pre>
 
 <p>A type storing properties associated to networks.</p>
-<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/ae7b6f27c72a48cee5b6f1a8b12c14600b6be4c1/src/maps/property_store.jl#L1-L9' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/CarloLucibello/Erdos.jl/blob/e435c388da1c30e269e9d57faba6af9589e4a70a/src/maps/property_store.jl#L1-L9' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
