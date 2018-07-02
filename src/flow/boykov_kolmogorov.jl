@@ -80,7 +80,7 @@ function find_path!(
                 if TREE[q] == 0
                     TREE[q] = TREE[p]
                     PARENT[q] = p
-                    unshift!(A, q)
+                    pushfirst!(A, q)
                 end
                 if TREE[q] ≠ 0 && TREE[q] ≠ TREE[p]
                     # p -> source
@@ -141,11 +141,11 @@ function augment!(
         if flow_matrix[p,q] == capacity_matrix[p,q]
             if TREE[p] == TREE[q] == 1
                 PARENT[q] = 0
-                unshift!(O, q)
+                pushfirst!(O, q)
             end
             if TREE[p] == TREE[q] == 2
                 PARENT[p] = 0
-                unshift!(O, p)
+                pushfirst!(O, p)
             end
         end
     end
@@ -191,11 +191,11 @@ function adopt!(
             for q in neighbors(residual_graph, p)
                 if TREE[q] == TREE[p]
                     if tree_cap(q,p) > 0
-                        unshift!(A, q)
+                        pushfirst!(A, q)
                     end
                     if PARENT[q] == p
                         PARENT[q] = 0
-                        unshift!(O, q)
+                        pushfirst!(O, q)
                     end
                 end
             end

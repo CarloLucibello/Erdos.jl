@@ -4,14 +4,14 @@ if !@isdefined(Erdos)
 end
 
 using BenchmarkTools
-using Base.Dates
+using Dates
 import JLD: load, save
 
 BenchmarkTools.DEFAULT_PARAMETERS.seconds = 40.
 BenchmarkTools.DEFAULT_PARAMETERS.time_tolerance = 0.05
 BenchmarkTools.DEFAULT_PARAMETERS.samples = 50000
 
-VERS = VERSION >= v"0.7dev" ? "v0.7" : "v0.6"
+VERS = true ? "v0.7" : "v0.6"
 bench_dir = Base.source_dir()
 res_dir = joinpath(bench_dir, "results", VERS)
 par_dir = joinpath(bench_dir, "parameters")

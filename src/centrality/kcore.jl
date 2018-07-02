@@ -70,6 +70,6 @@ See also [`cores`](@ref)
 function kcore(g::AGraph, k::Integer)
     #TODO use subgraph
     gnew = copy(g)
-    vmap = rem_vertices!(gnew, find(d -> d < k, cores(g)))
+    vmap = rem_vertices!(gnew, findall(d -> d < k, cores(g)))
     return gnew, vmap
 end

@@ -198,7 +198,7 @@ function _graph_from_matr!(G, op, adjmx::AbstractMatrix)
     g = G(n)
     for i in eachindex(adjmx)
         adjmx[i] == 0 && continue
-        u, v = ind2sub(adjmx, i)
+        u, v = LinearIndices(adjmx, i)
         op(u,v) || continue
         add_edge!(g, u, v)
     end

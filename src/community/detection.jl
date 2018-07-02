@@ -49,7 +49,7 @@ See [`Nonbacktracking`](@ref) for details.
 function nonbacktrack_embedding(g::AGraph, k::Int)
     B = Nonbacktracking(g)
     λ, eigv, conv = eigs(B, nev=k+1, v0=ones(Float64, B.m))
-    ϕ = zeros(Complex64, nv(g), k-1)
+    ϕ = zeros(ComplexF32, nv(g), k-1)
     # TODO decide what to do with the stationary distribution ϕ[:,1]
     # this code just throws it away in favor of eigv[:,2:k+1].
     # we might also use the degree distribution to scale these vectors as is
@@ -83,7 +83,7 @@ function community_detection_bethe(g::AGraph, k::Int=-1; kmax::Int=15)
     k >= 1 && (kmax = k)
     λ, eigv = eigs(Hr, which=:SR, nev=min(kmax, nv(g)))
     q = findlast(x -> x<0, λ)
-    k > q && warn("Using eigenvectors with positive eigenvalues,
+    k > q && @warn("Using eigenvectors with positive eigenvalues,
                     some communities could be meaningless. Try to reduce `k`.")
     k < 1 && (k = q)
     k < 1 && return fill(1, nv(g))

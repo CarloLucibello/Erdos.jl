@@ -96,7 +96,7 @@ function blocking_flow!(
         for v in out_neighbors(residual_graph, u)
             if P[v] == -1 && capacity_matrix[u,v] > flow_matrix[u,v]
                 P[v] = u
-                unshift!(Q, v)
+                pushfirst!(Q, v)
             end
         end
     end

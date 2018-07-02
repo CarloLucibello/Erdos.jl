@@ -72,7 +72,7 @@ function graphml_read_one_net!(xg::EzXML.Node, ::Type{G},
 end
 
 function readgraphml(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
-    xdoc = parsexml(readstring(io))
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "graphml" || error("Not a GraphML file")
     xg = getchild(xroot, "graph")
@@ -86,7 +86,7 @@ end
 
 
 function readnetgraphml(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
-    xdoc = parsexml(readstring(io))
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "graphml" || error("Not a GraphML file")
     xg = getchild(xroot, "graph")

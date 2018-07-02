@@ -222,7 +222,7 @@ function maximum_adjacency_visit(
         g::AGraphOrDiGraph,
         distmx::AEdgeMap=ConstEdgeMap(g,1);
         log::Bool=false,
-        io::IO=STDOUT
+        io::IO=stdout
     )
     visitor = MASVisitor(io, Vector{Int}(), distmx, log)
     traverse_graph!(g, valtype(distmx), MaximumAdjacency(), 1, visitor, zeros(Int, nv(g)))

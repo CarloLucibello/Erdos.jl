@@ -49,7 +49,7 @@ function gexf_read_one_graph!(el::EzXML.Node, ::Type{G}) where G
 end
 
 function readgexf(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
-    xdoc = parsexml(readstring(io))
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
@@ -62,7 +62,7 @@ function readgexf(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
 end
 
 function readnetgexf(io::IO, ::Type{G}) where G<:AGraphOrDiGraph
-    xdoc = parsexml(readstring(io))
+    xdoc = parsexml(read(io, String))
     xroot = root(xdoc)  # an instance of XMLElement
     nodename(xroot) == "gexf" || error("Not a Gexf file")
     xg = getchild(xroot, "graph")
