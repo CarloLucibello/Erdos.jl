@@ -27,7 +27,7 @@ c4 = complement(g4)
 @test nv(c4) == 5
 @test ne(c4) == 16
 
-g = blkdiag(g3, g3)
+g = blockdiag(g3, g3)
 @test nv(g) == 10
 @test ne(g) == 8
 
@@ -63,7 +63,7 @@ z = union(g4, h)
 
 g10 = CompleteGraph(2, G)
 h10 = CompleteGraph(2, G)
-z = blkdiag(g10, h10)
+z = blockdiag(g10, h10)
 @test nv(z) == nv(g10) + nv(h10)
 @test ne(z) == ne(g10) + ne(h10)
 @test has_edge(z, 1, 2)

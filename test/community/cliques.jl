@@ -7,7 +7,7 @@
 #
 ##################################################################
 
-if !isdefined(:setofsets)
+if !@isdefined(setofsets)
     function setofsets(array_of_arrays)
         Set(map(Set, array_of_arrays))
     end

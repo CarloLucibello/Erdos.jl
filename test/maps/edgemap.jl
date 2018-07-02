@@ -1,4 +1,4 @@
-if !isdefined(:TestEdge)
+if !@isdefined(TestEdge)
 mutable struct TestEdge <: AEdge
     src::Int
     dst::Int

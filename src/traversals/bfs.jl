@@ -31,7 +31,7 @@ function breadth_first_visit_impl!(
     fneig)                        # direction [:in,:out]
 
     while !isempty(queue)
-        u = shift!(queue)
+        u = popfirst!(queue)
         open_vertex!(visitor, u)
         ucolor = vcolormap[u]
 

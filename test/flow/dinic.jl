@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:test_blocking_flow)
+if !@isdefined(test_blocking_flow)
     # Test on disconnected graphs
     function test_blocking_flow(residual_graph, source, target, capacity_matrix, flow_matrix)
         #disconnect source

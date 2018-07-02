@@ -115,7 +115,7 @@ B₁ = Nonbacktracking(g10)
 
 # just so that we can assert equality of matrices
 
-if !isdefined(:test_full)
+if !@isdefined(test_full)
     test_full(nbt::Nonbacktracking) = full(sparse(nbt))
 end
 

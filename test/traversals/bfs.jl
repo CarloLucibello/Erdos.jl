@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:istree)
+if !@isdefined(istree)
     function istree(parents::Vector{Int}, maxdepth)
         flag = true
         for i in 1:n
@@ -74,7 +74,7 @@ g10 = CompleteGraph(10, G)
 g10 = CompleteBipartiteGraph(10,10, G)
 @test bipartite_map(g10) == Vector{Int}([ones(10); 2*ones(10)])
 
-h10 = blkdiag(g10,g10)
+h10 = blockdiag(g10,g10)
 @test bipartite_map(h10) == Vector{Int}([ones(10); 2*ones(10); ones(10); 2*ones(10)])
 
 end # testset

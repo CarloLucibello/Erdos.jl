@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:test_rem_edge)
+if !@isdefined(test_rem_edge)
     function test_rem_edge(g, srcv)
         for dstv in collect(neighbors(g, srcv))
             rem_edge!(g, srcv, dstv)

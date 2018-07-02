@@ -2,6 +2,7 @@ using Erdos
 using Test
 using Random
 using SparseArrays
+using LinearAlgebra
 using Statistics
 
 testdir = dirname(@__FILE__)

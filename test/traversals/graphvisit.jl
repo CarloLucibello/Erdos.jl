@@ -1,7 +1,7 @@
 @testset "$TEST $G" begin
 
 # stub tests for coverage; disregards output.
-if !isdefined(:trivialgraphvisit)
+if !@isdefined(trivialgraphvisit)
     function trivialgraphvisit(
         g::AGraphOrDiGraph,
         alg::Erdos.SimpleGraphVisitAlgorithm,

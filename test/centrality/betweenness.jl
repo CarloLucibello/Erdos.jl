@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:readcentrality)
+if !@isdefined(readcentrality)
     function readcentrality(f::AbstractString)
         f = open(f,"r")
         c = Vector{Float64}()

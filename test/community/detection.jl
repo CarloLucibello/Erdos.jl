@@ -3,7 +3,7 @@
 # TODO some tests here intermittently fail on travis-ci
 # using @test_skip for the time being
 
-if !isdefined(:nonbacktrack_embedding_dense)
+if !@isdefined(nonbacktrack_embedding_dense)
     #= Spectral embedding of the non-backtracking matrix of `g`
     (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
 
@@ -62,7 +62,7 @@ n=10
 g10 = CompleteGraph(n, G)
 z = copy(g10)
 for k=2:5
-    z = blkdiag(z, g10)
+    z = blockdiag(z, g10)
     add_edge!(z, (k-1)*n, k*n)
 
     c = community_detection_nback(z, k)
@@ -101,7 +101,7 @@ n=10
 g10 = CompleteGraph(n, G)
 z = copy(g10)
 for k=2:5
-    z = blkdiag(z, g10)
+    z = blockdiag(z, g10)
     add_edge!(z, (k-1)*n, k*n)
     c, ch = label_propagation(z)
     a = collect(n:n:k*n)

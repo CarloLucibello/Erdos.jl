@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:test_find_path_types)
+if !@isdefined(test_find_path_types)
     # Test the types of the values returned by fetch_path
     function test_find_path_types(residual_graph, s, t, flow_matrix, capacity_matrix)
         v, P, S, flag = Erdos.fetch_path(residual_graph, s, t, flow_matrix, capacity_matrix)

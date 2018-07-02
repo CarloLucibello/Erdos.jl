@@ -34,9 +34,9 @@ function readpajek(f::IO, ::Type{G}) where G
     n = parse(Int, matchall(r"\d+",line)[1])
     for fline in eachline(f)
         line = fline
-        (ismatch(r"^\*Arcs",line) || ismatch(r"^\*Edges",line)) && break
+        (occursin(r"^\*Arcs",line) || occursin(r"^\*Edges",line)) && break
     end
-    dir = ismatch(r"^\*Arcs",line)
+    dir = occursin(r"^\*Arcs",line)
     g = G(n)
     g = dir ? digraph(g) : graph(g)
     readpajek_edges!(g, f, line)
@@ -44,7 +44,7 @@ function readpajek(f::IO, ::Type{G}) where G
 end
 
 function readpajek_edges!(g::G, f::IO, line) where G<:AGraph
-    while ismatch(r"^\*Edges",line) && !eof(f)
+    while occursin(r"^\*Edges",line) && !eof(f)
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
@@ -57,7 +57,7 @@ function readpajek_edges!(g::G, f::IO, line) where G<:AGraph
 end
 
 function readpajek_edges!(g::G, f::IO, line) where G<:ADiGraph
-    while ismatch(r"^\*Arcs",line) # add edges in both directions
+    while occursin(r"^\*Arcs",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)
@@ -66,7 +66,7 @@ function readpajek_edges!(g::G, f::IO, line) where G<:ADiGraph
             unsafe_add_edge!(g, i1, i2)
         end
     end
-    while ismatch(r"^\*Edges",line) # add edges in both directions
+    while occursin(r"^\*Edges",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
             m = matchall(r"\d+",line)

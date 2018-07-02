@@ -109,8 +109,8 @@ push!(vec2, E(3, 7))
 
 n = 10; m = 20
 g = G(n, m)
-g = blkdiag(g, g)
-d = blkdiag(sparse(rand(n, n)), sparse(rand(n, n)))
+g = blockdiag(g, g)
+d = blockdiag(sparse(rand(n, n)), sparse(rand(n, n)))
 d = d + d'
 mst = minimum_spanning_tree(g, d)
 #@test_skip length(mst) == 2n - 2 #TODO

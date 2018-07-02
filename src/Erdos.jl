@@ -11,6 +11,7 @@ using LinearAlgebra
 # using Arpack
 import GZip # I/O
 import StatsFuns # randgraphs
+import Printf
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
 import Clustering: kmeans # community detection
 # package Iterators.jl methods are now in utils.jl due to name
@@ -22,10 +23,14 @@ import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
                         enqueue!, compare, top
 
+import SparseArrays: sparse, blockdiag
+import LinearAlgebra: issymmetric, A_mul_B!
+
+
 import Base: write, ==, <, *, ≈, isless, union, intersect,
-            reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
-            sum, size, sparse, eltype, length, ndims,
-            join, start, next, done, eltype, get, issymmetric, A_mul_B!,
+            reverse, reverse!, getindex, setindex!, show, print, copy, in,
+            sum, size, eltype, length, ndims,
+            join, start, next, done, eltype, get,
             sort, push!, pop!, IteratorSize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape,     #iterators
@@ -67,7 +72,7 @@ spectral_distance, edit_distance,
 MinkowskiCost, BoundedMinkowskiCost,
 
 # operators
-complement, blkdiag, union, intersect,
+complement, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,

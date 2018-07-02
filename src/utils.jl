@@ -23,7 +23,7 @@ end
 
 sample!(a::AbstractArray, k::Integer; exclude = ()) = sample!(getRNG(), a, k; exclude = exclude)
 
-getRNG(seed::Integer = -1) = seed >= 0 ? MersenneTwister(seed) : Base.Random.GLOBAL_RNG
+getRNG(seed::Integer = -1) = seed >= 0 ? MersenneTwister(seed) : Random.GLOBAL_RNG
 
 # modified from http://stackoverflow.com/questions/25678112/insert-item-into-a-sorted-list-with-julia-with-and-without-duplicates
 # returns true if insert succeeded, false if it was a duplicate

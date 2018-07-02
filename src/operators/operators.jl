@@ -74,14 +74,14 @@ end
 
 
 """
-    blkdiag(g, h)
+    blockdiag(g, h)
 
 Produces a graph with ``|V(g)| + |V(h)|`` vertices and ``|E(g)| + |E(h)|``
 edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
 """
-function blkdiag(g::T, h::T) where T<:AGraphOrDiGraph
+function blockdiag(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     r = T(gnv + nv(h))
     for e in edges(g)
@@ -154,11 +154,11 @@ end
 """
     join(g, h)
 
-Merges graphs `g` and `h` using `blkdiag` and then adds all the edges between
+Merges graphs `g` and `h` using `blockdiag` and then adds all the edges between
  the vertices in `g` and those in `h`.
 """
 function join(g::AGraph, h::AGraph)
-    r = blkdiag(g, h)
+    r = blockdiag(g, h)
     for i=1:nv(g)
         for j=nv(g)+1:nv(g)+nv(h)
             add_edge!(r, i, j)

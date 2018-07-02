@@ -189,7 +189,7 @@ function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     end
 
     # vector of weighted nodes (each node is repeated once for each adjacent edge)
-    weightedNodes = Vector{Int}(2*(n-n0)*k + 2*ne(g))
+    weightedNodes = Vector{Int}(undef, 2*(n-n0)*k + 2*ne(g))
 
     # initialize vector of weighted nodes
     offset = 0
@@ -202,7 +202,7 @@ function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     picked = fill(false, n)
 
     # vector of targets
-    targets = Vector{Int}(k)
+    targets = Vector{Int}(undef, k)
 
     for source in n0+1:n
         # choose k targets from the existing nodes
@@ -468,13 +468,13 @@ function random_regular_digraph(n::Int, k::Int, ::Type{G}=DiGraph;
     rng = getRNG(seed)
     cs = collect(2:n)
     i = 1
-    I = Vector{Int}(n*k)
-    J = Vector{Int}(n*k)
+    I = Vector{Int}(undef, n*k)
+    J = Vector{Int}(undef, n*k)
     V = fill(true, n*k)
     for r in 1:n
         l = (r-1)*k+1 : r*k
-        I[l] = r
-        J[l] = sample!(rng, cs, k, exclude = r)
+        I[l] .= r
+        J[l] .= sample!(rng, cs, k, exclude = r)
     end
 
     if dir == :out

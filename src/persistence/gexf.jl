@@ -109,7 +109,7 @@ const gexf_types_rev = Dict("integer"  =>  Int,
                         )
 
 gexfstring(x) = string(x)
-gexfstring(v::Vector) = join((@sprintf("%.10g",x) for x in v), ", ")
+gexfstring(v::Vector) = join((Printf.@sprintf("%.10g",x) for x in v), ", ")
 
 gexfparse(T, x::String) = parse(T, x)
 gexfparse(::Type{String}, x::String) = x

@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:scc_ok)
+if !@isdefined(scc_ok)
     function scc_ok(g)
       """Check that all SCC really are strongly connected"""
       scc = strongly_connected_components(g)

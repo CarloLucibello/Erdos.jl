@@ -1,4 +1,4 @@
-if !isdefined(:Erdos)
+if !@isdefined(Erdos)
     include("../src/Erdos.jl")
     using Erdos
 end

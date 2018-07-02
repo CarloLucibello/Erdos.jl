@@ -9,7 +9,7 @@ for i=2:10
 end
 
 g10 = StarGraph(10)
-g10 = blkdiag(g10,g10)
+g10 = blockdiag(g10,g10)
 add_edge!(g10, 1, 11)
 c = core_periphery_deg(g10)
 @test c[1] == 1

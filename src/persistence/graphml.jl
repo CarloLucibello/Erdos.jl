@@ -157,7 +157,7 @@ const graphml_types_rev = Dict("int"  =>  Int,
                         )
 
 graphmlstring(x) = string(x)
-graphmlstring(v::Vector) = join((@sprintf("%.10g",x) for x in v), ", ")
+graphmlstring(v::Vector) = join((Printf.@sprintf("%.10g",x) for x in v), ", ")
 
 function writenetgraphml(io::IO, g::ANetOrDiNet)
     xdoc = XMLDocument()
