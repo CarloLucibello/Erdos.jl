@@ -5,6 +5,7 @@ A graph and network analysis package for julia.
 """
 module Erdos
 
+using Random
 import GZip # I/O
 import StatsFuns # randgraphs
 using EzXML # I/O  graphml, gexf  #TODO import instead of using

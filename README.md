@@ -2,11 +2,13 @@
 [![][docs-latest-img]][docs-latest-url]
 [![][codecov-img]][codecov-url]
 [![][travis-img]][travis-url]
-[![][pkg-0.6-img]][pkg-0.6-url]
-
+[![][pkg-0.7-img]][pkg-0.7-url]
 
 [pkg-0.6-img]: http://pkg.julialang.org/badges/Erdos_0.6.svg
 [pkg-0.6-url]: http://pkg.julialang.org/?pkg=Erdos
+
+[pkg-0.7-img]: http://pkg.julialang.org/badges/Erdos_0.7.svg
+[pkg-0.7-url]: http://pkg.julialang.org/?pkg=Erdos
 
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-latest-url]: https://carlolucibello.github.io/Erdos.jl/latest
