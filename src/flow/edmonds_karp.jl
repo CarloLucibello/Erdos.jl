@@ -9,7 +9,6 @@ Requires arguments:
 - target                            # the target vertex
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-
 function edmonds_karp_impl(
         residual_graph::ADiGraph,               # the input graph
         source,                           # the source vertex

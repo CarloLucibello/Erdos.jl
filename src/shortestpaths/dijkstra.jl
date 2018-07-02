@@ -94,4 +94,4 @@ function dijkstra_shortest_paths(
 end
 
 dijkstra_shortest_paths(g::AGraphOrDiGraph, src::Int, distmx::AEdgeMap=ConstEdgeMap(g,1); allpaths=false) =
-  dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)
+    dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)

@@ -20,7 +20,6 @@ EdgeColorMap :
 - color == 0    => unseen
 - color == 1     => examined
 """
-
 struct DepthFirst <: SimpleGraphVisitAlgorithm end
 
 function depth_first_visit_impl!(

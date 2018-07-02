@@ -16,8 +16,6 @@ Requires arguments:
 - flow_algorithm::AbstractFlowAlgorithm  # keyword argument for algorithm
 - routes::Int                            # keyword argument for routes
 """
-
-# EMRF (Extended Multiroute Flow) algorithms
 function emrf(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
@@ -44,7 +42,6 @@ Requires arguments:
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
-
 function auxiliaryPoints(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
@@ -109,7 +106,6 @@ Requires arguments:
 - target::Int                            # the target vertex
 - capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
-
 function breakingPoints(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex
@@ -146,13 +142,12 @@ since we have to ignore zero values.since we have to ignore zero values.
 Requires argument:
 - capacity_matrix::AbstractMatrix{T}   # edge flow capacities
 """
-
-# Function to get the nonzero min and max function of a Matrix
-# note: this is more efficient than maximum() / minimum() / extrema()
-#       since we have to ignore zero values.
 function minmaxCapacity(
   capacity_matrix::AbstractMatrix{T}    # edge flow capacities
   ) where T<:AbstractFloat
+# Function to get the nonzero min and max function of a Matrix
+# note: this is more efficient than maximum() / minimum() / extrema()
+#       since we have to ignore zero values.
   cmin, cmax = typemax(T), typemin(T)
   for c in capacity_matrix
     if c > zero(T)
@@ -172,13 +167,13 @@ Requires argument:
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
 """
-# Function to get the slope of the restricted flow
 function slope(
   flow_graph::ADiGraph,                   # the input graph
   capacity_matrix::AbstractMatrix{T},  # edge flow capacities
   cut::Vector{Int},                      # cut information for vertices
   restriction::T                         # value of the restriction
   ) where T<:AbstractFloat
+  # Function to get the slope of the restricted flow
   slope = 0
   for e in edges(flow_graph)
       if cut[dst(e)] == 2 > cut[src(e)] &&
@@ -198,8 +193,6 @@ Requires argument:
 2) - points::Vector{Tuple{T, T, Int}}         # vector of points with T<:AbstractFloat
    - k::R<:Real                             # number of routes (slope of the line)
 """
-
-# Compute the (expected) intersection of two lines
 function intersection(
   x1::T,          # x coordinate of point 1
   y1::T,          # y coordinate of point 1
@@ -216,6 +209,7 @@ function intersection(
   y = a1 * x + b1
   return x, y
 end
+
 # Compute the intersection between a set of segment and a line of slope k passing by the origin
 function intersection(
   points::Vector{Tuple{T, T, Int}},  # vector of breaking points

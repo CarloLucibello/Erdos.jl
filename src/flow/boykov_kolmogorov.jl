@@ -22,7 +22,6 @@ capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 
 Author: Júlio Hoffimann Mendes (juliohm@stanford.edu)
 """
-
 function boykov_kolmogorov_impl(
     residual_graph::ADiGraph,               # the input graph
     source,                           # the source vertex
