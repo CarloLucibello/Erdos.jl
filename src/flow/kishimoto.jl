@@ -44,7 +44,6 @@ Requires arguments:
 - flow_algorithm::AbstractFlowAlgorithm, # keyword argument for algorithm
 - routes::Int                            # keyword argument for routes
 """
-
 function kishimoto(
   flow_graph::ADiGraph,                   # the input graph
   source::Int,                           # the source vertex

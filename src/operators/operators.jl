@@ -302,7 +302,6 @@ end
 Equivalent to [`subgraph`](@ref) but preserves vertex and edge properties
 when `g` is a network.
 """
-
 function subnetwork(g::G, vlist::AbstractVector{V}) where {G<:ANetOrDiNet,V<:Integer}
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
@@ -382,12 +381,12 @@ end
 
 
 """
-        g[iter]
+    g[iter]
 
-    Returns the subgraph induced by the vertex or edge iterable `iter`.
-    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
-    for networks.
-    """
+Returns the subgraph induced by the vertex or edge iterable `iter`.
+Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+for networks.
+"""
 getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
 # in julia 0.5 always gets dispatched to this (julia bug)
 subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
@@ -441,10 +440,10 @@ end
 
 size(g::AGraphOrDiGraph) = (nv(g), nv(g))
 
-"""size(g,i) provides 1:nv or 2:nv else 1 """
+"""`size(g,i)` provides 1:nv or 2:nv else 1 """
 size(g::AGraph,dim::Int) = (dim == 1 || dim == 2) ? nv(g) : 1
 
-"""sum(g) provides the number of edges in the graph"""
+"""`sum(g)`` provides the number of edges in the graph"""
 sum(g::AGraphOrDiGraph) = ne(g)
 
 """

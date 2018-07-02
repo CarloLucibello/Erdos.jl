@@ -11,7 +11,6 @@ show(io::IO, e::AEdge) = print(io, "$(src(e))=>$(dst(e))")
 
 A type representing an edge between two vertices of a graph.
 """
-
 struct Edge{T} <: AEdge
     src::T
     dst::T
