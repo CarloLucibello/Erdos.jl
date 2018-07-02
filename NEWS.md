@@ -1,5 +1,4 @@
-## v0.6
-- moved BlossomV to ErdosExtra
+File no longer updated. See GitHub Releases for latest changes. 
 
 ## v0.5  2017.7.10
 - add constructors `EdgeMap(g, e -> f(e))` and `VertexMap(g, v->f(v))`
