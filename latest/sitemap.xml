@@ -1,172 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-    
     <url>
      <loc>/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/graph_types/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/core/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/maps/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/network_types/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/network_interface/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/operators/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/traversals/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/distance/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/shortestpaths/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/linalg/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/persistence/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/datasets/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/deterministicgraphs/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/randomgraphs/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/centrality/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/community/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/flow/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/matching/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/dismantling/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
     <url>
      <loc>/spanningtrees/</loc>
-     <lastmod>2018-05-14</lastmod>
+     <lastmod>2018-07-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
 </urlset>

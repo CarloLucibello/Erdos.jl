@@ -322,12 +322,12 @@
         }, 
         {
             "location": "/matching/", 
-            "text": "Matching\n\n\nAlgorithms for the \noptimal matching problems\n.  \nErdosExtras\n.  Functionalities moved to  \nErdosExtras.jl\n.", 
+            "text": "Matching\n\n\nAlgorithms for the \noptimal matching problems\n. Functionalities moved to  \nErdosExtras.jl\n.", 
             "title": "Matching"
         }, 
         {
             "location": "/matching/#matching", 
-            "text": "Algorithms for the  optimal matching problems .   ErdosExtras .  Functionalities moved to   ErdosExtras.jl .", 
+            "text": "Algorithms for the  optimal matching problems . Functionalities moved to   ErdosExtras.jl .", 
             "title": "Matching"
         }, 
         {
