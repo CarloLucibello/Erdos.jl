@@ -63,7 +63,7 @@ end
 
 eltype(it::EdgeIter) = edgetype(it.g)
 length(it::EdgeIter) = ne(it.g)
-iteratorsize(::Type{EdgeIter}) = HasLength()
+IteratorSize(::Type{EdgeIter}) = HasLength()
 
 
 """

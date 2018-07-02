@@ -6,6 +6,9 @@ A graph and network analysis package for julia.
 module Erdos
 
 using Random
+using SparseArrays
+using LinearAlgebra
+using Arpack
 import GZip # I/O
 import StatsFuns # randgraphs
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
@@ -23,7 +26,7 @@ import Base: write, ==, <, *, ≈, isless, union, intersect,
             reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
             sum, size, sparse, eltype, length, ndims,
             join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!, iteratorsize, values, valtype,
+            sort, push!, pop!, IteratorSize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape,     #iterators
             haskey, Matrix #edgemap

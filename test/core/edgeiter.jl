@@ -31,7 +31,7 @@ add_edge!(ga, 5, 10)
 add_edge!(ga, 10, 3)
 
 eit = edges(ga)
-@test Base.iteratorsize(typeof(eit)) == Base.HasLength()
+@test Base.IteratorSize(typeof(eit)) == Base.HasLength()
 i = 0
 for e in eit
     @test src(e) <= dst(e)

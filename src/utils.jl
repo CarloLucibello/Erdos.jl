@@ -72,7 +72,7 @@ struct Distinct{I, J}
     seen::Dict{J, Int}
 end
 
-iteratorsize(::Type{T}) where {T<:Distinct} = SizeUnknown()
+IteratorSize(::Type{T}) where {T<:Distinct} = SizeUnknown()
 
 eltype(::Type{Distinct{I, J}}) where {I, J} = J
 
@@ -107,13 +107,13 @@ struct Chain{T<:Tuple}
     xss::T
 end
 
-iteratorsize(::Type{Chain{T}}) where {T} = _chain_is(T)
+IteratorSize(::Type{Chain{T}}) where {T} = _chain_is(T)
 
 @generated function _chain_is(t::Type{T}) where T
     for itype in T.types
-        if iteratorsize(itype) == IsInfinite()
+        if IteratorSize(itype) == IsInfinite()
             return :(IsInfinite())
-        elseif iteratorsize(itype) == SizeUnknown()
+        elseif IteratorSize(itype) == SizeUnknown()
             return :(SizeUnknown())
         end
     end
