@@ -18,7 +18,6 @@ function writepajek(f::IO, g::AGraphOrDiGraph)
     return 1
 end
 
-
 """
     readpajek{G}(f::IO, ::Type{G})
 
@@ -31,7 +30,7 @@ function readpajek(f::IO, ::Type{G}) where G
     while startswith(line, "%")
         line =readline(f)
     end
-    n = parse(Int, matchall(r"\d+",line)[1])
+    n = parse(Int, match(r"\d+",line).match)
     for fline in eachline(f)
         line = fline
         (occursin(r"^\*Arcs",line) || occursin(r"^\*Edges",line)) && break
@@ -47,9 +46,9 @@ function readpajek_edges!(g::G, f::IO, line) where G<:AGraph
     while occursin(r"^\*Edges",line) && !eof(f)
         for fline in eachline(f)
             line = fline
-            m = matchall(r"\d+",line)
+            m = collect(eachmatch(r"\d+",line))
             length(m) < 2 && break
-            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            i1, i2 = parse(Int, m[1].match), parse(Int, m[2].match)
             unsafe_add_edge!(g, i1, i2)
         end
     end
@@ -60,18 +59,18 @@ function readpajek_edges!(g::G, f::IO, line) where G<:ADiGraph
     while occursin(r"^\*Arcs",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
-            m = matchall(r"\d+",line)
+            m = collect(eachmatch(r"\d+",line))
             length(m) < 2 && break
-            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            i1, i2 = parse(Int, m[1].match), parse(Int, m[2].match)
             unsafe_add_edge!(g, i1, i2)
         end
     end
     while occursin(r"^\*Edges",line) # add edges in both directions
         for fline in eachline(f)
             line = fline
-            m = matchall(r"\d+",line)
+            m = collect(eachmatch(r"\d+",line))
             length(m) < 2 && break
-            i1, i2 = parse(Int, m[1]), parse(Int, m[2])
+            i1, i2 = parse(Int, m[1].match), parse(Int, m[2].match)
             unsafe_add_edge!(g, i1, i2)
             unsafe_add_edge!(g, i2, i1)
         end

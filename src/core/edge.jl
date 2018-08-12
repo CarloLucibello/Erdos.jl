@@ -26,11 +26,7 @@ end
 
 src(e::Edge) = e.src
 dst(e::Edge) = e.dst
-
-start(e::AEdge) = 1
-done(e::AEdge, i) = i>2
-next(e::AEdge, i) = (getfield(e,i), i+1)
-# indexed_next(e::Edge, i::Int, state) = (getfield(e,i), i+1)
+iterate(e::AEdge, i=0) = (i+=1; i>2 ? nothing : (getfield(e,i), i))   
 reverse(e::Edge) = Edge(dst(e), src(e))
 
 show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)),$(idx(e)))")

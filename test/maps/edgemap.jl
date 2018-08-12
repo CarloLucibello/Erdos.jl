@@ -122,7 +122,7 @@ sp = sparse(emap)
 @test typeof(sp) <: SparseMatrixCSC{Float64}
 
 @test size(m) == size(sp) == (nv(g), nv(g))
-@test countnz(m) == countnz(sp) == 2ne(g)
+@test count(!iszero,m) == count(!iszero,sp) == 2ne(g)
 
 for e in edges(g)
     u, v = src(e), dst(e)
@@ -142,7 +142,7 @@ sp = sparse(emap)
 @test typeof(sp) <: SparseMatrixCSC{Float64}
 
 @test size(m) == size(sp) == (nv(g), nv(g))
-@test countnz(m) == countnz(sp) == ne(g)
+@test count(!iszero,m) == count(!iszero,sp) == ne(g)
 
 for e in edges(g)
     u, v = src(e), dst(e)
@@ -164,7 +164,7 @@ for e in edges(g)
 end
 @test valtype(m) == V
 
-m = EdgeMap(g, e -> vecnorm(rand(2)))
+m = EdgeMap(g, e -> norm(rand(2)))
 @test valtype(m) == Float64
 m = EdgeMap(g, e -> rand(2))
 @test valtype(m) == Vector{Float64}

@@ -12,12 +12,12 @@ reached within `n` iterations, an error will be returned.
 function pagerank(g::ADiGraph, α=0.85, n=100, ϵ = 1.0e-6)
     A = adjacency_matrix(g,:in,Float64)
     S = 1 ./ vec(sum(A,1))
-    S[findall(S .== Inf)]=0.0
+    S[S .== Inf] .= 0.0
     M = A' # need a separate line due to bug #17456 in julia
     M = (Diagonal(S) * M)'
     N = nv(g)
-    x = repmat([1.0/N], Int(N)) # julia 20112
-    p = repmat([1.0/N], Int(N))
+    x = fill(1/N, N)
+    p = fill(1/N, N)
     dangling_weights = p
     is_dangling = findall(S .== 0)
 
@@ -25,9 +25,7 @@ function pagerank(g::ADiGraph, α=0.85, n=100, ϵ = 1.0e-6)
         xlast = x
         x = α * (M * x + sum(x[is_dangling]) * dangling_weights) + (1 - α) * p
         err = sum(abs, x - xlast)
-        if (err < N * ϵ)
-            return x
-        end
+        err < N * ϵ && return x
     end
     error("Pagerank did not converge after $n iterations.")
 end

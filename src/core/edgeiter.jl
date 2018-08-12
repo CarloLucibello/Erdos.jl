@@ -2,6 +2,9 @@ struct EdgeIter{G<:AGraphOrDiGraph}
     g::G
 end
 
+#TODO implement iterate protocolo for real
+iterate(it::EdgeIter{<:AGraphOrDiGraph}, i=start(it)) = done(it, i) ? nothing : next(it, i)
+
 @inline function start(it::EdgeIter{G}) where G<:AGraph
     s = _start(it)
     while !_done(it, s)
@@ -37,10 +40,8 @@ end
     xs_state = 1
     while i <= nv(it.g)
         eit = out_edges(it.g, i)
-        xs_state = start(eit)
-        if !done(eit, xs_state)
-            break
-        end
+        xs_state = Base.start(eit)
+        !Base.done(eit, xs_state) && break
         i += 1
     end
     return i, xs_state
@@ -48,13 +49,11 @@ end
 
 @inline function _next(it::EdgeIter, state)
     i, xs_state = state
-    e, xs_state = next(out_edges(it.g, i), xs_state)
-    while done(out_edges(it.g, i), xs_state)
+    e, xs_state = Base.next(out_edges(it.g, i), xs_state)
+    while Base.done(out_edges(it.g, i), xs_state)
         i += 1
-        if i > nv(it.g)
-            break
-        end
-        xs_state = start(out_edges(it.g, i))
+        i > nv(it.g) && break
+        xs_state = Base.start(out_edges(it.g, i))
     end
     return e, (i, xs_state)
 end

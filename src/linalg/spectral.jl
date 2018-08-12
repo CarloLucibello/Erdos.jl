@@ -29,7 +29,7 @@ function adjacency_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = out_neighbors
     elseif dir == :all
         if is_directed(g)
-            #TODO use chain and check performance
+            #TODO use flatten and check performance
             neighborfn = (h,j)->[collect(in_neighbors(h, j)); collect(out_neighbors(h, j))]
             nz *= 2
         else

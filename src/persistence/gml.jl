@@ -65,7 +65,7 @@ end
 gmlval(::Type{T}, x) where {T} = parse(T, x)
 gmlval(::Type{String}, x) = strip(x, '\"')
 function splitgml(s::AbstractString)
-    i = findfirst(s, ' ')
+    i = findfirst(isequal(' '), s)
     return SubString(s, 1, i-1), SubString(s, i+1, length(s))
 end
 

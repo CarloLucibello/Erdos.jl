@@ -41,7 +41,7 @@ function enumerate_paths(state::AbstractPathState, dest::Vector{V}) where V
     parents = state.parents
 
     num_dest = length(dest)
-    all_paths = Vector{Vector{V}}(num_dest)
+    all_paths = Vector{Vector{V}}(undef, num_dest)
     for i=1:num_dest
         all_paths[i] = Vector{V}()
         index = dest[i]

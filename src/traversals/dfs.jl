@@ -34,8 +34,8 @@ function depth_first_visit_impl!(
         u, udsts, tstate = pop!(stack)
         found_new_vertex = false
 
-        while !done(udsts, tstate) && !found_new_vertex
-            v, tstate = next(udsts, tstate)
+        while !Base.done(udsts, tstate) && !found_new_vertex
+            v, tstate = Base.next(udsts, tstate)
             ucolor = get(vcolormap, u, 0)
             vcolor = get(vcolormap, v, 0)
             v_edge = Edge(G,u,v) # ordering u,v for undirected graphs
@@ -51,7 +51,7 @@ function depth_first_visit_impl!(
 
                 open_vertex!(visitor, v)
                 vdsts = out_neighbors(g, v)
-                push!(stack, (v, vdsts, start(vdsts)))
+                push!(stack, (v, vdsts, Base.start(vdsts)))
             end
         end
 
@@ -75,7 +75,7 @@ function traverse_graph!(
     discover_vertex!(visitor, s) || return
 
     sdsts = out_neighbors(g, s)
-    sstate = start(sdsts)
+    sstate = Base.start(sdsts)
     stack = [(s, sdsts, sstate)]
 
     depth_first_visit_impl!(g, stack, vcolormap, ecolormap, visitor)

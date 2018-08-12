@@ -30,7 +30,7 @@ function a_star_impl!(
                 dist = distmx[e]
 
                 colormap[v] = 1
-                new_path = cat(1, path, Edge{V}(u,v))
+                new_path = cat(path, Edge{V}(u,v),dims=1)
                 path_cost = cost_so_far + dist
                 enqueue!(frontier,
                         (path_cost, new_path, v),

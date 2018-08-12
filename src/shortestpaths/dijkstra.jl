@@ -40,8 +40,8 @@ function dijkstra_shortest_paths(
     visited = zeros(Bool, nvg)
     pathcounts = zeros(Int, nvg)
     H = Vector{DijkstraHeapEntry{T}}()  # this should be Vector{T}() in 0.4, I think.
-    dists[srcs] = zero(T)
-    pathcounts[srcs] = 1
+    dists[srcs] .= 0
+    pathcounts[srcs] .= 1
 
     sizehint!(H, nvg)
 
@@ -83,9 +83,9 @@ function dijkstra_shortest_paths(
         end
     end
 
-    dists[srcs] = zero(T)
-    pathcounts[srcs] = 1
-    parents[srcs] = 0
+    dists[srcs] .= 0
+    pathcounts[srcs] .= 1
+    parents[srcs] .= 0
     for src in srcs
         preds[src] = []
     end

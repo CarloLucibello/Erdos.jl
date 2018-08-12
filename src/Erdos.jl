@@ -14,10 +14,10 @@ import StatsFuns # randgraphs
 import Printf
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
 import Clustering: kmeans # community detection
-# package Iterators.jl methods are now in utils.jl due to name
-# conflict in julia 0.6 with Base.Iterators
-# using Iterators: distinct, chain # all_neighbors
-# using Iterators: nth # EdgeIter
+using IterTools: distinct # all_neighbors
+using IterTools: nth # EdgeIter
+using Base.Iterators: flatten 
+
 
 import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
@@ -30,7 +30,7 @@ import LinearAlgebra: issymmetric, A_mul_B!
 import Base: write, ==, <, *, ≈, isless, union, intersect,
             reverse, reverse!, getindex, setindex!, show, print, copy, in,
             sum, size, eltype, length, ndims,
-            join, start, next, done, eltype, get,
+            join, iterate, eltype, get,
             sort, push!, pop!, IteratorSize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape,     #iterators
