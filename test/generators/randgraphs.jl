@@ -17,6 +17,7 @@ r2 = DG(5,10)
 
 er = erdos_renyi(10, 0.5, G)
 @test nv(er) == 10
+@test ne(er) < 40
 @test is_directed(er) == false
 
 er = erdos_renyi(10, 0.5, DG)
