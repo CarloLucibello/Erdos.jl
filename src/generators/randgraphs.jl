@@ -21,8 +21,8 @@ function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         # init dsfmt generator without altering GLOBAL_RNG
         Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
     end
-    ne = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
-    return erdos_renyi(n, m, G; seed=seed)
+    nedg = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
+    return erdos_renyi(n, nedg, G; seed=seed)
 end
 
 function erdos_renyi(n::Int, m::Int, ::Type{G} = Graph;
