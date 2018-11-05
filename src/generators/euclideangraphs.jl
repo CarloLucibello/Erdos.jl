@@ -28,8 +28,8 @@ function euclidean_graph(points::Matrix, ::Type{G} = Graph;
             if bc == :open
                 Δ = points[:,i] .- points[:,j]
             elseif bc == :periodic
-                Δ = abs.(points[:,i] . - points[:,j])
-                Δ = min.(L - Δ, Δ)
+                Δ = abs.(points[:,i] .- points[:,j])
+                Δ = min.(L .- Δ, Δ)
             end
             dist = norm(Δ, p)
             if dist < cutoff

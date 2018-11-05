@@ -51,7 +51,9 @@ function depth_first_visit_impl!(
 
                 open_vertex!(visitor, v)
                 vdsts = out_neighbors(g, v)
-                push!(stack, (v, vdsts, Base.start(vdsts)))
+                # if !isempty(vdsts)
+                    push!(stack, (v, vdsts, Base.start(vdsts)))
+                # end
             end
         end
 
