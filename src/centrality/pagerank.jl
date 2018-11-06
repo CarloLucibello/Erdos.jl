@@ -11,7 +11,7 @@ reached within `n` iterations, an error will be returned.
 """
 function pagerank(g::ADiGraph, α=0.85, n=100, ϵ = 1.0e-6)
     A = adjacency_matrix(g,:in,Float64)
-    S = 1 ./ vec(sum(A,1))
+    S = 1 ./ vec(sum(A, dims=1))
     S[S .== Inf] .= 0.0
     M = A' # need a separate line due to bug #17456 in julia
     M = (Diagonal(S) * M)'

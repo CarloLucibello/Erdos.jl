@@ -43,7 +43,7 @@ function a_star_impl!(
 end
 
 """
-    a_star(g, s, t, distmx=ConstEdgeMap(g,1), heuristic = n->0)
+    a_star(g, s, t, distmx=weights(g), heuristic = n->0)
 
 Computes the shortest path between vertices `s` and `t` using the
 [A* search algorithm](http://en.wikipedia.org/wiki/A%2A_search_algorithm). An
@@ -54,7 +54,7 @@ function a_star(
         g::AGraphOrDiGraph,  # the graph
         s::Integer,                       # the start vertex
         t::Integer,                       # the end vertex
-        distmx::AEdgeMap=ConstEdgeMap(g,1),
+        distmx::AEdgeMap=weights(g),
         heuristic::Function = n -> 0
     )
             # heuristic (under)estimating distance to target

@@ -15,8 +15,8 @@ mutable struct DijkstraState{T}<: AbstractDijkstraState
 end
 
 """
-    dijkstra_shortest_paths(g, s, distmx=ConstEdgeMap(g,1); allpaths=false)
-    dijkstra_shortest_paths(g, sources, distmx=ConstEdgeMap(g,1); allpaths=false)
+    dijkstra_shortest_paths(g, s, distmx=weights(g); allpaths=false)
+    dijkstra_shortest_paths(g, sources, distmx=weights(g); allpaths=false)
 
 Performs [Dijkstra's algorithm](http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 on a graph, computing shortest distances between a source vertex `s` (or a vector
@@ -29,7 +29,7 @@ predecessors of a given vertex.
 function dijkstra_shortest_paths(
         g::AGraphOrDiGraph,
         srcs::Vector{Int},
-        distmx::AEdgeMap=ConstEdgeMap(g,1);
+        distmx::AEdgeMap=weights(g);
         allpaths=false
     )
     T = valtype(distmx)
@@ -93,5 +93,5 @@ function dijkstra_shortest_paths(
     return DijkstraState{T}(parents, dists, preds, pathcounts)
 end
 
-dijkstra_shortest_paths(g::AGraphOrDiGraph, src::Int, distmx::AEdgeMap=ConstEdgeMap(g,1); allpaths=false) =
+dijkstra_shortest_paths(g::AGraphOrDiGraph, src::Int, distmx::AEdgeMap=weights(g); allpaths=false) =
     dijkstra_shortest_paths(g, [src;], distmx; allpaths=allpaths)

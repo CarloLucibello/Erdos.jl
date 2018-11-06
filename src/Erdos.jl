@@ -8,7 +8,7 @@ module Erdos
 using Random
 using SparseArrays
 using LinearAlgebra
-# using Arpack
+using Arpack
 import GZip # I/O
 import StatsFuns # randgraphs
 import Printf
@@ -84,10 +84,12 @@ discover_vertex!, open_vertex!, close_vertex!,
 examine_neighbor!, visited_vertices, traverse_graph!, traverse_graph_withlog,
 
 # bfs
-BreadthFirst, gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
+gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
+has_path,
 
 # dfs
-DepthFirst, has_cycles, topological_sort_by_dfs, dfs_tree, is_tree,
+has_cycles, topological_sort_by_dfs, dfs_tree, 
+#is_tree, #TODO add back
 
 # random
 randomwalk, self_avoiding_randomwalk, nonbacktracking_randomwalk,
@@ -98,7 +100,7 @@ is_connected, is_strongly_connected, is_weakly_connected, period,
 condensation, attracting_components, neighborhood, is_graphical, density,
 
 # maximum_adjacency_visit
-MaximumAdjacency, AbstractMASVisitor, mincut, maximum_adjacency_visit,
+MaximumAdjacency, maximum_adjacency_visit,
 
 # a-star, dijkstra, bellman-ford, floyd-warshall
 a_star, dijkstra_shortest_paths,
@@ -113,8 +115,8 @@ cores, kcore,
 
 # spectral
 adjacency_matrix,laplacian_matrix,
-CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix,
-nonbacktrack_embedding, Nonbacktracking,
+CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix, 
+nonbacktrack_embedding,
 
 # astar
 a_star,
@@ -158,7 +160,7 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 # maps
 AVertexMap, ConstVertexMap, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
-edgemap2adjlist,
+edgemap2adjlist, weights, 
 
 # properties
 PropertyStore,
@@ -183,7 +185,7 @@ include("maps/vertexmap.jl")
     include("maps/edgemap.jl")
     include("maps/property_store.jl")
 include("operators/operators.jl")
-include("traversals/graphvisit.jl")
+include("traversals/bipartition.jl")
     include("traversals/bfs.jl")
     include("traversals/dfs.jl")
     include("traversals/maxadjvisit.jl")

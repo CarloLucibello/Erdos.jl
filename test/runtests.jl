@@ -3,6 +3,7 @@ using Test
 using Random
 using SparseArrays
 using LinearAlgebra
+using Arpack
 using Statistics
 
 testdir = dirname(@__FILE__)
@@ -21,7 +22,7 @@ tests = [
     "operators/operators",
     "distances/distance",
     "distances/edit_distance",
-    # "linalg/spectral",
+    "linalg/spectral",
     "persistence/persistence",
     "persistence/datasets",
     "persistence/gt",

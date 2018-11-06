@@ -11,7 +11,7 @@ end
 
 g = G()
 cc = connected_components(g)
-@test cc == Vector{Int}[Int[]]
+@test cc == Vector{Int}[]
 
 g = G(1)
 cc = connected_components(g)
@@ -23,7 +23,7 @@ cc = connected_components(g)
 
 g = DG()
 cc = strongly_connected_components(g)
-@test cc == Vector{Int}[Int[]]
+@test cc == Vector{Int}[]
 
 g = DG(1)
 cc = strongly_connected_components(g)

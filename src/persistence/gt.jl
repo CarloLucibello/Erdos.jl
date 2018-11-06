@@ -174,7 +174,6 @@ end
 
 
 const Num = Union{Bool,Int16,Int32,Int64,Float64}
-const VecNum = Union{Vector{Bool}, Vector{Int16}, Vector{Int32}, Vector{Int64}, Vector{Float64}}
 
 const gtpropmap = DataType[   Bool,                   #0x00
                               Int16,                  #0x01
@@ -192,8 +191,10 @@ const gtpropmap = DataType[   Bool,                   #0x00
                               Vector{String}          #0x0d
                         ]
 
-readgt_prop(io, ::Type{T}, num) where {T<:Num} = read(io, T, num)
-readgt_prop(io, ::Type{T}, num) where {T<:VecNum} = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
+readgt_prop(io, ::Type{T}, num) where {T<:Num} = read!(io, Vector{T}(undef, num))
+function readgt_prop(io, ::Type{Vector{T}}, num) where {T <: Num}
+    [(l = read(io, UInt64); read!(io, Vector{T}(undef, l))) for _=1:num]
+end
 readgt_prop(io, ::Type{String}, num) = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
 
 writegt_prop(io, x::T) where {T<:Num} = write(io, x)
