@@ -240,7 +240,7 @@ function _condensation(g::T, scc::Vector{Vector{Int}}) where T<:ADiGraph
     @inbounds for e in edges(g)
         s, d = component[src(e)], component[dst(e)]
         if (s != d)
-            add_edge!(h,s,d)
+            add_edge!(h, s, d)
         end
     end
     return h

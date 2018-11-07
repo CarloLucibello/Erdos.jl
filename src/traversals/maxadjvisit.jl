@@ -93,7 +93,7 @@ function maximum_adjacency_visit(g::AGraphOrDiGraph,
     log::Bool=false,
     io::IO=stdout) where T <: Real
 
-    U = eltype(g)
+    U = vertextype(g)
     pq = PriorityQueue{U,T}(Base.Order.Reverse)
     vertices_order = Vector{U}()
     has_key = ones(Bool, nv(g))

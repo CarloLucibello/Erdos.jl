@@ -18,6 +18,6 @@ function core_periphery_deg(g::AGraph)
         end
     end
     c = 2 .+ zeros(Int, nv(g))
-    c[p[1:kbest]] = 1
+    c[p[1:kbest]] .= 1
     c
 end

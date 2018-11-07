@@ -104,7 +104,7 @@ add_edge!(g5,1,2); add_edge!(g5,2,3); add_edge!(g5,1,3); add_edge!(g5,3,4)
 @test_throws ErrorException sum(p,3)
 
 @test sparse(p) == adjacency_matrix(p)
-@test eltype(p) == Float64
+@test eltype(p) == vertextype(p)
 @test length(p) == 100
 @test ndims(p) == 2
 @test issymmetric(p)

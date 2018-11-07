@@ -18,8 +18,8 @@ function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     seed > 0 && seed_dsfmt(seed)
-    ne = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
-    return erdos_renyi(n, m, G; seed=seed)
+    nedg = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
+    return erdos_renyi(n, nedg, G; seed=seed)
 end
 
 function erdos_renyi(n::Int, m::Int, ::Type{G} = Graph;

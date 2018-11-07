@@ -114,15 +114,20 @@ end
 """
     difference(g, h)
 
-Produces a graph with edges in graph `g` that are not in graph `h`.
+Produces a graph with all the edges in graph `g` that are not in graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function difference(g::T, h::T) where T<:AGraphOrDiGraph
+function difference(g::G, h::T) where {T<:AGraphOrDiGraph,
+                                       G<:AGraphOrDiGraph}
+    
+    @assert (is_directed(g) && is_directed(h)) || 
+            (!is_directed(g) && !is_directed(h)) 
+
     gnv = nv(g)
     hnv = nv(h)
 
-    r = T(gnv)
+    r = G(gnv)
     for e in edges(g)
         !has_edge(h, e) && add_edge!(r,e)
     end
@@ -454,7 +459,7 @@ Equivalent to [`adjacency_matrix`](@ref).
 sparse(g::AGraphOrDiGraph) = adjacency_matrix(g)
 
 #arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
-eltype(g::AGraphOrDiGraph) = Float64
+eltype(g::AGraphOrDiGraph) = vertextype(g)
 length(g::AGraphOrDiGraph) = nv(g)*nv(g)
 ndims(g::AGraphOrDiGraph) = 2
 issymmetric(g::AGraphOrDiGraph) = !is_directed(g)

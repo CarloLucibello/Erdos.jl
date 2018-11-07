@@ -198,7 +198,8 @@ end
 readgt_prop(io, ::Type{String}, num) = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
 
 writegt_prop(io, x::T) where {T<:Num} = write(io, x)
-writegt_prop(io, x::T) where {T<:VecNum} = (write(io, length(x)); write(io, x))
+writegt_prop(io, x::Vector{T}) where {T<:Num} = 
+    (write(io, length(x)); write(io, x))
 writegt_prop(io, x::String) = (write(io, sizeof(x)); write(io, x))
 
 function readgt_adj!(io::IO, g::ADiGraph, ::Type{T}) where T

@@ -47,7 +47,11 @@ function nonbacktracking_randomwalk(g::AGraph, s::Integer, niter::Integer)
     while i <= niter
         push!(visited, currs)
         i += 1
-        nbrs = out_neighbors(g, currs)
+        # Use collect to work with generic iterable
+        # becouse we need indexing (alternative is IterTools.nth)
+        # e.g. Network returns generators
+        # TODO: do something more efficient
+        nbrs = out_neighbors(g, currs) |> collect         
         length(nbrs) == 1 && break
         idnext = rand(1:(length(nbrs) - 1))
         next = nbrs[idnext]
@@ -72,7 +76,7 @@ function nonbacktracking_randomwalk(g::ADiGraph, s::Integer, niter::Integer)
     while i <= niter
         push!(visited, currs)
         i += 1
-        nbrs = out_neighbors(g, currs)
+        nbrs = out_neighbors(g, currs) |> collect
         length(nbrs) == 0 && break
         next = myrand(nbrs)
         if next == prev

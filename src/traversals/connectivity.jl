@@ -357,8 +357,10 @@ julia> foreach(println, edges(condensation(g)))
 Edge 2 => 1
 ```
 """
-function condensation(g::ADiGraph, scc::Vector{Vector{T}}) where T <: Integer
-    h = DiGraph{T}(length(scc))
+function condensation(g::G, scc::Vector{Vector{T}}) where {T <: Integer,
+                                                           G <: ADiGraph}
+
+    h = G(length(scc))
 
     component = Vector{T}(undef, nv(g))
 
@@ -407,7 +409,7 @@ function attracting_components(g::ADiGraph)
     attracting = Vector{T}()
 
     for v in vertices(cond)
-        if outdegree(cond, v) == 0
+        if out_degree(cond, v) == 0
             push!(attracting, v)
         end
     end
