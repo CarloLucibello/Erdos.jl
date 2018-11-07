@@ -23,8 +23,6 @@ wedges = [
     (6, 7, 1.),
     (7, 8, 3.) ]
 
-print("here a")
-
 m = length(wedges)
 eweights = spzeros(nv(g),nv(g))
 
@@ -38,13 +36,12 @@ end
 @test ne(g) == m
 
 bestcut, cut, parity  = minimum_cut(g, EdgeMap(g, eweights))
-print("here 1")
+
 @test length(parity) == 8
 @test parity == [2, 2, 1, 1, 2, 2, 1, 1]
 @test bestcut == 4.0
 
 bestcut, cut, parity = minimum_cut(g)
-print("here 2")
 @test length(parity) == 8
 @test parity == [2, 1, 1, 1, 1, 1, 1, 1]
 @test bestcut == 2.0

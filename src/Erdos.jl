@@ -24,7 +24,7 @@ import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         enqueue!, compare, top
 
 import SparseArrays: sparse, blockdiag
-import LinearAlgebra: issymmetric, A_mul_B!
+import LinearAlgebra: issymmetric
 
 
 import Base: write, ==, <, *, ≈, isless, union, intersect,

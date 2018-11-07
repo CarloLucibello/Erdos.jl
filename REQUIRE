@@ -6,3 +6,10 @@ Clustering
 DataStructures 0.9.0
 Arpack
 IterTools
+## Standard Library
+# Dates 
+# LinearAlgebra
+# Random
+# SparseArrays
+# Printf
+# Iterators

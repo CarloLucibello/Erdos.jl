@@ -1,11 +1,12 @@
 language: julia
-sudo: false
+
 os:
   - linux
   - osx
 
 julia:
   - 0.7
+  - 1.0
   - nightly
 
 env:

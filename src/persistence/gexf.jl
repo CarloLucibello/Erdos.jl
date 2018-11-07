@@ -211,7 +211,7 @@ function writenetgexf(f::IO, g::ANetOrDiNet)
     xroot["xsi:schemaLocation"]="http://www.gexf.net/1.3/gexf.xsd"
 
     xmeta = addelement!(xroot, "meta")
-    xmeta["lastmodifieddate"] = string(Base.Dates.today())
+    xmeta["lastmodifieddate"] = string(Dates.today())
     xg = addelement!(xroot, "graph")
     xg["defaultedgetype"] = is_directed(g) ? "directed" : "undirected"
     xg["mode"] = "static"
