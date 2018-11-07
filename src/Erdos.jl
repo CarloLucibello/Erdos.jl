@@ -79,7 +79,6 @@ subgraph, egonet, complete, complete!,
 subnetwork, contract!,
 
 # graph visit
-SimpleGraphVisitor, TrivialGraphVisitor, LogGraphVisitor,
 discover_vertex!, open_vertex!, close_vertex!,
 examine_neighbor!, visited_vertices, traverse_graph!, traverse_graph_withlog,
 
