@@ -8,7 +8,7 @@ module Erdos
 using Random
 using SparseArrays
 using LinearAlgebra
-using Arpack
+# using Arpack
 import GZip # I/O
 import StatsFuns # randgraphs
 using EzXML # I/O  graphml, gexf  #TODO import instead of using

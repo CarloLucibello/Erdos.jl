@@ -165,6 +165,10 @@ myrand(itr) = nth(itr, _myrand(length(itr)))
 
 _myrand(n::T) where {T<:Integer} = ceil(T, rand() * n)
 
+# to seed the R generator called by randbinomial  
+seed_dsfmt(seed) =
+    Random.DSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
+
 randbinomial(m::Integer,p::AbstractFloat) =
     convert(Int, StatsFuns.RFunctions.binomrand(m, p))
 

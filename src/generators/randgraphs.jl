@@ -17,12 +17,9 @@ edges.
 function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
-    if seed >= 0
-        # init dsfmt generator without altering GLOBAL_RNG
-        Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
-    end
-    nedg = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
-    return erdos_renyi(n, nedg, G; seed=seed)
+    seed > 0 && seed_dsfmt(seed)
+    ne = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
+    return erdos_renyi(n, m, G; seed=seed)
 end
 
 function erdos_renyi(n::Int, m::Int, ::Type{G} = Graph;
@@ -508,7 +505,7 @@ function stochastic_block_model(c::Matrix{T}, n::Vector{Int},
     @assert size(c,1) == length(n)
     @assert size(c,2) == length(n)
     # init dsfmt generator without altering GLOBAL_RNG
-    seed > 0 && Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+1)
+    seed > 0 && seed_dsfmt(seed)
     rng =  getRNG(seed)
 
     N = sum(n)
