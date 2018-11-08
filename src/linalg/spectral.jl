@@ -29,7 +29,7 @@ function adjacency_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
         neighborfn = out_neighbors
     elseif dir == :all
         if is_directed(g)
-            #TODO use chain and check performance
+            #TODO use flatten and check performance
             neighborfn = (h,j)->[collect(in_neighbors(h, j)); collect(out_neighbors(h, j))]
             nz *= 2
         else
@@ -71,7 +71,7 @@ for a graph `g`, indexed by `[u, v]` vertices. `dir` has to be `:in, :out` or `:
 """
 function laplacian_matrix(g::AGraphOrDiGraph, dir::Symbol=:out, T::DataType=Int)
     A = adjacency_matrix(g, dir, T)
-    D = spdiagm(sum(A,2)[:])
+    D = convert(SparseMatrixCSC{T}, Diagonal(sparse(sum(A, dims=2)[:])))
     return D - A
 end
 
@@ -95,7 +95,7 @@ function incidence_matrix(g::AGraphOrDiGraph, T::DataType=Int; oriented::Bool = 
 
     # every col has the same 2 entries
     colpt = collect(1:2:(nz + 1))
-    nzval = repmat([(isdir || oriented) ? -one(T) : one(T), one(T)], n_e)
+    nzval = repeat([(isdir || oriented) ? -one(T) : one(T), one(T)], n_e)
 
     # iterate over edges for row indices
     rowval = zeros(Int, nz)
@@ -130,8 +130,8 @@ function spectral_distance(G₁::AGraph, G₂::AGraph, k::Integer)
   A₁ = adjacency_matrix(G₁)
   A₂ = adjacency_matrix(G₂)
 
-  λ₁ = k < nv(G₁)-1 ? eigs(A₁, nev=k, which=:LR)[1] : eigvals(full(A₁))[end:-1:end-(k-1)]
-  λ₂ = k < nv(G₂)-1 ? eigs(A₂, nev=k, which=:LR)[1] : eigvals(full(A₂))[end:-1:end-(k-1)]
+  λ₁ = k < nv(G₁)-1 ? Arpack.eigs(A₁, nev=k, which=:LR)[1] : eigvals(Matrix(A₁))[end:-1:end-(k-1)]
+  λ₂ = k < nv(G₂)-1 ? Arpack.eigs(A₂, nev=k, which=:LR)[1] : eigvals(Matrix(A₂))[end:-1:end-(k-1)]
 
   sum(abs, λ₁ - λ₂)
 end

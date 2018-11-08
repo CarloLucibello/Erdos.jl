@@ -134,15 +134,15 @@ rr = random_regular_graph(6, 3, G, seed=1)
 @test ne(rr) == 9
 @test is_directed(rr) == false
 
-rr = random_regular_graph(1000, 50, G)
-@test nv(rr) == 1000
-@test ne(rr) == 25000
+rr = random_regular_graph(100, 5, G)
+@test nv(rr) == 100
+@test ne(rr) == 250
 @test is_directed(rr) == false
 for v in vertices(rr)
-    @test degree(rr, v) == 50
+    @test degree(rr, v) == 5
 end
 
-rr = random_configuration_model(10, repmat([2,4] ,5), G, seed=3)
+rr = random_configuration_model(10, repeat([2,4] ,5), G, seed=3)
 @test nv(rr) == 10
 @test ne(rr) == 15
 @test is_directed(rr) == false
@@ -155,8 +155,8 @@ end
 @test num4 == 5
 @test num2 == 5
 
-rr = random_configuration_model(1000, zeros(Int,1000), G)
-@test nv(rr) == 1000
+rr = random_configuration_model(100, zeros(Int,100), G)
+@test nv(rr) == 100
 @test ne(rr) == 0
 @test is_directed(rr) == false
 
@@ -165,15 +165,15 @@ rr = random_configuration_model(3, [2,2,2], G, check_graphical=true)
 @test ne(rr) == 3
 @test is_directed(rr) == false
 
-rd = random_regular_digraph(1000, 4, DG)
-@test nv(rd) == 1000
-@test ne(rd) == 4000
+rd = random_regular_digraph(100, 4, DG)
+@test nv(rd) == 100
+@test ne(rd) == 400
 @test is_directed(rd)
 @test std(out_degree(rd)) == 0
 
-rd = random_regular_digraph(1000, 4, DG, dir=:in)
-@test nv(rd) == 1000
-@test ne(rd) == 4000
+rd = random_regular_digraph(100, 4, DG, dir=:in)
+@test nv(rd) == 100
+@test ne(rd) == 400
 @test is_directed(rd)
 @test std(in_degree(rd)) == 0
 

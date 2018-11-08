@@ -3,7 +3,7 @@
 #     issparse(distmx)? (nnz(distmx) > 0) : !isempty(distmx)
 
 """
-    eccentricity(g, v, distmx=ConstEdgeMap(g,1))
+    eccentricity(g, v, distmx=weights(g))
 
 Calculates the eccentricity[ies] of a vertex `v`,
 An optional matrix of edge distances may be supplied.
@@ -14,7 +14,7 @@ and all other vertices in the graph.
 function eccentricity(
     g::AGraphOrDiGraph,
     v::Int,
-    distmx::AEdgeMap=ConstEdgeMap(g,1)
+    distmx::AEdgeMap=weights(g)
 )
     e = maximum(dijkstra_shortest_paths(g,v,distmx).dists)
     e == typemax(valtype(distmx)) && error("Infinite path length detected")
@@ -24,8 +24,8 @@ end
 
 """
 
-    eccentricities(g, distmx=ConstEdgeMap(g,1))
-    eccentricities(g, vs, distmx=ConstEdgeMap(g,1))
+    eccentricities(g, distmx=weights(g))
+    eccentricities(g, vs, distmx=weights(g))
 
 Returns `[eccentricity(g,v,distmx) for v in vs]`. When `vs` it is not supplied,
 considers all node in the graph.
@@ -38,41 +38,41 @@ in some eccentricity related measures ([`periphery`](@ref), [`center`](@ref)).
 function eccentricities(
     g::AGraphOrDiGraph,
     vs::AbstractVector,
-    distmx::AEdgeMap=ConstEdgeMap(g,1)
+    distmx::AEdgeMap=weights(g)
 )
     [eccentricity(g,v,distmx) for v in vs]
 end
 
 eccentricities(
     g::AGraphOrDiGraph,
-    distmx::AEdgeMap=ConstEdgeMap(g,1)
+    distmx::AEdgeMap=weights(g)
 ) = eccentricities(g, 1:nv(g), distmx)
 
 """
-    diameter(g, distmx=ConstEdgeMap(g,1))
+    diameter(g, distmx=weights(g))
 
 Returns the maximum distance between any two vertices in `g`.
 Distances  between two adjacent nodes are given by `distmx`.
 
 See also [`eccentricities`](@ref), [`radius`](@ref).
 """
-diameter(g::AGraphOrDiGraph, distmx::AEdgeMap = ConstEdgeMap(g,1)) =
+diameter(g::AGraphOrDiGraph, distmx::AEdgeMap = weights(g)) =
     maximum(eccentricities(g, distmx))
 
 
 """
-    radius(g, distmx=ConstEdgeMap(g,1))
+    radius(g, distmx=weights(g))
 
 Returns the minimum distance between any two vertices in `g`.
 Distances  between two adjacent nodes are given by `distmx`.
 
 See [`eccentricities`](@ref), [`diameter`](@ref).
 """
-radius(g::AGraphOrDiGraph, distmx=ConstEdgeMap(g,1)) =
+radius(g::AGraphOrDiGraph, distmx=weights(g)) =
     minimum(eccentricities(g, distmx))
 
 """
-    periphery(g, distmx=ConstEdgeMap(g,1))
+    periphery(g, distmx=weights(g))
     periphery(all_ecc)
 
 Returns the set of all vertices whose eccentricity is equal to the graph's
@@ -88,11 +88,11 @@ function periphery(all_e::Vector)
     return filter((x)->all_e[x] == diam, 1:length(all_e))
 end
 
-periphery(g::AGraphOrDiGraph, distmx::AEdgeMap=ConstEdgeMap(g,1)) =
+periphery(g::AGraphOrDiGraph, distmx::AEdgeMap=weights(g)) =
     periphery(eccentricities(g, distmx))
 
 """
-    center(g, distmx=ConstEdgeMap(g,1))
+    center(g, distmx=weights(g))
     center(all_ecc)
 
 Returns the set of all vertices whose eccentricity is equal to the graph's
@@ -108,5 +108,5 @@ function center(all_e::Vector)
     return filter((x)->all_e[x] == rad, 1:length(all_e))
 end
 
-center(g::AGraphOrDiGraph, distmx::AEdgeMap = ConstEdgeMap(g,1)) =
+center(g::AGraphOrDiGraph, distmx::AEdgeMap = weights(g)) =
     center(eccentricities(g, distmx))

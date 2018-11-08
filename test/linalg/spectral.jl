@@ -21,18 +21,6 @@ for i=1:10
 end
 @test !issymmetric(B)
 
-v = ones(Float64, ne(g10))
-z = zeros(Float64, nv(g10))
-n10 = Nonbacktracking(g10)
-@test size(n10) == (2*ne(g10), 2*ne(g10))
-@test eltype(n10) == Float64
-@test !issymmetric(n10)
-
-Erdos.contraction!(z, n10, v)
-
-zprime = Erdos.contraction(n10, v)
-@test z == zprime
-@test z == 9*ones(Float64, nv(g10))
 
 @test adjacency_matrix(g3) ==
     adjacency_matrix(g3, :out) ==
@@ -59,7 +47,7 @@ for dir in [:in, :out, :all]
     lmat = laplacian_matrix(g5, dir, Float64)
     @test isa(amat, SparseMatrixCSC{Float64, Int64})
     @test isa(lmat, SparseMatrixCSC{Float64, Int64})
-    evals = eigvals(full(lmat))
+    evals = eigvals(Matrix(lmat))
     @test all(evals .>= -1e-15) # positive semidefinite
     @test isapprox(minimum(evals),0, atol=1e-13)
 end
@@ -83,47 +71,11 @@ i3o = incidence_matrix(g3; oriented=true)
 @test i3o == incidence_matrix(g4)
 @test laplacian_matrix(g3) == i3o * i3o'
 
-# TESTS FOR Nonbacktracking operator.
-
 n = 10; k = 5
 pg = CompleteGraph(n, G)
 # ϕ1 = nonbacktrack_embedding(pg, k)'
-
-nbt = Nonbacktracking(pg)
 B, emap = nonbacktracking_matrix(pg)
-Bs = sparse(nbt)
-@test sparse(B) == Bs
-@test isapprox(eigs(nbt, nev=1)[1], eigs(B, nev=1)[1], atol=1e-5)
-
-
-# check that matvec works
-x = ones(Float64, nbt.m)
-y = nbt * x
-z = B * x
-@test norm(y-z) < 1e-8
-
-#check that matmat works and full(nbt) == B
-@test norm(nbt*eye(nbt.m) - B) < 1e-8
-
-#check that matmat works and full(nbt) == B
-@test norm(nbt*eye(nbt.m) - B) < 1e-8
-
-#check that we can use the implicit matvec in nonbacktrack_embedding
-@test size(y) == size(x)
-
-B₁ = Nonbacktracking(g10)
-
-# just so that we can assert equality of matrices
-
-if !isdefined(:test_full)
-    test_full(nbt::Nonbacktracking) = full(sparse(nbt))
-end
-
-@test test_full(B₁) == full(B)
-@test  B₁ * ones(size(B₁)[2]) == B*ones(size(B)[2])
-@test size(B₁) == size(B)
-# @test eigs(B₁)[1] ≈ eigs(B)[1] atol=1e-7 #TODO unstable
-# END tests for Nonbacktracking
+## TODO add test
 
 # spectral distance checks
 for n=3:10

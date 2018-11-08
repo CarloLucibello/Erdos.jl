@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:scc_ok)
+if !@isdefined(scc_ok)
     function scc_ok(g)
       """Check that all SCC really are strongly connected"""
       scc = strongly_connected_components(g)
@@ -11,7 +11,7 @@ end
 
 g = G()
 cc = connected_components(g)
-@test cc == Vector{Int}[Int[]]
+@test cc == Vector{Int}[]
 
 g = G(1)
 cc = connected_components(g)
@@ -23,7 +23,7 @@ cc = connected_components(g)
 
 g = DG()
 cc = strongly_connected_components(g)
-@test cc == Vector{Int}[Int[]]
+@test cc == Vector{Int}[]
 
 g = DG(1)
 cc = strongly_connected_components(g)
@@ -82,11 +82,12 @@ add_edge!(h,5,6); add_edge!(h,6,7); add_edge!(h,7,6);
 add_edge!(h,8,4); add_edge!(h,8,7)
 
 @test is_weakly_connected(h)
-@test_throws MethodError is_connected(h)
+#TODO
+# @test_throws MethodError is_connected(h)
 
 scc = strongly_connected_components(h)
 wcc = weakly_connected_components(h)
-@test_throws MethodError connected_components(h)
+# @test_throws MethodError connected_components(h)
 
 @test length(scc) == 3 && sort(scc[3]) == [1,2,5]
 @test length(wcc) == 1 && length(wcc[1]) == nv(h)
@@ -130,43 +131,39 @@ scc = strongly_connected_components(h)
 
 # figure 1 example
 fig1 = spzeros(5,5)
-fig1[[3,4,9,10,11,13,18,19,22,24]] = [.5,.4,.1,1.,1.,.2,.3,.2,1.,.3]
+fig1[[3,4,9,10,11,13,18,19,22,24]] .= [.5,.4,.1,1.,1.,.2,.3,.2,1.,.3]
 fig1 = DG(fig1)
 scc_fig1 = Vector[[2,5],[1,3,4]]
 
 # figure 2 example
 fig2 = spzeros(5,5)
-fig2[[3, 10, 11, 13, 14, 17, 18, 19, 22]] = 1
+fig2[[3, 10, 11, 13, 14, 17, 18, 19, 22]] .= 1
 fig2 = DG(fig2)
 
 # figure 3 example
 fig3 = spzeros(8,8)
-fig3[[1,7,9,13,14,15,18,20,23,27,28,31,33,34,37,45,46,49,57,63,64]] = 1
+fig3[[1,7,9,13,14,15,18,20,23,27,28,31,33,34,37,45,46,49,57,63,64]] .= 1
 fig3 = DG(fig3)
 scc_fig3 = Vector[[3,4],[2,5,6],[8],[1,7]]
 fig3_cond = DG(4);
 add_edge!(fig3_cond,4,3); add_edge!(fig3_cond,2,1)
 add_edge!(fig3_cond,4,1); add_edge!(fig3_cond,4,2)
 
-
 # construct a n-number edge ring graph (period = n)
 n = 10
-n_ring_m = spdiagm(ones(n-1),1,n,n); n_ring_m[end,1] = 1
+n_ring_m = spdiagm(1=>ones(n-1),-n+1=>[1]) 
 n_ring = DG(n_ring_m)
-
 n_ring_shortcut = copy(n_ring); add_edge!(n_ring_shortcut,1,4)
-
+@test period(n_ring) == n
+@test period(n_ring_shortcut) == 2
 
 # figure 8 example
 fig8 = spzeros(6,6)
-fig8[[2,10,13,21,24,27,35]] = 1
+fig8[[2,10,13,21,24,27,35]] .= 1
 fig8 = DG(fig8)
 
 @test Set(strongly_connected_components(fig1)) == Set(scc_fig1)
 @test Set(strongly_connected_components(fig3)) == Set(scc_fig3)
-
-@test period(n_ring) == n
-@test period(n_ring_shortcut) == 2
 
 @test condensation(fig3) == fig3_cond
 

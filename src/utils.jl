@@ -23,7 +23,7 @@ end
 
 sample!(a::AbstractArray, k::Integer; exclude = ()) = sample!(getRNG(), a, k; exclude = exclude)
 
-getRNG(seed::Integer = -1) = seed >= 0 ? MersenneTwister(seed) : Base.Random.GLOBAL_RNG
+getRNG(seed::Integer = -1) = seed >= 0 ? MersenneTwister(seed) : Random.GLOBAL_RNG
 
 # modified from http://stackoverflow.com/questions/25678112/insert-item-into-a-sorted-list-with-julia-with-and-without-duplicates
 # returns true if insert succeeded, false if it was a duplicate
@@ -39,131 +39,16 @@ function countfirst(itr, v)
     return found ? c : 0
 end
 
-##############################################################3
-# from Iterators.jl until the conflict with Base.Iterators is resolverd
-"""
-    nth(xs, n::Integer)
-
-Return the n'th element of xs. Mostly useful for non indexable collections.
-"""
-function nth(xs, n::Integer)
-    n > 0 || throw(BoundsError(xs, n))
-    # catch, if possible
-    applicable(length, xs) && (n ≤ length(xs) || throw(BoundsError(xs, n)))
-    s = start(xs)
-    i = 0
-    while !done(xs, s)
-        (val, s) = next(xs, s)
-        i += 1
-        i == n && return val
-    end
-    # catch iterators with no length but actual finite size less then n
-    throw(BoundsError(xs, n))
-end
-
-nth(xs::AbstractArray, n::Integer) = xs[n]
-# Filter out reccuring elements.
-
-struct Distinct{I, J}
-    xs::I
-
-    # Map elements to the index at which it was first seen, so given an iterator
-    # state (index) we can test if an element has previously been observed.
-    seen::Dict{J, Int}
-end
-
-iteratorsize(::Type{T}) where {T<:Distinct} = SizeUnknown()
-
-eltype(::Type{Distinct{I, J}}) where {I, J} = J
-
-distinct(xs::I) where {I} = Distinct{I, eltype(xs)}(xs, Dict{eltype(xs), Int}())
-
-function start(it::Distinct)
-    start(it.xs), 1
-end
-
-function next(it::Distinct, state)
-    s, i = state
-    x, s = next(it.xs, s)
-    it.seen[x] = i
-    i += 1
-
-    while !done(it.xs, s)
-        y, t = next(it.xs, s)
-        if !haskey(it.seen, y) || it.seen[y] >= i
-            break
-        end
-        s = t
-        i += 1
-    end
-
-    x, (s, i)
-end
-
-done(it::Distinct, state) = done(it.xs, state[1])
-
-# Concatenate the output of n iterators
-struct Chain{T<:Tuple}
-    xss::T
-end
-
-iteratorsize(::Type{Chain{T}}) where {T} = _chain_is(T)
-
-@generated function _chain_is(t::Type{T}) where T
-    for itype in T.types
-        if iteratorsize(itype) == IsInfinite()
-            return :(IsInfinite())
-        elseif iteratorsize(itype) == SizeUnknown()
-            return :(SizeUnknown())
-        end
-    end
-    return :(HasLength())
-end
-
-chain(xss...) = Chain(xss)
-
-length(it::Chain{Tuple{}}) = 0
-length(it::Chain) = sum(length, it.xss)
-
-eltype(::Type{Chain{T}}) where {T} = typejoin([eltype(t) for t in T.parameters]...)
-
-function start(it::Chain)
-    i = 1
-    xs_state = nothing
-    while i <= length(it.xss)
-        xs_state = start(it.xss[i])
-        if !done(it.xss[i], xs_state)
-            break
-        end
-        i += 1
-    end
-    return i, xs_state
-end
-
-function next(it::Chain, state)
-    i, xs_state = state
-    v, xs_state = next(it.xss[i], xs_state)
-    while done(it.xss[i], xs_state)
-        i += 1
-        if i > length(it.xss)
-            break
-        end
-        xs_state = start(it.xss[i])
-    end
-    return v, (i, xs_state)
-end
-
-done(it::Chain, state) = state[1] > length(it.xss)
-
-#################
-
-
 # myrand(a::AbstractArray) = a[_myrand(length(a))]
 
 # for generic iterables with length
 myrand(itr) = nth(itr, _myrand(length(itr)))
 
 _myrand(n::T) where {T<:Integer} = ceil(T, rand() * n)
+
+# to seed the R generator called by randbinomial  
+seed_dsfmt(seed) =
+    Random.DSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed.+UInt32(1))
 
 randbinomial(m::Integer,p::AbstractFloat) =
     convert(Int, StatsFuns.RFunctions.binomrand(m, p))

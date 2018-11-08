@@ -168,7 +168,7 @@ function edge(g::NetOrDiNet, i::Integer, j::Integer)
     (i > nv(g) || j > nv(g)) && return IndexedEdge(i, j, -1)
     oes = g.out_edges[i]
     pos = findfirst(e->e.first==j, oes)
-    if pos != 0
+    if pos !== nothing
         return IndexedEdge(i, j, oes[pos].second)
     else
         return IndexedEdge(i, j, -1)

@@ -11,7 +11,6 @@ source::Int                            # the source vertex
 target::Int                            # the target vertex
 capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-
 function dinic_impl(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
@@ -74,7 +73,6 @@ capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 flow_matrix::AbstractMatrix{T}        # the current flow matrix
 P::AbstractVector{Int}               # Parent vector to store Level Graph
 """
-
 function blocking_flow!(
     residual_graph::ADiGraph,               # the input graph
     source::Int,                           # the source vertex
@@ -96,7 +94,7 @@ function blocking_flow!(
         for v in out_neighbors(residual_graph, u)
             if P[v] == -1 && capacity_matrix[u,v] > flow_matrix[u,v]
                 P[v] = u
-                unshift!(Q, v)
+                pushfirst!(Q, v)
             end
         end
     end

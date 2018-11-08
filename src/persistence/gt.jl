@@ -76,7 +76,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
     for (pname, p) in gprop(g)
         write(io, UInt8(0)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
-        pvaln = findfirst(gtpropmap, typeof(p))
+        pvaln = findfirst(isequal(typeof(p)), gtpropmap)
         write(io, UInt8(pvaln-1))
         writegt_prop(io, p)
     end
@@ -84,7 +84,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
     for (pname, p) in vprop(g)
         write(io, UInt8(1)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
-        pvaln = findfirst(gtpropmap, valtype(p))
+        pvaln = findfirst(isequal(valtype(p)), gtpropmap)
         write(io, UInt8(pvaln-1))
 
         for i=1:nv(g)
@@ -95,7 +95,7 @@ function writegt_props(io::IO, g::ANetOrDiNet)
     for (pname, p) in eprop(g)
         write(io, UInt8(2)) #property type (graph/edge/vertex)
         writegt_prop(io, pname)
-        pvaln = findfirst(gtpropmap, valtype(p))
+        pvaln = findfirst(isequal(valtype(p)), gtpropmap)
         write(io, UInt8(pvaln-1))
         if is_directed(g)
             for i=1:nv(g)
@@ -174,7 +174,6 @@ end
 
 
 const Num = Union{Bool,Int16,Int32,Int64,Float64}
-const VecNum = Union{Vector{Bool}, Vector{Int16}, Vector{Int32}, Vector{Int64}, Vector{Float64}}
 
 const gtpropmap = DataType[   Bool,                   #0x00
                               Int16,                  #0x01
@@ -192,12 +191,15 @@ const gtpropmap = DataType[   Bool,                   #0x00
                               Vector{String}          #0x0d
                         ]
 
-readgt_prop(io, ::Type{T}, num) where {T<:Num} = read(io, T, num)
-readgt_prop(io, ::Type{T}, num) where {T<:VecNum} = [(l = read(io, UInt64); read(io, eltype(T), l)) for _=1:num]
+readgt_prop(io, ::Type{T}, num) where {T<:Num} = read!(io, Vector{T}(undef, num))
+function readgt_prop(io, ::Type{Vector{T}}, num) where {T <: Num}
+    [(l = read(io, UInt64); read!(io, Vector{T}(undef, l))) for _=1:num]
+end
 readgt_prop(io, ::Type{String}, num) = [(l = read(io, UInt64); String(read(io, l))) for _=1:num]
 
 writegt_prop(io, x::T) where {T<:Num} = write(io, x)
-writegt_prop(io, x::T) where {T<:VecNum} = (write(io, length(x)); write(io, x))
+writegt_prop(io, x::Vector{T}) where {T<:Num} = 
+    (write(io, length(x)); write(io, x))
 writegt_prop(io, x::String) = (write(io, sizeof(x)); write(io, x))
 
 function readgt_adj!(io::IO, g::ADiGraph, ::Type{T}) where T

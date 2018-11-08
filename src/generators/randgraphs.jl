@@ -17,10 +17,7 @@ edges.
 function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
-    if seed >= 0
-        # init dsfmt generator without altering GLOBAL_RNG
-        Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+UInt32(1))
-    end
+    seed > 0 && seed_dsfmt(seed)
     nedg = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
     return erdos_renyi(n, nedg, G; seed=seed)
 end
@@ -192,7 +189,7 @@ function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     end
 
     # vector of weighted nodes (each node is repeated once for each adjacent edge)
-    weightedNodes = Vector{Int}(2*(n-n0)*k + 2*ne(g))
+    weightedNodes = Vector{Int}(undef, 2*(n-n0)*k + 2*ne(g))
 
     # initialize vector of weighted nodes
     offset = 0
@@ -205,7 +202,7 @@ function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     picked = fill(false, n)
 
     # vector of targets
-    targets = Vector{Int}(k)
+    targets = Vector{Int}(undef, k)
 
     for source in n0+1:n
         # choose k targets from the existing nodes
@@ -471,13 +468,13 @@ function random_regular_digraph(n::Int, k::Int, ::Type{G}=DiGraph;
     rng = getRNG(seed)
     cs = collect(2:n)
     i = 1
-    I = Vector{Int}(n*k)
-    J = Vector{Int}(n*k)
+    I = Vector{Int}(undef, n*k)
+    J = Vector{Int}(undef, n*k)
     V = fill(true, n*k)
     for r in 1:n
         l = (r-1)*k+1 : r*k
-        I[l] = r
-        J[l] = sample!(rng, cs, k, exclude = r)
+        I[l] .= r
+        J[l] .= sample!(rng, cs, k, exclude = r)
     end
 
     if dir == :out
@@ -508,7 +505,7 @@ function stochastic_block_model(c::Matrix{T}, n::Vector{Int},
     @assert size(c,1) == length(n)
     @assert size(c,2) == length(n)
     # init dsfmt generator without altering GLOBAL_RNG
-    seed > 0 && Base.dSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed+1)
+    seed > 0 && seed_dsfmt(seed)
     rng =  getRNG(seed)
 
     N = sum(n)

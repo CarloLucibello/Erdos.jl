@@ -1,53 +1,48 @@
 # Parts of this code were taken / derived from Graphs.jl. See LICENSE for
 # licensing details.
-
-
 """
-    connected_components!(label::Vector{Int}, g::AGraph)
+    connected_components!(label, g)
 
-Fills `label` with the `id` of the connected component to which it belongs.
+Fill `label` with the `id` of the connected component in the undirected graph
+`g` to which it belongs. Return a vector representing the component assigned
+to each vertex. The component value is the smallest vertex ID in the component.
 
-Arguments:
-    label: a place to store the output
-    g: the graph
-Output:
-    c = labels[i] => vertex i belongs to component c.
-    c is the smallest vertex id in the component.
+### Performance
+This algorithm is linear in the number of edges of the graph.
 """
-function connected_components!(label::Vector{Int}, g::AGraph)
-    # this version of connected components uses Breadth First Traversal
-    # with custom visitor type in order to improve performance.
-    # one BFS is performed for each component.
-    # This algorithm is linear in the number of edges of the graph
-    # each edge is touched once. memory performance is a single allocation.
-    # the return type is a vector of labels which can be used directly or
-    # passed to components(a)
+function connected_components!(label::AbstractVector, g::AGraphOrDiGraph)
     nvg = nv(g)
-    visitor = Erdos.ComponentVisitorVector(label, 0)
-    colormap = VertexMap(g, fill(0, nvg))
-    queue = Vector{Int}()
-    sizehint!(queue, nvg)
-    for v in 1:nvg
-        if label[v] == 0
-            visitor.labels[v] = v
-            visitor.seed = v
-            traverse_graph!(g, BreadthFirst(), v, visitor; vcolormap=colormap, queue=queue)
+    T = vertextype(g)
+    for u in vertices(g)
+        label[u] != zero(T) && continue
+        label[u] = u
+        Q = Vector{T}()
+        push!(Q, u)
+        while !isempty(Q)
+            src = popfirst!(Q)
+            for vertex in all_neighbors(g, src)
+                if label[vertex] == zero(T)
+                    push!(Q, vertex)
+                    label[vertex] = u
+                end
+            end
         end
     end
     return label
 end
 
-"""components_dict(labels) converts an array of labels to a Dict{Int,Vector{Int}} of components
 
-Arguments:
-    c = labels[i] => vertex i belongs to component c.
-Output:
-    vs = d[c] => vertices in vs belong to component c.
 """
-function components_dict(labels::Vector{Int})
-    d = Dict{Int,Vector{Int}}()
-    for (v,l) in enumerate(labels)
-        vec = get(d, l, Vector{Int}())
+    components_dict(labels)
+
+Convert an array of labels to a map of component id to vertices, and return
+a map with each key corresponding to a given component id
+and each value containing the vertices associated with that component.
+"""
+function components_dict(labels::Vector{T}) where T <: Integer
+    d = Dict{T,Vector{T}}()
+    for (v, l) in enumerate(labels)
+        vec = get(d, l, Vector{T}())
         push!(vec, v)
         d[l] = vec
     end
@@ -55,21 +50,16 @@ function components_dict(labels::Vector{Int})
 end
 
 """
-    components(labels::Vector{Int})
+    components(labels)
 
-Converts an array of labels to a Vector{Vector{Int}} of components
-
-Arguments:
-    c = labels[i] => vertex i belongs to component c.
-Output:
-    vs = c[i] => vertices in vs belong to component i.
-    a = d[i] => if labels[v]==i then v in c[a] end
+Given a vector of component labels, return a vector of vectors representing the vertices associated
+with a given component id.
 """
-function components(labels::Vector{Int})
-    d = Dict{Int, Int}()
-    c = Vector{Vector{Int}}()
-    i = 1
-    for (v,l) in enumerate(labels)
+function components(labels::Vector{T}) where T <: Integer
+    d = Dict{T,T}()
+    c = Vector{Vector{T}}()
+    i = one(T)
+    for (v, l) in enumerate(labels)
         index = get!(d, l, i)
         if length(c) >= index
             push!(c[index], v)
@@ -82,18 +72,34 @@ function components(labels::Vector{Int})
 end
 
 """
-    connected_components(g::AGraph)
+    connected_components(g)
 
-Returns the [connected components](https://en.wikipedia.org/wiki/Connectivity_(graph_theory))
-of `g` as a vector of components, each represented by a
-vector of vertices belonging to the component.
+Return the [connected components](https://en.wikipedia.org/wiki/Connectivity_(graph_theory))
+of an undirected graph `g` as a vector of components, with each element a vector of vertices
+belonging to the component.
 
-See also [`weakly_connected_components`](@ref) and [`strongly_connected_components`](@ref)
-for directed graphs.
+For directed graphs, see [`strongly_connected_components`](@ref) and
+[`weakly_connected_components`](@ref).
+
+# Examples
+```jldoctest
+julia> g = Graph([0 1 0; 1 0 1; 0 1 0]);
+
+julia> connected_components(g)
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+
+julia> g = Graph([0 1 0 0 0; 1 0 1 0 0; 0 1 0 0 0; 0 0 0 0 1; 0 0 0 1 0]);
+
+julia> connected_components(g)
+2-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+ [4, 5]
+```
 """
-function connected_components(g::AGraph)
-    nv(g) == 0 && return Vector{Int}[Int[]]
-    label = zeros(Int, nv(g))
+function connected_components(g::AGraphOrDiGraph)
+    T = vertextype(g)
+    label = zeros(T, nv(g))
     connected_components!(label, g)
     c, d = components(label)
     return c
@@ -102,212 +108,452 @@ end
 """
     is_connected(g)
 
-Returns `true` if `g` is connected.
-For DiGraphs, this is equivalent to a test of weak connectivity.
+Return `true` if graph `g` is connected. For directed graphs, return `true`
+if graph `g` is weakly connected.
+
+# Examples
+```jldoctest
+julia> g = Graph([0 1 0; 1 0 1; 0 1 0]);
+
+julia> is_connected(g)
+true
+
+julia> g = Graph([0 1 0 0 0; 1 0 1 0 0; 0 1 0 0 0; 0 0 0 0 1; 0 0 0 1 0]);
+
+julia> is_connected(g)
+false
+
+julia> g = DiGraph([0 1 0; 0 0 1; 1 0 0]);
+
+julia> is_connected(g)
+true
+```
 """
-is_connected(g::AGraph) = length(connected_components(g)) == 1
-
-"""
-    weakly_connected_components(g::ADiGraph)
-
-Returns the weakly connected components of undirected graph `g`.
-It is equivalent to the connected components of the corresponding
-undirected graph, i.e. `connected_components(graph(g))`.
-"""
-weakly_connected_components(g::ADiGraph) = connected_components(graph(g))
-
-"""
-    is_weakly_connected(g::ADiGraph)
-
-Returns `true` if the undirected graph `g` is weakly connected.
-
-See also [`weakly_connected_components`](@ref).
-"""
-is_weakly_connected(g::ADiGraph) = length(weakly_connected_components(g)) == 1
-
-# Adapated from Graphs.jl
-mutable struct TarjanVisitor <: SimpleGraphVisitor
-    stack::Vector{Int}
-    onstack::BitVector
-    lowlink::Vector{Int}
-    index::Vector{Int}
-    components::Vector{Vector{Int}}
-end
-
-TarjanVisitor(n) = TarjanVisitor(
-    Vector{Int}(),
-    falses(n),
-    Vector{Int}(),
-    zeros(Int, n),
-    Vector{Vector{Int}}()
-)
-
-function discover_vertex!(vis::TarjanVisitor, v)
-    vis.index[v] = length(vis.stack) + 1
-    push!(vis.lowlink, length(vis.stack) + 1)
-    push!(vis.stack, v)
-    vis.onstack[v] = true
-    return true
-end
-
-function examine_neighbor!(vis::TarjanVisitor, v, w, vcolor, w_color, ecolor)
-    if w_color != 0 && vis.onstack[w] # != 0 means seen
-        while vis.index[w] > 0 && vis.index[w] < vis.lowlink[end]
-            pop!(vis.lowlink)
-        end
-    end
-    return true
-end
-
-function close_vertex!(vis::TarjanVisitor, v)
-    if vis.index[v] == vis.lowlink[end]
-        component = splice!(vis.stack, vis.index[v]:length(vis.stack))
-        vis.onstack[component] = false
-        pop!(vis.lowlink)
-        push!(vis.components, component)
-    end
-    return true
+function is_connected(g::AGraphOrDiGraph)
+    nv(g) <= 1 && return true
+    mult = is_directed(g) ? 2 : 1
+    return mult * ne(g) + 1 >= nv(g) && length(connected_components(g)) == 1
 end
 
 """
-    strongly_connected_components(g::ADiGraph)
+    weakly_connected_components(g)
 
-Computes the strongly connected components of a directed graph.
+Return the weakly connected components of the graph `g`. This
+is equivalent to the connected components of the undirected equivalent of `g`.
+For undirected graphs this is equivalent to the [`connected_components`](@ref) of `g`.
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0; 1 0 1; 0 0 0]);
+
+julia> weakly_connected_components(g)
+1-element Array{Array{Int64,1},1}:
+ [1, 2, 3]
+```
+"""
+weakly_connected_components(g) = connected_components(g)
+
+"""
+    is_weakly_connected(g)
+
+Return `true` if the graph `g` is weakly connected. If `g` is undirected,
+this function is equivalent to [`is_connected(g)`](@ref).
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0; 0 0 1; 1 0 0]);
+
+julia> is_weakly_connected(g)
+true
+
+julia> g = DiGraph([0 1 0; 1 0 1; 0 0 0]);
+
+julia> is_connected(g)
+true
+
+julia> is_strongly_connected(g)
+false
+
+julia> is_weakly_connected(g)
+true
+```
+"""
+is_weakly_connected(g) = is_connected(g)
+
+"""
+    strongly_connected_components(g)
+
+Compute the strongly connected components of a directed graph `g`.
+
+Return an array of arrays, each of which is the entire connected component.
+
+### Implementation Notes
+The order of the components is not part of the API contract.
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0; 1 0 1; 0 0 0]);
+
+julia> strongly_connected_components(g)
+2-element Array{Array{Int64,1},1}:
+ [3]
+ [1, 2]
+```
 """
 function strongly_connected_components(g::ADiGraph)
+    T = vertextype(g)
+    zero_t = zero(T)
+    one_t = one(T)
     nvg = nv(g)
-    cmap = VertexMap(g, zeros(Int, nvg))
-    nv(g) == 0 && return Vector{Int}[Int[]]
-    components = Vector{Vector{Int}}()
+    count = one_t
+    index = zeros(T, nvg)         # first time in which vertex is discovered
+    stack = Vector{T}()           # stores vertices which have been discovered and not yet assigned to any component
+    onstack = zeros(Bool, nvg)    # false if a vertex is waiting in the stack to receive a component assignment
+    lowlink = zeros(T, nvg)       # lowest index vertex that it can reach through back edge (index array not vertex id number)
+    parents = zeros(T, nvg)       # parent of every vertex in dfs
+    components = Vector{Vector{T}}()    # maintains a list of scc (order is not guaranteed in API)
+    sizehint!(stack, nvg)
+    sizehint!(components, nvg)
 
-    for v in vertices(g)
-        if cmap[v] == 0 # 0 means not visited yet
-            visitor = TarjanVisitor(nvg)
-            traverse_graph!(g, DepthFirst(), v, visitor, vcolormap=cmap)
-            for component in visitor.components
-                push!(components, component)
+    for s in vertices(g)
+        if index[s] == zero_t
+            index[s] = count
+            lowlink[s] = count
+            onstack[s] = true
+            parents[s] = s
+            push!(stack, s)
+            count = count + one_t
+
+            # start dfs from 's'
+            dfs_stack = Vector{T}([s])
+            while !isempty(dfs_stack)
+                v = dfs_stack[end] #end is the most recently added item
+                u = zero_t
+                for n in out_neighbors(g, v)
+                    if index[n] == zero_t
+                        # unvisited neighbor found
+                        u = n
+                        break
+                        #GOTO A push u onto DFS stack and continue DFS
+                    elseif onstack[n]
+                        # we have already seen n, but can update the lowlink of v
+                        # which has the effect of possibly keeping v on the stack until n is ready to pop.
+                        # update lowest index 'v' can reach through out neighbors
+                        lowlink[v] = min(lowlink[v], index[n])
+                    end
+                end
+                if u == zero_t
+                    # All out neighbors already visited or no out neighbors
+                    # we have fully explored the DFS tree from v.
+                    # time to start popping.
+                    popped = pop!(dfs_stack)
+                    lowlink[parents[popped]] = min(lowlink[parents[popped]], lowlink[popped])
+                    if index[v] == lowlink[v]
+                        # found a cycle in a completed dfs tree.
+                        component = Vector{T}()
+                        sizehint!(component, length(stack))
+                        while !isempty(stack) #break when popped == v
+                            # drain stack until we see v.
+                            # everything on the stack until we see v is in the SCC rooted at v.
+                            popped = pop!(stack)
+                            push!(component, popped)
+                            onstack[popped] = false
+                            # popped has been assigned a component, so we will never see it again.
+                            if popped == v
+                                # we have drained the stack of an entire component.
+                                break
+                            end
+                        end
+                        push!(components, reverse(component))
+                    end
+                else #LABEL A
+                    # add unvisited neighbor to dfs
+                    index[u] = count
+                    lowlink[u] = count
+                    onstack[u] = true
+                    parents[u] = v
+                    count = count + one_t
+                    push!(stack, u)
+                    push!(dfs_stack, u)
+                    # next iteration of while loop will expand the DFS tree from u.
+                end
             end
         end
     end
+
     return components
 end
 
+
 """
-    is_strongly_connected(g::ADiGraph)
+    is_strongly_connected(g)
 
-Returns `true` if `g` is strongly connected.
+Return `true` if directed graph `g` is strongly connected.
 
-See also [`strongly_connected_components`](@ref)
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0; 0 0 1; 1 0 0]);
+
+julia> is_strongly_connected(g)
+true
+```
 """
 is_strongly_connected(g::ADiGraph) = length(strongly_connected_components(g)) == 1
 
 """
-    period(g::ADiGraph)
+    period(g)
 
-Computes the common period for all nodes in a strongly connected graph.
+Return the (common) period for all vertices in a strongly connected directed graph.
+Will throw an error if the graph is not strongly connected.
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0; 0 0 1; 1 0 0]);
+
+julia> period(g)
+3
+```
 """
 function period(g::ADiGraph)
-    !is_strongly_connected(g) && error("Graph must be strongly connected")
+    !is_strongly_connected(g) && throw(ArgumentError("Graph must be strongly connected"))
 
     # First check if there's a self loop
     has_self_loops(g) && return 1
 
-    g_bfs_tree  = bfs_tree(g,1)
-    levels      = gdistances(g_bfs_tree,1)
-    tree_diff   = difference(g,g_bfs_tree)
-    edge_values = Vector{Int}()
+    g_bfs_tree  = bfs_tree(g, 1)
+    levels      = gdistances(g_bfs_tree, 1)
+    tree_diff   = difference(g, g_bfs_tree)
+    T = vertextype(g)
+    edge_values = Vector{T}()
 
     divisor = 0
     for e in edges(tree_diff)
         @inbounds value = levels[src(e)] - levels[dst(e)] + 1
-        divisor = gcd(divisor,value)
-        isequal(divisor,1) && return 1
+        divisor = gcd(divisor, value)
+        isequal(divisor, 1) && return 1
     end
 
     return divisor
 end
 
-"""Computes the condensation graph of the strongly connected components."""
-function _condensation(g::T, scc::Vector{Vector{Int}}) where T<:ADiGraph
-    h = T(length(scc))
+"""
+    condensation(g[, scc])
 
-    component = Vector{Int}(nv(g))
+Return the condensation graph of the strongly connected components `scc`
+in the directed graph `g`. If `scc` is missing, generate the strongly
+connected components first.
 
-    for (i,s) in enumerate(scc)
-        @inbounds component[s] = i
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0 0 0; 0 0 1 0 0; 1 0 0 1 0; 0 0 0 0 1; 0 0 0 1 0])
+{5, 6} directed simple Int64 graph
+
+julia> strongly_connected_components(g)
+2-element Array{Array{Int64,1},1}:
+ [4, 5]
+ [1, 2, 3]
+
+julia> foreach(println, edges(condensation(g)))
+Edge 2 => 1
+```
+"""
+function condensation(g::G, scc::Vector{Vector{T}}) where {T <: Integer,
+                                                           G <: ADiGraph}
+
+    h = G(length(scc))
+
+    component = Vector{T}(undef, nv(g))
+
+    for (i, s) in enumerate(scc)
+        @inbounds component[s] .= i
     end
 
     @inbounds for e in edges(g)
         s, d = component[src(e)], component[dst(e)]
         if (s != d)
-            add_edge!(h,s,d)
+            add_edge!(h, s, d)
         end
     end
     return h
 end
+condensation(g::ADiGraph) = condensation(g, strongly_connected_components(g))
 
 """
-    condensation(g::ADiGraph)
+    attracting_components(g)
 
-Returns the condensation graph associated with `g`. The condensation `h` of
-a graph `g` is the directed graph where every node in `h` represents a strongly
-connected component in `g`, and the presence of an edge between between nodes
-in `h` indicates that there is at least one edge between the associated
-strongly connected components in `g`. The node numbering in `h` corresponds to
-the ordering of the components output from [`strongly_connected_components`](@ref).
-"""
-condensation(g::ADiGraph) = _condensation(g, strongly_connected_components(g))
+Return a vector of vectors of integers representing lists of attracting
+components in the directed graph `g`.
 
-"""
-    attracting_components(g::ADiGraph)
-
-Returns a vector of vectors of integers representing lists of attracting
-components in `g`. The attracting components are a subset of the strongly
+The attracting components are a subset of the strongly
 connected components in which the components do not have any leaving edges.
+
+# Examples
+```jldoctest
+julia> g = SimpleDiGraph([0 1 0 0 0; 0 0 1 0 0; 1 0 0 1 0; 0 0 0 0 1; 0 0 0 1 0])
+{5, 6} directed simple Int64 graph
+
+julia> strongly_connected_components(g)
+2-element Array{Array{Int64,1},1}:
+ [4, 5]
+ [1, 2, 3]
+
+julia> attracting_components(g)
+1-element Array{Array{Int64,1},1}:
+ [4, 5]
+```
 """
 function attracting_components(g::ADiGraph)
     scc  = strongly_connected_components(g)
-    cond = _condensation(g, scc)
-
-    attracting = Vector{Int}()
+    cond = condensation(g, scc)
+    T = vertextype(g)
+    attracting = Vector{T}()
 
     for v in vertices(cond)
-        if out_degree(cond,v) == 0
-            push!(attracting,v)
+        if out_degree(cond, v) == 0
+            push!(attracting, v)
         end
     end
     return scc[attracting]
 end
 
-mutable struct NeighborhoodVisitor{V} <: SimpleGraphVisitor
-    d::Int
-    neigs::Vector{V}
+"""
+    neighborhood(g, v, d, distmx=weights(g); dir=:out)
+    
+
+Return a vector of each vertex in `g` at a geodesic distance less than or equal to `d`, where distances
+may be specified by `distmx`. 
+
+### Optional Arguments
+- `dir=:out`: If `g` is directed, this argument specifies the edge direction
+with respect to `v` of the edges to be considered. Possible values: `:in` or `:out`.
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0 0 0; 0 0 1 0 0; 1 0 0 1 0; 0 0 0 0 1; 0 0 0 1 0]);
+
+julia> neighborhood(g, 1, 2)
+3-element Array{Int64,1}:
+ 1
+ 2
+ 3
+
+julia> neighborhood(g, 1, 3)
+4-element Array{Int64,1}:
+ 1
+ 2
+ 3
+ 4
+
+julia> neighborhood(g, 1, 3, [0 1 0 0 0; 0 0 1 0 0; 1 0 0 0.25 0; 0 0 0 0 0.25; 0 0 0 0.25 0])
+5-element Array{Int64,1}:
+ 1
+ 2
+ 3
+ 4
+ 5
+```
+"""
+function neighborhood(g::AGraphOrDiGraph, v::Integer, d, 
+                    distmx=weights(g); dir=:out)
+    first.(neighborhood_dists(g, v, d, distmx; dir=dir))
 end
 
-NeighborhoodVisitor(g::AGraphOrDiGraph, d::Integer) =
-    (V=vertextype(g); NeighborhoodVisitor{V}(d, Vector{V}()))
+"""
+    neighborhood_dists(g, v, d, distmx=weights(g))
 
-function examine_neighbor!(visitor::NeighborhoodVisitor, u, v, ucolor, vcolor, ecolor)
-    -ucolor > visitor.d && return false # color is negative for non-closed vertices
-    if vcolor == 0
-        push!(visitor.neigs, v)
+Return a tuple of each vertex at a geodesic distance less than or equal to `d`, where distances
+may be specified by `distmx`, along with its distance from `v`.
+
+### Optional Arguments
+- `dir=:out`: If `g` is directed, this argument specifies the edge direction
+with respect to `v` of the edges to be considered. Possible values: `:in` or `:out`.
+
+# Examples
+```jldoctest
+julia> g = DiGraph([0 1 0 0 0; 0 0 1 0 0; 1 0 0 1 0; 0 0 0 0 1; 0 0 0 1 0]);
+
+julia> neighborhood_dists(g, 1, 3)
+4-element Array{Tuple{Int64,Int64},1}:
+ (1, 0)
+ (2, 1)
+ (3, 2)
+ (4, 3)
+
+julia> neighborhood_dists(g, 1, 3, [0 1 0 0 0; 0 0 1 0 0; 1 0 0 0.25 0; 0 0 0 0 0.25; 0 0 0 0.25 0])
+5-element Array{Tuple{Int64,Float64},1}:
+ (1, 0.0)
+ (2, 1.0)
+ (3, 2.0)
+ (4, 2.25)
+ (5, 2.5)
+
+julia> neighborhood_dists(g, 4, 3)
+2-element Array{Tuple{Int64,Int64},1}:
+ (4, 0)
+ (5, 1)
+
+julia> neighborhood_dists(g, 4, 3, dir=:in)
+5-element Array{Tuple{Int64,Int64},1}:
+ (4, 0)
+ (3, 1)
+ (5, 1)
+ (2, 2)
+ (1, 3)
+```
+"""
+function neighborhood_dists(g::AGraphOrDiGraph, v::Integer, d, 
+                distmx::AEdgeMap=weights(g); dir=:out) where U <: Real
+
+    (dir == :out) ? _neighborhood(g, v, d, distmx, out_neighbors) :
+                    _neighborhood(g, v, d, distmx, in_neighbors)
+end                
+
+
+function _neighborhood(g::AGraphOrDiGraph, v::Integer, d::Real, distmx::AEdgeMap{U}, neighborfn::Function) where U
+    T = vertextype(g)
+    d < 0 && return Vector{Tuple{T,U}}()
+    neighs = Vector{T}()
+    push!(neighs, v)
+    Q = Vector{T}()
+    push!(Q, v)
+    seen = falses(nv(g))
+    dists = fill(typemax(U), nv(g))
+    dists[v] = zero(U)
+    while !isempty(Q)
+        src = popfirst!(Q)
+        seen[src] && continue
+        seen[src] = true
+        currdist = dists[src]
+        vertexneighbors = neighborfn(g, src)
+        @inbounds for vertex in vertexneighbors
+            if !seen[vertex] 
+                vdist = currdist + distmx[src, vertex]
+                if vdist <= d
+                    push!(Q, vertex)
+                    push!(neighs, vertex)
+                    dists[vertex] = vdist
+                end
+            end
+        end
+    end
+    return [(x::T, dists[x]::U) for x in neighs]
+end
+
+"""
+    isgraphical(degs)
+
+Return true if the degree sequence `degs` is graphical, according to
+[Erdös-Gallai condition](http://mathworld.wolfram.com/GraphicSequence.html).
+
+### Performance
+    Time complexity: ``\\mathcal{O}(|degs|^2)``
+"""
+function isgraphical(degs::Vector{Int})
+    iseven(sum(degs)) || return false
+    n = length(degs)
+    for r = 1:(n - 1)
+        cond = sum(i -> degs[i], 1:r) <= r * (r - 1) + sum(i -> min(r, degs[i]), (r + 1):n)
+        cond || return false
     end
     return true
-end
-
-
-"""
-    neighborhood(g, v, d; dir=:out)
-
-Returns a vector of the vertices in `g` at distance less or equal to `d`
-from `v`. If `g` is a `DiGraph` the `dir` optional argument specifies the edge direction
-the edge direction with respect to `v` (i.e. `:in` or `:out`) to be considered.
-"""
-function neighborhood(g::AGraphOrDiGraph, v::Integer, d::Integer; dir=:out)
-    @assert d >= 0 "Distance has to be greater then zero."
-    visitor = NeighborhoodVisitor(g, d)
-    push!(visitor.neigs, v)
-    traverse_graph!(g, BreadthFirst(), v, visitor,
-        vcolormap=VertexMap(g, Int), dir=dir)
-    return visitor.neigs
 end

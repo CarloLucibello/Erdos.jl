@@ -19,8 +19,8 @@ end
 
 
 """
-    bellman_ford_shortest_paths(g, s, distmx=ConstEdgeMap(g,1))
-    bellman_ford_shortest_paths(g, sources, distmx=ConstEdgeMap(g,1))
+    bellman_ford_shortest_paths(g, s, distmx=weights(g))
+    bellman_ford_shortest_paths(g, sources, distmx=weights(g))
 
 Uses the [Bellman-Ford algorithm](http://en.wikipedia.org/wiki/Bellman–Ford_algorithm)
 to compute shortest paths of all vertices of a `g` from a source vertex `s` (or a set of source
@@ -68,13 +68,13 @@ function bellman_ford_shortest_paths(
         g::AGraphOrDiGraph,
         sources::AbstractVector{Int})
 
-    bellman_ford_shortest_paths(g, sources, ConstEdgeMap(g,1))
+    bellman_ford_shortest_paths(g, sources, weights(g))
 end
 
 bellman_ford_shortest_paths(
     g::AGraphOrDiGraph,
     v::Int,
-    distmx::AEdgeMap=ConstEdgeMap(g,1)
+    distmx::AEdgeMap=weights(g)
 ) = bellman_ford_shortest_paths(g, [v], distmx)
 
 function has_negative_edge_cycle(g::AGraphOrDiGraph)

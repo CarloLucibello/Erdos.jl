@@ -26,7 +26,6 @@ struct PushRelabelAlgorithm <: AbstractFlowAlgorithm end
 """
 Type that returns 1 if a forward edge exists, and 0 otherwise
 """
-
 mutable struct DefaultCapacity{G<:ADiGraph, I<:Integer} <: AbstractMatrix{I}
     g::G
     nv::I

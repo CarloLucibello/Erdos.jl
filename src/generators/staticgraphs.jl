@@ -201,7 +201,7 @@ used as an example for spectral clustering by Guattery and Miller 1998.
 function DoubleBinaryTree(levels::Int, ::Type{G} = Graph) where G<:AGraph
     gl = BinaryTree(levels, G)
     gr = BinaryTree(levels, G)
-    g = blkdiag(gl, gr)
+    g = blockdiag(gl, gr)
     add_edge!(g,1, nv(gl)+1)
     return g
 end
@@ -213,7 +213,7 @@ function RoachGraph(k::Int, ::Type{G} = Graph) where G<:AGraph
     nopole = G(2)
     antannae = crosspath(nopole, k)
     body = crosspath(dipole, k)
-    roach = blkdiag(antannae, body)
+    roach = blockdiag(antannae, body)
     add_edge!(roach, nv(antannae)-1, nv(antannae)+1)
     add_edge!(roach, nv(antannae), nv(antannae)+2)
     return roach

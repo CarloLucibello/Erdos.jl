@@ -19,7 +19,7 @@ g = StarGraph(n, G)
 @test count_spanning_trees(g) == 1
 
 
-g = blkdiag(g, g)
+g = blockdiag(g, g)
 #accept only connected graphs
 @test_throws AssertionError count_spanning_trees(g)
 

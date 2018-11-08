@@ -74,14 +74,14 @@ end
 
 
 """
-    blkdiag(g, h)
+    blockdiag(g, h)
 
 Produces a graph with ``|V(g)| + |V(h)|`` vertices and ``|E(g)| + |E(h)|``
 edges.
 
 Put simply, the vertices and edges from graph `h` are appended to graph `g`.
 """
-function blkdiag(g::T, h::T) where T<:AGraphOrDiGraph
+function blockdiag(g::T, h::T) where T<:AGraphOrDiGraph
     gnv = nv(g)
     r = T(gnv + nv(h))
     for e in edges(g)
@@ -114,15 +114,20 @@ end
 """
     difference(g, h)
 
-Produces a graph with edges in graph `g` that are not in graph `h`.
+Produces a graph with all the edges in graph `g` that are not in graph `h`.
 
 Note that this function may produce a graph with 0-degree vertices.
 """
-function difference(g::T, h::T) where T<:AGraphOrDiGraph
+function difference(g::G, h::T) where {T<:AGraphOrDiGraph,
+                                       G<:AGraphOrDiGraph}
+    
+    @assert (is_directed(g) && is_directed(h)) || 
+            (!is_directed(g) && !is_directed(h)) 
+
     gnv = nv(g)
     hnv = nv(h)
 
-    r = T(gnv)
+    r = G(gnv)
     for e in edges(g)
         !has_edge(h, e) && add_edge!(r,e)
     end
@@ -154,11 +159,11 @@ end
 """
     join(g, h)
 
-Merges graphs `g` and `h` using `blkdiag` and then adds all the edges between
+Merges graphs `g` and `h` using `blockdiag` and then adds all the edges between
  the vertices in `g` and those in `h`.
 """
 function join(g::AGraph, h::AGraph)
-    r = blkdiag(g, h)
+    r = blockdiag(g, h)
     for i=1:nv(g)
         for j=nv(g)+1:nv(g)+nv(h)
             add_edge!(r, i, j)
@@ -302,7 +307,6 @@ end
 Equivalent to [`subgraph`](@ref) but preserves vertex and edge properties
 when `g` is a network.
 """
-
 function subnetwork(g::G, vlist::AbstractVector{V}) where {G<:ANetOrDiNet,V<:Integer}
     allunique(vlist) || error("Vertices in subgraph list must be unique")
     h = G(length(vlist))
@@ -382,12 +386,12 @@ end
 
 
 """
-        g[iter]
+    g[iter]
 
-    Returns the subgraph induced by the vertex or edge iterable `iter`.
-    Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
-    for networks.
-    """
+Returns the subgraph induced by the vertex or edge iterable `iter`.
+Equivalent to [`subgraph`](@ref)`(g, iter)[1]` or [`subnetwork`](@ref)`(g, iter)[1]`
+for networks.
+"""
 getindex(g::AGraphOrDiGraph, iter) = subnetwork(g, iter)[1]
 # in julia 0.5 always gets dispatched to this (julia bug)
 subnetwork(g::AGraphOrDiGraph, list) = subgraph(g, list)
@@ -441,10 +445,10 @@ end
 
 size(g::AGraphOrDiGraph) = (nv(g), nv(g))
 
-"""size(g,i) provides 1:nv or 2:nv else 1 """
+"""`size(g,i)` provides 1:nv or 2:nv else 1 """
 size(g::AGraph,dim::Int) = (dim == 1 || dim == 2) ? nv(g) : 1
 
-"""sum(g) provides the number of edges in the graph"""
+"""`sum(g)`` provides the number of edges in the graph"""
 sum(g::AGraphOrDiGraph) = ne(g)
 
 """
@@ -455,7 +459,7 @@ Equivalent to [`adjacency_matrix`](@ref).
 sparse(g::AGraphOrDiGraph) = adjacency_matrix(g)
 
 #arrayfunctions = (:eltype, :length, :ndims, :size, :strides, :issymmetric)
-eltype(g::AGraphOrDiGraph) = Float64
+eltype(g::AGraphOrDiGraph) = vertextype(g)
 length(g::AGraphOrDiGraph) = nv(g)*nv(g)
 ndims(g::AGraphOrDiGraph) = 2
 issymmetric(g::AGraphOrDiGraph) = !is_directed(g)

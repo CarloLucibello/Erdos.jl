@@ -106,7 +106,6 @@ Requires arguments:
 - active::AbstractVector{Bool}
 - excess::AbstractVector{T}
 """
-
 function enqueue_vertex!(
         Q::PushRelabelHeap,
         v,                                # input vertex
@@ -220,7 +219,6 @@ Requires arguments:
 - count::AbstractVector{Int}
 - Q::AbstractVector{Int}
 """
-
 function relabel!(
         g::ADiGraph,                # the input graph
         v,                                 # input vertex to be relabeled

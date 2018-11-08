@@ -211,3 +211,22 @@ function fill_mat_from_map!(M, g::AGraph, emap::AEdgeMap)
     end
     return M
 end
+
+"""
+    weights(g)
+
+Returns an edge map containing the "weights" associated to edges.
+For simple graphs, the return value is ConstEdgeMap(g, 1).
+For networks, returns the "weights" edge property if defined,
+otherwise the constant map.
+
+Notice that the edge map returned by `weights` is the
+default value for the edge weights used in many flow and 
+distance on graph algorithms.
+"""
+weights(g::AGraphOrDiGraph) = ConstEdgeMap(g, 1)
+
+weights(g::ANetOrDiNet) = has_eprop(g, "weights") ? 
+        eprop(g, "weights") : ConstEdgeMap(g, 1)    
+        
+

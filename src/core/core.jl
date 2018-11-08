@@ -136,7 +136,7 @@ Iterates over all distinct in/out neighbors of vertex `v` in `g`.
 all_neighbors(g::AGraph, v::Integer) = out_neighbors(g, v)
 
 all_neighbors(g::ADiGraph, v::Integer) =
-    distinct(chain(out_neighbors(g, v), in_neighbors(g, v)))
+    distinct(flatten((out_neighbors(g, v), in_neighbors(g, v))))
 
 """
     density(g)
@@ -198,7 +198,7 @@ function _graph_from_matr!(G, op, adjmx::AbstractMatrix)
     g = G(n)
     for i in eachindex(adjmx)
         adjmx[i] == 0 && continue
-        u, v = ind2sub(adjmx, i)
+        u, v = Tuple(CartesianIndices(adjmx)[i])
         op(u,v) || continue
         add_edge!(g, u, v)
     end
@@ -347,7 +347,7 @@ edges(g::AGraphOrDiGraph, v) = out_edges(g, v)
 Iterates over all in and out edges of vertex `v` in `g`.
 """
 all_edges(g::AGraph, v) = out_edges(g, v)
-all_edges(g::ADiGraph, v) = chain(out_edges(g, v), in_edges(g, v))
+all_edges(g::ADiGraph, v) = flatten((out_edges(g, v), in_edges(g, v)))
 #TODO fix chain eltype, since collect gives Any[...]
 
 """

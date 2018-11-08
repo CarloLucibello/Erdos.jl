@@ -8,7 +8,7 @@ mutable struct FloydWarshallState{T,V}<:AbstractPathState
 end
 
 """
-    floyd_warshall_shortest_paths(g, distmx=ConstEdgeMap(g,1))
+    floyd_warshall_shortest_paths(g, distmx=weights(g))
 
 Uses the [Floyd-Warshall algorithm](http://en.wikipedia.org/wiki/Floyd–Warshall_algorithm)
 to compute shortest paths between all pairs of vertices in graph `g`. Returns a
@@ -21,7 +21,7 @@ on the order of ``O(nv^2)``).
 """
 function floyd_warshall_shortest_paths(
         g::AGraphOrDiGraph,
-        distmx::AEdgeMap = ConstEdgeMap(g,1)
+        distmx::AEdgeMap = weights(g)
     )
     T = valtype(distmx)
     V = vertextype(g)

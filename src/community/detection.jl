@@ -44,21 +44,28 @@ Spectral embedding of the non-backtracking matrix of `g`
 Returns  a matrix `ϕ` where `ϕ[:,i]` are the coordinates for vertex `i`.
 
 Note:  does not explicitly construct the [`nonbacktracking_matrix`](@ref).
-See [`Nonbacktracking`](@ref) for details.
+See [`nonbacktracking_matrix`](@ref) for details.
 """
 function nonbacktrack_embedding(g::AGraph, k::Int)
-    B = Nonbacktracking(g)
-    λ, eigv, conv = eigs(B, nev=k+1, v0=ones(Float64, B.m))
-    ϕ = zeros(Complex64, nv(g), k-1)
+    B, edgeid = nonbacktracking_matrix(g)
+    λ, eigv, conv = Arpack.eigs(B, nev=k+1, v0=ones(Float64, size(B,1)))
+    ϕ = zeros(ComplexF64, k-1, nv(g))
     # TODO decide what to do with the stationary distribution ϕ[:,1]
     # this code just throws it away in favor of eigv[:,2:k+1].
     # we might also use the degree distribution to scale these vectors as is
     # common with the laplacian/adjacency methods.
+    E = edgetype(g)
     for n=1:k-1
-        v = eigv[:,n+1]
-        ϕ[:,n] = contraction(B, v)
+        v= eigv[:,n+1]
+        for i=1:nv(g)
+            for e in in_edges(g, i)
+                j = src(e)
+                u = edgeid[e]
+                ϕ[n,i] += v[u]
+            end
+        end
     end
-    return ϕ'
+    return ϕ
 end
 
 
@@ -75,19 +82,21 @@ Returns a vector containing the vertex assignments.
 """
 function community_detection_bethe(g::AGraph, k::Int=-1; kmax::Int=15)
     A = adjacency_matrix(g)
-    D = diagm(degree(g))
+    D = Diagonal(degree(g))
     r = (sum(degree(g)) / nv(g))^0.5
 
-    Hr = (r^2-1)*eye(nv(g))-r*A+D;
+    Hr = (r^2-1)*Diagonal(ones(nv(g))) - r*A + D;
     # Hmr = (r^2-1)*eye(nv(g))+r*A+D;
     k >= 1 && (kmax = k)
-    λ, eigv = eigs(Hr, which=:SR, nev=min(kmax, nv(g)))
+    λ, eigv = Arpack.eigs(Hr, which=:SR, nev=min(kmax, nv(g)))
     q = findlast(x -> x<0, λ)
-    k > q && warn("Using eigenvectors with positive eigenvalues,
+    k > q && @warn("Using eigenvectors with positive eigenvalues,
                     some communities could be meaningless. Try to reduce `k`.")
     k < 1 && (k = q)
     k < 1 && return fill(1, nv(g))
-    labels = kmeans(eigv[:,2:k]', k).assignments
+    m = Matrix(eigv[:,2:k]') # convert to Matrix since 
+                             # kmeans doesn't support Adjoint yet
+    labels = kmeans(m, k).assignments
     return labels
 end
 
@@ -101,10 +110,10 @@ Returns a vertex assignments and the convergence history
 function label_propagation(g::AGraphOrDiGraph; maxiter=1000)
     n = nv(g)
     label = collect(1:n)
-    active_nodes = IntSet(vertices(g))
+    active_nodes = BitSet(vertices(g))
     c = NeighComm(collect(1:n), fill(-1,n), 1)
     convergence_hist = Vector{Int}()
-    random_order = Vector{Int}(n)
+    random_order = Vector{Int}(undef, n)
     i = 0
     while !isempty(active_nodes) && i < maxiter
         num_active = length(active_nodes)

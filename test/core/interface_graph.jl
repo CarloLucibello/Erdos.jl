@@ -1,4 +1,4 @@
-if !isdefined(:TestIGraph)
+if !@isdefined(TestIGraph)
     struct TestIGraph <: AGraph  end
     struct TestIDiGraph <: ADiGraph end
     struct TestIEdge <: AEdge end

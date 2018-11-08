@@ -9,7 +9,6 @@ Requires arguments:
 - target                            # the target vertex
 - capacity_matrix::AbstractMatrix{T}    # edge flow capacities
 """
-
 function edmonds_karp_impl(
         residual_graph::ADiGraph,               # the input graph
         source,                           # the source vertex
@@ -157,7 +156,7 @@ function fetch_path!(
                 if capacity_matrix[u,v] - flow_matrix[u,v] > 0 && P[v] == -1
                     P[v] = u
                     if S[v] == -1
-                        unshift!(Q_f, v)
+                        pushfirst!(Q_f, v)
                     else
                         return v, P, S, 0 # 0 indicates success
                     end
@@ -172,7 +171,7 @@ function fetch_path!(
                     S[u] = v
                     P[u] != -1 && return  u, P, S, 0 # 0 indicates success
 
-                    unshift!(Q_r, u)
+                    pushfirst!(Q_r, u)
                 end
 
             end

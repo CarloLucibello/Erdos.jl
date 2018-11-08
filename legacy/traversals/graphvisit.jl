@@ -91,7 +91,7 @@ function traverse_graph_withlog(
     g::AGraphOrDiGraph,
     alg::SimpleGraphVisitAlgorithm,
     sources,
-    io::IO = STDOUT
+    io::IO = stdout
 )
     visitor = LogGraphVisitor(io)
     return traverse_graph!(g, alg, sources, visitor)

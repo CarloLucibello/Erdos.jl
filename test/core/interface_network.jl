@@ -1,4 +1,4 @@
-if !isdefined(:TestINet)
+if !@isdefined(TestINet)
     struct TestINet <: ANetwork; end
     struct TestIDiNet <: ADiNetwork; end
     struct TestIIdxEdge <: AIndexedEdge; end

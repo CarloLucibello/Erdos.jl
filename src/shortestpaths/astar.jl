@@ -30,7 +30,7 @@ function a_star_impl!(
                 dist = distmx[e]
 
                 colormap[v] = 1
-                new_path = cat(1, path, Edge{V}(u,v))
+                new_path = cat(path, Edge{V}(u,v),dims=1)
                 path_cost = cost_so_far + dist
                 enqueue!(frontier,
                         (path_cost, new_path, v),
@@ -43,10 +43,10 @@ function a_star_impl!(
 end
 
 """
-    a_star(g, s, t, distmx=ConstEdgeMap(g,1), heuristic = n->0)
+    a_star(g, s, t, distmx=weights(g), heuristic = n->0)
 
 Computes the shortest path between vertices `s` and `t` using the
-[A\* search algorithm](http://en.wikipedia.org/wiki/A%2A_search_algorithm). An
+[A* search algorithm](http://en.wikipedia.org/wiki/A%2A_search_algorithm). An
 optional heuristic function and edge distance matrix may be supplied.
 Returns an empty path if there are no such paths.
 """
@@ -54,7 +54,7 @@ function a_star(
         g::AGraphOrDiGraph,  # the graph
         s::Integer,                       # the start vertex
         t::Integer,                       # the end vertex
-        distmx::AEdgeMap=ConstEdgeMap(g,1),
+        distmx::AEdgeMap=weights(g),
         heuristic::Function = n -> 0
     )
             # heuristic (under)estimating distance to target

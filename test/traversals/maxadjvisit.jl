@@ -3,7 +3,7 @@
 # Test of Min-Cut and maximum adjacency visit
 
 using Erdos
-using Base.Test
+using Test
 
 g = G(8)
 
@@ -23,7 +23,6 @@ wedges = [
     (6, 7, 1.),
     (7, 8, 3.) ]
 
-
 m = length(wedges)
 eweights = spzeros(nv(g),nv(g))
 
@@ -36,14 +35,13 @@ end
 @test nv(g) == 8
 @test ne(g) == m
 
-bestcut, cut, parity = minimum_cut(g, EdgeMap(g, eweights))
+bestcut, cut, parity  = minimum_cut(g, EdgeMap(g, eweights))
 
 @test length(parity) == 8
 @test parity == [2, 2, 1, 1, 2, 2, 1, 1]
 @test bestcut == 4.0
 
 bestcut, cut, parity = minimum_cut(g)
-
 @test length(parity) == 8
 @test parity == [2, 1, 1, 1, 1, 1, 1, 1]
 @test bestcut == 2.0

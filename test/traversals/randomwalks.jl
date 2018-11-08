@@ -1,6 +1,6 @@
 @testset "$TEST $G" begin
 
-if !isdefined(:is_nonbacktracking)
+if !@isdefined(is_nonbacktracking)
     #is_nonbacktracking: a predicate that tests if a walk is nonbacktracking.
     #    That is that for no index i walk[i+2]==walk[i]
     function is_nonbacktracking(walk)

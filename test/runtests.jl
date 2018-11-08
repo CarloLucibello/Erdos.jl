@@ -1,5 +1,10 @@
 using Erdos
-using Base.Test
+using Test
+using Random
+using SparseArrays
+using LinearAlgebra
+using Arpack
+using Statistics
 
 testdir = dirname(@__FILE__)
 

@@ -15,7 +15,7 @@ open("docs/src/index.md", "w") do f
     end
 end
 
-cp("datasets/README.md","docs/src/datasets.md", remove_destination=true)
+cp("datasets/README.md","docs/src/datasets.md", force=true)
 
 makedocs(modules=[Erdos], doctest = true)
 

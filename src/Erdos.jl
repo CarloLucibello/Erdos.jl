@@ -5,24 +5,33 @@ A graph and network analysis package for julia.
 """
 module Erdos
 
+using Random
+using SparseArrays
+using LinearAlgebra
+using Arpack
 import GZip # I/O
 import StatsFuns # randgraphs
+import Printf
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
 import Clustering: kmeans # community detection
-# package Iterators.jl methods are now in utils.jl due to name
-# conflict in julia 0.6 with Base.Iterators
-# using Iterators: distinct, chain # all_neighbors
-# using Iterators: nth # EdgeIter
+using IterTools: distinct # all_neighbors
+using IterTools: nth # EdgeIter
+using Base.Iterators: flatten 
+import Dates
 
 import DataStructures: MutableBinaryHeap, update!, compare,  # push_relabel
                         PriorityQueue, dequeue!, peek, heappush!, heappop!,
                         enqueue!, compare, top
 
+import SparseArrays: sparse, blockdiag
+import LinearAlgebra: issymmetric
+
+
 import Base: write, ==, <, *, ≈, isless, union, intersect,
-            reverse, reverse!, blkdiag, getindex, setindex!, show, print, copy, in,
-            sum, size, sparse, eltype, length, ndims,
-            join, start, next, done, eltype, get, issymmetric, A_mul_B!,
-            sort, push!, pop!, iteratorsize, values, valtype,
+            reverse, reverse!, getindex, setindex!, show, print, copy, in,
+            sum, size, eltype, length, ndims,
+            join, iterate, eltype, get,
+            sort, push!, pop!, IteratorSize, values, valtype,
             SizeUnknown, IsInfinite, #iterators
             HasLength, HasShape,     #iterators
             haskey, Matrix #edgemap
@@ -63,22 +72,23 @@ spectral_distance, edit_distance,
 MinkowskiCost, BoundedMinkowskiCost,
 
 # operators
-complement, blkdiag, union, intersect,
+complement, union, intersect,
 difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,
 subnetwork, contract!,
 
 # graph visit
-SimpleGraphVisitor, TrivialGraphVisitor, LogGraphVisitor,
 discover_vertex!, open_vertex!, close_vertex!,
 examine_neighbor!, visited_vertices, traverse_graph!, traverse_graph_withlog,
 
 # bfs
-BreadthFirst, gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
+gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
+has_path,
 
 # dfs
-DepthFirst, has_cycles, topological_sort_by_dfs, dfs_tree, is_tree,
+has_cycles, topological_sort_by_dfs, dfs_tree, 
+#is_tree, #TODO add back
 
 # random
 randomwalk, self_avoiding_randomwalk, nonbacktracking_randomwalk,
@@ -89,7 +99,7 @@ is_connected, is_strongly_connected, is_weakly_connected, period,
 condensation, attracting_components, neighborhood, is_graphical, density,
 
 # maximum_adjacency_visit
-MaximumAdjacency, AbstractMASVisitor, mincut, maximum_adjacency_visit,
+MaximumAdjacency, maximum_adjacency_visit,
 
 # a-star, dijkstra, bellman-ford, floyd-warshall
 a_star, dijkstra_shortest_paths,
@@ -104,8 +114,8 @@ cores, kcore,
 
 # spectral
 adjacency_matrix,laplacian_matrix,
-CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix,
-nonbacktrack_embedding, Nonbacktracking,
+CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix, 
+nonbacktrack_embedding,
 
 # astar
 a_star,
@@ -149,7 +159,7 @@ dismantle_ci, dismantle_ci_init, dismantle_ci_oneiter!,
 # maps
 AVertexMap, ConstVertexMap, VertexMap,
 AEdgeMap, ConstEdgeMap, EdgeMap,
-edgemap2adjlist,
+edgemap2adjlist, weights, 
 
 # properties
 PropertyStore,
@@ -174,7 +184,7 @@ include("maps/vertexmap.jl")
     include("maps/edgemap.jl")
     include("maps/property_store.jl")
 include("operators/operators.jl")
-include("traversals/graphvisit.jl")
+include("traversals/bipartition.jl")
     include("traversals/bfs.jl")
     include("traversals/dfs.jl")
     include("traversals/maxadjvisit.jl")
