@@ -46,19 +46,16 @@ myrand(itr) = nth(itr, _myrand(length(itr)))
 
 _myrand(n::T) where {T<:Integer} = ceil(T, rand() * n)
 
-# to seed the R generator called by randbinomial  
-seed_dsfmt(seed) =
-    Random.DSFMT.dsfmt_gv_init_by_array(MersenneTwister(seed).seed.+UInt32(1))
-
-randbinomial(m::Integer,p::AbstractFloat) =
+randbinomial(m::Integer, p::AbstractFloat) =
     convert(Int, StatsFuns.RFunctions.binomrand(m, p))
 
 
 #used in flow and dismantling
-struct GreaterThan2 end
-struct LessThan2 end
-compare(c::GreaterThan2, x, y) = x[2] > y[2]
-compare(c::LessThan2, x, y) = x[2] < y[2]
+struct GreaterThan2 <: Base.Order.Ordering end
+Base.Order.lt(c::GreaterThan2, x, y) = x[2] > y[2]
+
+struct LessThan2 <: Base.Order.Ordering end
+Base.Order.lt(c::LessThan2, x, y) = x[2] < y[2]
 
 
 signedtype(::Type{T}) where {T<:Integer} = typeof(signed(T(0)))
