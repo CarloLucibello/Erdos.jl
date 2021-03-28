@@ -52,20 +52,22 @@ function readgraph(s::Symbol, ::Type{G}=Graph) where G<:AGraphOrDiGraph
 end
 
 """
-    readnetwork(filename, G=Graph)
-    readnetwork(filename, t, G=Graph; compressed=false)
+    readnetwork(filename, G=Network)
+    readnetwork(filename, t, G=Network; compressed=false)
 
-Reads a graph from  `filename` in the format `t`. Returns a graph of type `G`
-or the corresponding digraph/graph type.
+Read a network from  `filename` in the format `t`. 
+Returns a network of type `G`
+(or the corresponding directed/undirected type if needed).
 Compressed files can eventually be read.
 
 Supported formats are `:gml, :dot, :graphml, :gexf, :net, :gt`.
+When possible, graph, edge, and vertex properties will be read as well.
 
-If no format is provided, it will be inferred from `filename`.
+If no format is provided, it will be inferred from the `filename`.
 
-    readnetwork(s::Symbol, G=Graph)
+    readnetwork(s::Symbol, G=Network)
 
-Read a graph identified by `s` from Erdos datasets collection (e.g. `s=:karate`).
+Read a network identified by `s` from Erdos' datasets collection (e.g. `s=:karate`).
 They are stored in the `gt` binary format in the `datasets` directory of the package.
 For a list of available graph refer to the documentation.
 """
@@ -135,11 +137,12 @@ end
     writenetwork(file, g)
     writenetwork(file, g, t; compress=false)
 
-Save a graph `g` to `file` in the format `t`.
+Save a network `g` to `file` in the format `t`.
 
 Eventually the resulting file can be compressed in the gzip format.
 
 Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
+When possible, graph, edge, and vertex properties will be written as well.
 
 If no format is provided, it will be inferred from `file` along with compression.
 """
