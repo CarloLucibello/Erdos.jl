@@ -55,12 +55,13 @@ end
     readnetwork(filename, G=Network)
     readnetwork(filename, t, G=Network; compressed=false)
 
-Readsa network from  `filename` in the format `t`. Returns a netowrk of type `G`
+Read a network from  `filename` in the format `t`. 
+Returns a network of type `G`
 (or the corresponding directed/undirected type if needed).
 Compressed files can eventually be read.
 
 Supported formats are `:gml, :dot, :graphml, :gexf, :net, :gt`.
-When possible, graph, edge, and vertex properties will be re read as well.
+When possible, graph, edge, and vertex properties will be read as well.
 
 If no format is provided, it will be inferred from the `filename`.
 
@@ -136,7 +137,7 @@ end
     writenetwork(file, g)
     writenetwork(file, g, t; compress=false)
 
-Save a netowrk `g` to `file` in the format `t`.
+Save a network `g` to `file` in the format `t`.
 
 Eventually the resulting file can be compressed in the gzip format.
 
