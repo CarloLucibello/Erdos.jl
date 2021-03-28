@@ -39,16 +39,8 @@ function countfirst(itr, v)
     return found ? c : 0
 end
 
-# myrand(a::AbstractArray) = a[_myrand(length(a))]
-
 # for generic iterables with length
-myrand(itr) = nth(itr, _myrand(length(itr)))
-
-_myrand(n::T) where {T<:Integer} = ceil(T, rand() * n)
-
-randbinomial(m::Integer, p::AbstractFloat) =
-    convert(Int, StatsFuns.RFunctions.binomrand(m, p))
-
+myrand(itr) = nth(itr, rand(1:length(itr)))
 
 #used in flow and dismantling
 struct GreaterThan2 <: Base.Order.Ordering end
