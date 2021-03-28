@@ -18,4 +18,4 @@ Private = false
 In order to define a custom network type, e.g. `MyNet <: ANetwork`, the corresponding
 [interface methods](@ref network_interface)  have to be implemented.
 This is automatically done for custom network types having a `props::PropertyStore`
-member. Take a look to `src/factory/net.jl` and `src/maps/property_store.jl` for an example.
+member. Take a look to `src/factory/network.jl` and `src/maps/property_store.jl` for an example.
