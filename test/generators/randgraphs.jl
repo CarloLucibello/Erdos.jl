@@ -9,11 +9,11 @@ r2 = DG(5,10)
 @test nv(r2) == 5
 @test ne(r2) == 10
 
-@test G(10,20,seed=3) == G(10, 20, seed=3)
-@test DG(10,20,seed=3) == DG(10, 20, seed=3)
-@test G(10,20,seed=3) == erdos_renyi(10, 20, G, seed=3)
-@test ne(G(10,40,seed=3)) == 40
-@test ne(DG(10,80,seed=3)) == 80
+@test G(10, 20, seed=3) == G(10, 20, seed=3)
+@test DG(10, 20, seed=3) == DG(10, 20, seed=3)
+@test G(10, 20, seed=3) == erdos_renyi(10, 20, G, seed=3)
+@test ne(G(10, 40, seed=3)) == 40
+@test ne(DG(10, 80, seed=3)) == 80
 
 er = erdos_renyi(10, 0.5, G)
 @test nv(er) == 10

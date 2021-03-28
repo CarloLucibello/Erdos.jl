@@ -18,7 +18,7 @@ function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
     rng = getRNG(seed)
-    nedg = rand(rng, Binomial(n, p))
+    nedg = rand(rng, Binomial(m, p))
     seed = seed >= 0 ? seed + 1 : seed
     return erdos_renyi(n, nedg, G; seed=seed)
 end
