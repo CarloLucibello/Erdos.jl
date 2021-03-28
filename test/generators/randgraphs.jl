@@ -9,25 +9,23 @@ r2 = DG(5,10)
 @test nv(r2) == 5
 @test ne(r2) == 10
 
-@test G(10,20,seed=3) == G(10, 20, seed=3)
-@test DG(10,20,seed=3) == DG(10, 20, seed=3)
-@test G(10,20,seed=3) == erdos_renyi(10, 20, G, seed=3)
-@test ne(G(10,40,seed=3)) == 40
-@test ne(DG(10,80,seed=3)) == 80
+@test G(10, 20, seed=3) == G(10, 20, seed=3)
+@test DG(10, 20, seed=3) == DG(10, 20, seed=3)
+@test G(10, 20, seed=3) == erdos_renyi(10, 20, G, seed=3)
+@test ne(G(10, 40, seed=3)) == 40
+@test ne(DG(10, 80, seed=3)) == 80
 
-er = erdos_renyi(10, 0.5, G)
-@test nv(er) == 10
-@test ne(er) < 40
+er = erdos_renyi(100, 0.5, G)
+@test er isa G
+@test nv(er) == 100
+@test 2300 < ne(er) < 2650        # 50*99/2 == 2475.0
 @test is_directed(er) == false
 
-er = erdos_renyi(10, 0.5, DG)
-@test nv(er) == 10
+er = erdos_renyi(100, 0.5, DG) 
+@test er isa DG
+@test nv(er) == 100
+@test 4600 < ne(er) < 5300                 # 50*99/2 == 4950.0
 @test is_directed(er) == true
-
-er = erdos_renyi(10, 0.5, G, seed=17)
-@test nv(er) == 10
-@test is_directed(er) == false
-
 
 ws = watts_strogatz(10, 4, 0.2,  G)
 @test nv(ws) == 10
