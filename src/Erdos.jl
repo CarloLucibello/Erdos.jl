@@ -10,7 +10,7 @@ using SparseArrays
 using LinearAlgebra
 using Arpack
 import GZip # I/O
-import StatsFuns # randgraphs
+using Distributions: Binomial # randgraphs
 import Printf
 using EzXML # I/O  graphml, gexf  #TODO import instead of using
 import Clustering: kmeans # community detection

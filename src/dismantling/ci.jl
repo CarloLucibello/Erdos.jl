@@ -60,7 +60,7 @@ Returns `(gnew, heap, lneigs)`.
 """
 function dismantle_ci_init(g::AGraph, l::Integer)
     lneigs = [neighborhood(g, i, l) for i=1:nv(g)]
-    h = MutableBinaryHeap{Pair{Int,Int},GreaterThan2}(GreaterThan2())
+    h = MutableBinaryHeap{Pair{Int,Int}, GreaterThan2}()
     for i=1:nv(g)
          j = push!(h, i=>ci(g, lneigs[i], i))
     end
@@ -75,7 +75,7 @@ To be called after [`dismantle_ci_init`](@ref)
 Returns the cleaned vertex if any (see [`clean_vertex!`](@ref)), -1 otherwise.
 """
 function dismantle_ci_oneiter!(g::AGraph, h, lneigs::Vector{Vector{T}}, l::Integer) where T
-    itop, citop = top(h)
+    itop, citop = first(h)
     citop < 0 && return -1
     clean_vertex!(g, itop)
     neigstop = collect(lneigs[itop])

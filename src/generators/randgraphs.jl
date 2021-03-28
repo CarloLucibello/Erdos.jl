@@ -17,8 +17,9 @@ edges.
 function erdos_renyi(n::Int, p::Real, ::Type{G} = Graph;
         seed::Int=-1) where G<:AGraphOrDiGraph
     m = is_directed(G) ? n*(n-1) : div(n*(n-1),2)
-    seed > 0 && seed_dsfmt(seed)
-    nedg = randbinomial(m, p) # sadly StatsBase doesn't support non-global RNG
+    rng = getRNG(seed)
+    nedg = rand(rng, Binomial(n, p))
+    seed = seed >= 0 ? seed + 1 : seed
     return erdos_renyi(n, nedg, G; seed=seed)
 end
 
@@ -504,8 +505,6 @@ function stochastic_block_model(c::Matrix{T}, n::Vector{Int},
         ::Type{G}=Graph; seed::Int = -1) where {T<:Real, G<:AGraph}
     @assert size(c,1) == length(n)
     @assert size(c,2) == length(n)
-    # init dsfmt generator without altering GLOBAL_RNG
-    seed > 0 && seed_dsfmt(seed)
     rng =  getRNG(seed)
 
     N = sum(n)
@@ -520,7 +519,7 @@ function stochastic_block_model(c::Matrix{T}, n::Vector{Int},
 
             m = a==b ? div(n[a]*(n[a]-1),2) : n[a]*n[b]
             p = a==b ? n[a]*c[a,b] / (2m) : n[a]*c[a,b]/m
-            nedg = randbinomial(m, p)
+            nedg = rand(rng, Binomial(m, p))
             rb = cum[b]+1:cum[b+1]
             i=0
             while i < nedg

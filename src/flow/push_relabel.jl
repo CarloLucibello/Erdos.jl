@@ -5,7 +5,7 @@ end
 
 function PushRelabelHeap{V,T}(n::Integer) where {V<:Integer,T<:Integer}
     handles = zeros(V, n)
-    data = MutableBinaryHeap{Pair{V,T},LessThan2}(LessThan2())
+    data = MutableBinaryHeap{Pair{V,T},LessThan2}()
     return PushRelabelHeap{V,T}(data, handles)
 end
 

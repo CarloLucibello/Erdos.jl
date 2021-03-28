@@ -56,7 +56,7 @@ function nonbacktrack_embedding(g::AGraph, k::Int)
     # common with the laplacian/adjacency methods.
     E = edgetype(g)
     for n=1:k-1
-        v= eigv[:,n+1]
+        v = eigv[:,n+1]
         for i=1:nv(g)
             for e in in_edges(g, i)
                 j = src(e)
