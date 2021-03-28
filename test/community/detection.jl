@@ -14,7 +14,7 @@ if !@isdefined(nonbacktrack_embedding_dense)
     =#
     function nonbacktrack_embedding_dense(g::AGraph, k::Int)
         B, edgeid = nonbacktracking_matrix(g)
-        λ, eigv, conv = Arpack.eigs(B, nev=k+1, v0=ones(Float64, size(B,1)))
+        λ, eigv = Arpack.eigs(B, nev=k+1, v0=ones(Float64, size(B,1)))
         ϕ = zeros(ComplexF64, k-1, nv(g))
         # TODO decide what to do with the stationary distribution ϕ[:,1]
         # this code just throws it away in favor of eigv[:,2:k+1].
