@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Getting Started · Erdos</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">Erdos</span></div><form class="docs-search" action="search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Getting Started</a><ul class="internal"><li><a class="tocitem" href="#Basic-examples"><span>Basic examples</span></a></li><li><a class="tocitem" href="#Ready-to-explore"><span>Ready to explore</span></a></li></ul></li><li><a class="tocitem" href="graph_types/">Graph Types</a></li><li><a class="tocitem" href="core/">Basic Interface</a></li><li><a class="tocitem" href="maps/">Edge And Vertex Maps</a></li><li><a class="tocitem" href="network_types/">Network Types</a></li><li><a class="tocitem" href="network_interface/">Property Interface for Networks</a></li><li><a class="tocitem" href="operators/">Operators</a></li><li><a class="tocitem" href="traversals/">Traversals</a></li><li><a class="tocitem" href="distance/">Distance</a></li><li><a class="tocitem" href="shortestpaths/">Shortest Paths</a></li><li><a class="tocitem" href="linalg/">Linear Algebra</a></li><li><a class="tocitem" href="persistence/">Reading / Writing Graphs</a></li><li><a class="tocitem" href="datasets/">Graph Datasets</a></li><li><a class="tocitem" href="deterministicgraphs/">Deterministic Graphs</a></li><li><a class="tocitem" href="randomgraphs/">Random Graphs</a></li><li><a class="tocitem" href="centrality/">Centrality Measures</a></li><li><a class="tocitem" href="community/">Community Structures</a></li><li><a class="tocitem" href="flow/">Flow and Cut</a></li><li><a class="tocitem" href="matching/">Matching</a></li><li><a class="tocitem" href="dismantling/">Dismantling</a></li><li><a class="tocitem" href="spanningtrees/">Spanning Trees</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Getting Started</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Getting Started</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/CarloLucibello/Erdos.jl/blob/master/docs/src/index.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Erdos"><a class="docs-heading-anchor" href="#Erdos">Erdos</a><a id="Erdos-1"></a><a class="docs-heading-anchor-permalink" href="#Erdos" title="Permalink"></a></h1><p><strong>Erdos</strong> is a graph library written in Julia. Installation is straightforward:</p><pre><code class="language-julia">julia&gt; Pkg.add(&quot;Erdos&quot;)</code></pre><p>Erdos defines two abstract graph types, <code>AGraph</code> and <code>ADiGraph</code>, from which all concrete undirected and directed graph types are derived.</p><p>Two concrete graph types, <code>Graph</code> and <code>Network</code>, and two digraph types, <code>DiGraph</code> and <code>DiNetwork</code> are implemented. In all these types the graph topology is represented internally as an adjacency list for each vertex. <code>(Di)Network</code>s come with some additional features over <code>(Di)Graph</code>s:</p><ul><li>each edge has a unique index;</li><li>vertex/edge maps (also called properties) can be stored internally.</li></ul><p>All graphs in <strong>Erdos</strong> have <code>1:n</code> indexed vertices, where <code>n</code> is the number of vertices. Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced just defining a few basic methods.</p><h2 id="Basic-examples"><a class="docs-heading-anchor" href="#Basic-examples">Basic examples</a><a id="Basic-examples-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-examples" title="Permalink"></a></h2><h3 id="Constructors"><a class="docs-heading-anchor" href="#Constructors">Constructors</a><a id="Constructors-1"></a><a class="docs-heading-anchor-permalink" href="#Constructors" title="Permalink"></a></h3><p>Build your first graph using the basic constructors.</p><pre><code class="language-julia">julia&gt; using Erdos
+
+julia&gt; g = CompleteGraph(100)
+Graph{Int64}(100, 4950)
+
+julia&gt; g = Network(10, 30) # a random graph with 10 vertex and 30 edges
+Network(10, 30)
+
+julia&gt; g = Graph{Int32}(100)
+Graph{Int32}(100, 0)
+
+julia&gt; g = DiGraph()
+DiGraph{Int64}(0, 0)
+
+julia&gt; g = erdos_renyi(10,30)
+Graph{Int64}(10, 30)
+
+julia&gt; g = random_regular_graph(10,3,seed=17)
+Graph{Int64}(10, 15).</code></pre><p>The default graph and digraph types are <code>Graph{Int}</code> and <code>DiGraph{Int}</code>. Use  the <code>Graph{Int32}</code> type to save memory if working with very large graphs.</p><h3 id="Queries"><a class="docs-heading-anchor" href="#Queries">Queries</a><a id="Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Queries" title="Permalink"></a></h3><pre><code class="language-julia">julia&gt; g = CompleteBipartiteGraph(5,10)
+Graph{Int64}(15, 50)
+
+julia&gt; is_bipartite(g)
+true
+
+julia&gt; nv(g) # number of vertices
+15
+
+julia&gt; ne(g) #number of edges
+50
+
+julia&gt; has_edge(g,1,2)
+false
+
+julia&gt; has_edge(g,1,6)
+true
+
+julia&gt; degree(g,1)
+10</code></pre><h3 id="Modifiers:"><a class="docs-heading-anchor" href="#Modifiers:">Modifiers:</a><a id="Modifiers:-1"></a><a class="docs-heading-anchor-permalink" href="#Modifiers:" title="Permalink"></a></h3><pre><code class="language-julia">julia&gt; g=DiGraph(10)
+DiGraph{Int64}(10, 0)
+
+julia&gt; add_edge!(g,1,2)
+true
+
+julia&gt; g
+DiGraph{Int64}(10, 1)
+
+# trying to add an edge between non-existen vertices results in a
+# (silent) failure
+julia&gt; add_edge!(g,1,11)
+false
+
+# has the addition of an already existent edge
+julia&gt; add_edge!(g,1,2)
+false
+
+julia&gt; add_edge!(g,2,1)
+true
+
+julia&gt; rem_edge!(g,2,1)
+true
+
+# returns the index of the vertex
+julia&gt; add_vertex!(g)
+11
+
+# vertex removal will cause the switch of the last index
+# with the removed one, to keep the indexes continuity.
+julia&gt; rem_vertex!(g,1)
+true
+
+julia&gt; rem_vertex!(g,12)
+false</code></pre><h3 id="Iterators"><a class="docs-heading-anchor" href="#Iterators">Iterators</a><a id="Iterators-1"></a><a class="docs-heading-anchor-permalink" href="#Iterators" title="Permalink"></a></h3><pre><code class="language-julia">julia&gt; g = Graph(10,20) #erdos renyi random graph with 10 vertices and 20 edges
+Graph{Int64}(10, 20)
+
+julia&gt; numedges = 0;
+
+# iterate over all edges
+julia&gt; for e in edges(g)
+           i, j = src(e), dst(e) # source and destination of an edge
+           @assert i &lt;= j  # default for undirected graphs
+           numedge += 1
+       end
+
+julia&gt; ne(g) == numedge
+true
+
+julia&gt; k=0;
+
+julia&gt; for i in neighbors(g,1)
+           @assert has_edge(g, 1, i);
+           k += 1
+       end
+
+julia&gt; degree(g, 1) == k
+true</code></pre><h3 id="I/O"><a class="docs-heading-anchor" href="#I/O">I/O</a><a id="I/O-1"></a><a class="docs-heading-anchor-permalink" href="#I/O" title="Permalink"></a></h3><p>Erdos supports many standard graph formats. Here is an example with Pajek&#39;s .net format:</p><pre><code class="language-julia">julia&gt; g = DiGraph(10,20)
+DiGraph{Int64}(10, 20)
+
+julia&gt; writegraph(&quot;test.net&quot;, g)
+1
+
+julia&gt; h = readgraph(&quot;test.net&quot;)
+DiGraph{Int64}(10, 20)
+
+julia&gt; g == h
+true</code></pre><h3 id="Datasets"><a class="docs-heading-anchor" href="#Datasets">Datasets</a><a id="Datasets-1"></a><a class="docs-heading-anchor-permalink" href="#Datasets" title="Permalink"></a></h3><p>A collection of real world graphs is available through <code>readgraph</code>:</p><pre><code class="language-julia">julia&gt; g = readgraph(:karate)
+Graph{Int64}(34, 78)
+
+julia&gt; g = readgraph(:condmat,Graph{UInt32})
+Graph{UInt32}(16726, 47594)</code></pre><h2 id="Ready-to-explore"><a class="docs-heading-anchor" href="#Ready-to-explore">Ready to explore</a><a id="Ready-to-explore-1"></a><a class="docs-heading-anchor-permalink" href="#Ready-to-explore" title="Permalink"></a></h2><p>Refer to the <a href="https://carlolucibello.github.io/Erdos.jl/latest">documentation</a> to explore all the features of Erdos. Here is a comprehensive list of the implemente algorithms. (<em>EE</em>) denotes algorithms in the companion package <a href="https://github.com/CarloLucibello/ErdosExtras.jl">ErdosExtras</a>.</p><ul><li><p><strong>core functions:</strong> vertices and edges addition and removal, degree (in/out/all), neighbors (in/out/all)</p></li><li><p><strong>maps</strong> dictionary like types to store properties associated to vertices and edges</p></li><li><p><strong>networks</strong> store vertex/edge/graph properties (maps) inside the graph itself</p></li><li><p><strong>connectivity:</strong> strongly- and weakly-connected components, bipartite checks, condensation, attracting components, neighborhood, k-core</p></li><li><p><strong>operators:</strong> complement, reverse, reverse!, union, join, intersect, difference, symmetric difference, blockdiag, induced subgraphs, products (cartesian/scalar)</p></li><li><p><strong>shortest paths:</strong> Dijkstra, Dijkstra with predecessors, Bellman-Ford, Floyd-Warshall, A*</p></li><li><p><strong>graph datasets:</strong> A collection of real world graphs (e.g. Zachary&#39;s karate club)</p></li><li><p><strong>graph generators:</strong> <a href="https://github.com/CarloLucibello/Erdos.jl/blob/master/src/generators/smallgraphs.jl">notorious graphs</a>, euclidean graphs and random graphs (Erdős–Rényi, Watts-Strogatz, random regular, arbitrary degree sequence, stochastic block model)</p></li><li><p><strong>I/O formats:</strong> <a href="http://en.wikipedia.org/wiki/GraphML">graphml</a>, <a href="https://en.wikipedia.org/wiki/Graph_Modelling_Language">gml</a>, <a href="http://gexf.net/format">gexf</a>, <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">dot</a>, <a href="http://gephi.org/users/supported-graph-formats/pajek-net-format/">net</a>, <a href="https://graph-tool.skewed.de/static/doc/gt_format.html">gt</a>. For some of these formats vertex/edge/graph properties can be read and written.</p></li><li><p><strong>centrality:</strong> betweenness, closeness, degree, pagerank, Katz</p></li><li><p><strong>traversal operations:</strong> cycle detection, BFS and DFS DAGs, BFS and DFS traversals with visitors, DFS topological sort, maximum adjacency / minimum cut, multiple random walks</p></li><li><p><strong>flow operations:</strong> maximum flow, minimum s-t cut</p></li><li><p><strong>matching:</strong> minimum weight matching on arbitrary graphs (<em>EE</em>), minimum b-matching (<em>EE</em>)</p></li><li><p><strong>travelling salesman problem:</strong> a TSP solver based on linear programming (<em>EE</em>)</p></li><li><p><strong>dismantling:</strong> collective influencer heuristic</p></li><li><p><strong>clique enumeration:</strong> maximal cliques</p></li><li><p><strong>linear algebra / spectral graph theory:</strong> adjacency matrix, Laplacian matrix, non-backtracking matrix</p></li><li><p><strong>community:</strong> modularity, community detection, core-periphery, clustering coefficients</p></li><li><p><strong>distance within graphs:</strong> eccentricity, diameter, periphery, radius, center</p></li><li><p><strong>distance between graphs:</strong> spectral<em>distance, edit</em>distance</p></li></ul></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="graph_types/">Graph Types »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 28 March 2021 06:51">Sunday 28 March 2021</span>. Using Julia version 1.6.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
