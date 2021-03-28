@@ -164,11 +164,16 @@ Returns a dictionary with elements `property_name => edge_map`.
 Returns a dictionary of the form `name => val` containing all the properties
 associated to edge `e`.
 
+    edge_property(g, e, name)
+
+Equivalent to `edge_property(g, e)[name]`
+
 [`eprop`](@ref) is the short form of this function.
 """
 edge_property(g::ANetOrDiNet, name::AbstractString) = edge_property(g.props, name)
 edge_property(g::ANetOrDiNet) = edge_property(g.props)
 edge_property(g::ANetOrDiNet, e::AEdge) = edge_property(g.props, e)
+edge_property(g::ANetOrDiNet, e::AEdge, name::AbstractString) = edge_property(g.props, e)[name]
 
 
 """See [`edge_property`](@ref)"""
@@ -242,10 +247,17 @@ Returns a dictionary with elements `property_name => vertex_map`.
 
 Returns a dictionary of the form `name => val` containing all the properties
 associated to vertex `v`.
+
+    vertex_property(g, v, name)
+
+Equivalent to `vertex_property(g, v)[name]`.
+
+[`vprop`](@ref) is the short form for this function.
 """
 vertex_property(g::ANetOrDiNet, name::AbstractString) = vertex_property(g.props, name)
 vertex_property(g::ANetOrDiNet) = vertex_property(g.props)
 vertex_property(g::ANetOrDiNet, v::Integer) = vertex_property(g.props, v)
+vertex_property(g::ANetOrDiNet, v::Integer, name::AbstractString) = vertex_property(g.props, v)[name]
 
 """See [`vertex_property`](@ref)"""
 vprop = vertex_property
@@ -266,7 +278,7 @@ has_vertex_property(g::ANetOrDiNet, name::AbstractString, v::Integer) =
 """See [`has_vertex_property`](@ref)"""
 has_vprop = has_vertex_property
 
-
+https://github.com/CarloLucibello/Erdos.jl
 
 # TODO export
 gprop_names(g::ANetOrDiNet) = collect(keys(gprop(g)))

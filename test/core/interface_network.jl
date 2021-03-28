@@ -14,7 +14,7 @@ e = TestIIdxEdge()
 
 if G<: ANetwork
 
-g = G(10,20)
+g = G(10, 20)
 m = ones(10,10)
 em = add_edge_property!(g, "rand", m)
 @test typeof(em) <: EdgeMap
@@ -26,6 +26,13 @@ vm = add_vertex_property!(g, "rand", m)
 @test typeof(vm) <: VertexMap
 @test vm.data === m
 @test vprop(g, "rand")[1] == 2
+
+g = G(10, 20)
+eprop!(g, "E", EdgeMap(g, e -> rand()))
+vprop!(g, "V", VertexMap(g, v -> rand()))
+e = first(edges(g))
+@test eprop(g, e)["E"] == eprop(g, e, "E")
+@test vprop(g, 1)["V"] == vprop(g, 1, "V")
 
 end #if
 
