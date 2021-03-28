@@ -37,6 +37,14 @@ mutable struct Network <: ANetwork
     props::PropertyStore
 end
 
+function Network(n::Integer = 0)
+    out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
+    epos = Vector{Pair{Int,Int}}()
+    free_indexes = Vector{Int}()
+    return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
+end
+
+
 """
     mutable struct DiNetwork <: ADiNetwork
         ne::Int
@@ -81,14 +89,6 @@ mutable struct DiNetwork <: ADiNetwork
     props::PropertyStore
 end
 
-const NetOrDiNet = Union{Network, DiNetwork}
-
-edgetype(::Type{G}) where {G<:NetOrDiNet} = IndexedEdge
-graphtype(::Type{DiNetwork}) = Network
-digraphtype(::Type{Network}) = DiNetwork
-vertextype(::Type{G}) where {G<:NetOrDiNet} = Int
-
-#### GRAPH CONSTRUCTORS
 function DiNetwork(n::Integer = 0)
     out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
     in_edges = [Vector{Pair{Int,Int}}() for _=1:n]
@@ -97,6 +97,14 @@ function DiNetwork(n::Integer = 0)
     free_indexes = Vector{Int}()
     return DiNetwork(0, 0, out_edges, in_edges, epos, free_indexes, PropertyStore())
 end
+
+
+const NetOrDiNet = Union{Network, DiNetwork}
+
+edgetype(::Type{G}) where {G<:NetOrDiNet} = IndexedEdge
+graphtype(::Type{DiNetwork}) = Network
+digraphtype(::Type{Network}) = DiNetwork
+vertextype(::Type{G}) where {G<:NetOrDiNet} = Int
 
 nv(g::NetOrDiNet) = length(g.out_edges)
 ne(g::NetOrDiNet) = g.ne
@@ -209,13 +217,6 @@ function reverse!(g::DiNetwork)
 end
 
 ## GRAPH
-
-function Network(n::Integer = 0)
-    out_edges = [Vector{Pair{Int,Int}}() for _=1:n]
-    epos = Vector{Pair{Int,Int}}()
-    free_indexes = Vector{Int}()
-    return Network(0, 0, out_edges, epos, free_indexes, PropertyStore())
-end
 
 function add_vertex!(g::Network)
     push!(g.out_edges, Vector{Pair{Int,Int}}())

@@ -176,6 +176,22 @@ digraph(g::ADiGraph) = g
 
 #### FALLBACKS #################
 
+function (::Type{G})(g::AGraph) where G <: AGraph
+    gnew = G(nv(g))
+    for e in edges(g)
+        add_edge!(gnew, src(e), dst(e))
+    end
+    return gnew
+end
+
+function (::Type{G})(g::ADiGraph) where G <: ADiGraph
+    gnew = G(nv(g))
+    for e in edges(g)
+        add_edge!(gnew, src(e), dst(e))
+    end
+    return gnew
+end
+
 function (::Type{G})(adjmx::AbstractMatrix{T}
         ; selfedges=true) where {G<:ADiGraph, T<:Number}
     op =  selfedges ? ((x,y) -> true)  : (!=)

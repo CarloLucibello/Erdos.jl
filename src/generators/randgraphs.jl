@@ -369,7 +369,7 @@ function _construct_fitness(n::Int, α::Float64, finite_size_correction::Bool)
 end
 
 """
-    random_regular_graph(n::Int, k::Int; seed=-1)
+    random_regular_graph(n::Int, k::Int, G=Graph; seed=-1)
 
 Creates a random undirected
 [regular graph](https://en.wikipedia.org/wiki/Regular_graph) with `n` vertices,
@@ -378,6 +378,8 @@ each with degree `k`.
 For undirected graphs, allocates an array of `nk` `Int`s, and takes
 approximately ``nk^2`` time. For ``k > n/2``, generates a graph of degree
 `n-k-1` and returns its complement.
+
+`G` is the resulting graph type.
 """
 function random_regular_graph(n::Int, k::Int, ::Type{G}=Graph;
         seed::Int=-1) where G<:AGraph
@@ -407,7 +409,7 @@ end
 
 
 """
-    random_configuration_model(n::Int, k::Vector{Int}; seed=-1, check_graphical=false)
+    random_configuration_model(n::Int, k::Vector{Int}, G=Graph; seed=-1, check_graphical=false)
 
 Creates a random undirected graph according to the [configuraton model]
 (http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf).
@@ -416,8 +418,9 @@ It contains `n` vertices, the vertex `i` having degree `k[i]`.
 Defining `c = mean(k)`, it allocates an array of `nc` `Int`s, and takes
 approximately ``nc^2`` time.
 
-
 If `check_graphical=true` makes sure that `k` is a graphical sequence (see `is_graphical`).
+
+`G` is the resulting graph type.
 """
 function random_configuration_model(n::Int, k::Vector{Int}, ::Type{G}=Graph;
         seed::Int=-1, check_graphical::Bool=false) where G<:AGraph

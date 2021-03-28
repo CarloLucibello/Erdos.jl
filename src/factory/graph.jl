@@ -7,10 +7,13 @@
 
 A simple graph type based on an adjacency list.
 
+The constructors
+
     Graph{T}(n=0)
     Graph(n=0) = Graph{Int}(n)
 
-Construct a `Graph` with `n` vertices and no edges.
+return a `Graph` with `n` vertices and no edges.
+
 
     Graph{T}(adjmx::AbstractMatrix; upper=false, selfedges=true)
 
@@ -34,8 +37,8 @@ Graph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
     erdos_renyi(n, m, Graph{T}; seed=seed)
 Graph(n::T, m::T; kws...) where {T<:Integer} = Graph{T}(n, m; kws...)
 Graph(n::T) where {T<:Integer} = Graph{T}(n)
+Graph(g::AGraph) = Graph{Int}(g)
 Graph() = Graph{Int}()
-
 
 """
     mutable struct DiGraph{T<:Integer} <: ADiGraph
@@ -75,7 +78,7 @@ DiGraph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
 DiGraph(n::T, m::T; kws...) where {T<:Integer} = DiGraph{T}(n, m; kws...)
 DiGraph(n::T) where {T<:Integer} = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
-
+DiGraph(g::ADiGraph) = DiGraph{Int}(g)
 
 const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 

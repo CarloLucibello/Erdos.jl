@@ -18,7 +18,18 @@ w = sprand(10,10, 0.1)
 @test Graph(w) == Graph{Int}(w)
 @test DiGraph(w) == DiGraph{Int}(w)
 
-@test Graph(0) == Graph() ==Graph{Int}() == Graph{Int}(0)
+@test Graph(0) == Graph() == Graph{Int}() == Graph{Int}(0)
 @test DiGraph(0) == DiGraph() == DiGraph{Int}() == DiGraph{Int}(0)
 
+
+g = G(10, 20)
+@test G(g) isa G
+@test g == G(g)
+@test g == g |> Network |> G
+
+g = DG(10, 20)
+@test DG(g) isa DG
+@test g == DG(g) 
+@test g == g |> DiNetwork |> DG
+  
 end # testset
