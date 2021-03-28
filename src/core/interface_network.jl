@@ -278,7 +278,6 @@ has_vertex_property(g::ANetOrDiNet, name::AbstractString, v::Integer) =
 """See [`has_vertex_property`](@ref)"""
 has_vprop = has_vertex_property
 
-https://github.com/CarloLucibello/Erdos.jl
 
 # TODO export
 gprop_names(g::ANetOrDiNet) = collect(keys(gprop(g)))
