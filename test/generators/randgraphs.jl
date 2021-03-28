@@ -18,7 +18,7 @@ r2 = DG(5,10)
 er = erdos_renyi(100, 0.5, G)
 @test er isa G
 @test nv(er) == 100
-@test 2300 < nv(er) < 2650        # 50*99/2 == 2475.0
+@test 2300 < ne(er) < 2650        # 50*99/2 == 2475.0
 @test is_directed(er) == false
 
 er = erdos_renyi(100, 0.5, DG) 
