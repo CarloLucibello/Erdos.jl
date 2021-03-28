@@ -37,7 +37,6 @@ Graph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
     erdos_renyi(n, m, Graph{T}; seed=seed)
 Graph(n::T, m::T; kws...) where {T<:Integer} = Graph{T}(n, m; kws...)
 Graph(n::T) where {T<:Integer} = Graph{T}(n)
-Graph(g::AGraph) = Graph{Int}(g)
 Graph() = Graph{Int}()
 
 """
@@ -78,7 +77,6 @@ DiGraph{T}(n::Integer, m::Integer; seed = -1) where {T<:Integer} =
 DiGraph(n::T, m::T; kws...) where {T<:Integer} = DiGraph{T}(n, m; kws...)
 DiGraph(n::T) where {T<:Integer} = DiGraph{T}(n)
 DiGraph() = DiGraph{Int}()
-DiGraph(g::ADiGraph) = DiGraph{Int}(g)
 
 const GraphOrDiGraph{T} = Union{Graph{T}, DiGraph{T}}
 
