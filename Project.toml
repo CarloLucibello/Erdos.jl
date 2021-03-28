@@ -1,6 +1,6 @@
 name = "Erdos"
 uuid = "90d7349d-81aa-5495-813a-883243abfe31"
-version = "0.8.0"
+version = "0.8.1"
 
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
