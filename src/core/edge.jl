@@ -29,7 +29,7 @@ dst(e::Edge) = e.dst
 iterate(e::AEdge, i=0) = (i+=1; i>2 ? nothing : (getfield(e,i), i))   
 reverse(e::Edge) = Edge(dst(e), src(e))
 
-show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)),$(idx(e)))")
+show(io::IO, e::AIndexedEdge) = print(io, "($(src(e))=>$(dst(e)), $(idx(e)))")
 
 """
     struct IndexedEdge <: AIndexedEdge
