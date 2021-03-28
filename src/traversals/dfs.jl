@@ -9,7 +9,7 @@ Return `true` if graph `g` contains a cycle.
 ### Implementation Notes
 Uses DFS.
 """
-has_cycycles(g::AGraph) = ne(g) > 0
+has_cycles(g::AGraph) = ne(g) > 0
 
 function has_cycles(g::ADiGraph)
     T = vertextype(g)
