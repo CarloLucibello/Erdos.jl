@@ -1,4 +1,5 @@
 # Edge and Vertex Maps
+
 Arbitrary values can be associated to a graph's vertices and edges, and handed
 over to method's that necessitate them, thanks to the edge maps and vertex maps
 interfaces. Also, edge and vector maps can be internally stored in
@@ -6,6 +7,7 @@ interfaces. Also, edge and vector maps can be internally stored in
 [property interface](@ref network_interface).
 
 **Example usage**:
+
 ```julia
 # create a graph
 g = erdos_renyi(10,0.1)
@@ -22,9 +24,10 @@ for e in edges(g)
    w = weights[i,j]
    .....
 end
-``` 
+```
 
 ## Edge Maps
+
 ```@autodocs
 Modules = [Erdos]
 Pages   = [ "maps/edgemap.jl"]
@@ -32,7 +35,9 @@ Private = false
 ```
 
 ## Vertex Maps
+
 Any `AbstractVector{T}` or `Dict{Int,T}` can be used as a vertex map.
+
 ```@autodocs
 Modules = [Erdos]
 Pages   = [ "maps/vertexmap.jl"]
@@ -40,6 +45,7 @@ Private = false
 ```
 
 ## PropertyStore
+
 ```@autodocs
 Modules = [Erdos]
 Pages   = [ "maps/property_store.jl"]

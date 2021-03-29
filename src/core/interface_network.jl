@@ -130,8 +130,9 @@ add_edge_property!(g, "weight", Float64)
 eprop!(g, "weight", Float64)
 ```
 """
-add_edge_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_edge_property!(g.props, name, EdgeMap(g, T))
-add_edge_property!(g::ANetOrDiNet, name::AbstractString, emap::AEdgeMap) = add_edge_property!(g.props, name, emap)
+add_edge_property!(g::ANetOrDiNet, name::AbstractString, emap::AEdgeMap) = 
+    (add_edge_property!(g.props, name, emap); g)
+add_edge_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_edge_property!(g, name, EdgeMap(g, T))
 add_edge_property!(g::ANetOrDiNet, name::AbstractString, data) = add_edge_property!(g, name, EdgeMap(g, data))
 
 
@@ -145,7 +146,8 @@ Remove the edge property  `name` from `g`.
 
 [`rem_eprop!`](@ref) is the short form of this function.
 """
-rem_edge_property!(g::ANetOrDiNet, name::AbstractString) = rem_edge_property!(g.props, name)
+rem_edge_property!(g::ANetOrDiNet, name::AbstractString) = 
+    (rem_edge_property!(g.props, name); g)
 
 """See [`rem_edge_property!`](@ref)"""
 rem_eprop! = rem_edge_property!
@@ -160,11 +162,13 @@ Return an edge map corresponding to property `name` of edges in `g`.
 Returns a dictionary with elements `property_name => edge_map`.
 
     edge_property(g, e)
+    edge_property(g, u, v)
 
 Returns a dictionary of the form `name => val` containing all the properties
 associated to edge `e`.
 
     edge_property(g, e, name)
+    edge_property(g, u, v, name)
 
 Equivalent to `edge_property(g, e)[name]`
 
@@ -173,7 +177,11 @@ Equivalent to `edge_property(g, e)[name]`
 edge_property(g::ANetOrDiNet, name::AbstractString) = edge_property(g.props, name)
 edge_property(g::ANetOrDiNet) = edge_property(g.props)
 edge_property(g::ANetOrDiNet, e::AEdge) = edge_property(g.props, e)
-edge_property(g::ANetOrDiNet, e::AEdge, name::AbstractString) = edge_property(g.props, e)[name]
+edge_property(g::ANetOrDiNet, u::Integer, v::Integer) = edge_property(g.props, edge(g, u, v))
+edge_property(g::ANetOrDiNet, e::AEdge, name::AbstractString) = 
+    edge_property(g.props, e)[name]
+edge_property(g::ANetOrDiNet, u::Integer, v::Integer, name::AbstractString) = 
+    edge_property(g.props, edge(g, u, v))[name]
 
 
 """See [`edge_property`](@ref)"""
@@ -214,8 +222,9 @@ As an alternative, an existing vertex map `vmap` can be stored into `g`.
 
 [`vprop!`](@ref) is the short form of this function.
 """
-add_vertex_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_vertex_property!(g.props, name, VertexMap(g, T))
-add_vertex_property!(g::ANetOrDiNet, name::AbstractString, vmap::AVertexMap) = add_vertex_property!(g.props, name, vmap)
+add_vertex_property!(g::ANetOrDiNet, name::AbstractString, vmap::AVertexMap) = 
+    (add_vertex_property!(g.props, name, vmap); g)
+add_vertex_property!(g::ANetOrDiNet, name::AbstractString, ::Type{T}) where {T} = add_vertex_property!(g, name, VertexMap(g, T))
 add_vertex_property!(g::ANetOrDiNet, name::AbstractString, data) = add_vertex_property!(g, name, VertexMap(g, data))
 
 """See [`add_vertex_property!`](@ref)"""
@@ -229,7 +238,8 @@ Remove the vertex property  `name` from `g`.
 
 [`rem_vprop!`](@ref) is the short form of this function.
 """
-rem_vertex_property!(g::ANetOrDiNet, name::AbstractString) = rem_vertex_property!(g.props, name)
+rem_vertex_property!(g::ANetOrDiNet, name::AbstractString) = 
+    (rem_vertex_property!(g.props, name); g)
 
 """See [`rem_vertex_property!`](@ref)"""
 rem_vprop! = rem_vertex_property!

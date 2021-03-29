@@ -30,8 +30,15 @@ vm = add_vertex_property!(g, "rand", m)
 g = G(10, 20)
 eprop!(g, "E", EdgeMap(g, e -> rand()))
 vprop!(g, "V", VertexMap(g, v -> rand()))
+eprop!(g, "E1", e -> rand())
+vprop!(g, "V1", v -> rand())
+
 e = first(edges(g))
 @test eprop(g, e)["E"] == eprop(g, e, "E")
+@test vprop(g, 1)["V"] == vprop(g, 1, "V")
+
+@test eprop(g, src(e), dst(e))["E"] == eprop(g, e, "E")
+@test eprop(g, src(e), dst(e))["E"] == eprop(g, src(e), dst(e), "E")
 @test vprop(g, 1)["V"] == vprop(g, 1, "V")
 
 end #if
