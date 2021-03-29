@@ -39,7 +39,6 @@ e = first(edges(g))
 
 @test eprop(g, src(e), dst(e))["E"] == eprop(g, e, "E")
 @test eprop(g, src(e), dst(e))["E"] == eprop(g, src(e), dst(e), "E")
-@test vprop(g, 1)["V"] == vprop(g, 1, "V")
 
 end #if
 
