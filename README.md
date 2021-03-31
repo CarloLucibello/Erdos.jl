@@ -7,20 +7,33 @@
 A graph library entirely written in Julia. Install it with
 
 ```julia
-julia> Pkg.add("Erdos")
+]add Erdos
 ```
 
-*Erdos* defines some types associated to graph mathematical structures and implements a huge number of algorithms to work with them.
-Moreover edge and vertex properties can be internally stored in some of the graph types (we call them networks) and read/written in most common graph formats.
-Custom graphs and networks can be defined inheriting from *Erdos*' abstract types.
+*Erdos* implements some graph types a large number of algorithms to work with them.
+Moreover edge and vertex properties can be internally stored in some of the graph types (we call them networks). These features can also be exported to most common graph formats.
+Custom graph types can be defined inheriting from *Erdos*' abstract types.
 
-Take a look at the companion package [ErdosExtras](https://github.com/CarloLucibello/ErdosExtras.jl) for additional algorithms.
+## Usage Example
 
-## Licence and Credits
+```julia
+julia> using Erdos
 
-*Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
+julia> g = Network(10, 20) # create erdos-renyi random network
 
-Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).
+julia> add_edge!(g, 1, 2); # add edge (1, 2) if it doesn't exists
+
+julia> eprop!(g, "w", e -> rand()) # add edge property named "w"
+Network(10, 20) with [] graph, [] vertex, ["w"] edge properties
+
+julia> vprop!(g, "x", v -> [1,1]) # add vertex property named "x"
+Network(10, 20) with [] graph, ["x"] vertex, ["w"] edge properties
+
+julia> eprop(g, 1, 2, "w")
+0.8959648919973169
+
+julia> writenetwork("mygraph.graphml")  # save graph and properties in .graphml format
+```
 
 ## Features
 
@@ -66,3 +79,9 @@ Here is a comprehensive list of the implemente algorithms. (*EE*) denotes algori
 - **distance within graphs:** eccentricity, diameter, periphery, radius, center
 
 - **distance between graphs:** spectral_distance, edit_distance
+
+## Licence and Credits
+
+*Erdos* is released under MIT License. Graphs stored in the [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets) directory are released under GPLv3 License.
+
+Huge credit goes to the contributors of [LightGraphs.jl](https://github.com/JuliaGraphs/LightGraphs.jl), from which this library is derived. Also thanks to Tiago de Paula Peixoto and his Python library [graph-tool](https://graph-tool.skewed.de/) for inspiration and for the graphs in [datasets](https://github.com/CarloLucibello/Erdos.jl/tree/master/datasets).

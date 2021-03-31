@@ -7,9 +7,11 @@ a name associated to them. *Erdos* defines some interface methods and their
 convenient short form equivalents to work with networks and properties.
 
 ```julia
+julia> using Erdos
+
 julia> g = Network(10, 20) # create erdos-renyi random network
 
-julia> add_edge!(g, 1, 2); # just to make sure edge (1,2) exists
+julia> add_edge!(g, 1, 2); # add edge (1, 2) if it doesn't exists
 
 julia> eprop!(g, "w", e -> rand()) # add edge property named "w"
 Network(10, 20) with [] graph, [] vertex, ["w"] edge properties
@@ -19,6 +21,8 @@ Network(10, 20) with [] graph, ["x"] vertex, ["w"] edge properties
 
 julia> eprop(g, 1, 2, "w")
 0.8959648919973169
+
+julia> writenetwork("mygraph.graphml")  # save graph and properties in .graphml format
 ```
 
 ## Property Interface
