@@ -4,7 +4,7 @@ if G <: ANetwork
 ## EDGE
 g = G(10, 20)
 eprop!(g, "label", Int)
-m = eprop!(g, "label")
+m = eprop(g, "label")
 
 @test valtype(m) == Int
 @test typeof(m) <: AEdgeMap
@@ -20,7 +20,7 @@ rem_eprop!(g, "label")
 @test_throws KeyError eprop(g, "label")
 
 eprop!(g, "hi", String)
-m = eprop!(g, "hi")
+m = eprop(g, "hi")
 @test valtype(m) == String
 @test typeof(m) <: AEdgeMap
 e = first(edges(g))
@@ -29,7 +29,7 @@ m[e] = "ciao"
 
 m = EdgeMap(g, String)
 eprop!(g, "bye", m)
-m2 = eprop!(g, "bye")
+m2 = eprop(g, "bye")
 @test m === m2
 @test eprop_names(g) == ["bye","hi"]
 
