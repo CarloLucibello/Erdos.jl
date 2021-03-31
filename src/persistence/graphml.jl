@@ -208,7 +208,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
 
     for i in 1:nv(g)
         xv = addelement!(xg, "node")
-        xv["id"] = "n$(i-1)"
+        xv["id"] = "$(i-1)"
         for (pname,p) in vprop(g)
             xp = addelement!(xv, "data")
             xp["key"] = vpropkey[pname]
@@ -218,8 +218,8 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
 
     for e in edges(g)
         xe = addelement!(xg, "edge")
-        xe["source"] = "n$(src(e)-1)"
-        xe["target"] = "n$(dst(e)-1)"
+        xe["source"] = "$(src(e)-1)"
+        xe["target"] = "$(dst(e)-1)"
         for (pname, p) in eprop(g)
             xp = addelement!(xe, "data")
             xp["key"] = epropkey[pname]
