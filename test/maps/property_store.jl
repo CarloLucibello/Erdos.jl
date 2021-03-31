@@ -3,7 +3,8 @@
 if G <: ANetwork
 ## EDGE
 g = G(10, 20)
-m = eprop!(g, "label", Int)
+eprop!(g, "label", Int)
+m = eprop(g, "label")
 
 @test valtype(m) == Int
 @test typeof(m) <: AEdgeMap
@@ -18,7 +19,8 @@ rem_eprop!(g, "label")
 @test_throws ErrorException rem_eprop!(g, "label")
 @test_throws KeyError eprop(g, "label")
 
-m = eprop!(g, "hi", String)
+eprop!(g, "hi", String)
+m = eprop(g, "hi")
 @test valtype(m) == String
 @test typeof(m) <: AEdgeMap
 e = first(edges(g))
@@ -26,7 +28,8 @@ m[e] = "ciao"
 @test m[e] == "ciao"
 
 m = EdgeMap(g, String)
-m2 = eprop!(g, "bye", m)
+eprop!(g, "bye", m)
+m2 = eprop(g, "bye")
 @test m === m2
 @test eprop_names(g) == ["bye","hi"]
 
@@ -47,7 +50,8 @@ eprop(g, "bye")[edg[2]] = "e2"
 g = G(3)
 add_edge!(g,1,2)
 add_edge!(g,2,3)
-m = vprop!(g, "label", [1,2,3])
+vprop!(g, "label", [1,2,3])
+m = vprop(g, "label")
 @test valtype(m) == Int
 @test typeof(m) <: AVertexMap
 @test vprop(g, "label") === m
@@ -60,7 +64,8 @@ swap_vertices!(g, 1, 2)
 @test m[1] == 2
 @test m[2] == 3
 
-m = vprop!(g, "size", Int)
+vprop!(g, "size", Int)
+m = vprop(g, "size")
 m[1] =  4
 @test vprop(g, 1) == Dict("size"=>4, "label"=>2)
 @test vprop(g, 2) == Dict("label"=>3)

@@ -166,7 +166,7 @@ function readgt_props!(io::IO, g::ANetOrDiNet)
         elseif ptype == 1
             add_vertex_property!(g, pname, m)
         elseif ptype == 2
-            add_edge_property!(g, pname, EdgeMap(g, m))
+            add_edge_property!(g, pname, m)
         end
     end
 
