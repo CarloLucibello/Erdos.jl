@@ -213,10 +213,10 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
     for i in 1:nv(g)
         xv = addelement!(xg, "node")
         xv["id"] = "$(i-1)"
-        for (pname,p) in vprop(g)
+        for (pname, p) in vprop(g, i)
             xp = addelement!(xv, "data")
             xp["key"] = vpropkey[pname]
-            setnodecontent!(xp, graphmlstring(p[i])) #TODO check has key
+            setnodecontent!(xp, graphmlstring(p))
         end
     end
 
@@ -224,10 +224,10 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         xe = addelement!(xg, "edge")
         xe["source"] = "$(src(e)-1)"
         xe["target"] = "$(dst(e)-1)"
-        for (pname, p) in eprop(g)
+        for (pname, p) in eprop(g, e)
             xp = addelement!(xe, "data")
             xp["key"] = epropkey[pname]
-            setnodecontent!(xp, graphmlstring(p[e])) #TODO check has key
+            setnodecontent!(xp, graphmlstring(p))
         end
     end
     prettyprint(io, xdoc)
