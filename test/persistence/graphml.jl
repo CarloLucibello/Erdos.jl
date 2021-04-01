@@ -28,17 +28,25 @@ ga = readgraph(f, :graphml, G)
 
 if G <: ANetwork ##################
 
-g = readnetwork(:lesmis, G)
-h = readnetwork(joinpath(testdir, "testdata", "lesmis.graphml.gz"), G)
-test_networks_eq(g, h)
+    g = readnetwork(:lesmis, G)
+    h = readnetwork(joinpath(testdir, "testdata", "lesmis.graphml.gz"), G)
+    test_networks_eq(g, h)
 
-for gname in [:lesmis, :karate]
-    g = readnetwork(gname, G)
+    for gname in [:lesmis, :karate]
+        g = readnetwork(gname, G)
+        writenetwork(f, g, :graphml)
+        h = readnetwork(f, :graphml, G)
+        test_networks_eq(g, h)
+    end
+
+    g = G(5, 10)
+    add_edge!(g, 1, 2)
+    vprop!(g, "x", Dict(1=>"a"))
+    vprop!(g, "y", Dict(1=>"aa", 2=>"aa"))
+    eprop!(g, "x", Dict(first(edges(g)) => "a"))
     writenetwork(f, g, :graphml)
     h = readnetwork(f, :graphml, G)
     test_networks_eq(g, h)
-end
-
 end #if network ############################
 
 isfile(f) && rm(f)
