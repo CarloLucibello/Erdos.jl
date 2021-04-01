@@ -178,7 +178,7 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         gpropkey[pname] = "key$nprop"
         xp["for"] = "graph"
         xp["attr.name"] = pname
-        xp["attr.type"] = get_graphml_type(valtype(p))
+        xp["attr.type"] = get_graphml_type(typeof(p))
         nprop += 1
     end
     vpropkey = Dict{String,String}()
