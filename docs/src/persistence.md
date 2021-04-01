@@ -15,7 +15,6 @@ julia> g = Graph(10, 20)
 Graph{Int64}(10, 20)
 
 julia> writegraph("mygraph.gml", g) #format is inferred from the extension
-1
 
 julia> h = readgraph("mygraph.gml")
 Graph{Int64}(10, 20)
@@ -33,7 +32,6 @@ julia> eprop!(g, "B", EdgeMap(g, e -> rand()));
 julia> vprop!(g, "C", VertexMap(g, v -> rand()));
 
 julia> writenetwork("mygraph.gml", g) #format is inferred from the extension
-1
 
 julia> h = readnetwork("mygraph.gml")
 Network(10, 20) with ["A"] graph, ["C"] vertex, ["B"] edge properties

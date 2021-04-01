@@ -4,7 +4,7 @@ f,fio = mktemp()
 
 p1 = readgraph(joinpath(testdir,"testdata","tutte.gml"), G)
 
-@test writegraph(f, p1, :graphml) == 1
+writegraph(f, p1, :graphml)
 g = readgraph(f, :graphml, G)
 @test g == p1
 graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), G)
@@ -12,17 +12,17 @@ graphml_g = readgraph(joinpath(testdir, "testdata", "grafo1853.13.graphml"), G)
 @test ne(graphml_g) == 15
 
 g = G(10,0)
-@test writegraph(f, g, :graphml) == 1
+writegraph(f, g, :graphml)
 ga = readgraph(f, :graphml, G)
 @test g == ga
 
 g = G(10,20)
-@test writegraph(f, g, :graphml) == 1
+writegraph(f, g, :graphml)
 ga = readgraph(f, :graphml, G)
 @test g == ga
 
 g = DG(10,20)
-@test writegraph(f, g, :graphml) == 1
+writegraph(f, g, :graphml)
 ga = readgraph(f, :graphml, G)
 @test g == ga
 

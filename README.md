@@ -23,10 +23,10 @@ julia> g = Network(10, 20) # create erdos-renyi random network
 
 julia> add_edge!(g, 1, 2); # add edge (1, 2) if it doesn't exists
 
-julia> eprop!(g, "w", e -> rand()) # add edge property named "w"
+julia> eprop!(g, "w", e -> dst(e) - src(e)) # add edge property named "w"
 Network(10, 20) with [] graph, [] vertex, ["w"] edge properties
 
-julia> vprop!(g, "x", v -> [1,1]) # add vertex property named "x"
+julia> vprop!(g, "x", v -> rand()) # add vertex property named "x"
 Network(10, 20) with [] graph, ["x"] vertex, ["w"] edge properties
 
 julia> eprop(g, 1, 2, "w")

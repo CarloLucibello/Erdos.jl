@@ -138,7 +138,6 @@ julia> g = DiGraph(10,20)
 DiGraph{Int64}(10, 20)
 
 julia> writegraph("test.net", g)
-1
 
 julia> h = readgraph("test.net")
 DiGraph{Int64}(10, 20)

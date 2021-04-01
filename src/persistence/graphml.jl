@@ -156,6 +156,10 @@ const graphml_types_rev = Dict("int"  =>  Int,
                             "vector_double" => Vector{Float64}
                         )
 
+get_graphml_type(T) = get(graphml_types, T) do
+                        @error("property type $(T) not supported by the writer")
+                      end
+
 graphmlstring(x) = string(x)
 graphmlstring(v::Vector) = join((Printf.@sprintf("%.10g",x) for x in v), ", ")
 
@@ -174,8 +178,8 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         gpropkey[pname] = "key$nprop"
         xp["for"] = "graph"
         xp["attr.name"] = pname
-        xp["attr.type"] = graphml_types[typeof(p)]
-        nprop+=1
+        xp["attr.type"] = get_graphml_type(valtype(p))
+        nprop += 1
     end
     vpropkey = Dict{String,String}()
     for (pname, p) in vprop(g)
@@ -184,8 +188,8 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         vpropkey[pname] = "key$nprop"
         xp["for"] = "node"
         xp["attr.name"] = pname
-        xp["attr.type"] = graphml_types[valtype(p)]
-        nprop+=1
+        xp["attr.type"] = get_graphml_type(valtype(p)) 
+        nprop += 1
     end
     epropkey = Dict{String,String}()
     for (pname, p) in eprop(g)
@@ -194,8 +198,8 @@ function writenetgraphml(io::IO, g::ANetOrDiNet)
         epropkey[pname] = "key$nprop"
         xp["for"] = "edge"
         xp["attr.name"] = pname
-        xp["attr.type"] = graphml_types[valtype(p)]
-        nprop+=1
+        xp["attr.type"] = get_graphml_type(valtype(p)) 
+        nprop += 1
     end
 
     xg = addelement!(xroot, "graph")
