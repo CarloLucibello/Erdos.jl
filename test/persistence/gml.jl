@@ -9,7 +9,7 @@ g = graph(:tutte, G)
 gml1 = readgraph(joinpath(testdir,"testdata", "twographs-10-28.gml"), G)
 @test nv(gml1) == 10
 @test ne(gml1) == 28
-@test writegraph(f, gml1, :gml) == 1
+writegraph(f, gml1, :gml)
 gml1a = readgraph(f, :gml, G)
 @test gml1a == gml1
 
@@ -17,22 +17,22 @@ gml1 = readgraph(joinpath(testdir,"testdata", "twounnamedgraphs.gml"), G)
 @test typeof(gml1) == G
 @test nv(gml1) == 4
 @test ne(gml1) == 6
-@test writegraph(f, gml1, :gml) == 1
+writegraph(f, gml1, :gml)
 gml1a = readgraph(f, :gml, G)
 @test gml1a == gml1
 
 g = G(10,0)
-@test writegraph(f, g, :gml) == 1
+writegraph(f, g, :gml)
 ga = readgraph(f, :gml, G)
 @test g == ga
 
 g = G(10,20)
-@test writegraph(f, g, :gml) == 1
+writegraph(f, g, :gml)
 ga = readgraph(f, :gml, G)
 @test g == ga
 
 g = DG(10,20)
-@test writegraph(f, g, :gml) == 1
+writegraph(f, g, :gml)
 ga = readgraph(f, :gml, G)
 @test g == ga
 

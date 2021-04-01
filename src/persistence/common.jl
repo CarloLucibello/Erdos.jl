@@ -95,7 +95,7 @@ function readnetwork(fn::String, ::Type{G}=Network) where G<:ANetOrDiNet
 end
 
 function readnetwork(s::Symbol, ::Type{G}=Network) where G<:AGraphOrDiGraph
-    readnetwork(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
+    return readnetwork(joinpath(DATASETS_DIR, string(s) * ".gt.gz"), G)
 end
 
 """
@@ -111,15 +111,16 @@ Currently supported formats are `:gml, :graphml, :gexf, :dot, :net, :gt`.
 If no format is provided, it will be inferred from `file` along with compression.
 """
 function writegraph(io::IO, g::AGraphOrDiGraph, t::Symbol)
-    return filemap[t][2](io, g)
+    filemap[t][2](io, g)
+    return nothing
 end
 
 function writegraph(fn::String, g::AGraphOrDiGraph, t::Symbol; compress::Bool=false)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     io = compress ? GZip.open(fn,"w") : open(fn,"w")
-    retval = writegraph(io, g, t)
+    writegraph(io, g, t)
     close(io)
-    return retval
+    return nothing
 end
 
 function writegraph(fn::String, g::AGraphOrDiGraph)
@@ -130,7 +131,8 @@ function writegraph(fn::String, g::AGraphOrDiGraph)
         ft = split(fn,'.')[end-1]
     end
     Symbol(ft) in keys(filemap) || error("Could not infer file format.")
-    return writegraph(fn, g, Symbol(ft), compress=compress)
+    writegraph(fn, g, Symbol(ft), compress=compress)
+    return nothing
 end
 
 """
@@ -147,15 +149,16 @@ When possible, graph, edge, and vertex properties will be written as well.
 If no format is provided, it will be inferred from `file` along with compression.
 """
 function writenetwork(io::IO, g::ANetOrDiNet, t::Symbol)
-    return filemap[t][4](io, g)
+    filemap[t][4](io, g)
+    return nothing
 end
 
 function writenetwork(fn::String, g::ANetOrDiNet, t::Symbol; compress::Bool=false)
     t in keys(filemap) || error("Please select a supported graph format: one of $(keys(filemap))")
     io = compress ? GZip.open(fn,"w") : open(fn,"w")
-    retval = writenetwork(io, g, t)
+    writenetwork(io, g, t)
     close(io)
-    return retval
+    return nothing
 end
 
 function writenetwork(fn::String, g::ANetOrDiNet)
@@ -166,7 +169,8 @@ function writenetwork(fn::String, g::ANetOrDiNet)
         ft = split(fn,'.')[end-1]
     end
     Symbol(ft) in keys(filemap) || error("Could not infer file format.")
-    return writenetwork(fn, g, Symbol(ft), compress=compress)
+    writenetwork(fn, g, Symbol(ft), compress=compress)
+    return nothing
 end
 
 function getchild(el::EzXML.Node, s::String)

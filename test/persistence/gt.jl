@@ -44,7 +44,7 @@ g = readgraph(:lesmis, G)
 @test nv(g) == 77
 @test ne(g) == 254
 
-@test writegraph(f, g, :gt) == 1
+writegraph(f, g, :gt)
 h = readgraph(f, :gt, G)
 @test g == h
 
@@ -53,23 +53,23 @@ g = readgraph(:serengetifoodweb, G)
 @test nv(g) == 161
 @test ne(g) == 592
 
-@test writegraph(f, g, :gt) == 1
+writegraph(f, g, :gt)
 h = readgraph(f, :gt, G)
 @test g == h
 
 
 g = G(10,0)
-@test writegraph(f, g, :gt) == 1
+writegraph(f, g, :gt)
 ga = readgraph(f, :gt, G)
 @test g == ga
 
 g = G(10,20)
-@test writegraph(f, g, :gt) == 1
+writegraph(f, g, :gt)
 ga = readgraph(f, :gt, G)
 @test g == ga
 
 g = DG(10,20)
-@test writegraph(f, g, :gt) == 1
+writegraph(f, g, :gt)
 ga = readgraph(f, :gt, G)
 @test g == ga
 

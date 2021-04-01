@@ -3,17 +3,17 @@
 f, fio = mktemp()
 
 g = G(10,0)
-@test writegraph(f, g, :gexf) == 1
+writegraph(f, g, :gexf)
 ga = readgraph(f, :gexf, G)
 @test g == ga
 
 g = G(10,20)
-@test writegraph(f, g, :gexf) == 1
+writegraph(f, g, :gexf)
 ga = readgraph(f, :gexf, G)
 @test g == ga
 
 g = DG(10,20)
-@test writegraph(f, g, :gexf) == 1
+writegraph(f, g, :gexf)
 ga = readgraph(f, :gexf, G)
 @test g == ga
 

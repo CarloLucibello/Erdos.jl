@@ -1,21 +1,27 @@
 # Erdos
+
 **Erdos** is a graph library written in Julia. Installation is straightforward:
+
 ```julia
 julia> Pkg.add("Erdos")
 ```
+
 Erdos defines two abstract graph types, `AGraph` and `ADiGraph`, from which all concrete undirected and directed graph types are derived.
 
 Two concrete graph types, `Graph` and `Network`, and two digraph types, `DiGraph` and `DiNetwork` are implemented. In all these types the graph topology is represented internally as an adjacency list for each vertex. `(Di)Network`s come with some additional features over `(Di)Graph`s:
 
- - each edge has a unique index;
- - vertex/edge maps (also called properties) can be stored internally.
+- each edge has a unique index;
+- vertex/edge maps (also called properties) can be stored internally.
 
 All graphs in **Erdos** have `1:n` indexed vertices, where `n` is the number of vertices. Multi-edges are not allowed. Self-edges are experimentally supported. Provided this constraints, new graph types can be easily introduced just defining a few basic methods.
 
 ## Basic examples
+
 ### Constructors
+
 Build your first graph using the basic constructors.
-```julia
+
+```jldoctest
 julia> using Erdos
 
 julia> g = CompleteGraph(100)
@@ -65,9 +71,10 @@ julia> degree(g,1)
 10
 ```
 
-### Modifiers:
-```julia
-julia> g=DiGraph(10)
+### Modifiers
+
+```jldoctest
+julia> g = DiGraph(10)
 DiGraph{Int64}(10, 0)
 
 julia> add_edge!(g,1,2)
@@ -105,7 +112,8 @@ false
 ```
 
 ### Iterators
-```julia
+
+```jldoctest
 julia> g = Graph(10,20) #erdos renyi random graph with 10 vertices and 20 edges
 Graph{Int64}(10, 20)
 
@@ -133,14 +141,15 @@ true
 ```
 
 ### I/O
+
 Erdos supports many standard graph formats. Here is an example with Pajek's .net
 format:
-```julia
+
+```jldoctest
 julia> g = DiGraph(10,20)
 DiGraph{Int64}(10, 20)
 
 julia> writegraph("test.net", g)
-1
 
 julia> h = readgraph("test.net")
 DiGraph{Int64}(10, 20)
@@ -150,8 +159,10 @@ true
 ```
 
 ### Datasets
+
 A collection of real world graphs is available through `readgraph`:
-```julia
+
+```jldoctest
 julia> g = readgraph(:karate)
 Graph{Int64}(34, 78)
 
