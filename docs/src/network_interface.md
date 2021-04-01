@@ -22,7 +22,7 @@ Network(10, 20) with [] graph, ["x"] vertex, ["w"] edge properties
 julia> eprop(g, 1, 2, "w")
 0.8959648919973169
 
-julia> writenetwork("mygraph.graphml")  # save graph and properties in .graphml format
+julia> writenetwork("mygraph.graphml", g)  # save graph and properties in .graphml format
 ```
 
 ## Property Interface
