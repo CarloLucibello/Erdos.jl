@@ -65,6 +65,9 @@ reverse!, Graph, DiGraph, DiNetwork, Network,
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,
 
+# drawing
+spring_layout, circular_layout,
+
 # distance between graphs
 spectral_distance, edit_distance,
 
@@ -192,6 +195,7 @@ include("traversals/bipartition.jl")
     include("traversals/connectivity.jl")
 include("distances/distance.jl")
     include("distances/edit_distance.jl")
+include("drawing/layout.jl")
 include("shortestpaths/shortestpaths.jl")
 include("linalg/nonbacktracking.jl")
     include("linalg/spectral.jl")

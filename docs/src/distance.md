@@ -1,4 +1,5 @@
 # Distance
+
 *Erdos.jl* includes the following distance measurements:
 
 ```@autodocs
