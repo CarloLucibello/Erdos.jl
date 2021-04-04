@@ -66,7 +66,7 @@ reverse!, Graph, DiGraph, DiNetwork, Network,
 eccentricities, eccentricity, diameter, periphery, radius, center,
 
 # drawing
-spring_layout, circular_layout,
+spring_layout, circular_layout, shell_layout,
 
 # distance between graphs
 spectral_distance, edit_distance,

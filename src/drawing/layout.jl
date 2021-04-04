@@ -103,3 +103,28 @@ function spring_layout(g::AGraphOrDiGraph;
 
     return x, y
 end
+
+"""
+    shell_layout(g, nlist) -> x, y
+
+Position the nodes of `g` in concentric circles.
+
+`nlist` is a vector of vectors containing the nodes
+for each shell.
+"""
+function shell_layout(g::AGraphOrDiGraph, nlist::Vector{Vector{T}}) where T<:Integer
+    if nv(g) == 1
+        return [0.0], [0.0]
+    end
+    radius = length(nlist[1]) > 1 ? 1.0 : 0.0
+    x = Float64[]
+    y = Float64[]
+    for nodes in nlist
+        θ = range(0, stop=2pi, length=length(nodes)+1)[1:end-1]
+        append!(x, radius * cos.(θ))
+        append!(y, radius * sin.(θ))
+        radius += 1.0
+    end
+    return x, y
+end
+

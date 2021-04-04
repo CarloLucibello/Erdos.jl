@@ -63,7 +63,7 @@ tests = [
     "spanningtrees/spanningtrees",
     "spanningtrees/kruskal",
     "dismantling/dismantling",
-    "drawing/layout.jl",
+    "drawing/layout",
     "utils"
 ]
 
