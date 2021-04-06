@@ -2,7 +2,7 @@ s = BenchmarkGroup()
 suite["persistence"] = s
 
 fname = joinpath(bench_dir,"data","benchgraph_")
-srand(17)
+Random.seed!(17)
 for G in GLIST
     for n in [100]
         g = G(n, 5n, seed=1)

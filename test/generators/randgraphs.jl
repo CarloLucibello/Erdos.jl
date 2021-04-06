@@ -128,9 +128,19 @@ rd = random_regular_digraph(10,0)
 @test is_directed(rd)
 
 rr = random_regular_graph(6, 3, G, seed=1)
+@test all(degree(rr) .== 6)
 @test nv(rr) == 6
 @test ne(rr) == 9
 @test is_directed(rr) == false
+
+g = random_bipartite_regular_graph(6, 8, 4, 3, G, seed=1)
+ks = degree(g)
+@test all(ks[1:6] .== 4)
+@test all(ks[7:14] .== 3)
+@test nv(rr) == 14
+@test ne(rr) == 24
+@test is_directed(rr) == false
+
 
 rr = random_regular_graph(100, 5, G)
 @test nv(rr) == 100
@@ -152,6 +162,17 @@ for v in vertices(rr)
 end
 @test num4 == 5
 @test num2 == 5
+
+ks1 = [1,3,2,1]
+ks2 = [1,2,2,1,1]
+
+g = random_bipartite_configuration_model(4, 5, ks1, ks2, G, seed=1)
+ks = degree(g)
+@test all(ks[1:4] .== ks1)
+@test all(ks[5:9] .== ks2)
+@test nv(rr) == 9
+@test ne(rr) == 7
+@test is_directed(rr) == false
 
 rr = random_configuration_model(100, zeros(Int,100), G)
 @test nv(rr) == 100

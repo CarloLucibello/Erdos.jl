@@ -1,7 +1,7 @@
 s = BenchmarkGroup()
 suite["centrality"] = s
 
-srand(1)
+Random.seed!(1)
 for G in DGLIST
     for n in [100, 200]
         g = G(n , 10n, seed=1)

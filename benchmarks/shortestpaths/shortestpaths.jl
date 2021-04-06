@@ -3,7 +3,7 @@ suite["shortestpaths"] = s
 
 fname, fio = mktemp()
 close(fio)
-srand(17)
+Random.seed!(17)
 for G in GLIST
     for n in [10_000]
         g = G(n, 5n, seed=1)

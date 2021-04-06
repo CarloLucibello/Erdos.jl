@@ -78,21 +78,19 @@ function watts_strogatz(n::Int, k::Int, β::Real, ::Type{G} = Graph;
     return g
 end
 
-function _suitable(edges::Set{Edge{T}}, potential_edges::Dict{T, T}) where T
-    isempty(potential_edges) && return true
-    list = keys(potential_edges)
-    for s1 in list, s2 in list
+function suitable(edges::Set{Edge{T}}, pe1::Dict{T,T}, pe2::Dict{T,T}) where T
+    if isempty(pe1) && isempty(pe2)
+        return true
+    end
+    for s1 in keys(pe1), s2 in keys(pe2)
         s1 >= s2 && continue
         (Edge{T}(s1, s2) ∉ edges) && return true
     end
     return false
 end
 
-_try_creation_rrg(n::T, k::T, rng::AbstractRNG) where {T<:Integer} = _try_creation_rrg(n, fill(k,n), rng)
-
-function _try_creation_rrg(n::T, k::Vector{T}, rng::AbstractRNG) where T<:Integer
-    E = Edge{T}
-    edges = Set{E}()
+function fill_stubs(n, k::Vector{T}) where T
+    # stubs = vcat([fill(i, k[i]) for i=1:n]...) # slower
     m = 0
     stubs = zeros(T, sum(k))
     for i=1:n
@@ -101,8 +99,53 @@ function _try_creation_rrg(n::T, k::Vector{T}, rng::AbstractRNG) where T<:Intege
             stubs[m] = i
         end
     end
-    # stubs = vcat([fill(i, k[i]) for i=1:n]...) # slower
+    return stubs
+end
 
+function try_bipartite_config_model(n1::T, n2::T, 
+            k1::Vector{T}, k2::Vector{T}, rng::AbstractRNG) where T<:Integer
+    E = Edge{T}
+    edges = Set{E}()
+    m = 0
+    stubs1 = fill_stubs(n1, k1)
+    stubs2 = n1 .+ fill_stubs(n2, k2)
+    @assert length(stubs1) == length(stubs2) 
+    while !isempty(stubs1)
+        potential_edges1 =  Dict{T,T}()
+        potential_edges2 =  Dict{T,T}()
+        shuffle!(rng, stubs2)
+        for i in 1:length(stubs1)
+            s1, s2 = stubs1[i], stubs2[i]
+            e = E(s1, s2)
+            if e ∉ edges
+                push!(edges, e)
+            else
+                potential_edges1[s1] = get(potential_edges1, s1, 0) + 1
+                potential_edges2[s2] = get(potential_edges2, s2, 0) + 1
+            end
+        end
+
+        if !suitable(edges, potential_edges1, potential_edges2)
+            return Set{E}()
+        end
+        stubs1 = Vector{T}()
+        stubs2 = Vector{T}()
+        for (i, k) in potential_edges1
+            append!(stubs1, fill(i, k))
+        end
+        for (i, k) in potential_edges2
+            append!(stubs2, fill(i, k))
+        end
+    end
+    
+    return edges
+end
+
+function try_config_model(n::T, k::Vector{T}, rng::AbstractRNG) where T<:Integer
+    E = Edge{T}
+    edges = Set{E}()
+    stubs = fill_stubs(n, k)
+    
     while !isempty(stubs)
         potential_edges =  Dict{T,T}()
         shuffle!(rng, stubs)
@@ -120,13 +163,13 @@ function _try_creation_rrg(n::T, k::Vector{T}, rng::AbstractRNG) where T<:Intege
             end
         end
 
-        if !_suitable(edges, potential_edges)
+        if !suitable(edges, potential_edges, potential_edges)
             return Set{E}()
         end
 
         stubs = Vector{T}()
-        for (e, ct) in potential_edges
-            append!(stubs, fill(e, ct))
+        for (i, k) in potential_edges
+            append!(stubs, fill(i, k))
         end
     end
     return edges
@@ -173,7 +216,7 @@ function barabasi_albert!(g::AGraphOrDiGraph, n::Int, k::Int; seed::Int=-1)
     n0 == n && return g
 
     # seed random number generator
-    seed > 0 && srand(seed)
+    seed > 0 && Random.seed!(seed)
 
     add_vertices!(g, n - n0)
 
@@ -309,8 +352,8 @@ function _create_static_fitness_graph!(g::AGraphOrDiGraph, m::Int, cum_fitness_o
 end
 
 """
-    function static_scale_free(n, m, α, G=Graph;
-            seed=-1, finite_size_correction=true)
+    static_scale_free(n, m, α, G=Graph;
+                    seed=-1, finite_size_correction=true)
 
 Generates a random graph with `n` vertices, `m` edges and expected power-law
 degree distribution with exponent `α`. `finite_size_correction` determines
@@ -318,10 +361,10 @@ whether to use the finite size correction proposed by Cho et al.
 This generator calls internally the `static_fitness_model function`.
 Time complexity is O(|V| + |E| log |E|).
 
-    function static_scale_free(n, m, α_out, α_in, G=DiGraph;
-            seed=-1, finite_size_correction=true)
+    static_scale_free(n, m, α_out, α_in, G=DiGraph;
+                    seed=-1, finite_size_correction=true)
 
-Generates a random digraph
+Generates a random digraph.
 
 References:
 
@@ -395,9 +438,10 @@ function random_regular_graph(n::Int, k::Int, ::Type{G}=Graph;
     rng = getRNG(seed)
 
     T = vertextype(G)
-    edges = _try_creation_rrg(T(n), T(k), rng)
+    ks = fill(T(k), n)
+    edges = try_config_model(T(n), ks, rng)
     while isempty(edges)
-        edges = _try_creation_rrg(T(n), T(k), rng)
+        edges = try_config_model(T(n), ks, rng)
     end
     g = G(n)
     for edge in edges
@@ -409,9 +453,22 @@ end
 
 
 """
+    random_bipartite_regular_graph(n1, n2, k1, k2, G=Graph; seed=-1)
+
+Creates a random undirected nipartite regular graph with `n1+n2` vertices,
+the first `n1` with degree `k1`, the others with degree `k2`
+
+See also [`random_regular_graph`](@ref) and [`random_bipartite_configuration_model`](@ref).
+"""
+function random_bipartite_regular_graph(n1::Int, n2::Int, k1::Int, k2::Int; seed=-1)
+    @assert n1*k1 == n2*k2
+    return random_bipartite_configuration_model(n1, n2, fill(k1, n1), fill(k2, n2); seed)
+end
+
+"""
     random_configuration_model(n::Int, k::Vector{Int}, G=Graph; seed=-1, check_graphical=false)
 
-Creates a random undirected graph according to the [configuraton model]
+Creates a random undirected graph according to the [configuration model]
 (http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf).
 It contains `n` vertices, the vertex `i` having degree `k[i]`.
 
@@ -433,9 +490,9 @@ function random_configuration_model(n::Int, k::Vector{Int}, ::Type{G}=Graph;
     end
     rng = getRNG(seed)
 
-    edges = _try_creation_rrg(n, k, rng)
+    edges = try_config_model(n, k, rng)
     while m > 0 && isempty(edges)
-        edges = _try_creation_rrg(n, k, rng)
+        edges = try_config_model(n, k, rng)
     end
 
     g = G(n)
@@ -446,16 +503,57 @@ function random_configuration_model(n::Int, k::Vector{Int}, ::Type{G}=Graph;
     return g
 end
 
+
+
+"""
+    random_bipartite_configuration_model(
+                                    n1::Int, n2::Int, 
+                                    k1::Vector{Int}, k2::Vector{Int}, 
+                                    G=Graph; seed=-1)
+
+Create a random bipartie undirected graph according to the [configuration model]
+(http://tuvalu.santafe.edu/~aaronc/courses/5352/fall2013/csci5352_2013_L11.pdf).
+It contains `n1+n2` vertices. The vertex `i` in the first set will have degree `k1[i]`,
+while the vertex `i` in the second set will have degree `k2[i]`.
+
+`G` is the resulting graph type.
+"""
+function random_bipartite_configuration_model(
+                                n1::Int, n2::Int, 
+                                k1::Vector{Int}, k2::Vector{Int}, 
+                                ::Type{G}=Graph;
+                                seed::Int=-1) where G<:AGraph
+    @assert(n1 == length(k1), "a degree sequence of length n1 has to be provided")
+    @assert(n2 == length(k2), "a degree sequence of length n2 has to be provided")
+    @assert(sum(k1) == sum(k2))
+    @assert(all(0 .<= k1 .<= n2), "the 0 <= k1[i] < n2 inequality must be satisfied")
+    @assert(all(0 .<= k2 .<= n1), "the 0 <= k2[i] < n1 inequality must be satisfied")
+    rng = getRNG(seed)
+
+    edges = try_bipartite_config_model(n1, n2, k1, k2, rng)
+    while isempty(edges)
+        edges = try_bipartite_config_model(n1, n2, k1, k2, rng)
+    end
+
+    g = G(n1+n2)
+    for edge in edges
+        add_edge!(g, edge)
+    end
+
+    return g
+end
+
+
 """
     random_regular_digraph(n::Int, k::Int; dir::Symbol=:out, seed=-1)
 
 Creates a random directed
 [regular graph](https://en.wikipedia.org/wiki/Regular_graph) with `n` vertices,
 each with degree `k`. The degree (in or out) can be
-specified using `dir=:in` or `dir=:out`. The default is `dir=:out`.
+specified using `dir=:in` or `dir=:out`.
 
 For directed graphs, allocates an ``n \times n`` sparse matrix of boolean as an
-adjacency matrix and uses that to generate the directed graph.
+adjacency matrix and uses that to generate the  graph.
 """
 function random_regular_digraph(n::Int, k::Int, ::Type{G}=DiGraph;
         dir::Symbol=:out, seed::Int=-1) where G<:ADiGraph
@@ -470,7 +568,7 @@ function random_regular_digraph(n::Int, k::Int, ::Type{G}=DiGraph;
         return complement(random_regular_digraph(n, n-k-1, G, dir=dir, seed=seed))
     end
     rng = getRNG(seed)
-    cs = collect(2:n)
+    cs = collect(1:n)
     i = 1
     I = Vector{Int}(undef, n*k)
     J = Vector{Int}(undef, n*k)

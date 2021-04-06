@@ -18,7 +18,7 @@ function sample!(rng::AbstractRNG, a::AbstractArray, k::Integer; exclude = ())
             i += 1
         end
     end
-    res
+    return res
 end
 
 sample!(a::AbstractArray, k::Integer; exclude = ()) = sample!(getRNG(), a, k; exclude = exclude)
