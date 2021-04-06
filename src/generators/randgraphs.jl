@@ -460,9 +460,10 @@ the first `n1` with degree `k1`, the others with degree `k2`
 
 See also [`random_regular_graph`](@ref) and [`random_bipartite_configuration_model`](@ref).
 """
-function random_bipartite_regular_graph(n1::Int, n2::Int, k1::Int, k2::Int; seed=-1)
+function random_bipartite_regular_graph(n1::Int, n2::Int, k1::Int, k2::Int, ::Type{G}=Graph
+        ; seed=-1) where G
     @assert n1*k1 == n2*k2
-    return random_bipartite_configuration_model(n1, n2, fill(k1, n1), fill(k2, n2); seed)
+    return random_bipartite_configuration_model(n1, n2, fill(k1, n1), fill(k2, n2), G; seed)
 end
 
 """
