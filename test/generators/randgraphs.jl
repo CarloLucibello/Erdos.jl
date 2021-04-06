@@ -116,11 +116,13 @@ sf = static_scale_free(10, 20, 2.0, 2.0, DG)
 @test nv(sf) == 10
 @test ne(sf) == 20
 @test is_directed(sf) == true
+@test sf isa DG
 
 rr = random_regular_graph(5, 0, G)
 @test nv(rr) == 5
 @test ne(rr) == 0
 @test is_directed(rr) == false
+@test rr isa G
 
 rd = random_regular_digraph(10,0)
 @test nv(rd) == 10
@@ -128,9 +130,20 @@ rd = random_regular_digraph(10,0)
 @test is_directed(rd)
 
 rr = random_regular_graph(6, 3, G, seed=1)
+@test all(degree(rr) .== 3)
 @test nv(rr) == 6
 @test ne(rr) == 9
 @test is_directed(rr) == false
+
+g = random_bipartite_regular_graph(6, 8, 4, 3, G, seed=1)
+ks = degree(g)
+@test all(ks[1:6] .== 4)
+@test all(ks[7:14] .== 3)
+@test nv(g) == 14
+@test ne(g) == 24
+@test is_directed(g) == false
+@test g isa G
+
 
 rr = random_regular_graph(100, 5, G)
 @test nv(rr) == 100
@@ -139,6 +152,7 @@ rr = random_regular_graph(100, 5, G)
 for v in vertices(rr)
     @test degree(rr, v) == 5
 end
+@test rr isa G
 
 rr = random_configuration_model(10, repeat([2,4] ,5), G, seed=3)
 @test nv(rr) == 10
@@ -152,16 +166,31 @@ for v in vertices(rr)
 end
 @test num4 == 5
 @test num2 == 5
+@test rr isa G
+
+ks1 = [1,3,2,1]
+ks2 = [1,2,2,1,1]
+
+g = random_bipartite_configuration_model(4, 5, ks1, ks2, G, seed=1)
+ks = degree(g)
+@test all(ks[1:4] .== ks1)
+@test all(ks[5:9] .== ks2)
+@test nv(g) == 9
+@test ne(g) == 7
+@test is_directed(g) == false
+@test g isa G
 
 rr = random_configuration_model(100, zeros(Int,100), G)
 @test nv(rr) == 100
 @test ne(rr) == 0
 @test is_directed(rr) == false
+@test rr isa G
 
 rr = random_configuration_model(3, [2,2,2], G, check_graphical=true)
 @test nv(rr) == 3
 @test ne(rr) == 3
 @test is_directed(rr) == false
+@test rr isa G
 
 rd = random_regular_digraph(100, 4, DG)
 @test nv(rd) == 100

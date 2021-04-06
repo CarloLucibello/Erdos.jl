@@ -1,7 +1,7 @@
 s = BenchmarkGroup()
 suite["dismantling"] = s
 
-srand(1)
+Random.seed!(1)
 for G in GLIST
     for n in [100]
         l = 2

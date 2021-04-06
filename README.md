@@ -70,6 +70,8 @@ Here is a comprehensive list of the implemente algorithms. (*EE*) denotes algori
 
 - **dismantling:** collective influencer heuristic
 
+- **drawing:** different graph layouts
+
 - **clique enumeration:** maximal cliques
 
 - **linear algebra / spectral graph theory:** adjacency matrix, Laplacian matrix, non-backtracking matrix

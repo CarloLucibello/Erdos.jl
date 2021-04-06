@@ -1,7 +1,7 @@
 s = BenchmarkGroup()
 suite["generators"] = s
 
-srand(17)
+Random.seed!(17)
 k=3; seed=17
 for n in [100,500], G in GLIST
     g = random_regular_graph(n, k, G, seed=seed)

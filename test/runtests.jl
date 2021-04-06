@@ -63,6 +63,7 @@ tests = [
     "spanningtrees/spanningtrees",
     "spanningtrees/kruskal",
     "dismantling/dismantling",
+    "drawing/layout",
     "utils"
 ]
 

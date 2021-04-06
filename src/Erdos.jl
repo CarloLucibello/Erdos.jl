@@ -65,6 +65,9 @@ reverse!, Graph, DiGraph, DiNetwork, Network,
 # distance
 eccentricities, eccentricity, diameter, periphery, radius, center,
 
+# drawing
+spring_layout, circular_layout, shell_layout,
+
 # distance between graphs
 spectral_distance, edit_distance,
 
@@ -77,10 +80,6 @@ difference, symmetric_difference,
 join, tensor_product, cartesian_product, crosspath,
 subgraph, egonet, complete, complete!,
 subnetwork, contract!,
-
-# graph visit
-discover_vertex!, open_vertex!, close_vertex!,
-examine_neighbor!, visited_vertices, traverse_graph!, traverse_graph_withlog,
 
 # bfs
 gdistances, gdistances!, bfs_tree, is_bipartite, bipartite_map,
@@ -99,7 +98,7 @@ is_connected, is_strongly_connected, is_weakly_connected, period,
 condensation, attracting_components, neighborhood, is_graphical, density,
 
 # maximum_adjacency_visit
-MaximumAdjacency, maximum_adjacency_visit,
+maximum_adjacency_visit,
 
 # a-star, dijkstra, bellman-ford, floyd-warshall
 a_star, dijkstra_shortest_paths,
@@ -114,7 +113,7 @@ cores, kcore,
 
 # spectral
 adjacency_matrix,laplacian_matrix,
-CombinatorialAdjacency, nonbacktracking_matrix, incidence_matrix, 
+nonbacktracking_matrix, incidence_matrix, 
 nonbacktrack_embedding,
 
 # astar
@@ -129,8 +128,9 @@ multiroute_flow, KishimotoAlgorithm, ExtendedMultirouteFlowAlgorithm,
 minimum_cut,
 
 # randgraphs
-erdos_renyi, watts_strogatz, random_regular_graph, random_regular_digraph, random_configuration_model,
-StochasticBlockModel, make_edgestream, nearbipartiteSBM, blockcounts, blockfractions,
+erdos_renyi, watts_strogatz, 
+random_regular_graph, random_regular_digraph, random_bipartite_regular_graph,
+random_configuration_model, random_bipartite_configuration_model,
 stochastic_block_model, barabasi_albert, barabasi_albert!, static_fitness_model, static_scale_free,
 
 #community
@@ -192,6 +192,7 @@ include("traversals/bipartition.jl")
     include("traversals/connectivity.jl")
 include("distances/distance.jl")
     include("distances/edit_distance.jl")
+include("drawing/layout.jl")
 include("shortestpaths/shortestpaths.jl")
 include("linalg/nonbacktracking.jl")
     include("linalg/spectral.jl")
@@ -230,4 +231,5 @@ include("persistence/common.jl")
     include("persistence/net.jl")
     include("persistence/gt.jl")
 include("deprecate.jl")
+
 end # module

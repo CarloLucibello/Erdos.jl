@@ -24,7 +24,7 @@ s["boykov","$flow_graph"] = @benchmarkable maximum_flow($flow_graph, 1, 8
                     , $capacity_matrix, algorithm=BoykovKolmogorovAlgorithm())
 
 # from LittleScienceTools.RFIM
-srand(17)
+Random.seed!(17)
 N = 200
 g = random_regular_graph(N, 3, seed=1)
 h = randn(N)

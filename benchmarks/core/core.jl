@@ -44,7 +44,7 @@ function b_rem_vert(g::AGraphOrDiGraph, vs)
     end
 end
 
-srand(17)
+Random.seed!(17)
 n=100
 vs100 = [rand(1:n-i+1) for i=1:n÷4]
 n=1000

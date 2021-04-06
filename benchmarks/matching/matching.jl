@@ -1,7 +1,7 @@
 s = BenchmarkGroup()
 suite["matching"] = s
 
-srand(17)
+Random.seed!(17)
 n = 100
 p = 0.2
 w = (w=sprand(n,n,p); w=w+w'; w-Diagonal(w))
