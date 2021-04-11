@@ -1,17 +1,8 @@
 """
-    mutable struct Network <: ANetwork
-        ne::Int
-        edge_index_range::Int
-        out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered adjlist
-        epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
-        free_indexes::Vector{Int}       # indexes of deleted edges to be used up
-                                        # for new edges to avoid very large
-                                        # indexes, and unnecessary property map
-                                        # memory used
-        props::PropertyStore
-    end
+    Network
 
-A type representing a directed graph with indexed edges.
+A type representing a graph with indexed edges and the possibility to store 
+graph/vertex/edge properties.
 
     Network(n=0)
 
@@ -46,25 +37,11 @@ end
 
 
 """
-    mutable struct DiNetwork <: ADiNetwork
-        ne::Int
-        edge_index_range::Int
-        out_edges::Vector{Vector{Pair{Int,Int}}}  #unordered out_adjlist
-        in_edges::Vector{Vector{Pair{Int,Int}}}  #unordered in_adjlist
-
-        epos::Vector{Pair{Int,Int}}    # position of the edge in out_edges
-                                        # the first in the pair is the vertex
-                                        # with lower index
-
-        free_indexes::Vector{Int}       # indexes of deleted edges to be used up
-                                        # for new edges to avoid very large
-                                        # indexes, and unnecessary property map
-                                        # memory use
-        props::PropertyStore
-    end
+    DiNetwork
 
 
-A type representing an directed graph with indexed edges.
+A type representing a directed graph with indexed edges and the possibility to store 
+graph/vertex/edge properties.
 
     DiNetwork(n=0)
 
