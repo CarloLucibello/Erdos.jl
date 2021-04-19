@@ -1,7 +1,5 @@
-__precompile__(true)
-
 """
-A graph and network analysis package for julia.
+A graph library for julia.
 """
 module Erdos
 
