@@ -21,7 +21,7 @@ julia> using Erdos
 
 julia> g = Network(10, 20) # create erdos-renyi random network
 
-julia> add_edge!(g, 1, 2); # add edge (1, 2) if it doesn't exists
+julia> add_edge!(g, 1, 6); # add edge (1, 6) if it doesn't exists already
 
 julia> eprop!(g, "w", e -> dst(e) - src(e)) # add edge property named "w"
 Network(10, 20) with [] graph, [] vertex, ["w"] edge properties
@@ -29,8 +29,12 @@ Network(10, 20) with [] graph, [] vertex, ["w"] edge properties
 julia> vprop!(g, "x", v -> rand()) # add vertex property named "x"
 Network(10, 20) with [] graph, ["x"] vertex, ["w"] edge properties
 
-julia> eprop(g, 1, 2, "w")
-0.8959648919973169
+julia> eprop(g, 1, 6, "w")
+5
+
+julia> vprop(g, 1, "x")
+0.9016965075429149
+
 
 julia> writenetwork("mygraph.graphml", g)  # save graph and properties in .graphml format
 ```
