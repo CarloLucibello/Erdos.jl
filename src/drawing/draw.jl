@@ -113,6 +113,3 @@ function draw(g; kws...)
     Graphviz.run_graphviz(gv; format="x11")
     nothing
 end
-
-
-
