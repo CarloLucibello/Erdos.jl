@@ -6,6 +6,9 @@ interfaces. Also, edge and vector maps can be internally stored in
 [network types](@ref network_types) and accessed through the
 [property interface](@ref network_interface).
 
+Attention: mutating the graph topology, e.g. adding or removing edges and vertices, invalidates the 
+property maps.
+
 **Example usage**:
 
 ```julia
