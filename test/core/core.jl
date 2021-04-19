@@ -530,4 +530,34 @@ g = DG(A, selfedges=false)
 @test !has_edge(g, 2, 2)
 @test !has_edge(g, 3, 3)
 
+@testset "constructors Net from Net" begin
+    g = G(5, 10)
+    g2 = G(g)
+    @test g == g2
+        
+    g = DG(5, 10)
+    g2 = DG(g)
+    @test g == g2
+
+    if G <: ANetwork
+        g = G(5, 10)
+        vprop!(g, "a", v -> 1)
+        eprop!(g, "a", e -> 2)
+        gprop!(g, "a", "ciao")
+        g2 = G(g)
+        @test gprop(g2, "a") == gprop(g, "a")
+        @test has_vprop(g2, "a")
+        @test has_eprop(g2, "a")
+        
+        g = DG(5, 10)
+        vprop!(g, "a", v -> 1)
+        eprop!(g, "a", e -> 2)
+        gprop!(g, "a", "ciao")
+        g2 = DG(g)
+        @test gprop(g2, "a") == gprop(g, "a")
+        @test has_vprop(g2, "a")
+        @test has_eprop(g2, "a")
+    end
+end
+
 end #testset
