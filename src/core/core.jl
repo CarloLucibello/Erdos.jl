@@ -192,6 +192,41 @@ function (::Type{G})(g::ADiGraph) where G <: ADiGraph
     return gnew
 end
 
+function (::Type{G})(g::ANetwork) where G <: ANetwork
+    gnew = G(nv(g))
+    for e in edges(g)
+        add_edge!(gnew, src(e), dst(e))
+    end
+    for (pname, p) in gprop(g)
+        gprop!(gnew, pname, deepcopy(p))
+    end
+    for (pname, p) in vprop(g)
+        vprop!(gnew, pname, deepcopy(p))
+    end
+    for (pname, p) in eprop(g)
+        eprop!(gnew, pname, deepcopy(p))
+    end
+    return gnew
+end
+
+function (::Type{G})(g::ADiNetwork) where G <: ADiNetwork
+    gnew = G(nv(g))
+    for e in edges(g)
+        add_edge!(gnew, src(e), dst(e))
+    end
+    for (pname, p) in gprop(g)
+        gprop!(gnew, pname, deepcopy(p))
+    end
+    for (pname, p) in vprop(g)
+        vprop!(gnew, pname, deepcopy(p))
+    end
+    for (pname, p) in eprop(g)
+        eprop!(gnew, pname, deepcopy(p))
+    end
+    return gnew
+end
+
+
 function (::Type{G})(adjmx::AbstractMatrix{T}
         ; selfedges=true) where {G<:ADiGraph, T<:Number}
     op =  selfedges ? ((x,y) -> true)  : (!=)

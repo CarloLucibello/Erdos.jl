@@ -255,7 +255,7 @@ Returns a dictionary with elements `property_name => vertex_map`.
 
     vertex_property(g, v)
 
-Returns a dictionary of the form `name => val` containing all the properties
+Returns a dictionary in the form `name => val` containing all the properties
 associated to vertex `v`.
 
     vertex_property(g, v, name)

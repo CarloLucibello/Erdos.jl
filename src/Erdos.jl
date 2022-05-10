@@ -1,7 +1,5 @@
-__precompile__(true)
-
 """
-A graph and network analysis package for julia.
+A graph library for julia.
 """
 module Erdos
 
@@ -193,6 +191,8 @@ include("traversals/bipartition.jl")
 include("distances/distance.jl")
     include("distances/edit_distance.jl")
 include("drawing/layout.jl")
+    include("drawing/Graphviz.jl")
+    include("drawing/draw.jl")
 include("shortestpaths/shortestpaths.jl")
 include("linalg/nonbacktracking.jl")
     include("linalg/spectral.jl")

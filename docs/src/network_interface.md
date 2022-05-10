@@ -25,6 +25,9 @@ julia> eprop(g, 1, 2, "w")
 julia> writenetwork("mygraph.graphml", g)  # save graph and properties in .graphml format
 ```
 
+Attention: mutating the graph topology, e.g. adding or removing edges and vertices, invalidates the 
+property maps.
+
 ## Property Interface
 
 ```@autodocs
